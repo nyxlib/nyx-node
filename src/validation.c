@@ -37,7 +37,7 @@ bool indi_validation_initialize()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlSchemaParserCtxt *context = xmlSchemaNewMemParserCtxt(indi_proxy_xsd_buff, INDI_BASE_XSD_SIZE);
+    xmlSchemaParserCtxt *context = xmlSchemaNewMemParserCtxt(indi_base_xsd_buff, INDI_BASE_XSD_SIZE);
 
     if(context == NULL)
     {
