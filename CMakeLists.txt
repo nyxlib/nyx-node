@@ -25,25 +25,26 @@ check_function_exists(malloc_usable_size HAVE_MALLOC_USABLE_SIZE)
 ########################################################################################################################
 
 set(SOURCE_FILES
-        src/indi_base.h
-        src/indi_base_schema.h
-        src/indi_base_internal.h
-        #
-        src/structs/indi_boolean.c
-        src/structs/indi_dict.c
-        src/structs/indi_list.c
-        src/structs/indi_null.c
-        src/structs/indi_number.c
-        src/structs/indi_string.c
-        #
-        src/alloc.c
-        src/json.c
-        src/transform_json_to_xml.c
-        src/transform_xml_to_json.c
-        src/validation.c
-        src/xml.c
-        #
-        src/mongoose/mongoose.c
+    src/indi_base.h
+    src/indi_base_schema.h
+    src/indi_base_internal.h
+    #
+    src/structs/indi_boolean.c
+    src/structs/indi_dict.c
+    src/structs/indi_list.c
+    src/structs/indi_null.c
+    src/structs/indi_number.c
+    src/structs/indi_string.c
+    #
+    src/alloc.c
+    src/json.c
+    src/server.c
+    src/transform_json_to_xml.c
+    src/transform_xml_to_json.c
+    src/validation.c
+    src/xml.c
+    #
+    src/mongoose/mongoose.c
 )
 
 ########################################################################################################################
@@ -68,7 +69,8 @@ set_target_properties(indi-base-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-base-shared SHARED ${SOURCE_FILES})
+add_library(indi-base-shared SHARED ${SOURCE_FILES}
+        src/server.c)
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)
@@ -91,5 +93,11 @@ set_target_properties(indi-base-shared PROPERTIES
 add_executable(test1 test/test1.c)
 
 target_link_libraries(test1 ${LIBXML2_LIBRARIES} indi-base-static)
+
+########################################################################################################################
+
+add_executable(test2 test/test2.c)
+
+target_link_libraries(test2 ${LIBXML2_LIBRARIES} indi-base-static)
 
 ########################################################################################################################
