@@ -1,6 +1,6 @@
 ########################################################################################################################
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 ########################################################################################################################
 
@@ -42,6 +42,8 @@ set(SOURCE_FILES
         src/transform_xml_to_json.c
         src/validation.c
         src/xml.c
+        #
+        src/mongoose/mongoose.c
 )
 
 ########################################################################################################################
@@ -61,7 +63,7 @@ target_include_directories(indi-base-static PRIVATE ${LIBXML2_INCLUDE_DIR})
 ######_link_libraries(indi-base-static ${LIBXML2_LIBRARIES})
 
 set_target_properties(indi-base-static PROPERTIES
-        OUTPUT_NAME "indi-base"
+    OUTPUT_NAME "indi-base"
 )
 
 ########################################################################################################################
@@ -81,7 +83,7 @@ target_include_directories(indi-base-shared PRIVATE ${LIBXML2_INCLUDE_DIR})
 target_link_libraries(indi-base-shared ${LIBXML2_LIBRARIES})
 
 set_target_properties(indi-base-shared PROPERTIES
-        OUTPUT_NAME "indi-base"
+    OUTPUT_NAME "indi-base"
 )
 
 ########################################################################################################################
