@@ -15,6 +15,9 @@ indi_number_t *indi_number_new()
     obj->base.magic = INDI_OBJECT_MAGIC;
     obj->base.type = INDI_TYPE_NUMBER;
 
+    obj->base.parent = NULL;
+    obj->base.callback = NULL;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     obj->data = 0.0;
@@ -43,6 +46,8 @@ double indi_number_get(indi_number_t *obj)
 void indi_number_set(indi_number_t *obj, double data)
 {
     obj->data = data;
+
+    indi_object_dispatch(&obj->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

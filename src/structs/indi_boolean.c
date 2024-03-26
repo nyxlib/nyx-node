@@ -14,6 +14,9 @@ indi_boolean_t *indi_boolean_new()
     
     obj->base.magic = INDI_OBJECT_MAGIC;
     obj->base.type = INDI_TYPE_BOOLEAN;
+
+    obj->base.parent = NULL;
+    obj->base.callback = NULL;
     
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -43,6 +46,8 @@ bool indi_boolean_get(indi_boolean_t *obj)
 void indi_boolean_set(indi_boolean_t *obj, bool data)
 {
     obj->data = data;
+
+    indi_object_dispatch(&obj->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

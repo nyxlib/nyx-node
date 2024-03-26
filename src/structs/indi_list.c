@@ -25,6 +25,9 @@ indi_list_t *indi_list_new()
     obj->base.magic = INDI_OBJECT_MAGIC;
     obj->base.type = INDI_TYPE_LIST;
 
+    obj->base.parent = NULL;
+    obj->base.callback = NULL;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     obj->head = NULL;
@@ -174,6 +177,10 @@ indi_list_t *indi_list_push(indi_list_t *obj, buff_t val)
         obj->tail->next = node;
         obj->tail /*-*/ = node;
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_object_dispatch((indi_object_t *) val);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

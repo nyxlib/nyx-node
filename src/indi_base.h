@@ -69,6 +69,8 @@ typedef struct indi_object_s
 
     struct indi_object_s *parent;
 
+    void (* callback)(const struct indi_object_s *object);
+
 } indi_object_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/

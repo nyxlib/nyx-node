@@ -29,6 +29,9 @@ indi_dict_t *indi_dict_new()
     obj->base.magic = INDI_OBJECT_MAGIC;
     obj->base.type = INDI_TYPE_DICT;
 
+    obj->base.parent = NULL;
+    obj->base.callback = NULL;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     obj->head = NULL;
@@ -165,7 +168,7 @@ void indi_dict_put(indi_dict_t *obj, STR_t key, buff_t val)
 
             curr_node->val = val;
 
-            return;
+            goto _ok;
         }
     }
 
@@ -190,6 +193,11 @@ void indi_dict_put(indi_dict_t *obj, STR_t key, buff_t val)
         obj->tail->next = node;
         obj->tail /*-*/ = node;
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+_ok:
+    indi_object_dispatch((indi_object_t *) val);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }

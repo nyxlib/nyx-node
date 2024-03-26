@@ -25,6 +25,9 @@ indi_string_t *indi_string_new()
     obj->base.magic = INDI_OBJECT_MAGIC;
     obj->base.type = INDI_TYPE_STRING;
 
+    obj->base.parent = NULL;
+    obj->base.callback = NULL;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     obj->head = NULL;
@@ -94,6 +97,10 @@ void indi_string_append(indi_string_t *obj, STR_t data)
         obj->tail->next = node;
         obj->tail /*-*/ = node;
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_object_dispatch(&obj->base);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
