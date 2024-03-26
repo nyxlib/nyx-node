@@ -60,7 +60,7 @@ void indi_memory_finalize()
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-    if(used_mem > 0) fprintf(stderr, "Memory leak: %ld bytes!\n", used_mem);
+    if(__atomic_load_n(&used_mem, __ATOMIC_SEQ_CST) > 0) fprintf(stderr, "Memory leak: %ld bytes!\n", used_mem);
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -81,13 +81,13 @@ size_t indi_memory_free(buff_t buff)
     #ifdef HAVE_MALLOC_SIZE
     size_t result = malloc_size(buff);
 
-    used_mem -= result;
+    __atomic_fetch_sub(&used_mem, result, __ATOMIC_SEQ_CST);
     #endif
 
     #ifdef HAVE_MALLOC_USABLE_SIZE
     size_t result = malloc_usable_size(buff);
 
-    used_mem -= result;
+    __atomic_fetch_sub(&used_mem, result, __ATOMIC_SEQ_CST);
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -126,11 +126,11 @@ buff_t indi_memory_alloc(size_t size)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef HAVE_MALLOC_SIZE
-    used_mem += malloc_size(result);
+    __atomic_fetch_add(&used_mem, malloc_size(result), __ATOMIC_SEQ_CST);
     #endif
 
     #ifdef HAVE_MALLOC_USABLE_SIZE
-    used_mem += malloc_usable_size(result);
+    __atomic_fetch_add(&used_mem, malloc_usable_size(result), __ATOMIC_SEQ_CST);
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -153,11 +153,11 @@ buff_t indi_memory_realloc(buff_t buff, size_t size)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef HAVE_MALLOC_SIZE
-    used_mem -= malloc_size(buff);
+    __atomic_fetch_sub(&used_mem, malloc_size(buff), __ATOMIC_SEQ_CST);
     #endif
 
     #ifdef HAVE_MALLOC_USABLE_SIZE
-    used_mem -= malloc_usable_size(buff);
+    __atomic_fetch_sub(&used_mem, malloc_usable_size(buff), __ATOMIC_SEQ_CST);
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -174,11 +174,11 @@ buff_t indi_memory_realloc(buff_t buff, size_t size)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef HAVE_MALLOC_SIZE
-    used_mem += malloc_size(result);
+    __atomic_fetch_add(&used_mem, malloc_size(result), __ATOMIC_SEQ_CST);
     #endif
 
     #ifdef HAVE_MALLOC_USABLE_SIZE
-    used_mem += malloc_usable_size(result);
+    __atomic_fetch_add(&used_mem, malloc_usable_size(result), __ATOMIC_SEQ_CST);
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
