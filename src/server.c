@@ -94,27 +94,37 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        str_t topic = indi_memory_alloc(ctx->opts.client_id.len + 16 + 1);
+        static STR_t topics[] = {
+            "indi/get_properties",
+            "indi/get_clients",
+            "indi/get_drivers"
+        };
 
-        sprintf(topic, "indi/get_properties/%s", ctx->opts.client_id.ptr);
+        for(int i = 0; i < sizeof(topics) / sizeof(STR_t); i++)
+        {
+            str_t topic = indi_memory_alloc(strlen(topics[i]) + ctx->opts.client_id.len + 2);
 
-        mqtt_sub(connection, mg_str("indi/get_properties"), 1);
+            sprintf(topic, "%s/%s", topics[i], ctx->opts.client_id.ptr);
 
-        mqtt_sub(connection, mg_str("indi/get_clients"), 1);
+            mqtt_sub(connection, mg_str(topics[i]), 1);
 
-        mqtt_sub(connection, mg_str("indi/get_drivers"), 1);
+            mqtt_sub(connection, mg_str(topic), 1);
 
-        mqtt_sub(connection, mg_str(topic), 1);
-
-        indi_memory_free(topic);
+            indi_memory_free(topic);
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
     else if(ev == MG_EV_MQTT_MSG)
     {
-        struct mg_mqtt_message *mm = (struct mg_mqtt_message *) ev_data;
+        struct mg_mqtt_message *message = (struct mg_mqtt_message *) ev_data;
 
-        MG_INFO(("%lu MQTT MSG %.*s <- %.*s", connection->id, (int) mm->data.len, mm->data.ptr, (int) mm->topic.len, mm->topic.ptr));
+        if(message->topic.len > 0 && message->topic.ptr != NULL
+           &&
+           message->data.len > 0 && message->data.ptr != NULL
+        ) {
+            MG_INFO(("%lu MQTT MSG %.*s <- %.*s", connection->id, (int) message->data.len, message->data.ptr, (int) message->topic.len, message->topic.ptr));
+        }
     }
 }
 
