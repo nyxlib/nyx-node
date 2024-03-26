@@ -38,6 +38,8 @@ int main()
     str_t json2 = indi_object_to_string(test);
     indi_object_free(test);
 
+    printf("%s\n", json1);
+
     indi_object_t *obj2 = indi_object_parse(json2);
     indi_xmldoc_t *doc2 = indi_object_to_xmldoc(obj2, false);
     str_t xml = indi_xmldoc_to_string(doc2);

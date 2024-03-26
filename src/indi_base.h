@@ -48,24 +48,26 @@ buff_t indi_memory_realloc(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef enum
+typedef enum indi_type_e
 {
-    INDI_TYPE_NULL      = 100,
-    INDI_TYPE_BOOLEAN   = 101,
-    INDI_TYPE_NUMBER    = 102,
-    INDI_TYPE_STRING    = 103,
-    INDI_TYPE_DICT      = 104,
-    INDI_TYPE_LIST      = 105,
+    INDI_TYPE_NULL    = 100,
+    INDI_TYPE_BOOLEAN = 101,
+    INDI_TYPE_NUMBER  = 102,
+    INDI_TYPE_STRING  = 103,
+    INDI_TYPE_DICT    = 104,
+    INDI_TYPE_LIST    = 105,
 
 } indi_type_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct
+typedef struct indi_object_s
 {
     uint64_t magic;
 
     indi_type_t type;
+
+    struct indi_object_s *parent;
 
 } indi_object_t;
 

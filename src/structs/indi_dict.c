@@ -153,6 +153,10 @@ void indi_dict_put(indi_dict_t *obj, STR_t key, buff_t val)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    ((indi_object_t *) val)->parent = (indi_object_t *) obj;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
