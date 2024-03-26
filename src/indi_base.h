@@ -65,7 +65,7 @@ typedef struct indi_object_s
 {
     uint64_t magic;
 
-    indi_type_t type;
+    enum indi_type_e type;
 
     struct indi_object_s *parent;
 
@@ -143,7 +143,7 @@ int indi_run(
     STR_t url,
     /* nullable */ STR_t username,
     /* nullable */ STR_t password,
-    /* nullable */ STR_t client_id
+    STR_t client_id
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

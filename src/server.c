@@ -142,7 +142,7 @@ static void timer_fn(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_run(STR_t url, /* nullable */ STR_t username, /* nullable */ STR_t password, /* nullable */ STR_t client_id)
+int indi_run(STR_t url, /* nullable */ STR_t username, /* nullable */ STR_t password, STR_t client_id)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -150,21 +150,20 @@ int indi_run(STR_t url, /* nullable */ STR_t username, /* nullable */ STR_t pass
 
     memset(&ctx, 0, sizeof(struct ctx_s));
 
+    /* SERVER */
+
     ctx.url = url;
 
     ctx.opts.user = mg_str(username);
     ctx.opts.pass = mg_str(password);
 
+    /* CLIENT */
+
     ctx.opts.clean = true;
 
     ctx.opts.version = 0x04;
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(client_id != NULL)
-    {
-        ctx.opts.client_id = mg_str(client_id);
-    }
+    ctx.opts.client_id = mg_str(client_id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
