@@ -69,8 +69,7 @@ set_target_properties(indi-base-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-base-shared SHARED ${SOURCE_FILES}
-        src/server.c)
+add_library(indi-base-shared SHARED ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)
