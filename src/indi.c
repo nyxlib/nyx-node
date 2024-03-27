@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <stdio.h>
+
 #include "indi_base_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -86,7 +88,7 @@ STR_t indi_onoff_to_str(__NULLABLE__ indi_onoff_t onoff)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void indi_apply_opts(indi_dict_t *dict, indi_opt_t *opt)
+static void setup_opts(indi_dict_t *dict, indi_opt_t *opt)
 {
     if(opt != NULL)
     {
@@ -110,6 +112,17 @@ static void indi_apply_opts(indi_dict_t *dict, indi_opt_t *opt)
             indi_dict_set(dict, "@message", indi_string_from(opt->message));
         }
     }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void callback(const indi_object_t *object)
+{
+    str_t json = indi_object_to_string(object);
+
+    printf("%s\n", json);
+
+    indi_memory_free(json);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -170,13 +183,15 @@ indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, 
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_apply_opts(result, opt);
+    setup_opts(result, opt);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    result->base.callback = callback;
 
     return result;
 }
@@ -234,13 +249,15 @@ indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, in
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_apply_opts(result, opt);
+    setup_opts(result, opt);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    result->base.callback = callback;
 
     return result;
 }
@@ -297,13 +314,15 @@ indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_apply_opts(result, opt);
+    setup_opts(result, opt);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    result->base.callback = callback;
 
     return result;
 }
@@ -362,13 +381,15 @@ indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_apply_opts(result, opt);
+    setup_opts(result, opt);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    result->base.callback = callback;
 
     return result;
 }

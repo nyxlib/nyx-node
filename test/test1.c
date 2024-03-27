@@ -23,11 +23,10 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *defs[] = {
-        indi_switch_def_new("turn_on", "Turn ON", INDI_ONOFF_ON),
-        indi_switch_def_new("turn_off", "Turn OFF", INDI_ONOFF_OFF),
-        NULL,
-    };
+    indi_dict_t *def1 = indi_switch_def_new("turn_on", "Turn ON", INDI_ONOFF_ON);
+    indi_dict_t *def2 = indi_switch_def_new("turn_off", "Turn OFF", INDI_ONOFF_OFF);
+
+    indi_dict_t *defs[] = {def1, def2, NULL};
 
     indi_dict_t *switch_vector = indi_switch_vector_new(
         "my_device",
@@ -39,10 +38,6 @@ int main()
         NULL
     );
 
-    str_t json = indi_dict_to_string(switch_vector);
-    printf("%s\n", json);
-    indi_memory_free(json);
-
     indi_xmldoc_t *doc = indi_object_to_xmldoc(&switch_vector->base, true);
 
     str_t xml = indi_xmldoc_to_string(doc);
@@ -50,6 +45,9 @@ int main()
     indi_memory_free(xml);
 
     indi_xmldoc_free(doc);
+
+    indi_dict_set(def1, "$", indi_string_from("Off"));
+    indi_dict_set(def1, "$", indi_string_from("On"));
 
     indi_dict_free(switch_vector);
 
