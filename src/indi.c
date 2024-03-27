@@ -62,16 +62,16 @@ STR_t indi_rule_to_str(indi_rule_t rule)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SWITCH STATE                                                                                                       */
+/* ONOFF                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 STR_t indi_onoff_to_str(indi_onoff_t onoff)
 {
     switch(onoff)
     {
-        case INDI_SWITCH_STATE_ON:
+        case INDI_ONOFF_ON:
             return "On";
-        case INDI_SWITCH_STATE_OFF:
+        case INDI_ONOFF_OFF:
             return "Off";
     }
 
@@ -228,7 +228,7 @@ indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, in
 
         indi_dict_t *dict = indi_dict_new();
 
-        indi_dict_set(dict, "<>", indi_string_from("defNumber"));
+        indi_dict_set(dict, "<>", indi_string_from("defText"));
 
         indi_dict_set(dict, "@name", indi_string_from(def->name));
         indi_dict_set(dict, "@label", indi_string_from(def->label));
@@ -295,7 +295,7 @@ indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state,
 
         indi_dict_t *dict = indi_dict_new();
 
-        indi_dict_set(dict, "<>", indi_string_from("defNumber"));
+        indi_dict_set(dict, "<>", indi_string_from("defLight"));
 
         indi_dict_set(dict, "@name", indi_string_from(def->name));
         indi_dict_set(dict, "@label", indi_string_from(def->label));

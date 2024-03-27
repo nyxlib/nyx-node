@@ -481,8 +481,8 @@ typedef enum
 
 typedef enum
 {
-    INDI_SWITCH_STATE_ON = 0,
-    INDI_SWITCH_STATE_OFF = 1,
+    INDI_ONOFF_ON = 0,
+    INDI_ONOFF_OFF = 1,
 
 } indi_onoff_t;
 
