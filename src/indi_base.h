@@ -11,7 +11,10 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define __USED__ __attribute__ ((unused))
+#define __INLINE__ \
+            static inline
+
+#define __NULLABLE__
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -71,9 +74,9 @@ typedef struct indi_object_s
 
     enum indi_type_e type;
 
-    struct indi_object_s *parent;
+    __NULLABLE__ struct indi_object_s *parent;
 
-    void (* callback)(const struct indi_object_s *object);
+    __NULLABLE__ void (* callback)(const struct indi_object_s *object);
 
 } indi_object_t;
 
@@ -152,8 +155,7 @@ str_t indi_number_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__USED__
-static inline indi_number_t *indi_number_from(double data)
+__INLINE__ indi_number_t *indi_number_from(double data)
 {
     indi_number_t *result = indi_number_new();
 
@@ -197,8 +199,7 @@ str_t indi_boolean_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__USED__
-static inline indi_boolean_t *indi_boolean_from(bool data)
+__INLINE__ indi_boolean_t *indi_boolean_from(bool data)
 {
     indi_boolean_t *result = indi_boolean_new();
 
@@ -265,8 +266,7 @@ str_t indi_string_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__USED__
-static inline indi_string_t *indi_string_from(STR_t data)
+__INLINE__ indi_string_t *indi_string_from(STR_t data)
 {
     indi_string_t *result = indi_string_new();
 
@@ -411,9 +411,6 @@ indi_list_t *indi_list_set(
     buff_t val
 );
 
-#define indi_list_push(obj, val) \
-            indi_list_set(obj, -1, val)
-
 size_t indi_list_size(
     indi_list_t *obj
 );
@@ -421,6 +418,11 @@ size_t indi_list_size(
 str_t indi_list_to_string(
     indi_list_t *obj
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define indi_list_push(obj, val) \
+            indi_list_set(obj, -1, val)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* XMLDOC                                                                                                             */
@@ -431,7 +433,7 @@ typedef struct _xmlDoc indi_xmldoc_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_xmldoc_t *indi_xmldoc_parse(
-    STR_t text
+    __NULLABLE__ STR_t text
 );
 
 void indi_xmldoc_free(
@@ -440,6 +442,161 @@ void indi_xmldoc_free(
 
 str_t indi_xmldoc_to_string(
     const indi_xmldoc_t *doc
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INDI                                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef enum
+{
+    INDI_STATE_IDLE = 0,
+    INDI_STATE_OK = 1,
+    INDI_STATE_BUSY = 2,
+    INDI_STATE_ALERT = 3,
+
+} indi_state_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef enum
+{
+    INDI_PERM_RO = 0,
+    INDI_PERM_WO = 1,
+    INDI_PERM_RW = 2,
+
+} indi_perm_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef enum
+{
+    INDI_RULE_ONE_OF_MANY = 0,
+    INDI_RULE_AT_MOST_ONE = 1,
+    INDI_RULE_ANY_OF_MANY = 2,
+
+} indi_rule_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef enum
+{
+    INDI_SWITCH_STATE_ON = 0,
+    INDI_SWITCH_STATE_OFF = 1,
+
+} indi_onoff_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    __NULLABLE__ STR_t label;
+    __NULLABLE__ STR_t group;
+    __NULLABLE__ uint32_t timeout;
+    __NULLABLE__ STR_t timestamp;
+    __NULLABLE__ STR_t message;
+
+} indi_opt_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    STR_t name;
+    STR_t label;
+    __NULLABLE__ STR_t format;
+
+    float min;
+    float max;
+    float step;
+
+    float value;
+
+} indi_number_def_t;
+
+#define INDI_NUMBER_DEF(name, label, format, min, max, step, value) \
+            {name, label, format, min, max, step, value}
+
+indi_dict_t *indi_number_vector_new(
+    STR_t device,
+    STR_t name,
+    indi_perm_t perm,
+    indi_state_t state,
+    size_t n_defs,
+    indi_number_def_t defs[],
+    indi_opt_t *opt
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    STR_t name;
+    __NULLABLE__ STR_t label;
+
+    STR_t value;
+
+} indi_text_def_t;
+
+#define INDI_TEXT_DEF(name, label, value) \
+            {name, label, value}
+
+indi_dict_t *indi_text_vector_new(
+    STR_t device,
+    STR_t name,
+    indi_perm_t perm,
+    indi_state_t state,
+    size_t n_defs,
+    indi_text_def_t defs[],
+    indi_opt_t *opt
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    STR_t name;
+    STR_t label;
+
+    indi_state_t value;
+
+} indi_light_def_t;
+
+#define INDI_LIGHT_DEF(name, label, value) \
+            {name, label, value}
+
+indi_dict_t *indi_light_vector_new(
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    size_t n_defs,
+    indi_light_def_t defs[],
+    indi_opt_t *opt
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    STR_t name;
+    __NULLABLE__ STR_t label;
+
+    indi_onoff_t value;
+
+} indi_switch_def_t;
+
+#define INDI_SWICH_DEF(name, label, value) \
+            {name, label, value}
+
+indi_dict_t *indi_switch_vector_new(
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_rule_t rule,
+    size_t n_defs,
+    indi_switch_def_t defs[],
+    indi_opt_t *opt
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -474,8 +631,8 @@ indi_xmldoc_t *indi_object_to_xmldoc(
 
 int indi_run(
     STR_t url,
-    /* nullable */ STR_t username,
-    /* nullable */ STR_t password,
+    __NULLABLE__ STR_t username,
+    __NULLABLE__ STR_t password,
     STR_t client_id
 );
 

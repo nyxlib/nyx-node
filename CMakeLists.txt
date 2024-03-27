@@ -38,11 +38,12 @@ set(SOURCE_FILES
     #
     src/alloc.c
     src/json.c
-    src/server.c
+    src/xml.c
+    src/indi.c
+    src/validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
-    src/validation.c
-    src/xml.c
+    src/server.c
     #
     src/mongoose/mongoose.c
 )
@@ -69,7 +70,8 @@ set_target_properties(indi-base-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-base-shared SHARED ${SOURCE_FILES})
+add_library(indi-base-shared SHARED ${SOURCE_FILES}
+        src/indi.c)
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)
