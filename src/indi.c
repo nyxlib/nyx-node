@@ -120,7 +120,7 @@ static void callback(const indi_object_t *object)
 {
     str_t json = indi_object_to_string(object);
 
-    printf("%s\n", json);
+    printf("** \033[91mNOT REGISTERED\033[0m **\n%s\n", json);
 
     indi_memory_free(json);
 }
