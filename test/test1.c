@@ -26,6 +26,7 @@ int main()
     indi_dict_t *defs[] = {
         indi_switch_def_new("turn_on", "Turn ON", INDI_ONOFF_ON),
         indi_switch_def_new("turn_off", "Turn OFF", INDI_ONOFF_OFF),
+        NULL,
     };
 
     indi_dict_t *switch_vector = indi_switch_vector_new(
@@ -34,7 +35,6 @@ int main()
         INDI_STATE_OK,
         INDI_PERM_RW,
         INDI_RULE_AT_MOST_ONE,
-        2,
         defs,
         NULL
     );

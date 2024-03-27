@@ -144,7 +144,7 @@ indi_dict_t *indi_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t for
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
+indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -172,10 +172,7 @@ indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, 
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(int i = 0; i < n_defs; i++)
-    {
-        indi_list_push(children, defs[i]);
-    }
+    for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -211,7 +208,7 @@ indi_dict_t *indi_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
+indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -239,10 +236,7 @@ indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, in
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(int i = 0; i < n_defs; i++)
-    {
-        indi_list_push(children, defs[i]);
-    }
+    for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -278,7 +272,7 @@ indi_dict_t *indi_light_def_new(STR_t name, __NULLABLE__ STR_t label, indi_state
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
+indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -305,10 +299,7 @@ indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(int i = 0; i < n_defs; i++)
-    {
-        indi_list_push(children, defs[i]);
-    }
+    for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -344,7 +335,7 @@ indi_dict_t *indi_switch_def_new(STR_t name, __NULLABLE__ STR_t label, indi_onof
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state, indi_perm_t perm, indi_rule_t rule, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
+indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state, indi_perm_t perm, indi_rule_t rule, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -373,10 +364,7 @@ indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(int i = 0; i < n_defs; i++)
-    {
-        indi_list_push(children, defs[i]);
-    }
+    for(; *defs != NULL; defs++) indi_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
