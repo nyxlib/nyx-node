@@ -116,7 +116,7 @@ static void setup_opts(indi_dict_t *dict, indi_opt_t *opt)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void callback(const indi_object_t *object)
+static void error_callback(const indi_object_t *object)
 {
     str_t json = indi_object_to_string(object);
 
@@ -191,7 +191,7 @@ indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, 
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    result->base.callback = callback;
+    result->base.callback = error_callback;
 
     return result;
 }
@@ -257,7 +257,7 @@ indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, in
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    result->base.callback = callback;
+    result->base.callback = error_callback;
 
     return result;
 }
@@ -322,7 +322,7 @@ indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    result->base.callback = callback;
+    result->base.callback = error_callback;
 
     return result;
 }
@@ -389,7 +389,7 @@ indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    result->base.callback = callback;
+    result->base.callback = error_callback;
 
     return result;
 }
