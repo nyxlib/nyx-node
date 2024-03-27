@@ -166,7 +166,7 @@ indi_object_t *indi_dict_get(indi_dict_t *obj, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_dict_put(indi_dict_t *obj, STR_t key, buff_t val)
+void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t val)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -243,11 +243,7 @@ str_t indi_dict_to_string(indi_dict_t *obj)
     /**/    {
     /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
     /**/
-    /**/        /**/    indi_string_append(string, "\"");
-    /**/        /**/    indi_string_append(string, curr_node->key);
-    /**/        /**/    indi_string_append(string, "\"");
-    /**/        /**/    indi_string_append(string, ":");
-    /**/        /**/    indi_string_append(string, curr_node_val);
+    /**/        /**/    indi_string_append(string, "\"", curr_node->key, "\"", ":", curr_node_val);
     /**/
     /**/        indi_memory_free(curr_node_val);
     /**/

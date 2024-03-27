@@ -172,9 +172,10 @@ void indi_string_clear(
     indi_string_t *obj
 );
 
-void indi_string_append(
+void indi_string_append_n(
     indi_string_t *obj,
-    STR_t data
+    STR_t args[],
+    size_t n
 );
 
 void indi_string_notify(
@@ -192,6 +193,15 @@ str_t indi_string_to_string(
 str_t indi_string_to_cstring(
     indi_string_t *obj
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define indi_string_append(obj, ...) ({                                                                                \
+                                                                                                                       \
+            STR_t args[] = {__VA_ARGS__};                                                                              \
+                                                                                                                       \
+            indi_string_append_n(obj, args, sizeof(args) / sizeof(STR_t));                                             \
+})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -263,7 +273,7 @@ indi_object_t *indi_dict_get(
     STR_t key
 );
 
-void indi_dict_put(
+void indi_dict_set(
     indi_dict_t *obj,
     STR_t key,
     buff_t val
@@ -341,6 +351,9 @@ indi_list_t *indi_list_set(
     buff_t val
 );
 
+#define indi_list_push(obj, val) \
+            indi_list_set(obj, -1, val)
+
 size_t indi_list_size(
     indi_list_t *obj
 );
@@ -348,14 +361,6 @@ size_t indi_list_size(
 str_t indi_list_to_string(
     indi_list_t *obj
 );
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-__USED__
-static inline indi_list_t *indi_list_push(indi_list_t *obj, buff_t val)
-{
-    return indi_list_set(obj, -1, val);
-}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

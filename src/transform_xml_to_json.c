@@ -17,7 +17,7 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_put(result, "<>", indi_string_from((str_t) curr_node->name));
+    indi_dict_set(result, "<>", indi_string_from((str_t) curr_node->name));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -43,7 +43,7 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
             {
                 *content_e = '\0';
 
-                indi_dict_put(result, "$", indi_string_from((str_t) content_s));
+                indi_dict_set(result, "$", indi_string_from((str_t) content_s));
             }
 
             break;
@@ -56,14 +56,13 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
     {
         indi_string_t *obj = indi_string_new();
 
-        /**/    indi_string_append(obj, /*-----*/ "@" /*-----*/);
-        /**/    indi_string_append(obj, (str_t) attribute->name);
+        /**/    indi_string_append(obj, "@", (str_t) attribute->name);
         /**/
         /**/    str_t attribute_name = indi_string_to_cstring(obj);
         /**/
         /**/    /**/    xmlChar *attribute_val = xmlNodeListGetString(curr_node->doc, attribute->children, 1);
         /**/    /**/
-        /**/    /**/    /**/    indi_dict_put(result, (str_t) attribute_name, indi_string_from((str_t) attribute_val));
+        /**/    /**/    /**/    indi_dict_set(result, (str_t) attribute_name, indi_string_from((str_t) attribute_val));
         /**/    /**/
         /**/    /**/    xmlFree(attribute_val);
         /**/
@@ -84,7 +83,7 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
             {
                 if(list == NULL)
                 {
-                    indi_dict_put(result, "children", list = indi_list_new());
+                    indi_dict_set(result, "children", list = indi_list_new());
                 }
 
                 indi_list_push(list, transform(new_node));

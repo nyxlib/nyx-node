@@ -348,25 +348,25 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
         /*------------------------------------------------------------------------------------------------------------*/
 
         /**/ if(CHECK(JSON_TOKEN_NULL)) {
-            indi_dict_put(result, key, json_parse_null(parser));
+            indi_dict_set(result, key, json_parse_null(parser));
         }
         else if(CHECK(JSON_TOKEN_TRUE)) {
-            indi_dict_put(result, key, json_parse_true(parser));
+            indi_dict_set(result, key, json_parse_true(parser));
         }
         else if(CHECK(JSON_TOKEN_FALSE)) {
-            indi_dict_put(result, key, json_parse_false(parser));
+            indi_dict_set(result, key, json_parse_false(parser));
         }
         else if(CHECK(JSON_TOKEN_NUMBER)) {
-            indi_dict_put(result, key, json_parse_number(parser));
+            indi_dict_set(result, key, json_parse_number(parser));
         }
         else if(CHECK(JSON_TOKEN_STRING)) {
-            indi_dict_put(result, key, json_parse_string(parser));
+            indi_dict_set(result, key, json_parse_string(parser));
         }
         else if(CHECK(JSON_TOKEN_CURLY_OPEN)) {
-            indi_dict_put(result, key, json_parse_dict(parser));
+            indi_dict_set(result, key, json_parse_dict(parser));
         }
         else if(CHECK(JSON_TOKEN_SQUARE_OPEN)) {
-            indi_dict_put(result, key, json_parse_list(parser));
+            indi_dict_set(result, key, json_parse_list(parser));
         }
         else {
             indi_memory_free(key);

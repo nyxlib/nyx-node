@@ -88,11 +88,9 @@ void indi_list_del(indi_list_t *obj, int idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int i = 0;
-
-    for(node_t *prev_node = NULL, *curr_node = obj->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next)
+    if(idx >= 0) for(node_t *prev_node = NULL, *curr_node = obj->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
     {
-        if(idx == i++)
+        if(idx == 0)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -233,29 +231,29 @@ size_t indi_list_size(indi_list_t *obj)
 
 str_t indi_list_to_string(indi_list_t *obj)
 {
-    indi_string_t *sb = indi_string_new();
+    indi_string_t *string = indi_string_new();
 
-    /**/    indi_string_append(sb, "[");
+    /**/    indi_string_append(string, "[");
     /**/
     /**/    for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
     /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
     /**/
-    /**/        /**/    indi_string_append(sb, curr_node_val);
+    /**/        /**/    indi_string_append(string, curr_node_val);
     /**/
     /**/        indi_memory_free(curr_node_val);
     /**/
     /**/        if(curr_node->next != NULL)
     /**/        {
-    /**/            indi_string_append(sb, ",");
+    /**/            indi_string_append(string, ",");
     /**/        }
     /**/    }
     /**/
-    /**/    indi_string_append(sb, "]");
+    /**/    indi_string_append(string, "]");
 
-    str_t result = indi_string_to_cstring(sb);
+    str_t result = indi_string_to_cstring(string);
 
-    indi_string_free(sb);
+    indi_string_free(string);
 
     return result;
 }
