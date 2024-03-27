@@ -47,7 +47,7 @@ void indi_number_set(indi_number_t *obj, double data)
 {
     obj->data = data;
 
-    indi_object_dispatch(&obj->base);
+    indi_object_notify(&obj->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -11,13 +11,11 @@
 
 #define __USED__ __attribute__ ((unused))
 
-#define __NORETURN__ __attribute__ ((noreturn))
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_dispatch(
+void indi_object_notify(
     const indi_object_t *obj
 );
 
@@ -170,9 +168,17 @@ void indi_string_free(
     indi_string_t *obj
 );
 
+void indi_string_clear(
+    indi_string_t *obj
+);
+
 void indi_string_append(
     indi_string_t *obj,
     STR_t data
+);
+
+void indi_string_notify(
+    indi_string_t *obj
 );
 
 size_t indi_string_length(
@@ -234,6 +240,10 @@ typedef struct
 indi_dict_t *indi_dict_new();
 
 void indi_dict_free(
+    indi_dict_t *obj
+);
+
+void indi_dict_clear(
     indi_dict_t *obj
 );
 
@@ -305,6 +315,10 @@ void indi_list_free(
     indi_list_t *obj
 );
 
+void indi_list_clear(
+    indi_list_t *obj
+);
+
 void indi_list_del(
     indi_list_t *obj,
     int idx
@@ -321,8 +335,9 @@ indi_object_t *indi_list_get(
     int idx
 );
 
-indi_list_t *indi_list_push(
+indi_list_t *indi_list_set(
     indi_list_t *obj,
+    size_t idx,
     buff_t val
 );
 
@@ -333,6 +348,14 @@ size_t indi_list_size(
 str_t indi_list_to_string(
     indi_list_t *obj
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__USED__
+static inline indi_list_t *indi_list_push(indi_list_t *obj, buff_t val)
+{
+    return indi_list_set(obj, -1, val);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

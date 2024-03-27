@@ -47,7 +47,7 @@ void indi_boolean_set(indi_boolean_t *obj, bool data)
 {
     obj->data = data;
 
-    indi_object_dispatch(&obj->base);
+    indi_object_notify(&obj->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

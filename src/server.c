@@ -30,7 +30,7 @@ static void signal_handler(int signo)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mqtt_startswith(struct mg_str topic, struct mg_str prefix)
+static bool mg_startswith(struct mg_str topic, struct mg_str prefix)
 {
     return topic.len >= prefix.len && memcmp(topic.ptr, prefix.ptr, prefix.len) == 0;
 }
@@ -71,10 +71,10 @@ static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int 
 /* SERVER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static STR_t SPECIAL_TOPICS[] = {
-    "indi/get_properties",
-    "indi/get_clients",
-    "indi/get_drivers"
+static struct mg_str SPECIAL_TOPICS[] = {
+    MG_C_STR("indi/get_properties"),
+    MG_C_STR("indi/get_clients"),
+    MG_C_STR("indi/get_drivers"),
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -109,15 +109,16 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(STR_t); i++)
+        for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(struct mg_str); i++)
         {
-            str_t topic = indi_memory_alloc(strlen(SPECIAL_TOPICS[i]) + ctx->opts.client_id.len + 2);
+            str_t topic = indi_memory_alloc(SPECIAL_TOPICS[i].len + ctx->opts.client_id.len + 2);
 
-            sprintf(topic, "%s/%s", SPECIAL_TOPICS[i], ctx->opts.client_id.ptr);
+            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, ctx->opts.client_id.ptr) > 0)
+            {
+                mqtt_sub(connection, SPECIAL_TOPICS[i], 1);
 
-            mqtt_sub(connection, mg_str(SPECIAL_TOPICS[i]), 1);
-
-            mqtt_sub(connection, mg_str(topic), 1);
+                mqtt_sub(connection, mg_str(topic), 1);
+            }
 
             indi_memory_free(topic);
         }
@@ -134,15 +135,15 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
         ) {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            /**/ if(mqtt_startswith(message->topic, mg_str(SPECIAL_TOPICS[0])))
+            /**/ if(mg_startswith(message->topic, SPECIAL_TOPICS[0]))
             {
                 MG_INFO((">> get_properties"));
             }
-            else if(mqtt_startswith(message->topic, mg_str(SPECIAL_TOPICS[1])))
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[1]))
             {
                 MG_INFO((">> get_clients"));
             }
-            else if(mqtt_startswith(message->topic, mg_str(SPECIAL_TOPICS[2])))
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[2]))
             {
                 MG_INFO((">> get_drivers"));
             }

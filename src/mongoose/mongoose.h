@@ -989,7 +989,7 @@ enum { MG_FS_READ = 1, MG_FS_WRITE = 2, MG_FS_DIR = 4 };
 
 // Filesystem API functions
 // st() returns MG_FS_* flags and populates file size and modification time
-// ls() calls fn() for every directory entry, allowing to list a directory
+// ls() calls mqtt_fn() for every directory entry, allowing to list a directory
 //
 // NOTE: UNIX-style shorthand names for the API functions are deliberately
 // chosen to avoid conflicts with some libraries that make macros for e.g.
@@ -997,7 +997,7 @@ enum { MG_FS_READ = 1, MG_FS_WRITE = 2, MG_FS_DIR = 4 };
 struct mg_fs {
   int (*st)(const char *path, size_t *size, time_t *mtime);  // stat file
   void (*ls)(const char *path, void (*fn)(const char *, void *),
-             void *);  // List directory entries: call fn(file_name, fn_data)
+             void *);  // List directory entries: call mqtt_fn(file_name, fn_data)
                        // for each directory entry
   void *(*op)(const char *path, int flags);             // Open file
   void (*cl)(void *fd);                                 // Close file
