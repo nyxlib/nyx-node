@@ -527,6 +527,9 @@ indi_dict_t *indi_number_def_new(
     float value
 );
 
+#define indi_number_set(def, value) \
+            indi_dict_set(def, "$", indi_number_from(value))
+
 indi_dict_t *indi_number_vector_new(
     STR_t device,
     STR_t name,
@@ -543,6 +546,9 @@ indi_dict_t *indi_text_def_new(
     __NULLABLE__ STR_t label,
     STR_t value
 );
+
+#define indi_text_set(def, value) \
+            indi_dict_set(def, "$", indi_string_from(value))
 
 indi_dict_t *indi_text_vector_new(
     STR_t device,
@@ -561,6 +567,9 @@ indi_dict_t *indi_light_def_new(
     indi_state_t value
 );
 
+#define indi_light_set(def, value) \
+            indi_dict_set(def, "$", indi_string_from(indi_state_to_str(value)))
+
 indi_dict_t *indi_light_vector_new(
     STR_t device,
     STR_t name,
@@ -576,6 +585,9 @@ indi_dict_t *indi_switch_def_new(
     __NULLABLE__ STR_t label,
     indi_onoff_t value
 );
+
+#define indi_switch_set(def, value) \
+            indi_dict_set(def, "$", indi_string_from(indi_onoff_to_str(value)))
 
 indi_dict_t *indi_switch_vector_new(
     STR_t device,
