@@ -457,6 +457,10 @@ typedef enum
 
 } indi_state_t;
 
+__NULLABLE__ STR_t indi_state_to_str(
+    indi_state_t state
+);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef enum
@@ -466,6 +470,10 @@ typedef enum
     INDI_PERM_RW = 2,
 
 } indi_perm_t;
+
+__NULLABLE__ STR_t indi_perm_to_str(
+    indi_perm_t perm
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -477,6 +485,10 @@ typedef enum
 
 } indi_rule_t;
 
+__NULLABLE__ STR_t indi_rule_to_str(
+    indi_rule_t rule
+);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef enum
@@ -485,6 +497,10 @@ typedef enum
     INDI_ONOFF_OFF = 1,
 
 } indi_onoff_t;
+
+__NULLABLE__ STR_t indi_onoff_to_str(
+    indi_onoff_t onoff
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -585,7 +601,7 @@ typedef struct
 
 } indi_switch_def_t;
 
-#define INDI_SWICH_DEF(name, label, value) \
+#define INDI_SWITCH_DEF(name, label, value) \
             {name, label, value}
 
 indi_dict_t *indi_switch_vector_new(

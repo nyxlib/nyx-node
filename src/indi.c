@@ -6,6 +6,7 @@
 /* STATE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+__NULLABLE__
 STR_t indi_state_to_str(indi_state_t state)
 {
     switch(state)
@@ -27,6 +28,7 @@ STR_t indi_state_to_str(indi_state_t state)
 /* PERM                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+__NULLABLE__
 STR_t indi_perm_to_str(indi_perm_t perm)
 {
     switch(perm)
@@ -46,6 +48,7 @@ STR_t indi_perm_to_str(indi_perm_t perm)
 /* RULE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+__NULLABLE__
 STR_t indi_rule_to_str(indi_rule_t rule)
 {
     switch(rule)
@@ -65,6 +68,7 @@ STR_t indi_rule_to_str(indi_rule_t rule)
 /* ONOFF                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+__NULLABLE__
 STR_t indi_onoff_to_str(indi_onoff_t onoff)
 {
     switch(onoff)
@@ -80,7 +84,7 @@ STR_t indi_onoff_to_str(indi_onoff_t onoff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_apply_opts(indi_dict_t *dict, indi_opt_t *opt)
+static void indi_apply_opts(indi_dict_t *dict, indi_opt_t *opt)
 {
     if(opt != NULL)
     {
