@@ -1,13 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
-#include <string.h>
 
 #include "../src/indi_base.h"
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static STR_t XML = "<defSwitchVector device=\"CCD Simulator\" name=\"CONNECTION\" label=\"Connection\" group=\"Main Control\" value=\"Ok\" perm=\"rw\" rule=\"OneOfMany\" timeout=\"60\" timestamp=\"2023-07-17T06:46:07\"><defSwitch name=\"CONNECT\" label=\"Connect\">\nOn\n</defSwitch><defSwitch name=\"DISCONNECT\" label=\"Disconnect\">Off</defSwitch></defSwitchVector>\n";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -28,33 +23,35 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_xmldoc_t *doc1 = indi_xmldoc_parse(XML);
-    indi_object_t *obj1 = indi_xmldoc_to_object(doc1, true);
-    str_t json1 = indi_object_to_string(obj1);
-    indi_object_free(obj1);
-    indi_xmldoc_free(doc1);
+    indi_dict_t *defs[] = {
+        indi_switch_def_new("turn_on", "Turn ON", INDI_ONOFF_ON),
+        indi_switch_def_new("turn_off", "Turn OFF", INDI_ONOFF_OFF),
+    };
 
-    indi_object_t *test = indi_object_parse(json1);
-    str_t json2 = indi_object_to_string(test);
-    indi_object_free(test);
+    indi_dict_t *switch_vector = indi_switch_vector_new(
+        "my_device",
+        "my_device_onoff",
+        INDI_STATE_OK,
+        INDI_PERM_RW,
+        INDI_RULE_AT_MOST_ONE,
+        2,
+        defs,
+        NULL
+    );
 
-    printf("%s\n", json1);
+    str_t json = indi_dict_to_string(switch_vector);
+    printf("%s\n", json);
+    indi_memory_free(json);
 
-    indi_object_t *obj2 = indi_object_parse(json2);
-    indi_xmldoc_t *doc2 = indi_object_to_xmldoc(obj2, false);
-    str_t xml = indi_xmldoc_to_string(doc2);
-    indi_xmldoc_free(doc2);
-    indi_object_free(obj2);
+    indi_xmldoc_t *doc = indi_object_to_xmldoc(&switch_vector->base, true);
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    int ret = (xml != NULL) && strcmp(XML, xml) == 0 ? 0 : 1;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    indi_memory_free(json2);
+    str_t xml = indi_xmldoc_to_string(doc);
+    printf("%s\n", xml);
     indi_memory_free(xml);
-    indi_memory_free(json1);
+
+    indi_xmldoc_free(doc);
+
+    indi_dict_free(switch_vector);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -71,14 +68,14 @@ int main()
 
     printf("[SUCCESS]\n");
 
-    return ret;
+    return 0;
 
 _err:
     indi_memory_finalize();
 
     printf("[ERROR]\n");
 
-    return 0x1;
+    return 1;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

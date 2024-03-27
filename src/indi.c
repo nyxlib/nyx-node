@@ -114,7 +114,37 @@ static void indi_apply_opts(indi_dict_t *dict, indi_opt_t *opt)
 /* NUMBER VECTORS                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, size_t n_defs, indi_number_def_t defs[], indi_opt_t *opt)
+indi_dict_t *indi_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, float min, float max, float step, float value)
+{
+    if(label == NULL)
+    {
+        label = name;
+    }
+
+    /*------------------------------------------------------------------------------------------------------------*/
+
+    indi_dict_t *result = indi_dict_new();
+
+    indi_dict_set(result, "<>", indi_string_from("defNumber"));
+
+    indi_dict_set(result, "@name", indi_string_from(name));
+    indi_dict_set(result, "@label", indi_string_from(label));
+    indi_dict_set(result, "@format", indi_string_from(format));
+
+    indi_dict_set(result, "@min", indi_number_from(min));
+    indi_dict_set(result, "@max", indi_number_from(max));
+    indi_dict_set(result, "@step", indi_number_from(step));
+
+    indi_dict_set(result, "$", indi_number_from(value));
+
+    /*------------------------------------------------------------------------------------------------------------*/
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -144,38 +174,7 @@ indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, 
 
     for(int i = 0; i < n_defs; i++)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_number_def_t *def = &defs[i];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(def->label == NULL)
-        {
-            def->label = def->name;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_dict_t *dict = indi_dict_new();
-
-        indi_dict_set(dict, "<>", indi_string_from("defNumber"));
-
-        indi_dict_set(dict, "@name", indi_string_from(def->name));
-        indi_dict_set(dict, "@label", indi_string_from(def->label));
-        indi_dict_set(dict, "@format", indi_string_from(def->format));
-
-        indi_dict_set(dict, "@min", indi_number_from(def->min));
-        indi_dict_set(dict, "@max", indi_number_from(def->max));
-        indi_dict_set(dict, "@step", indi_number_from(def->step));
-
-        indi_dict_set(dict, "$", indi_number_from(def->value));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_list_push(children, dict);
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        indi_list_push(children, defs[i]);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -187,7 +186,32 @@ indi_dict_t *indi_number_vector_new(STR_t device, STR_t name, indi_perm_t perm, 
 /* TEXT VECTORS                                                                                                       */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, size_t n_defs, indi_text_def_t defs[], indi_opt_t *opt)
+indi_dict_t *indi_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
+{
+    if(label == NULL)
+    {
+        label = name;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_dict_t *result = indi_dict_new();
+
+    indi_dict_set(result, "<>", indi_string_from("defText"));
+
+    indi_dict_set(result, "@name", indi_string_from(name));
+    indi_dict_set(result, "@label", indi_string_from(label));
+
+    indi_dict_set(result, "$", indi_string_from(value));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -217,33 +241,7 @@ indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, in
 
     for(int i = 0; i < n_defs; i++)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_text_def_t *def = &defs[i];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(def->label == NULL)
-        {
-            def->label = def->name;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_dict_t *dict = indi_dict_new();
-
-        indi_dict_set(dict, "<>", indi_string_from("defText"));
-
-        indi_dict_set(dict, "@name", indi_string_from(def->name));
-        indi_dict_set(dict, "@label", indi_string_from(def->label));
-
-        indi_dict_set(dict, "$", indi_string_from(def->value));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_list_push(children, dict);
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        indi_list_push(children, defs[i]);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -255,7 +253,32 @@ indi_dict_t *indi_text_vector_new(STR_t device, STR_t name, indi_perm_t perm, in
 /* LIGHT VECTORS                                                                                                      */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state, size_t n_defs, indi_light_def_t defs[], indi_opt_t *opt)
+indi_dict_t *indi_light_def_new(STR_t name, __NULLABLE__ STR_t label, indi_state_t value)
+{
+    if(label == NULL)
+    {
+        label = name;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_dict_t *result = indi_dict_new();
+
+    indi_dict_set(result, "<>", indi_string_from("defLight"));
+
+    indi_dict_set(result, "@name", indi_string_from(name));
+    indi_dict_set(result, "@label", indi_string_from(label));
+
+    indi_dict_set(result, "$", indi_string_from(indi_state_to_str(value)));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -284,33 +307,7 @@ indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state,
 
     for(int i = 0; i < n_defs; i++)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_light_def_t *def = &defs[i];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(def->label == NULL)
-        {
-            def->label = def->name;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_dict_t *dict = indi_dict_new();
-
-        indi_dict_set(dict, "<>", indi_string_from("defLight"));
-
-        indi_dict_set(dict, "@name", indi_string_from(def->name));
-        indi_dict_set(dict, "@label", indi_string_from(def->label));
-
-        indi_dict_set(dict, "$", indi_string_from(indi_state_to_str(def->value)));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_list_push(children, dict);
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        indi_list_push(children, defs[i]);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -322,7 +319,32 @@ indi_dict_t *indi_light_vector_new(STR_t device, STR_t name, indi_state_t state,
 /* SWITCH VECTORS                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state, indi_perm_t perm, indi_rule_t rule, size_t n_defs, indi_switch_def_t defs[], indi_opt_t *opt)
+indi_dict_t *indi_switch_def_new(STR_t name, __NULLABLE__ STR_t label, indi_onoff_t value)
+{
+    if(label == NULL)
+    {
+        label = name;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_dict_t *result = indi_dict_new();
+
+    indi_dict_set(result, "<>", indi_string_from("defSwitch"));
+
+    indi_dict_set(result, "@name", indi_string_from(name));
+    indi_dict_set(result, "@label", indi_string_from(label));
+
+    indi_dict_set(result, "$", indi_string_from(indi_onoff_to_str(value)));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state, indi_perm_t perm, indi_rule_t rule, size_t n_defs, indi_dict_t *defs[], indi_opt_t *opt)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -353,33 +375,7 @@ indi_dict_t *indi_switch_vector_new(STR_t device, STR_t name, indi_state_t state
 
     for(int i = 0; i < n_defs; i++)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_switch_def_t *def = &defs[i];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(def->label == NULL)
-        {
-            def->label = def->name;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_dict_t *dict = indi_dict_new();
-
-        indi_dict_set(dict, "<>", indi_string_from("defSwitch"));
-
-        indi_dict_set(dict, "@name", indi_string_from(def->name));
-        indi_dict_set(dict, "@label", indi_string_from(def->label));
-
-        indi_dict_set(dict, "$", indi_string_from(indi_onoff_to_str(def->value)));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_list_push(children, dict);
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        indi_list_push(children, defs[i]);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

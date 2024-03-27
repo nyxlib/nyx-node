@@ -517,22 +517,15 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct
-{
-    STR_t name;
-    STR_t label;
-    __NULLABLE__ STR_t format;
-
-    float min;
-    float max;
-    float step;
-
-    float value;
-
-} indi_number_def_t;
-
-#define INDI_NUMBER_DEF(name, label, format, min, max, step, value) \
-            {name, label, format, min, max, step, value}
+indi_dict_t *indi_number_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label,
+    STR_t format,
+    float min,
+    float max,
+    float step,
+    float value
+);
 
 indi_dict_t *indi_number_vector_new(
     STR_t device,
@@ -540,23 +533,17 @@ indi_dict_t *indi_number_vector_new(
     indi_perm_t perm,
     indi_state_t state,
     size_t n_defs,
-    indi_number_def_t defs[],
+    indi_dict_t *defs[],
     indi_opt_t *opt
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct
-{
-    STR_t name;
-    __NULLABLE__ STR_t label;
-
-    STR_t value;
-
-} indi_text_def_t;
-
-#define INDI_TEXT_DEF(name, label, value) \
-            {name, label, value}
+indi_dict_t *indi_text_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label,
+    STR_t value
+);
 
 indi_dict_t *indi_text_vector_new(
     STR_t device,
@@ -564,46 +551,34 @@ indi_dict_t *indi_text_vector_new(
     indi_perm_t perm,
     indi_state_t state,
     size_t n_defs,
-    indi_text_def_t defs[],
+    indi_dict_t *defs[],
     indi_opt_t *opt
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct
-{
-    STR_t name;
-    STR_t label;
-
-    indi_state_t value;
-
-} indi_light_def_t;
-
-#define INDI_LIGHT_DEF(name, label, value) \
-            {name, label, value}
+indi_dict_t *indi_light_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label,
+    indi_state_t value
+);
 
 indi_dict_t *indi_light_vector_new(
     STR_t device,
     STR_t name,
     indi_state_t state,
     size_t n_defs,
-    indi_light_def_t defs[],
+    indi_dict_t *defs[],
     indi_opt_t *opt
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct
-{
-    STR_t name;
-    __NULLABLE__ STR_t label;
-
-    indi_onoff_t value;
-
-} indi_switch_def_t;
-
-#define INDI_SWITCH_DEF(name, label, value) \
-            {name, label, value}
+indi_dict_t *indi_switch_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label,
+    indi_onoff_t value
+);
 
 indi_dict_t *indi_switch_vector_new(
     STR_t device,
@@ -612,7 +587,7 @@ indi_dict_t *indi_switch_vector_new(
     indi_perm_t perm,
     indi_rule_t rule,
     size_t n_defs,
-    indi_switch_def_t defs[],
+    indi_dict_t *defs[],
     indi_opt_t *opt
 );
 
