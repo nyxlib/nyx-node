@@ -171,7 +171,7 @@ static void timer_fn(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_run(STR_t url, /* nullable */ STR_t username, /* nullable */ STR_t password, STR_t client_id)
+int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password, STR_t client_id)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

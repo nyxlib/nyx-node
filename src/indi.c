@@ -7,7 +7,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __NULLABLE__
-STR_t indi_state_to_str(indi_state_t state)
+STR_t indi_state_to_str(__NULLABLE__ indi_state_t state)
 {
     switch(state)
     {
@@ -29,7 +29,7 @@ STR_t indi_state_to_str(indi_state_t state)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __NULLABLE__
-STR_t indi_perm_to_str(indi_perm_t perm)
+STR_t indi_perm_to_str(__NULLABLE__ indi_perm_t perm)
 {
     switch(perm)
     {
@@ -49,7 +49,7 @@ STR_t indi_perm_to_str(indi_perm_t perm)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __NULLABLE__
-STR_t indi_rule_to_str(indi_rule_t rule)
+STR_t indi_rule_to_str(__NULLABLE__ indi_rule_t rule)
 {
     switch(rule)
     {
@@ -69,7 +69,7 @@ STR_t indi_rule_to_str(indi_rule_t rule)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __NULLABLE__
-STR_t indi_onoff_to_str(indi_onoff_t onoff)
+STR_t indi_onoff_to_str(__NULLABLE__ indi_onoff_t onoff)
 {
     switch(onoff)
     {

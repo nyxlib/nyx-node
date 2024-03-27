@@ -8,7 +8,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_xmldoc_t *indi_xmldoc_parse(STR_t text)
+indi_xmldoc_t *indi_xmldoc_parse(__NULLABLE__ STR_t text)
 {
     return (text != NULL) ? xmlReadMemory(text, (int) strlen(text), "message.xml", "iso-8859-1", 0) : NULL;
 }
