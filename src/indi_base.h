@@ -14,7 +14,8 @@
 #define __INLINE__ \
             static inline
 
-#define __NULLABLE__
+#define __NULLABLE__ \
+            /* no nothing */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -83,7 +84,7 @@ typedef struct indi_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_object_t *indi_object_parse(
-    STR_t text
+    __NULLABLE__ STR_t text
 );
 
 void indi_object_free(
