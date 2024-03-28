@@ -275,7 +275,7 @@ static indi_number_t *json_parse_number(json_parser_t *parser)
 
     str_t val = PEEK().val;
 
-    indi_number_t *result = indi_number_from(atof(val));
+    indi_number_t *result = indi_number_from(atof(val)); // NOLINT(*-err34-c)
 
     indi_memory_free(val);
 

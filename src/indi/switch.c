@@ -8,7 +8,7 @@
 
 static void debug_callback(const indi_object_t *object)
 {
-    indi_dict_t *dict = indi_switch_set_verctor_new((indi_dict_t *) object);
+    indi_dict_t *dict = indi_switch_set_vector_new((indi_dict_t *) object);
 
     str_t json = indi_dict_to_string(dict);
     printf("** \033[91mNOT REGISTERED\033[0m **\n%s\n", json);
@@ -97,7 +97,7 @@ indi_dict_t *indi_switch_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_switch_set_verctor_new(indi_dict_t *def_vector)
+indi_dict_t *indi_switch_set_vector_new(indi_dict_t *def_vector)
 {
     return indi_generate_set_message(def_vector, "setSwitchVector", "oneSwitch");
 }

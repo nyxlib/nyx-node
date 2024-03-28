@@ -1,5 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
+#pragma ide diagnostic ignored "bugprone-reserved-identifier"
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #ifndef INDI_BASE_INDI_BASE_H
 #define INDI_BASE_INDI_BASE_H
 
@@ -621,7 +628,7 @@ indi_dict_t *indi_switch_def_vector_new(
     indi_opt_t *opt
 );
 
-indi_dict_t *indi_switch_set_verctor_new(
+indi_dict_t *indi_switch_set_vector_new(
     indi_dict_t *def_vector
 );
 
@@ -665,5 +672,9 @@ int indi_run(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #endif /* INDI_BASE_INDI_BASE_H */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#pragma clang diagnostic pop
 
 /*--------------------------------------------------------------------------------------------------------------------*/

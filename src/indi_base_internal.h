@@ -1,5 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
+#pragma ide diagnostic ignored "bugprone-reserved-identifier"
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #ifndef INDI_BASE_INDI_BASE_INTERNAL_H
 #define INDI_BASE_INDI_BASE_INTERNAL_H
 
@@ -91,11 +98,11 @@ str_t indi_string_builder_to_cstring(
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
-    indi_string_builder_t *sb = indi_string_builder_new();                                                             \
+    indi_string_builder_t *_sb = indi_string_builder_new();                                                             \
                                                                                                                        \
-    indi_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                              \
+    indi_string_builder_append_n(_sb, args, sizeof(args) / sizeof(STR_t));                                              \
                                                                                                                        \
-    sb;                                                                                                                \
+    _sb;                                                                                                                \
 })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -111,5 +118,9 @@ indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_na
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #endif /* INDI_BASE_INDI_BASE_INTERNAL_H */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#pragma clang diagnostic pop
 
 /*--------------------------------------------------------------------------------------------------------------------*/
