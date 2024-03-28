@@ -242,7 +242,11 @@ static void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 
                                             if(strcmp(name3, name4) == 0)
                                             {
-                                                bool notify = internal_copy_entry((indi_dict_t *) obj2, (indi_dict_t *) obj1, "$");
+                                                bool notify = internal_copy_entry(
+                                                    (indi_dict_t *) obj2,
+                                                    (indi_dict_t *) obj1,
+                                                    "$"
+                                                );
 
                                                 if(notify && obj2->in_callback != NULL)
                                                 {
