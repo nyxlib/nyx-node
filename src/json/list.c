@@ -14,7 +14,9 @@ typedef struct indi_list_node_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void indi_list_clear_internal(indi_list_t *obj);
+static void internal_list_clear(
+    indi_list_t *obj
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -46,14 +48,14 @@ indi_list_t *indi_list_new()
 
 void indi_list_free(indi_list_t *obj)
 {
-    indi_list_clear_internal(obj);
+    internal_list_clear(obj);
 
     indi_memory_free(obj);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void indi_list_clear_internal(indi_list_t *obj)
+static void internal_list_clear(indi_list_t *obj)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -86,7 +88,7 @@ static void indi_list_clear_internal(indi_list_t *obj)
 
 void indi_list_clear(indi_list_t *obj)
 {
-    indi_list_clear_internal(obj);
+    internal_list_clear(obj);
 
     indi_object_notify(&obj->base);
 }

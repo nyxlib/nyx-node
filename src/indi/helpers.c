@@ -239,7 +239,7 @@ void internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key)
             /*--------------------------------------------------------------------------------------------------------*/
 
             default:
-                fprintf(stderr, "\n");
+                fprintf(stderr, "Internal error in `internal_copy_entry`\n");
                 fflush(stderr);
                 break;
 

@@ -18,7 +18,9 @@ typedef struct indi_dict_node_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void indi_dict_clear_internal(indi_dict_t *obj);
+static void internal_dict_clear(
+    indi_dict_t *obj
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -50,14 +52,14 @@ indi_dict_t *indi_dict_new()
 
 void indi_dict_free(indi_dict_t *obj)
 {
-    indi_dict_clear_internal(obj);
+    internal_dict_clear(obj);
 
     indi_memory_free(obj);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void indi_dict_clear_internal(indi_dict_t *obj)
+static void internal_dict_clear(indi_dict_t *obj)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -90,7 +92,7 @@ static void indi_dict_clear_internal(indi_dict_t *obj)
 
 void indi_dict_clear(indi_dict_t *obj)
 {
-    indi_dict_clear_internal(obj);
+    internal_dict_clear(obj);
 
     indi_object_notify(&obj->base);
 }
