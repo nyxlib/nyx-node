@@ -46,8 +46,8 @@ int main()
 
     indi_xmldoc_free(doc);
 
-    indi_switch_set(def1, INDI_ONOFF_OFF);
-    indi_switch_set(def1, INDI_ONOFF_ON);
+    indi_switch_def_set(def1, INDI_ONOFF_OFF);
+    indi_switch_def_set(def1, INDI_ONOFF_ON);
 
     indi_dict_free(switch_vector);
 

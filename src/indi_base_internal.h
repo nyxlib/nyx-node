@@ -36,6 +36,69 @@ str_t indi_string_dup(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* STRING BUILDER                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    struct indi_string_builder_node_s *head;
+    struct indi_string_builder_node_s *tail;
+
+} indi_string_builder_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_string_builder_t *indi_string_builder_new();
+
+void indi_string_builder_free(
+    indi_string_builder_t *sb
+);
+
+void indi_string_builder_clear(
+    indi_string_builder_t *sb
+);
+
+void indi_string_builder_append_n(
+    indi_string_builder_t *sb,
+    STR_t args[],
+    size_t n
+);
+
+size_t indi_string_builder_length(
+    indi_string_builder_t *sb
+);
+
+str_t indi_string_builder_to_string(
+    indi_string_builder_t *sb
+);
+
+str_t indi_string_builder_to_cstring(
+    indi_string_builder_t *sb
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define indi_string_builder_append(sb, ...) ({                                                                         \
+                                                                                                                       \
+    STR_t args[] = {__VA_ARGS__};                                                                                      \
+                                                                                                                       \
+    indi_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                              \
+})
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define indi_string_builder_from(...) ({                                                                               \
+                                                                                                                       \
+    STR_t args[] = {__VA_ARGS__};                                                                                      \
+                                                                                                                       \
+    indi_string_builder_t *sb = indi_string_builder_new();                                                             \
+                                                                                                                       \
+    indi_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                              \
+                                                                                                                       \
+    sb;                                                                                                                \
+})
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 #endif /* INDI_BASE_INDI_BASE_INTERNAL_H */
 

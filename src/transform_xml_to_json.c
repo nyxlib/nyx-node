@@ -54,11 +54,9 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
 
     for(xmlAttr *attribute = curr_node->properties; attribute != NULL; attribute = attribute->next)
     {
-        indi_string_t *obj = indi_string_new();
+        indi_string_builder_t *sb = indi_string_builder_from("@", (str_t) attribute->name);
 
-        /**/    indi_string_append(obj, "@", (str_t) attribute->name);
-        /**/
-        /**/    str_t attribute_name = indi_string_to_cstring(obj);
+        /**/    str_t attribute_name = indi_string_builder_to_cstring(sb);
         /**/
         /**/    /**/    xmlChar *attribute_val = xmlNodeListGetString(curr_node->doc, attribute->children, 1);
         /**/    /**/
@@ -68,7 +66,7 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
         /**/
         /**/    indi_memory_free(attribute_name);
 
-        indi_string_free(obj);
+        indi_string_builder_free(sb);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

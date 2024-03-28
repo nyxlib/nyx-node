@@ -244,29 +244,29 @@ size_t indi_dict_size(indi_dict_t *obj)
 
 str_t indi_dict_to_string(indi_dict_t *obj)
 {
-    indi_string_t *string = indi_string_new();
+    indi_string_builder_t *sb = indi_string_builder_new();
 
-    /**/    indi_string_append(string, "{");
+    /**/    indi_string_builder_append(sb, "{");
     /**/
     /**/    for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
     /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
     /**/
-    /**/        /**/    indi_string_append(string, "\"", curr_node->key, "\"", ":", curr_node_val);
+    /**/        /**/    indi_string_builder_append(sb, "\"", curr_node->key, "\"", ":", curr_node_val);
     /**/
     /**/        indi_memory_free(curr_node_val);
     /**/
     /**/        if(curr_node->next != NULL)
     /**/        {
-    /**/            indi_string_append(string, ",");
+    /**/            indi_string_builder_append(sb, ",");
     /**/        }
     /**/    }
     /**/
-    /**/    indi_string_append(string, "}");
+    /**/    indi_string_builder_append(sb, "}");
 
-    str_t result = indi_string_to_cstring(string);
+    str_t result = indi_string_builder_to_cstring(sb);
 
-    indi_string_free(string);
+    indi_string_builder_free(sb);
 
     return result;
 }

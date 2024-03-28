@@ -217,8 +217,7 @@ typedef struct
 {
     indi_object_t base;
 
-    struct indi_string_node_s *head;
-    struct indi_string_node_s *tail;
+    STR_t data;
 
 } indi_string_t;
 
@@ -230,22 +229,13 @@ void indi_string_free(
     indi_string_t *obj
 );
 
-void indi_string_clear(
+STR_t indi_string_get(
     indi_string_t *obj
 );
 
-void indi_string_append_n(
+void indi_string_set(
     indi_string_t *obj,
-    STR_t args[],
-    size_t n
-);
-
-void indi_string_notify(
-    indi_string_t *obj
-);
-
-size_t indi_string_length(
-    indi_string_t *obj
+    STR_t data
 );
 
 str_t indi_string_to_string(
@@ -258,20 +248,11 @@ str_t indi_string_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define indi_string_append(obj, ...) ({                                                                                \
-                                                                                                                       \
-            STR_t args[] = {__VA_ARGS__};                                                                              \
-                                                                                                                       \
-            indi_string_append_n(obj, args, sizeof(args) / sizeof(STR_t));                                             \
-})
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 __INLINE__ indi_string_t *indi_string_from(STR_t data)
 {
     indi_string_t *result = indi_string_new();
 
-    indi_string_append(result, data);
+    indi_string_set(result, data);
 
     return result;
 }
@@ -527,7 +508,7 @@ indi_dict_t *indi_number_def_new(
     float value
 );
 
-#define indi_number_set(def, value) \
+#define indi_number_def_set(def, value) \
             indi_dict_set(def, "$", indi_number_from(value))
 
 indi_dict_t *indi_number_vector_new(
@@ -547,7 +528,7 @@ indi_dict_t *indi_text_def_new(
     STR_t value
 );
 
-#define indi_text_set(def, value) \
+#define indi_text_def_set(def, value) \
             indi_dict_set(def, "$", indi_string_from(value))
 
 indi_dict_t *indi_text_vector_new(
@@ -567,7 +548,7 @@ indi_dict_t *indi_light_def_new(
     indi_state_t value
 );
 
-#define indi_light_set(def, value) \
+#define indi_light_def_set(def, value) \
             indi_dict_set(def, "$", indi_string_from(indi_state_to_str(value)))
 
 indi_dict_t *indi_light_vector_new(
@@ -586,7 +567,7 @@ indi_dict_t *indi_switch_def_new(
     indi_onoff_t value
 );
 
-#define indi_switch_set(def, value) \
+#define indi_switch_def_set(def, value) \
             indi_dict_set(def, "$", indi_string_from(indi_onoff_to_str(value)))
 
 indi_dict_t *indi_switch_vector_new(

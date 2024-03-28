@@ -37,6 +37,7 @@ set(SOURCE_FILES
     src/structs/indi_string.c
     #
     src/alloc.c
+    src/string_builder.c
     src/json.c
     src/xml.c
     src/indi.c
@@ -71,7 +72,8 @@ set_target_properties(indi-base-static PROPERTIES
 ########################################################################################################################
 
 add_library(indi-base-shared SHARED ${SOURCE_FILES}
-        src/indi.c)
+        src/indi.c
+        src/string_builder.c)
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)
