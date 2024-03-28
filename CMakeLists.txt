@@ -29,12 +29,12 @@ set(SOURCE_FILES
     src/indi_base_schema.h
     src/indi_base_internal.h
     #
-    src/structs/indi_boolean.c
-    src/structs/indi_dict.c
-    src/structs/indi_list.c
-    src/structs/indi_null.c
-    src/structs/indi_number.c
-    src/structs/indi_string.c
+        src/json_structs/indi_boolean.c
+        src/json_structs/indi_dict.c
+        src/json_structs/indi_list.c
+        src/json_structs/indi_null.c
+        src/json_structs/indi_number.c
+        src/json_structs/indi_string.c
     #
     src/alloc.c
     src/string_builder.c
