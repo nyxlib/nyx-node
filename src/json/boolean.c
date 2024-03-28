@@ -34,7 +34,7 @@ void indi_boolean_free(indi_boolean_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_boolean_get(indi_boolean_t *obj)
+bool indi_boolean_get(const indi_boolean_t *obj)
 {
     return obj->data;
 }
@@ -53,7 +53,7 @@ void indi_boolean_set(indi_boolean_t *obj, bool data)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_boolean_to_string(indi_boolean_t *obj)
+str_t indi_boolean_to_string(const indi_boolean_t *obj)
 {
     return indi_boolean_dup(obj->data);
 }

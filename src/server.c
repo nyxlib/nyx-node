@@ -101,61 +101,127 @@ static struct mg_str SPECIAL_TOPICS[] = {
 
 static void out_callback(const indi_object_t *object)
 {
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) object->server_ctx;
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    indi_object_t *string = indi_dict_get((indi_dict_t *) object, "<>");
 
-    STR_t tag = indi_string_get((indi_string_t *) indi_dict_get((indi_dict_t *) object, "<>"));
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    indi_dict_t *dict;
-
-    /**/ if(strcmp("defNumberVector", tag) == 0) {
-        dict = indi_number_set_vector_new((indi_dict_t *) object);
-    }
-    else if(strcmp("defTextVector", tag) == 0) {
-        dict = indi_text_set_vector_new((indi_dict_t *) object);
-    }
-    else if(strcmp("defLightVector", tag) == 0) {
-        dict = indi_light_set_vector_new((indi_dict_t *) object);
-    }
-    else if(strcmp("defSwitchVector", tag) == 0) {
-        dict = indi_switch_set_vector_new((indi_dict_t *) object);
-    }
-    else {
-        return;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(ctx->emit_xml)
+    if(string != NULL && string->type == INDI_TYPE_STRING)
     {
-        indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, ctx->validate_xml);
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(xmldoc != NULL)
+        STR_t tag = indi_string_get((indi_string_t *) string);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        indi_dict_t *dict;
+
+        /**/ if(strcmp("defNumberVector", tag) == 0) {
+            dict = indi_number_set_vector_new((indi_dict_t *) object);
+        }
+        else if(strcmp("defTextVector", tag) == 0) {
+            dict = indi_text_set_vector_new((indi_dict_t *) object);
+        }
+        else if(strcmp("defLightVector", tag) == 0) {
+            dict = indi_light_set_vector_new((indi_dict_t *) object);
+        }
+        else if(strcmp("defSwitchVector", tag) == 0) {
+            dict = indi_switch_set_vector_new((indi_dict_t *) object);
+        }
+        else {
+            return;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(ctx->emit_xml)
         {
+            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, ctx->validate_xml);
+
+            if(xmldoc != NULL)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                str_t json = indi_dict_to_string(dict);
+                mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
+                indi_memory_free(json);
+
+                indi_xmldoc_free(xmldoc);
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        str_t json = indi_dict_to_string(dict);
+        mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
+        indi_memory_free(json);
+
+        indi_dict_free(dict);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_object_t *device_string = indi_dict_get(dict, "@device");
+    indi_object_t *name_string = indi_dict_get(dict, "@name");
+
+    if(device_string != NULL && device_string->type == INDI_TYPE_STRING
+       &&
+       name_string != NULL && name_string->type == INDI_TYPE_STRING
+    ) {
+        STR_t device = indi_string_get((indi_string_t *) device_string);
+        STR_t name = indi_string_get((indi_string_t *) name_string);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
+        {
+            indi_dict_t *vector = *vector_ptr;
+
             /*--------------------------------------------------------------------------------------------------------*/
 
-            str_t json = indi_dict_to_string(dict);
-            mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
-            indi_memory_free(json);
+            indi_object_t *device_string = indi_dict_get(vector, "@device");
+            indi_object_t *name_string = indi_dict_get(vector, "@name");
 
-            indi_xmldoc_free(xmldoc);
+            if(device_string != NULL && device_string->type == INDI_TYPE_STRING
+               &&
+               name_string != NULL && name_string->type == INDI_TYPE_STRING
+            ) {
+                STR_t _device = indi_string_get((indi_string_t *) device_string);
+                STR_t _name = indi_string_get((indi_string_t *) name_string);
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(strcmp(device, _device) == 0 && strcmp(name, _name) == 0)
+                {
+                    vector->base.locked = true;
+
+                    /**/    /*----------------------------------------------------------------------------------------*/
+                    /**/
+                    /**/    printf("Yessssssss!\n");
+                    /**/
+                    /**/    /*----------------------------------------------------------------------------------------*/
+
+                    vector->base.locked = false;
+
+                    break;
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    str_t json = indi_dict_to_string(dict);
-    mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
-    indi_memory_free(json);
-
-    indi_dict_free(dict);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -287,9 +353,12 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 if(object != NULL)
                 {
-                    MG_INFO((">> treating: %.*s", (int) message->data.len, message->data.ptr));
+                    if(object->type == INDI_TYPE_DICT)
+                    {
+                        update_device(ctx->vector_list, (indi_dict_t *) object);
+                    }
 
-                    indi_object_free(object);
+                    indi_dict_free((indi_dict_t *) object);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -308,11 +377,12 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                     if(object != NULL)
                     {
-                        str_t json = indi_object_to_string(object);
-                        MG_INFO((">> treating: %s", json));
-                        indi_memory_free(json);
+                        if(object->type == INDI_TYPE_DICT)
+                        {
+                            update_device(ctx->vector_list, (indi_dict_t *) object);
+                        }
 
-                        indi_object_free(object);
+                        indi_dict_free((indi_dict_t *) object);
                     }
 
                     indi_xmldoc_free(xmldoc);

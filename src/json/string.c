@@ -37,7 +37,7 @@ void indi_string_free(indi_string_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_string_get(indi_string_t *obj)
+STR_t indi_string_get(const indi_string_t *obj)
 {
     return obj->data;
 }
@@ -65,7 +65,7 @@ void indi_string_set(indi_string_t *obj, STR_t data)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_string(indi_string_t *obj)
+str_t indi_string_to_string(const indi_string_t *obj)
 {
     indi_string_builder_t *sb = indi_string_builder_from(obj->data);
 
@@ -78,7 +78,7 @@ str_t indi_string_to_string(indi_string_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_cstring(indi_string_t *obj)
+str_t indi_string_to_cstring(const indi_string_t *obj)
 {
     indi_string_builder_t *sb = indi_string_builder_from(obj->data);
 

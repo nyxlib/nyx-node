@@ -150,7 +150,7 @@ bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_list_get(indi_list_t *obj, int idx)
+indi_object_t *indi_list_get(const indi_list_t *obj, int idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -221,7 +221,7 @@ _ok:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_list_size(indi_list_t *obj)
+size_t indi_list_size(const indi_list_t *obj)
 {
     size_t result = 0;
 
@@ -236,7 +236,7 @@ size_t indi_list_size(indi_list_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_list_to_string(indi_list_t *obj)
+str_t indi_list_to_string(const indi_list_t *obj)
 {
     indi_string_builder_t *sb = indi_string_builder_new();
 

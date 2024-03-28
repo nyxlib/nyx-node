@@ -28,7 +28,7 @@ void indi_null_free(indi_null_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_null_to_string(__USED__ indi_null_t *obj)
+str_t indi_null_to_string(__USED__ const indi_null_t *obj)
 {
     return indi_string_dup("null");
 }

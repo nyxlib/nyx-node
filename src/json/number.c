@@ -37,7 +37,7 @@ void indi_number_free(indi_number_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double indi_number_get(indi_number_t *obj)
+double indi_number_get(const indi_number_t *obj)
 {
     return obj->data;
 }
@@ -63,7 +63,7 @@ void indi_number_set(indi_number_t *obj, double data)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_number_to_string(indi_number_t *obj)
+str_t indi_number_to_string(const indi_number_t *obj)
 {
     return indi_double_dup(obj->data);
 }

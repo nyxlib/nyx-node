@@ -154,7 +154,7 @@ bool indi_dict_iterate(indi_dict_iter_t *iter, STR_t *key, indi_object_t **obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_dict_get(indi_dict_t *obj, STR_t key)
+indi_object_t *indi_dict_get(const indi_dict_t *obj, STR_t key)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -225,7 +225,7 @@ _ok:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_dict_size(indi_dict_t *obj)
+size_t indi_dict_size(const indi_dict_t *obj)
 {
     size_t result = 0;
 
@@ -240,7 +240,7 @@ size_t indi_dict_size(indi_dict_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_dict_to_string(indi_dict_t *obj)
+str_t indi_dict_to_string(const indi_dict_t *obj)
 {
     indi_string_builder_t *sb = indi_string_builder_new();
 
