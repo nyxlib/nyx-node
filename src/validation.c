@@ -70,7 +70,7 @@ bool indi_validation_initialize()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_validation_check(struct _xmlDoc *doc)
+bool indi_validation_check(const struct _xmlDoc *doc)
 {
     if(INDI_SCHEMA == NULL)
     {

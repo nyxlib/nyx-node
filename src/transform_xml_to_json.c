@@ -9,7 +9,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
+static indi_object_t *transform(const xmlNode *curr_node) // NOLINT(misc-no-recursion)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -96,7 +96,7 @@ static indi_object_t *transform(xmlNode *curr_node) // NOLINT(misc-no-recursion)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_xmldoc_to_object(indi_xmldoc_t *doc, bool validate)
+indi_object_t *indi_xmldoc_to_object(const indi_xmldoc_t *doc, bool validate)
 {
     if(doc == NULL)
     {

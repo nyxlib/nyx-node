@@ -65,6 +65,9 @@ struct indi_server_ctx_s
 
     /**/
 
+    bool emit_xml;
+    bool validate_xml;
+
     str_t main_topic;
     str_t driver_topic;
 
@@ -90,21 +93,71 @@ static struct mg_str SPECIAL_TOPICS[] = {
     MG_C_STR("indi/get_drivers"),
     MG_C_STR("indi/get_properties"),
     MG_C_STR("indi/enable_blob"),
-    MG_C_STR("indi"),
+    MG_C_STR("indi/json"),
+    MG_C_STR("indi/xml"),
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void out_callback(const indi_object_t *object)
 {
-    indi_dict_t *dict = indi_switch_set_vector_new((indi_dict_t *) object);
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) object->server_ctx;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t tag = indi_string_get((indi_string_t *) indi_dict_get((indi_dict_t *) object, "<>"));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_dict_t *dict;
+
+    /**/ if(strcmp("defNumberVector", tag) == 0) {
+        dict = indi_number_set_vector_new((indi_dict_t *) object);
+    }
+    else if(strcmp("defTextVector", tag) == 0) {
+        dict = indi_text_set_vector_new((indi_dict_t *) object);
+    }
+    else if(strcmp("defLightVector", tag) == 0) {
+        dict = indi_light_set_vector_new((indi_dict_t *) object);
+    }
+    else if(strcmp("defSwitchVector", tag) == 0) {
+        dict = indi_switch_set_vector_new((indi_dict_t *) object);
+    }
+    else {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(ctx->emit_xml)
+    {
+        indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, ctx->validate_xml);
+
+        if(xmldoc != NULL)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            str_t json = indi_dict_to_string(dict);
+            mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
+            indi_memory_free(json);
+
+            indi_xmldoc_free(xmldoc);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t json = indi_dict_to_string(dict);
-    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) object->server_ctx;
     mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
     indi_memory_free(json);
 
     indi_dict_free(dict);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -227,10 +280,43 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
             else if(mg_startswith(message->topic, SPECIAL_TOPICS[4]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
-                /* NEW XXX VECTOR                                                                                     */
+                /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                MG_INFO((">> TODO treating: %.*s", (int) message->data.len, message->data.ptr));
+                indi_object_t *object = indi_object_parse(message->data.ptr);
+
+                if(object != NULL)
+                {
+                    MG_INFO((">> treating: %.*s", (int) message->data.len, message->data.ptr));
+
+                    indi_object_free(object);
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[5]))
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+                /* XML NEW XXX VECTOR                                                                                 */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                indi_xmldoc_t *xmldoc = indi_xmldoc_parse(message->data.ptr);
+
+                if(xmldoc != NULL)
+                {
+                    indi_object_t *object = indi_xmldoc_to_object(xmldoc, ctx->validate_xml);
+
+                    if(object != NULL)
+                    {
+                        str_t json = indi_object_to_string(object);
+                        MG_INFO((">> treating: %s", json));
+                        indi_memory_free(json);
+
+                        indi_object_free(object);
+                    }
+
+                    indi_xmldoc_free(xmldoc);
+                }
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -276,6 +362,9 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     ctx.opts.client_id = mg_str(client_id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    ctx.emit_xml = true;
+    ctx.validate_xml = true;
 
     ctx.driver_list = driver_list;
     ctx.vector_list = vector_list;

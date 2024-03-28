@@ -523,7 +523,7 @@ typedef struct
 {
     __NULLABLE__ STR_t label;
     __NULLABLE__ STR_t group;
-    __NULLABLE__ uint32_t timeout;
+    __NULLABLE__ double timeout;
     __NULLABLE__ STR_t timestamp;
     __NULLABLE__ STR_t message;
 
@@ -650,7 +650,7 @@ bool indi_validation_initialize();
 bool indi_validation_finalize();
 
 bool indi_validation_check(
-    indi_xmldoc_t *doc
+    const indi_xmldoc_t *doc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -658,12 +658,12 @@ bool indi_validation_check(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_object_t *indi_xmldoc_to_object(
-    indi_xmldoc_t *doc,
+    const indi_xmldoc_t *doc,
     bool validate
 );
 
 indi_xmldoc_t *indi_object_to_xmldoc(
-    indi_object_t *obj,
+    const indi_object_t *obj,
     bool validate
 );
 
