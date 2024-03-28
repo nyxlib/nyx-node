@@ -19,11 +19,11 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define buff_t /* */ void *
-#define BUFF_t const void *
+typedef /* */ void *buff_t;
+/////// const void *BUFF_t;
 
-#define str_t /* */ char *
-#define STR_t const char *
+typedef /* */ char *str_t;
+typedef const char *STR_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
