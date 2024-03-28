@@ -149,10 +149,10 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
             if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, ctx->opts.client_id.ptr) > 0)
             {
-                MG_INFO(("%lu Subscribing to `%s`", connection->id, SPECIAL_TOPICS[i]));
+                MG_INFO(("%lu Subscribing to `%s`...", connection->id, SPECIAL_TOPICS[i]));
                 mqtt_sub(connection, SPECIAL_TOPICS[i], 1);
 
-                MG_INFO(("%lu Subscribing to `%s`", connection->id, mg_str(topic)));
+                MG_INFO(("%lu Subscribing to `%s`...", connection->id, mg_str(topic)));
                 mqtt_sub(connection, mg_str(topic), 1);
             }
 
