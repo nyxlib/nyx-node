@@ -55,7 +55,7 @@ void indi_string_set(indi_string_t *obj, STR_t data)
         return;
     }
 
-    if(strcmp(obj->data, data) == 0)
+    if(strcmp(obj->data, data) != 0)
     {
         obj->data = data;
 
