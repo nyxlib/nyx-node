@@ -6,7 +6,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_callback(const indi_object_t *object)
+static void debug_callback(const indi_object_t *object)
 {
     indi_dict_t *dict = indi_number_set_vector_new((indi_dict_t *) object);
 
@@ -49,9 +49,14 @@ indi_dict_t *indi_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t for
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_number_def_vector_new(STR_t device, STR_t name, indi_perm_t perm, indi_state_t state,
-                                        indi_dict_t *defs[], indi_opt_t *opt)
-{
+indi_dict_t *indi_number_def_vector_new(
+    STR_t device,
+    STR_t name,
+    indi_perm_t perm,
+    indi_state_t state,
+    indi_dict_t *defs[],
+    indi_opt_t *opt
+) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     indi_dict_t *result = indi_dict_new();
@@ -82,7 +87,7 @@ indi_dict_t *indi_number_def_vector_new(STR_t device, STR_t name, indi_perm_t pe
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    result->base.out_callback = internal_callback;
+    result->base.out_callback = debug_callback;
 
     return result;
 }
