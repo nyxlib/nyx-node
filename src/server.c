@@ -68,8 +68,9 @@ struct indi_server_ctx_s
     bool emit_xml;
     bool validate_xml;
 
-    str_t main_topic;
     str_t driver_topic;
+    str_t main_topic_xml;
+    str_t main_topic_json;
 
     /**/
 
@@ -141,9 +142,9 @@ static void out_callback(const indi_object_t *object)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                str_t json = indi_dict_to_string(dict);
-                mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
-                indi_memory_free(json);
+                str_t xml = indi_xmldoc_to_string(xmldoc);
+                mqtt_pub(ctx->connection, mg_str(ctx->main_topic_xml), mg_str(xml), 1, false);
+                indi_memory_free(xml);
 
                 indi_xmldoc_free(xmldoc);
 
@@ -154,7 +155,7 @@ static void out_callback(const indi_object_t *object)
         /*------------------------------------------------------------------------------------------------------------*/
 
         str_t json = indi_dict_to_string(dict);
-        mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
+        mqtt_pub(ctx->connection, mg_str(ctx->main_topic_json), mg_str(json), 1, false);
         indi_memory_free(json);
 
         indi_dict_free(dict);
@@ -165,14 +166,17 @@ static void out_callback(const indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
+static void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    indi_object_t *children_list1 = indi_dict_get(dict, "children");
     indi_object_t *device_string1 = indi_dict_get(dict, "@device");
     indi_object_t *name_string1 = indi_dict_get(dict, "@name");
 
-    if(device_string1 != NULL && device_string1->type == INDI_TYPE_STRING
+    if(children_list1 != NULL && children_list1->type == INDI_TYPE_LIST
+       &&
+       device_string1 != NULL && device_string1->type == INDI_TYPE_STRING
        &&
        name_string1 != NULL && name_string1->type == INDI_TYPE_STRING
     ) {
@@ -187,10 +191,13 @@ void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
+            indi_object_t *children_list2 = indi_dict_get(vector, "children");
             indi_object_t *device_string2 = indi_dict_get(vector, "@device");
             indi_object_t *name_string2 = indi_dict_get(vector, "@name");
 
-            if(device_string2 != NULL && device_string2->type == INDI_TYPE_STRING
+            if(children_list2 != NULL && children_list1->type == INDI_TYPE_LIST
+               &&
+               device_string2 != NULL && device_string2->type == INDI_TYPE_STRING
                &&
                name_string2 != NULL && name_string2->type == INDI_TYPE_STRING
             ) {
@@ -201,15 +208,54 @@ void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 
                 if(strcmp(device1, device2) == 0 && strcmp(name1, name2) == 0)
                 {
-                    vector->base.locked = true;
+                    int idx1;
+                    int idx2;
 
-                    /**/    /*----------------------------------------------------------------------------------------*/
-                    /**/
-                    /**/    printf("Yessssssss!\n");
-                    /**/
-                    /**/    /*----------------------------------------------------------------------------------------*/
+                    indi_object_t *obj1;
+                    indi_object_t *obj2;
 
-                    vector->base.locked = false;
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    for(indi_list_iter_t iter1 = INDI_LIST_ITER(children_list1); indi_list_iterate(&iter1, &idx1, &obj1);)
+                    {
+                        if(obj1->type == INDI_TYPE_DICT)
+                        {
+                            indi_object_t *name_string3 = indi_dict_get((indi_dict_t *) obj1, "@name");
+
+                            if(name_string3 != NULL && name_string3->type == INDI_TYPE_STRING)
+                            {
+                                STR_t name3 = indi_string_get((indi_string_t *) name_string3);
+
+                                /*------------------------------------------------------------------------------------*/
+
+                                for(indi_list_iter_t iter2 = INDI_LIST_ITER(children_list2); indi_list_iterate(&iter2, &idx2, &obj2);)
+                                {
+                                    if(obj2->type == INDI_TYPE_DICT)
+                                    {
+                                        indi_object_t *name_string4 = indi_dict_get((indi_dict_t *) obj2, "@name");
+
+                                        if(name_string4 != NULL && name_string4->type == INDI_TYPE_STRING)
+                                        {
+                                            STR_t name4 = indi_string_get((indi_string_t *) name_string4);
+
+                                            /*------------------------------------------------------------------------*/
+
+                                            if(strcmp(name3, name4) == 0)
+                                            {
+                                                internal_copy_entry((indi_dict_t *) obj2, (indi_dict_t *) obj1, "$");
+                                            }
+
+                                            /*------------------------------------------------------------------------*/
+                                        }
+                                    }
+                                }
+
+                                /*------------------------------------------------------------------------------------*/
+                            }
+                        }
+                    }
+
+                    /*------------------------------------------------------------------------------------------------*/
 
                     break;
                 }
@@ -410,7 +456,7 @@ static void timer_fn(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password, STR_t client_id, indi_list_t *driver_list, indi_dict_t *vector_list[])
+int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password, STR_t client_id, indi_list_t *driver_list, indi_dict_t *vector_list[], bool emit_xml, bool validate_xml)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -432,21 +478,27 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ctx.emit_xml = true;
-    ctx.validate_xml = true;
+    ctx.emit_xml     = emit_xml    ;
+    ctx.validate_xml = validate_xml;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     ctx.driver_list = driver_list;
     ctx.vector_list = vector_list;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_string_builder_t *sb1 = indi_string_builder_from("indi", "/", client_id);
-    ctx.main_topic = indi_string_builder_to_cstring(sb1);
+    indi_string_builder_t *sb1 = indi_string_builder_from("indi", "/", "drivers", "/", client_id);
+    ctx.driver_topic = indi_string_builder_to_cstring(sb1);
     indi_string_builder_free(sb1);
 
-    indi_string_builder_t *sb2 = indi_string_builder_from("indi", "/", "drivers", "/", client_id);
-    ctx.driver_topic = indi_string_builder_to_cstring(sb2);
+    indi_string_builder_t *sb2 = indi_string_builder_from("indi", "/", client_id, "/xml");
+    ctx.main_topic_xml = indi_string_builder_to_cstring(sb2);
     indi_string_builder_free(sb2);
+
+    indi_string_builder_t *sb3 = indi_string_builder_from("indi", "/", client_id, "/json");
+    ctx.main_topic_json = indi_string_builder_to_cstring(sb3);
+    indi_string_builder_free(sb3);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -474,9 +526,11 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_memory_free(ctx.main_topic);
-
     indi_memory_free(ctx.driver_topic);
+
+    indi_memory_free(ctx.main_topic_xml);
+
+    indi_memory_free(ctx.main_topic_json);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

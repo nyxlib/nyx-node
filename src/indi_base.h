@@ -89,14 +89,12 @@ typedef struct indi_object_s
     __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
     __NULLABLE__ void (* out_callback)(const struct indi_object_s *object);
 
-    bool locked;
-
 } indi_object_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define INDI_OBJECT(_type) \
-            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .type = _type, .parent = NULL, .server_ctx = NULL, .in_callback = NULL, .out_callback = NULL, .locked = false})
+            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .type = _type, .parent = NULL, .server_ctx = NULL, .in_callback = NULL, .out_callback = NULL})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -677,7 +675,9 @@ int indi_run(
     __NULLABLE__ STR_t password,
     STR_t client_id,
     indi_list_t *driver_list,
-    indi_dict_t *vector_list[]
+    indi_dict_t *vector_list[],
+    bool emit_xml,
+    bool validate_xml
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -242,10 +242,8 @@ void indi_object_notify(const indi_object_t *obj)
 {
     do
     {
-        if(obj->locked == false
-           &&
-           obj->out_callback != NULL
-        ) {
+        if(obj->out_callback)
+        {
             obj->out_callback(obj);
         }
 
