@@ -19,7 +19,7 @@ indi_string_t *indi_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->value = NULL;
+    obj->value = indi_string_dup("");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -53,7 +53,7 @@ void indi_string_set(indi_string_t *obj, STR_t value)
         return;
     }
 
-    if(obj->value == NULL || strcmp(obj->value, value) != 0)
+    if(strcmp(obj->value, value) != 0)
     {
         indi_memory_free(obj->value);
 
