@@ -15,7 +15,10 @@ static bool mg_startswith(struct mg_str topic, struct mg_str prefix)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ConstantParameter"
 static void mqtt_pub(struct mg_connection *connection, struct mg_str topic, struct mg_str message, int qos, bool retain)
+#pragma clang diagnostic pop
 {
     struct mg_mqtt_opts opts;
 
@@ -31,7 +34,10 @@ static void mqtt_pub(struct mg_connection *connection, struct mg_str topic, stru
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ConstantParameter"
 static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int qos)
+#pragma clang diagnostic pop
 {
     struct mg_mqtt_opts opts;
 
@@ -58,6 +64,12 @@ struct ctx_s
     struct mg_mqtt_opts opts;
 
     struct mg_connection *connection;
+
+    /**/
+
+    str_t main_topic;
+
+    str_t driver_topic;
 
     /**/
 
@@ -169,7 +181,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 str_t json = indi_list_to_string(ctx->driver_list);
 
-                mqtt_pub(connection, mg_str("indi/drivers"), mg_str(json), 1, false);
+                mqtt_pub(connection, mg_str(ctx->driver_topic), mg_str(json), 1, false);
 
                 indi_memory_free(json);
 
@@ -243,25 +255,31 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    /* SERVER */
-
     ctx.url = url;
 
     ctx.opts.user = mg_str(username);
     ctx.opts.pass = mg_str(password);
-
-    ctx.driver_list = driver_list;
-    ctx.vector_list = vector_list;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    /* CLIENT */
 
     ctx.opts.clean = true;
 
     ctx.opts.version = 0x04;
 
     ctx.opts.client_id = mg_str(client_id);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    ctx.driver_list = driver_list;
+    ctx.vector_list = vector_list;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_string_builder_t *sb1 = indi_string_builder_from("indi", "/", client_id);
+    ctx.main_topic = indi_string_builder_to_cstring(sb1);
+    indi_string_builder_free(sb1);
+
+    indi_string_builder_t *sb2 = indi_string_builder_from("indi", "/", "drivers", "/", client_id);
+    ctx.driver_topic = indi_string_builder_to_cstring(sb2);
+    indi_string_builder_free(sb2);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -277,6 +295,12 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     while(s_signo == 0) mg_mgr_poll(&ctx.mgr, 1000);
 
     mg_mgr_free(&ctx.mgr);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_memory_free(ctx.main_topic);
+
+    indi_memory_free(ctx.driver_topic);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
