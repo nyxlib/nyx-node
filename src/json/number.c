@@ -14,12 +14,8 @@ indi_number_t *indi_number_new()
     indi_number_t *obj = indi_memory_alloc(sizeof(indi_number_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    
-    obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_NUMBER;
 
-    obj->base.parent = NULL;
-    obj->base.out_callback = NULL;
+    obj->base = INDI_OBJECT(INDI_TYPE_NUMBER);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

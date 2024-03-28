@@ -12,11 +12,7 @@ indi_null_t *indi_null_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_NULL;
-
-    obj->base.parent = NULL;
-    obj->base.out_callback = NULL;
+    obj->base = INDI_OBJECT(INDI_TYPE_NULL);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

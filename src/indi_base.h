@@ -85,9 +85,19 @@ typedef struct indi_object_s
     __NULLABLE__ struct indi_object_s *parent;
 
     __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
+    __NULLABLE__ BUFF_t in_arg;
+
     __NULLABLE__ void (* out_callback)(const struct indi_object_s *object);
+    __NULLABLE__ BUFF_t out_arg;
+
+    bool locked;
 
 } indi_object_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define INDI_OBJECT(type) \
+            ((struct indi_object_s) {INDI_OBJECT_MAGIC, type, NULL, NULL, NULL, NULL, NULL, false})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

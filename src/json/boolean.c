@@ -11,13 +11,9 @@ indi_boolean_t *indi_boolean_new()
     indi_boolean_t *obj = indi_memory_alloc(sizeof(indi_boolean_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    
-    obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_BOOLEAN;
 
-    obj->base.parent = NULL;
-    obj->base.out_callback = NULL;
-    
+    obj->base = INDI_OBJECT(INDI_TYPE_BOOLEAN);
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     obj->data = false;

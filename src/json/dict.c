@@ -32,11 +32,7 @@ indi_dict_t *indi_dict_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_DICT;
-
-    obj->base.parent = NULL;
-    obj->base.out_callback = NULL;
+    obj->base = INDI_OBJECT(INDI_TYPE_DICT);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

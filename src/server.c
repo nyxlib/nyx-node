@@ -60,21 +60,17 @@ struct ctx_s
     STR_t url;
 
     struct mg_mgr mgr;
-
     struct mg_mqtt_opts opts;
-
     struct mg_connection *connection;
 
     /**/
 
     str_t main_topic;
-
     str_t driver_topic;
 
     /**/
 
     indi_list_t *driver_list;
-
     indi_dict_t **vector_list;
 };
 
@@ -96,6 +92,20 @@ static struct mg_str SPECIAL_TOPICS[] = {
     MG_C_STR("indi/enable_blob"),
     MG_C_STR("indi"),
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void out_callback(const indi_object_t *object)
+{
+    indi_dict_t *dict = indi_switch_set_vector_new((indi_dict_t *) object);
+
+    str_t json = indi_dict_to_string(dict);
+    struct ctx_s *ctx = (struct ctx_s *) object->out_arg;
+    mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
+    indi_memory_free(json);
+
+    indi_dict_free(dict);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -261,7 +271,6 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     ctx.opts.pass = mg_str(password);
 
     ctx.opts.clean = true;
-
     ctx.opts.version = 0x04;
 
     ctx.opts.client_id = mg_str(client_id);
@@ -280,6 +289,15 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     indi_string_builder_t *sb2 = indi_string_builder_from("indi", "/", "drivers", "/", client_id);
     ctx.driver_topic = indi_string_builder_to_cstring(sb2);
     indi_string_builder_free(sb2);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
+    {
+        (*vector_ptr)->base.out_callback = &out_callback;
+
+        (*vector_ptr)->base.out_arg = &ctx;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

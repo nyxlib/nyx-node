@@ -15,11 +15,7 @@ indi_string_t *indi_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_STRING;
-
-    obj->base.parent = NULL;
-    obj->base.out_callback = NULL;
+    obj->base = INDI_OBJECT(INDI_TYPE_STRING);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
