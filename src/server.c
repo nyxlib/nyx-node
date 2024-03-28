@@ -166,7 +166,7 @@ static void out_callback(const indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void update_device(unsigned long id, indi_dict_t *vector_list[], const indi_dict_t *dict)
+static void update_props(unsigned long id, indi_dict_t *vector_list[], const indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -330,10 +330,14 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
             if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, ctx->opts.client_id.ptr) > 0)
             {
-                MG_INFO(("%lu Subscribing to `%s`...", connection->id, SPECIAL_TOPICS[i]));
+                MG_INFO(("%lu Subscribing to `%s` and `%s` topics",
+                    connection->id,
+                    SPECIAL_TOPICS[i].ptr,
+                    /*-----*/ topic /*-----*/
+                ));
+
                 mqtt_sub(connection, SPECIAL_TOPICS[i], 1);
 
-                MG_INFO(("%lu Subscribing to `%s`...", connection->id, mg_str(topic)));
                 mqtt_sub(connection, mg_str(topic), 1);
             }
 
@@ -417,7 +421,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 {
                     if(object->type == INDI_TYPE_DICT)
                     {
-                        update_device(connection->id, ctx->vector_list, (indi_dict_t *) object);
+                        update_props(connection->id, ctx->vector_list, (indi_dict_t *) object);
                     }
 
                     indi_dict_free((indi_dict_t *) object);
@@ -441,7 +445,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                     {
                         if(object->type == INDI_TYPE_DICT)
                         {
-                            update_device(connection->id, ctx->vector_list, (indi_dict_t *) object);
+                            update_props(connection->id, ctx->vector_list, (indi_dict_t *) object);
                         }
 
                         indi_dict_free((indi_dict_t *) object);
