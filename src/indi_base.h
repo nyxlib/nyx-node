@@ -84,11 +84,10 @@ typedef struct indi_object_s
 
     __NULLABLE__ struct indi_object_s *parent;
 
-    __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
-    __NULLABLE__ BUFF_t in_arg;
+    __NULLABLE__ struct indi_server_ctx_s *server_ctx;
 
+    __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
     __NULLABLE__ void (* out_callback)(const struct indi_object_s *object);
-    __NULLABLE__ BUFF_t out_arg;
 
     bool locked;
 
@@ -96,8 +95,8 @@ typedef struct indi_object_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define INDI_OBJECT(type) \
-            ((struct indi_object_s) {INDI_OBJECT_MAGIC, type, NULL, NULL, NULL, NULL, NULL, false})
+#define INDI_OBJECT(_type) \
+            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .type = _type, .parent = NULL, .server_ctx = NULL, .in_callback = NULL, .out_callback = NULL, .locked = false})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -303,7 +302,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define INDI_DICT_ITER(obj) \
-                ((indi_dict_iter_t) {0, ((indi_dict_t *) (obj))->base.type, ((indi_dict_t *) (obj))->head})
+                ((indi_dict_iter_t) {.idx = 0, .type = ((indi_dict_t *) (obj))->base.type, .head = ((indi_dict_t *) (obj))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -375,7 +374,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define INDI_LIST_ITER(obj) \
-                ((indi_list_iter_t) {0, ((indi_list_t *) (obj))->base.type, ((indi_list_t *) (obj))->head})
+                ((indi_list_iter_t) {.idx = 0, .type = ((indi_list_t *) (obj))->base.type, .head = ((indi_list_t *) (obj))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

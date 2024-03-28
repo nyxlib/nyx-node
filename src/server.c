@@ -55,7 +55,7 @@ static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int 
 /* SERVER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-struct ctx_s
+struct indi_server_ctx_s
 {
     STR_t url;
 
@@ -100,7 +100,7 @@ static void out_callback(const indi_object_t *object)
     indi_dict_t *dict = indi_switch_set_vector_new((indi_dict_t *) object);
 
     str_t json = indi_dict_to_string(dict);
-    struct ctx_s *ctx = (struct ctx_s *) object->out_arg;
+    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) object->server_ctx;
     mqtt_pub(ctx->connection, mg_str(ctx->main_topic), mg_str(json), 1, false);
     indi_memory_free(json);
 
@@ -111,7 +111,7 @@ static void out_callback(const indi_object_t *object)
 
 static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 {
-    struct ctx_s *ctx = (struct ctx_s *) connection->fn_data;
+    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -127,7 +127,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
     }
     else if(ev == MG_EV_CLOSE)
     {
-        ((struct ctx_s *) connection->fn_data)->connection = NULL;
+        ((struct indi_server_ctx_s *) connection->fn_data)->connection = NULL;
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
@@ -149,10 +149,10 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
             if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, ctx->opts.client_id.ptr) > 0)
             {
-                MG_INFO(("%lu Subscribing %s", connection->id, SPECIAL_TOPICS[i]));
+                MG_INFO(("%lu Subscribing to `%s`", connection->id, SPECIAL_TOPICS[i]));
                 mqtt_sub(connection, SPECIAL_TOPICS[i], 1);
 
-                MG_INFO(("%lu Subscribing %s", connection->id, mg_str(topic)));
+                MG_INFO(("%lu Subscribing to `%s`", connection->id, mg_str(topic)));
                 mqtt_sub(connection, mg_str(topic), 1);
             }
 
@@ -245,7 +245,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
 static void timer_fn(void *arg)
 {
-    struct ctx_s *ctx = (struct ctx_s *) arg;
+    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) arg;
 
     if(ctx->connection == NULL)
     {
@@ -259,9 +259,9 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    struct ctx_s ctx;
+    struct indi_server_ctx_s ctx;
 
-    memset(&ctx, 0, sizeof(struct ctx_s));
+    memset(&ctx, 0, sizeof(struct indi_server_ctx_s));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -296,7 +296,7 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     {
         (*vector_ptr)->base.out_callback = &out_callback;
 
-        (*vector_ptr)->base.out_arg = &ctx;
+        (*vector_ptr)->base.server_ctx = &ctx;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
