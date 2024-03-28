@@ -1,5 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <math.h>
+#include <stdio.h>
+
 #include "../indi_base_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -45,9 +48,19 @@ double indi_number_get(indi_number_t *obj)
 
 void indi_number_set(indi_number_t *obj, double data)
 {
-    obj->data = data;
+    if(isnan(data))
+    {
+        fprintf(stderr, "NaN number not allowed in `indi_number_set`\n");
+        fflush(stderr);
+        return;
+    }
 
-    indi_object_notify(&obj->base);
+    if(obj->data != data)
+    {
+        obj->data = data;
+
+        indi_object_notify(&obj->base);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
