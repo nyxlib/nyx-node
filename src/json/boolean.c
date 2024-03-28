@@ -4,19 +4,23 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_null_t *indi_null_new()
+indi_boolean_t *indi_boolean_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_null_t *obj = indi_memory_alloc(sizeof(indi_null_t));
+    indi_boolean_t *obj = indi_memory_alloc(sizeof(indi_boolean_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
+    
     obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_NULL;
+    obj->base.type = INDI_TYPE_BOOLEAN;
 
     obj->base.parent = NULL;
-    obj->base.callback = NULL;
+    obj->base.out_callback = NULL;
+    
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    obj->data = false;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -25,16 +29,32 @@ indi_null_t *indi_null_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_null_free(indi_null_t *obj)
+void indi_boolean_free(indi_boolean_t *obj)
 {
     indi_memory_free(obj);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_null_to_string(__USED__ indi_null_t *obj)
+bool indi_boolean_get(indi_boolean_t *obj)
 {
-    return indi_string_dup("null");
+    return obj->data;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_boolean_set(indi_boolean_t *obj, bool data)
+{
+    obj->data = data;
+
+    indi_object_notify(&obj->base);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+str_t indi_boolean_to_string(indi_boolean_t *obj)
+{
+    return indi_boolean_dup(obj->data);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

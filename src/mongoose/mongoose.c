@@ -1668,7 +1668,7 @@ bool mg_file_printf(struct mg_fs *fs, const char *path, const char *fmt, ...) {
 }
 
 // This helper function allows to scan a filesystem in a sequential way,
-// without using callback function:
+// without using out_callback function:
 //      char buf[100] = "";
 //      while (mg_fs_ls(&mg_fs_posix, "./", buf, sizeof(buf))) {
 //        ...

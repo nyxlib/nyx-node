@@ -242,9 +242,9 @@ void indi_object_notify(const indi_object_t *obj)
 {
     do
     {
-        if(obj->callback)
+        if(obj->out_callback)
         {
-            obj->callback(obj);
+            obj->out_callback(obj);
         }
 
     } while((obj = obj->parent) != NULL);
@@ -261,7 +261,7 @@ void indi_object_free(indi_object_t *obj)
 
     if(obj->magic != INDI_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object!\n");
+        fprintf(stderr, "Invalid object in `indi_object_free`\n");
         fflush(stderr);
         exit(1);
     }
@@ -293,7 +293,7 @@ void indi_object_free(indi_object_t *obj)
             break;
 
         default:
-            fprintf(stderr, "Internal error!\n");
+            fprintf(stderr, "Internal error in `indi_object_free`\n");
             fflush(stderr);
             exit(1);
     }
@@ -310,7 +310,7 @@ str_t indi_object_to_string(const indi_object_t *obj)
 
     if(obj->magic != INDI_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object!\n");
+        fprintf(stderr, "Invalid object in `indi_object_to_cstring`\n");
         fflush(stderr);
         exit(1);
     }
@@ -336,7 +336,7 @@ str_t indi_object_to_string(const indi_object_t *obj)
             return indi_dict_to_string((indi_dict_t *) obj);
 
         default:
-            fprintf(stderr, "Internal error!\n");
+            fprintf(stderr, "Internal error in `indi_object_to_string`\n");
             fflush(stderr);
             exit(1);
     }
@@ -353,7 +353,7 @@ str_t indi_object_to_cstring(const indi_object_t *obj)
 
     if(obj->magic != INDI_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object!\n");
+        fprintf(stderr, "Invalid object in `indi_object_to_cstring`\n");
         fflush(stderr);
         exit(1);
     }
@@ -379,7 +379,7 @@ str_t indi_object_to_cstring(const indi_object_t *obj)
             return indi_dict_to_string((indi_dict_t *) obj);
 
         default:
-            fprintf(stderr, "Internal error!\n");
+            fprintf(stderr, "Internal error in `indi_object_to_cstring`\n");
             fflush(stderr);
             exit(1);
     }

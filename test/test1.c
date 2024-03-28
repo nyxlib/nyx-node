@@ -28,14 +28,14 @@ int main()
 
     indi_dict_t *defs[] = {def1, def2, NULL};
 
-    indi_dict_t *switch_vector = indi_switch_vector_new(
-        "my_device",
-        "my_device_onoff",
-        INDI_STATE_OK,
-        INDI_PERM_RW,
-        INDI_RULE_AT_MOST_ONE,
-        defs,
-        NULL
+    indi_dict_t *switch_vector = indi_switch_def_vector_new(
+            "my_device",
+            "my_device_onoff",
+            INDI_STATE_OK,
+            INDI_PERM_RW,
+            INDI_RULE_AT_MOST_ONE,
+            defs,
+            NULL
     );
 
     indi_xmldoc_t *doc = indi_object_to_xmldoc(&switch_vector->base, true);

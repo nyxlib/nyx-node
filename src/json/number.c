@@ -4,23 +4,23 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_string_t *indi_string_new()
+indi_number_t *indi_number_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_string_t *obj = indi_memory_alloc(sizeof(indi_string_t));
+    indi_number_t *obj = indi_memory_alloc(sizeof(indi_number_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
+    
     obj->base.magic = INDI_OBJECT_MAGIC;
-    obj->base.type = INDI_TYPE_STRING;
+    obj->base.type = INDI_TYPE_NUMBER;
 
     obj->base.parent = NULL;
-    obj->base.callback = NULL;
+    obj->base.out_callback = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->data = NULL;
+    obj->data = 0.0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -29,21 +29,21 @@ indi_string_t *indi_string_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_free(indi_string_t *obj)
+void indi_number_free(indi_number_t *obj)
 {
     indi_memory_free(obj);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_string_get(indi_string_t *obj)
+double indi_number_get(indi_number_t *obj)
 {
     return obj->data;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_set(indi_string_t *obj, STR_t data)
+void indi_number_set(indi_number_t *obj, double data)
 {
     obj->data = data;
 
@@ -52,28 +52,9 @@ void indi_string_set(indi_string_t *obj, STR_t data)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_string(indi_string_t *obj)
+str_t indi_number_to_string(indi_number_t *obj)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(obj->data);
-
-    str_t result = indi_string_builder_to_string(sb);
-
-    indi_string_builder_free(sb);
-
-    return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-str_t indi_string_to_cstring(indi_string_t *obj)
-{
-    indi_string_builder_t *sb = indi_string_builder_from(obj->data);
-
-    str_t result = indi_string_builder_to_cstring(sb);
-
-    indi_string_builder_free(sb);
-
-    return result;
+    return indi_double_dup(obj->data);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

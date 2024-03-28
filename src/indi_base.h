@@ -15,12 +15,12 @@
             static inline
 
 #define __NULLABLE__ \
-            /* no nothing */
+            /* do nothing */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef /* */ void *buff_t;
-/////// const void *BUFF_t;
+typedef const void *BUFF_t;
 
 typedef /* */ char *str_t;
 typedef const char *STR_t;
@@ -58,12 +58,12 @@ buff_t indi_memory_realloc(
 
 typedef enum indi_type_e
 {
-    INDI_TYPE_NULL    = 100,
+    INDI_TYPE_NULL = 100,
     INDI_TYPE_BOOLEAN = 101,
-    INDI_TYPE_NUMBER  = 102,
-    INDI_TYPE_STRING  = 103,
-    INDI_TYPE_DICT    = 104,
-    INDI_TYPE_LIST    = 105,
+    INDI_TYPE_NUMBER = 102,
+    INDI_TYPE_STRING = 103,
+    INDI_TYPE_DICT = 104,
+    INDI_TYPE_LIST = 105,
 
 } indi_type_t;
 
@@ -77,7 +77,8 @@ typedef struct indi_object_s
 
     __NULLABLE__ struct indi_object_s *parent;
 
-    __NULLABLE__ void (* callback)(const struct indi_object_s *object);
+    __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
+    __NULLABLE__ void (* out_callback)(const struct indi_object_s *object);
 
 } indi_object_t;
 
@@ -432,10 +433,10 @@ str_t indi_xmldoc_to_string(
 
 typedef enum
 {
-    INDI_STATE_IDLE = 0,
-    INDI_STATE_OK = 1,
-    INDI_STATE_BUSY = 2,
-    INDI_STATE_ALERT = 3,
+    INDI_STATE_IDLE = 200,
+    INDI_STATE_OK = 201,
+    INDI_STATE_BUSY = 202,
+    INDI_STATE_ALERT = 203,
 
 } indi_state_t;
 
@@ -451,9 +452,9 @@ indi_state_t indi_str_to_state(
 
 typedef enum
 {
-    INDI_PERM_RO = 0,
-    INDI_PERM_WO = 1,
-    INDI_PERM_RW = 2,
+    INDI_PERM_RO = 300,
+    INDI_PERM_WO = 301,
+    INDI_PERM_RW = 302,
 
 } indi_perm_t;
 
@@ -469,9 +470,9 @@ indi_perm_t indi_str_to_perm(
 
 typedef enum
 {
-    INDI_RULE_ONE_OF_MANY = 0,
-    INDI_RULE_AT_MOST_ONE = 1,
-    INDI_RULE_ANY_OF_MANY = 2,
+    INDI_RULE_ONE_OF_MANY = 400,
+    INDI_RULE_AT_MOST_ONE = 401,
+    INDI_RULE_ANY_OF_MANY = 402,
 
 } indi_rule_t;
 
@@ -487,8 +488,8 @@ indi_rule_t indi_str_to_rule(
 
 typedef enum
 {
-    INDI_ONOFF_ON = 0,
-    INDI_ONOFF_OFF = 1,
+    INDI_ONOFF_ON = 500,
+    INDI_ONOFF_OFF = 501,
 
 } indi_onoff_t;
 
@@ -530,13 +531,17 @@ indi_dict_t *indi_number_def_new(
 #define indi_number_def_get(def) \
             ((indi_number_t *) indi_dict_get(def, "$"))->data
 
-indi_dict_t *indi_number_vector_new(
+indi_dict_t *indi_number_def_vector_new(
     STR_t device,
     STR_t name,
     indi_perm_t perm,
     indi_state_t state,
     indi_dict_t *defs[],
     indi_opt_t *opt
+);
+
+indi_dict_t *indi_number_set_vector_new(
+    indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -553,13 +558,17 @@ indi_dict_t *indi_text_def_new(
 #define indi_text_def_get(def) \
             ((indi_string_t *) indi_dict_get(def, "$"))->data
 
-indi_dict_t *indi_text_vector_new(
+indi_dict_t *indi_text_def_vector_new(
     STR_t device,
     STR_t name,
     indi_perm_t perm,
     indi_state_t state,
     indi_dict_t *defs[],
     indi_opt_t *opt
+);
+
+indi_dict_t *indi_text_set_vector_new(
+    indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -576,12 +585,16 @@ indi_dict_t *indi_light_def_new(
 #define indi_light_def_get(def) \
             indi_str_to_state(((indi_string_t *) indi_dict_get(def, "$"))->data)
 
-indi_dict_t *indi_light_vector_new(
+indi_dict_t *indi_light_def_vector_new(
     STR_t device,
     STR_t name,
     indi_state_t state,
     indi_dict_t *defs[],
     indi_opt_t *opt
+);
+
+indi_dict_t *indi_light_set_vector_new(
+    indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -598,7 +611,7 @@ indi_dict_t *indi_switch_def_new(
 #define indi_switch_def_get(def) \
             indi_str_to_onoff(((indi_string_t *) indi_dict_get(def, "$"))->data)
 
-indi_dict_t *indi_switch_vector_new(
+indi_dict_t *indi_switch_def_vector_new(
     STR_t device,
     STR_t name,
     indi_state_t state,
@@ -606,6 +619,10 @@ indi_dict_t *indi_switch_vector_new(
     indi_rule_t rule,
     indi_dict_t *defs[],
     indi_opt_t *opt
+);
+
+indi_dict_t *indi_switch_set_verctor_new(
+    indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
