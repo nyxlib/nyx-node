@@ -39,7 +39,7 @@ set(SOURCE_FILES
     src/indi/helpers.c
     src/indi/light.c
     src/indi/number.c
-        src/indi/text.c
+    src/indi/text.c
     src/indi/switch.c
     #
     src/alloc.c

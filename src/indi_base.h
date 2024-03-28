@@ -666,7 +666,9 @@ int indi_run(
     STR_t url,
     __NULLABLE__ STR_t username,
     __NULLABLE__ STR_t password,
-    STR_t client_id
+    STR_t client_id,
+    indi_list_t *driver_list,
+    indi_dict_t *vector_list[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
