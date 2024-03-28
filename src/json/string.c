@@ -23,7 +23,7 @@ indi_string_t *indi_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->data = "";
+    obj->data = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -34,6 +34,8 @@ indi_string_t *indi_string_new()
 
 void indi_string_free(indi_string_t *obj)
 {
+    indi_memory_free(obj->data);
+
     indi_memory_free(obj);
 }
 
@@ -55,9 +57,11 @@ void indi_string_set(indi_string_t *obj, STR_t data)
         return;
     }
 
-    if(strcmp(obj->data, data) != 0)
+    if(obj->data == NULL || strcmp(obj->data, data) != 0)
     {
-        obj->data = data;
+        indi_memory_free(obj->data);
+
+        obj->data = indi_string_dup(data);
 
         indi_object_notify(&obj->base);
     }

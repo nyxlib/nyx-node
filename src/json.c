@@ -187,7 +187,7 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        parser->curr_token.val = strncpy(indi_memory_alloc(length + 1), s + 0, length);
+        parser->curr_token.val = strncpy(indi_memory_alloc(length + 1), s, length);
 
         parser->curr_token.val[length] = '\0';
     }
@@ -295,7 +295,7 @@ static indi_string_t *json_parse_string(json_parser_t *parser)
 
     str_t val = PEEK().val;
 
-    indi_string_t *result = indi_string_from(/**/(val));
+    indi_string_t *result = indi_string_from(/**/(val)); // NOLINT(*-err34-c)
 
     indi_memory_free(val);
 

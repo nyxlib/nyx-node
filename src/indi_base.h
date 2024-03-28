@@ -225,7 +225,7 @@ typedef struct
 {
     indi_object_t base;
 
-    STR_t data;
+    str_t data;
 
 } indi_string_t;
 
