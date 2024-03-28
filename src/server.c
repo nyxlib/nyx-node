@@ -169,15 +169,15 @@ void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_object_t *device_string = indi_dict_get(dict, "@device");
-    indi_object_t *name_string = indi_dict_get(dict, "@name");
+    indi_object_t *device_string1 = indi_dict_get(dict, "@device");
+    indi_object_t *name_string1 = indi_dict_get(dict, "@name");
 
-    if(device_string != NULL && device_string->type == INDI_TYPE_STRING
+    if(device_string1 != NULL && device_string1->type == INDI_TYPE_STRING
        &&
-       name_string != NULL && name_string->type == INDI_TYPE_STRING
+       name_string1 != NULL && name_string1->type == INDI_TYPE_STRING
     ) {
-        STR_t device = indi_string_get((indi_string_t *) device_string);
-        STR_t name = indi_string_get((indi_string_t *) name_string);
+        STR_t device1 = indi_string_get((indi_string_t *) device_string1);
+        STR_t name1 = indi_string_get((indi_string_t *) name_string1);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -187,19 +187,19 @@ void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_t *device_string = indi_dict_get(vector, "@device");
-            indi_object_t *name_string = indi_dict_get(vector, "@name");
+            indi_object_t *device_string2 = indi_dict_get(vector, "@device");
+            indi_object_t *name_string2 = indi_dict_get(vector, "@name");
 
-            if(device_string != NULL && device_string->type == INDI_TYPE_STRING
+            if(device_string2 != NULL && device_string2->type == INDI_TYPE_STRING
                &&
-               name_string != NULL && name_string->type == INDI_TYPE_STRING
+               name_string2 != NULL && name_string2->type == INDI_TYPE_STRING
             ) {
-                STR_t _device = indi_string_get((indi_string_t *) device_string);
-                STR_t _name = indi_string_get((indi_string_t *) name_string);
+                STR_t device2 = indi_string_get((indi_string_t *) device_string2);
+                STR_t name2 = indi_string_get((indi_string_t *) name_string2);
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(strcmp(device, _device) == 0 && strcmp(name, _name) == 0)
+                if(strcmp(device1, device2) == 0 && strcmp(name1, name2) == 0)
                 {
                     vector->base.locked = true;
 
@@ -392,7 +392,6 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
             }
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
         /*------------------------------------------------------------------------------------------------------------*/
     }
 }
