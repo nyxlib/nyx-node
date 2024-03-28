@@ -8,27 +8,27 @@ indi_null_t *indi_null_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_null_t *obj = indi_memory_alloc(sizeof(indi_null_t));
+    indi_null_t *object = indi_memory_alloc(sizeof(indi_null_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base = INDI_OBJECT(INDI_TYPE_NULL);
+    object->base = INDI_OBJECT(INDI_TYPE_NULL);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_null_free(indi_null_t *obj)
+void indi_null_free(indi_null_t *object)
 {
-    indi_memory_free(obj);
+    indi_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_null_to_string(__USED__ const indi_null_t *obj)
+str_t indi_null_to_string(__USED__ const indi_null_t *object)
 {
     return indi_string_dup("null");
 }

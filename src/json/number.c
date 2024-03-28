@@ -11,40 +11,40 @@ indi_number_t *indi_number_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_number_t *obj = indi_memory_alloc(sizeof(indi_number_t));
+    indi_number_t *object = indi_memory_alloc(sizeof(indi_number_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base = INDI_OBJECT(INDI_TYPE_NUMBER);
+    object->base = INDI_OBJECT(INDI_TYPE_NUMBER);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->value = 0.0;
+    object->value = 0.0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_number_free(indi_number_t *obj)
+void indi_number_free(indi_number_t *object)
 {
-    obj->value = 0.0;
+    object->value = 0.0;
 
-    indi_memory_free(obj);
+    indi_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double indi_number_get(const indi_number_t *obj)
+double indi_number_get(const indi_number_t *object)
 {
-    return obj->value;
+    return object->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_number_set(indi_number_t *obj, double value)
+void indi_number_set(indi_number_t *object, double value)
 {
     if(isnan(value))
     {
@@ -53,19 +53,19 @@ void indi_number_set(indi_number_t *obj, double value)
         return;
     }
 
-    if(obj->value != value)
+    if(object->value != value)
     {
-        obj->value = value;
+        object->value = value;
 
-        indi_object_notify(&obj->base);
+        indi_object_notify(&object->base);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_number_to_string(const indi_number_t *obj)
+str_t indi_number_to_string(const indi_number_t *object)
 {
-    return indi_double_dup(obj->value);
+    return indi_double_dup(object->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

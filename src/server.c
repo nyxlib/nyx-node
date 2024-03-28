@@ -162,28 +162,26 @@ static void out_callback(const indi_object_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-
-    printf("*\n");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
+static void update_device(unsigned long id, indi_dict_t *vector_list[], const indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_object_t *children_list1 = indi_dict_get(dict, "children");
-    indi_object_t *device_string1 = indi_dict_get(dict, "@device");
-    indi_object_t *name_string1 = indi_dict_get(dict, "@name");
+    indi_object_t *children1_list = indi_dict_get(dict, "children");
+    indi_object_t *device1_string = indi_dict_get(dict, "@device");
+    indi_object_t *name1_string = indi_dict_get(dict, "@name");
 
-    if(children_list1 != NULL && children_list1->type == INDI_TYPE_LIST
+    if(children1_list != NULL && children1_list->type == INDI_TYPE_LIST
        &&
-       device_string1 != NULL && device_string1->type == INDI_TYPE_STRING
+       device1_string != NULL && device1_string->type == INDI_TYPE_STRING
        &&
-       name_string1 != NULL && name_string1->type == INDI_TYPE_STRING
+       name1_string != NULL && name1_string->type == INDI_TYPE_STRING
     ) {
-        STR_t device1 = indi_string_get((indi_string_t *) device_string1);
-        STR_t name1 = indi_string_get((indi_string_t *) name_string1);
+        STR_t device1 = indi_string_get((indi_string_t *) device1_string);
+        STR_t name1 = indi_string_get((indi_string_t *) name1_string);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -193,18 +191,18 @@ static void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_t *children_list2 = indi_dict_get(vector, "children");
-            indi_object_t *device_string2 = indi_dict_get(vector, "@device");
-            indi_object_t *name_string2 = indi_dict_get(vector, "@name");
+            indi_object_t *children2_list = indi_dict_get(vector, "children");
+            indi_object_t *device2_string = indi_dict_get(vector, "@device");
+            indi_object_t *name2_string = indi_dict_get(vector, "@name");
 
-            if(children_list2 != NULL && children_list1->type == INDI_TYPE_LIST
+            if(children2_list != NULL && children1_list->type == INDI_TYPE_LIST
                &&
-               device_string2 != NULL && device_string2->type == INDI_TYPE_STRING
+               device2_string != NULL && device2_string->type == INDI_TYPE_STRING
                &&
-               name_string2 != NULL && name_string2->type == INDI_TYPE_STRING
+               name2_string != NULL && name2_string->type == INDI_TYPE_STRING
             ) {
-                STR_t device2 = indi_string_get((indi_string_t *) device_string2);
-                STR_t name2 = indi_string_get((indi_string_t *) name_string2);
+                STR_t device2 = indi_string_get((indi_string_t *) device2_string);
+                STR_t name2 = indi_string_get((indi_string_t *) name2_string);
 
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -213,46 +211,53 @@ static void update_device(indi_dict_t *vector_list[], const indi_dict_t *dict)
                     int idx1;
                     int idx2;
 
-                    indi_object_t *obj1;
-                    indi_object_t *obj2;
+                    indi_object_t *object1;
+                    indi_object_t *object2;
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(indi_list_iter_t iter1 = INDI_LIST_ITER(children_list1); indi_list_iterate(&iter1, &idx1, &obj1);)
+                    for(indi_list_iter_t iter1 = INDI_LIST_ITER(children1_list); indi_list_iterate(&iter1, &idx1, &object1);)
                     {
-                        if(obj1->type == INDI_TYPE_DICT)
+                        if(object1->type == INDI_TYPE_DICT)
                         {
-                            indi_object_t *name_string3 = indi_dict_get((indi_dict_t *) obj1, "@name");
+                            indi_object_t *prop1_string = indi_dict_get((indi_dict_t *) object1, "@name");
 
-                            if(name_string3 != NULL && name_string3->type == INDI_TYPE_STRING)
+                            if(prop1_string != NULL && prop1_string->type == INDI_TYPE_STRING)
                             {
-                                STR_t name3 = indi_string_get((indi_string_t *) name_string3);
+                                STR_t prop1 = indi_string_get((indi_string_t *) prop1_string);
 
                                 /*------------------------------------------------------------------------------------*/
 
-                                for(indi_list_iter_t iter2 = INDI_LIST_ITER(children_list2); indi_list_iterate(&iter2, &idx2, &obj2);)
+                                for(indi_list_iter_t iter2 = INDI_LIST_ITER(children2_list); indi_list_iterate(&iter2, &idx2, &object2);)
                                 {
-                                    if(obj2->type == INDI_TYPE_DICT)
+                                    if(object2->type == INDI_TYPE_DICT)
                                     {
-                                        indi_object_t *name_string4 = indi_dict_get((indi_dict_t *) obj2, "@name");
+                                        indi_object_t *prop2_string = indi_dict_get((indi_dict_t *) object2, "@name");
 
-                                        if(name_string4 != NULL && name_string4->type == INDI_TYPE_STRING)
+                                        if(prop2_string != NULL && prop2_string->type == INDI_TYPE_STRING)
                                         {
-                                            STR_t name4 = indi_string_get((indi_string_t *) name_string4);
+                                            STR_t prop2 = indi_string_get((indi_string_t *) prop2_string);
 
                                             /*------------------------------------------------------------------------*/
 
-                                            if(strcmp(name3, name4) == 0)
+                                            if(strcmp(prop1, prop2) == 0)
                                             {
                                                 bool notify = internal_copy_entry(
-                                                    (indi_dict_t *) obj2,
-                                                    (indi_dict_t *) obj1,
+                                                    (indi_dict_t *) object2,
+                                                    (indi_dict_t *) object1,
                                                     "$"
                                                 );
 
-                                                if(notify && obj2->in_callback != NULL)
+                                                if(notify)
                                                 {
-                                                    obj2->in_callback(obj2);
+                                                    str_t str = indi_object_to_string(object2);
+                                                    MG_INFO(("%lu Updating `%s::%s` with %s", id, device1, name1, str));
+                                                    indi_memory_free(str);
+
+                                                    if(object2->in_callback != NULL)
+                                                    {
+                                                        object2->in_callback(object2);
+                                                    }
                                                 }
                                             }
 
@@ -412,7 +417,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 {
                     if(object->type == INDI_TYPE_DICT)
                     {
-                        update_device(ctx->vector_list, (indi_dict_t *) object);
+                        update_device(connection->id, ctx->vector_list, (indi_dict_t *) object);
                     }
 
                     indi_dict_free((indi_dict_t *) object);
@@ -436,7 +441,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                     {
                         if(object->type == INDI_TYPE_DICT)
                         {
-                            update_device(ctx->vector_list, (indi_dict_t *) object);
+                            update_device(connection->id, ctx->vector_list, (indi_dict_t *) object);
                         }
 
                         indi_dict_free((indi_dict_t *) object);

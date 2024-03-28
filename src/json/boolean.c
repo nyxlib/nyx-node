@@ -8,54 +8,54 @@ indi_boolean_t *indi_boolean_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_boolean_t *obj = indi_memory_alloc(sizeof(indi_boolean_t));
+    indi_boolean_t *object = indi_memory_alloc(sizeof(indi_boolean_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base = INDI_OBJECT(INDI_TYPE_BOOLEAN);
+    object->base = INDI_OBJECT(INDI_TYPE_BOOLEAN);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->value = false;
+    object->value = false;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_boolean_free(indi_boolean_t *obj)
+void indi_boolean_free(indi_boolean_t *object)
 {
-    obj->value = false;
+    object->value = false;
 
-    indi_memory_free(obj);
+    indi_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_boolean_get(const indi_boolean_t *obj)
+bool indi_boolean_get(const indi_boolean_t *object)
 {
-    return obj->value;
+    return object->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_boolean_set(indi_boolean_t *obj, bool value)
+void indi_boolean_set(indi_boolean_t *object, bool value)
 {
-    if(obj->value != value)
+    if(object->value != value)
     {
-        obj->value = value;
+        object->value = value;
 
-        indi_object_notify(&obj->base);
+        indi_object_notify(&object->base);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_boolean_to_string(const indi_boolean_t *obj)
+str_t indi_boolean_to_string(const indi_boolean_t *object)
 {
-    return indi_boolean_dup(obj->value);
+    return indi_boolean_dup(object->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

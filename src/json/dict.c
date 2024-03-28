@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "../indi_base_internal.h"
@@ -19,7 +21,7 @@ typedef struct indi_dict_node_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void internal_dict_clear(
-    indi_dict_t *obj
+    indi_dict_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -28,38 +30,38 @@ indi_dict_t *indi_dict_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *obj = indi_memory_alloc(sizeof(indi_dict_t));
+    indi_dict_t *object = indi_memory_alloc(sizeof(indi_dict_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base = INDI_OBJECT(INDI_TYPE_DICT);
+    object->base = INDI_OBJECT(INDI_TYPE_DICT);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->head = NULL;
-    obj->tail = NULL;
+    object->head = NULL;
+    object->tail = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_dict_free(indi_dict_t *obj)
+void indi_dict_free(indi_dict_t *object)
 {
-    internal_dict_clear(obj);
+    internal_dict_clear(object);
 
-    indi_memory_free(obj);
+    indi_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_dict_clear(indi_dict_t *obj)
+static void internal_dict_clear(indi_dict_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = obj->head; node != NULL;)
+    for(node_t *node = object->head; node != NULL;)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -78,28 +80,28 @@ static void internal_dict_clear(indi_dict_t *obj)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->head = NULL;
-    obj->tail = NULL;
+    object->head = NULL;
+    object->tail = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_dict_clear(indi_dict_t *obj)
+void indi_dict_clear(indi_dict_t *object)
 {
-    internal_dict_clear(obj);
+    internal_dict_clear(object);
 
-    indi_object_notify(&obj->base);
+    indi_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_dict_del(indi_dict_t *obj, STR_t key)
+void indi_dict_del(indi_dict_t *object, STR_t key)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *prev_node = NULL, *curr_node = obj->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next)
+    for(node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
@@ -107,7 +109,7 @@ void indi_dict_del(indi_dict_t *obj, STR_t key)
 
             if(prev_node == NULL)
             {
-                obj->head = curr_node->next;
+                object->head = curr_node->next;
             }
             else
             {
@@ -131,7 +133,7 @@ void indi_dict_del(indi_dict_t *obj, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_dict_iterate(indi_dict_iter_t *iter, STR_t *key, indi_object_t **obj)
+bool indi_dict_iterate(indi_dict_iter_t *iter, STR_t *key, indi_object_t **object)
 {
     if(iter->type == INDI_TYPE_DICT && iter->head != NULL)
     {
@@ -139,8 +141,8 @@ bool indi_dict_iterate(indi_dict_iter_t *iter, STR_t *key, indi_object_t **obj)
             *key = iter->head->key;
         }
 
-        if(obj != NULL) {
-            *obj = iter->head->val;
+        if(object != NULL) {
+            *object = iter->head->val;
         }
 
         iter->idx += 0x0000000000001;
@@ -154,11 +156,11 @@ bool indi_dict_iterate(indi_dict_iter_t *iter, STR_t *key, indi_object_t **obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_dict_get(const indi_dict_t *obj, STR_t key)
+indi_object_t *indi_dict_get(const indi_dict_t *object, STR_t key)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
+    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
@@ -173,15 +175,24 @@ indi_object_t *indi_dict_get(const indi_dict_t *obj, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t value)
+void indi_dict_set(indi_dict_t *object, STR_t key, buff_t value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((indi_object_t *) value)->parent = (indi_object_t *) obj;
+    if(((indi_object_t *) value)->magic != INDI_OBJECT_MAGIC)
+    {
+        fprintf(stderr, "Invalid object in `indi_dict_set`\n");
+        fflush(stderr);
+        exit(1);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
+    ((indi_object_t *) value)->parent = (indi_object_t *) object;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
@@ -204,15 +215,15 @@ void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(obj->head == NULL)
+    if(object->head == NULL)
     {
-        obj->head = node;
-        obj->tail = node;
+        object->head = node;
+        object->tail = node;
     }
     else
     {
-        obj->tail->next = node;
-        obj->tail /*-*/ = node;
+        object->tail->next = node;
+        object->tail /*-*/ = node;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -225,13 +236,13 @@ _ok:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_dict_size(const indi_dict_t *obj)
+size_t indi_dict_size(const indi_dict_t *object)
 {
     size_t result = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = obj->head; node != NULL; node = node->next, result++);
+    for(node_t *node = object->head; node != NULL; node = node->next, result++);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -240,13 +251,13 @@ size_t indi_dict_size(const indi_dict_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_dict_to_string(const indi_dict_t *obj)
+str_t indi_dict_to_string(const indi_dict_t *object)
 {
     indi_string_builder_t *sb = indi_string_builder_new();
 
     /**/    indi_string_builder_append(sb, "{");
     /**/
-    /**/    for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
+    /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
     /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
     /**/

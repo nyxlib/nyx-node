@@ -79,16 +79,16 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_xmldoc_t *indi_object_to_xmldoc(const indi_object_t *obj, bool validate)
+indi_xmldoc_t *indi_object_to_xmldoc(const indi_object_t *object, bool validate)
 {
-    if(obj == NULL)
+    if(object == NULL)
     {
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlNode *root = transform(obj);
+    xmlNode *root = transform(object);
 
     if(root == NULL)
     {

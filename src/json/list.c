@@ -1,5 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "../indi_base_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -15,7 +18,7 @@ typedef struct indi_list_node_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void internal_list_clear(
-    indi_list_t *obj
+    indi_list_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -24,38 +27,38 @@ indi_list_t *indi_list_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_list_t *obj = indi_memory_alloc(sizeof(indi_list_t));
+    indi_list_t *object = indi_memory_alloc(sizeof(indi_list_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base = INDI_OBJECT(INDI_TYPE_LIST);
+    object->base = INDI_OBJECT(INDI_TYPE_LIST);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->head = NULL;
-    obj->tail = NULL;
+    object->head = NULL;
+    object->tail = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_list_free(indi_list_t *obj)
+void indi_list_free(indi_list_t *object)
 {
-    internal_list_clear(obj);
+    internal_list_clear(object);
 
-    indi_memory_free(obj);
+    indi_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_list_clear(indi_list_t *obj)
+static void internal_list_clear(indi_list_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = obj->head; node != NULL;)
+    for(node_t *node = object->head; node != NULL;)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -74,28 +77,28 @@ static void internal_list_clear(indi_list_t *obj)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->head = NULL;
-    obj->tail = NULL;
+    object->head = NULL;
+    object->tail = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_list_clear(indi_list_t *obj)
+void indi_list_clear(indi_list_t *object)
 {
-    internal_list_clear(obj);
+    internal_list_clear(object);
 
-    indi_object_notify(&obj->base);
+    indi_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_list_del(indi_list_t *obj, int idx)
+void indi_list_del(indi_list_t *object, int idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(idx >= 0) for(node_t *prev_node = NULL, *curr_node = obj->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
+    if(idx >= 0) for(node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -103,7 +106,7 @@ void indi_list_del(indi_list_t *obj, int idx)
 
             if(prev_node == NULL)
             {
-                obj->head = curr_node->next;
+                object->head = curr_node->next;
             }
             else
             {
@@ -127,7 +130,7 @@ void indi_list_del(indi_list_t *obj, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **obj)
+bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **object)
 {
     if(iter->type == INDI_TYPE_LIST && iter->head != NULL)
     {
@@ -135,8 +138,8 @@ bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **obj)
             *idx = iter->idx;
         }
 
-        if(obj != NULL) {
-            *obj = iter->head->val;
+        if(object != NULL) {
+            *object = iter->head->val;
         }
 
         iter->idx += 0x0000000000001;
@@ -150,11 +153,11 @@ bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_list_get(const indi_list_t *obj, int idx)
+indi_object_t *indi_list_get(const indi_list_t *object, int idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(idx >= 0) for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    if(idx >= 0) for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -169,15 +172,24 @@ indi_object_t *indi_list_get(const indi_list_t *obj, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t value)
+indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((indi_object_t *) value)->parent = (indi_object_t *) obj;
+    if(((indi_object_t *) value)->magic != INDI_OBJECT_MAGIC)
+    {
+        fprintf(stderr, "Invalid object in `indi_list_set`\n");
+        fflush(stderr);
+        exit(1);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(idx >= 0) for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    ((indi_object_t *) value)->parent = (indi_object_t *) object;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(idx >= 0) for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -198,15 +210,15 @@ indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(obj->head == NULL)
+    if(object->head == NULL)
     {
-        obj->head = node;
-        obj->tail = node;
+        object->head = node;
+        object->tail = node;
     }
     else
     {
-        obj->tail->next = node;
-        obj->tail /*-*/ = node;
+        object->tail->next = node;
+        object->tail /*-*/ = node;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -216,18 +228,18 @@ _ok:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_list_size(const indi_list_t *obj)
+size_t indi_list_size(const indi_list_t *object)
 {
     size_t result = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = obj->head; node != NULL; node = node->next, result++);
+    for(node_t *node = object->head; node != NULL; node = node->next, result++);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -236,13 +248,13 @@ size_t indi_list_size(const indi_list_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_list_to_string(const indi_list_t *obj)
+str_t indi_list_to_string(const indi_list_t *object)
 {
     indi_string_builder_t *sb = indi_string_builder_new();
 
     /**/    indi_string_builder_append(sb, "[");
     /**/
-    /**/    for(node_t *curr_node = obj->head; curr_node != NULL; curr_node = curr_node->next)
+    /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
     /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
     /**/

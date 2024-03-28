@@ -319,11 +319,11 @@ indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_na
 
     int idx;
 
-    indi_object_t *obj;
+    indi_object_t *object;
 
     indi_object_t *list = indi_dict_get(def_vector, "children");
 
-    for(indi_list_iter_t iter = INDI_LIST_ITER(list); indi_list_iterate(&iter, &idx, &obj);)
+    for(indi_list_iter_t iter = INDI_LIST_ITER(list); indi_list_iterate(&iter, &idx, &object);)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -331,7 +331,7 @@ indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_na
 
         indi_dict_set(dict, "<>", indi_string_from(one_tag_name));
 
-        internal_copy_entry(dict, (indi_dict_t *) obj, "$");
+        internal_copy_entry(dict, (indi_dict_t *) object, "$");
 
         indi_list_push(children, dict);
 

@@ -103,15 +103,15 @@ indi_object_t *indi_object_parse(
 );
 
 void indi_object_free(
-    /*-*/ indi_object_t *obj
+    /*-*/ indi_object_t *object
 );
 
 str_t indi_object_to_string(
-    const indi_object_t *obj
+    const indi_object_t *object
 );
 
 str_t indi_object_to_cstring(
-    const indi_object_t *obj
+    const indi_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -129,11 +129,11 @@ typedef struct
 indi_null_t *indi_null_new();
 
 void indi_null_free(
-    /*-*/ indi_null_t *obj
+    /*-*/ indi_null_t *object
 );
 
 str_t indi_null_to_string(
-    const indi_null_t *obj
+    const indi_null_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -153,20 +153,20 @@ typedef struct
 indi_number_t *indi_number_new();
 
 void indi_number_free(
-    /*-*/ indi_number_t *obj
+    /*-*/ indi_number_t *object
 );
 
 double indi_number_get(
-    const indi_number_t *obj
+    const indi_number_t *object
 );
 
 void indi_number_set(
-    /*-*/ indi_number_t *obj,
+    /*-*/ indi_number_t *object,
     double value
 );
 
 str_t indi_number_to_string(
-    const indi_number_t *obj
+    const indi_number_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -197,20 +197,20 @@ typedef struct
 indi_boolean_t *indi_boolean_new();
 
 void indi_boolean_free(
-    /*-*/ indi_boolean_t *obj
+    /*-*/ indi_boolean_t *object
 );
 
 bool indi_boolean_get(
-    const indi_boolean_t *obj
+    const indi_boolean_t *object
 );
 
 void indi_boolean_set(
-    /*-*/ indi_boolean_t *obj,
+    /*-*/ indi_boolean_t *object,
     bool value
 );
 
 str_t indi_boolean_to_string(
-    const indi_boolean_t *obj
+    const indi_boolean_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -241,24 +241,24 @@ typedef struct
 indi_string_t *indi_string_new();
 
 void indi_string_free(
-    /*-*/ indi_string_t *obj
+    /*-*/ indi_string_t *object
 );
 
 STR_t indi_string_get(
-    const indi_string_t *obj
+    const indi_string_t *object
 );
 
 void indi_string_set(
-    /*-*/ indi_string_t *obj,
+    /*-*/ indi_string_t *object,
     STR_t value
 );
 
 str_t indi_string_to_string(
-    const indi_string_t *obj
+    const indi_string_t *object
 );
 
 str_t indi_string_to_cstring(
-    const indi_string_t *obj
+    const indi_string_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -299,49 +299,49 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define INDI_DICT_ITER(obj) \
-                ((indi_dict_iter_t) {.idx = 0, .type = ((indi_dict_t *) (obj))->base.type, .head = ((indi_dict_t *) (obj))->head})
+#define INDI_DICT_ITER(object) \
+                ((indi_dict_iter_t) {.idx = 0, .type = ((indi_dict_t *) (object))->base.type, .head = ((indi_dict_t *) (object))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_dict_t *indi_dict_new();
 
 void indi_dict_free(
-    /*-*/ indi_dict_t *obj
+    /*-*/ indi_dict_t *object
 );
 
 void indi_dict_clear(
-    /*-*/ indi_dict_t *obj
+    /*-*/ indi_dict_t *object
 );
 
 void indi_dict_del(
-    /*-*/ indi_dict_t *obj,
+    /*-*/ indi_dict_t *object,
     STR_t key
 );
 
 bool indi_dict_iterate(
     indi_dict_iter_t *iter,
     STR_t *key,
-    indi_object_t **obj
+    indi_object_t **object
 );
 
 indi_object_t *indi_dict_get(
-    const indi_dict_t *obj,
+    const indi_dict_t *object,
     STR_t key
 );
 
 void indi_dict_set(
-    /*-*/ indi_dict_t *obj,
+    /*-*/ indi_dict_t *object,
     STR_t key,
     buff_t value
 );
 
 size_t indi_dict_size(
-    const indi_dict_t *obj
+    const indi_dict_t *object
 );
 
 str_t indi_dict_to_string(
-    const indi_dict_t *obj
+    const indi_dict_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -371,55 +371,55 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define INDI_LIST_ITER(obj) \
-                ((indi_list_iter_t) {.idx = 0, .type = ((indi_list_t *) (obj))->base.type, .head = ((indi_list_t *) (obj))->head})
+#define INDI_LIST_ITER(object) \
+                ((indi_list_iter_t) {.idx = 0, .type = ((indi_list_t *) (object))->base.type, .head = ((indi_list_t *) (object))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_list_t *indi_list_new();
 
 void indi_list_free(
-    /*-*/ indi_list_t *obj
+    /*-*/ indi_list_t *object
 );
 
 void indi_list_clear(
-    /*-*/ indi_list_t *obj
+    /*-*/ indi_list_t *object
 );
 
 void indi_list_del(
-    /*-*/ indi_list_t *obj,
+    /*-*/ indi_list_t *object,
     int idx
 );
 
 bool indi_list_iterate(
     indi_list_iter_t *iter,
     int *idx,
-    indi_object_t **obj
+    indi_object_t **object
 );
 
 indi_object_t *indi_list_get(
-    const indi_list_t *obj,
+    const indi_list_t *object,
     int idx
 );
 
 indi_list_t *indi_list_set(
-    /*-*/ indi_list_t *obj,
+    /*-*/ indi_list_t *object,
     size_t idx,
     buff_t value
 );
 
 size_t indi_list_size(
-    const indi_list_t *obj
+    const indi_list_t *object
 );
 
 str_t indi_list_to_string(
-    const indi_list_t *obj
+    const indi_list_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define indi_list_push(obj, val) \
-            indi_list_set(obj, -1, val)
+#define indi_list_push(object, val) \
+            indi_list_set(object, -1, val)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* XMLDOC                                                                                                             */
@@ -661,7 +661,7 @@ indi_object_t *indi_xmldoc_to_object(
 );
 
 indi_xmldoc_t *indi_object_to_xmldoc(
-    const indi_object_t *obj,
+    const indi_object_t *object,
     bool validate
 );
 

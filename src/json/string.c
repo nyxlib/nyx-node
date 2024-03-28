@@ -11,40 +11,40 @@ indi_string_t *indi_string_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_string_t *obj = indi_memory_alloc(sizeof(indi_string_t));
+    indi_string_t *object = indi_memory_alloc(sizeof(indi_string_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->base = INDI_OBJECT(INDI_TYPE_STRING);
+    object->base = INDI_OBJECT(INDI_TYPE_STRING);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->value = indi_string_dup("");
+    object->value = indi_string_dup("");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return obj;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_free(indi_string_t *obj)
+void indi_string_free(indi_string_t *object)
 {
-    indi_memory_free(obj->value);
+    indi_memory_free(object->value);
 
-    indi_memory_free(obj);
+    indi_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_string_get(const indi_string_t *obj)
+STR_t indi_string_get(const indi_string_t *object)
 {
-    return obj->value;
+    return object->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_set(indi_string_t *obj, STR_t value)
+void indi_string_set(indi_string_t *object, STR_t value)
 {
     if(value == NULL)
     {
@@ -53,21 +53,21 @@ void indi_string_set(indi_string_t *obj, STR_t value)
         return;
     }
 
-    if(strcmp(obj->value, value) != 0)
+    if(strcmp(object->value, value) != 0)
     {
-        indi_memory_free(obj->value);
+        indi_memory_free(object->value);
 
-        obj->value = indi_string_dup(value);
+        object->value = indi_string_dup(value);
 
-        indi_object_notify(&obj->base);
+        indi_object_notify(&object->base);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_string(const indi_string_t *obj)
+str_t indi_string_to_string(const indi_string_t *object)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(obj->value);
+    indi_string_builder_t *sb = indi_string_builder_from(object->value);
 
     str_t result = indi_string_builder_to_string(sb);
 
@@ -78,9 +78,9 @@ str_t indi_string_to_string(const indi_string_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_cstring(const indi_string_t *obj)
+str_t indi_string_to_cstring(const indi_string_t *object)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(obj->value);
+    indi_string_builder_t *sb = indi_string_builder_from(object->value);
 
     str_t result = indi_string_builder_to_cstring(sb);
 

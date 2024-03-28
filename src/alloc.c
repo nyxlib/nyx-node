@@ -238,57 +238,57 @@ str_t indi_string_dup(STR_t s)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_notify(const indi_object_t *obj)
+void indi_object_notify(const indi_object_t *object)
 {
-    for(; obj != NULL; obj = obj->parent)
+    for(; object != NULL; object = object->parent)
     {
-        if(obj->out_callback != NULL)
+        if(object->out_callback != NULL)
         {
-            obj->out_callback(obj);
+            object->out_callback(object);
         }
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_free(indi_object_t *obj)
+void indi_object_free(indi_object_t *object)
 {
-    if(obj == NULL)
+    if(object == NULL)
     {
         return;
     }
 
-    if(obj->magic != INDI_OBJECT_MAGIC)
+    if(object->magic != INDI_OBJECT_MAGIC)
     {
         fprintf(stderr, "Invalid object in `indi_object_free`\n");
         fflush(stderr);
         exit(1);
     }
 
-    switch(obj->type)
+    switch(object->type)
     {
         case INDI_TYPE_NULL:
-            indi_null_free((indi_null_t *) obj);
+            indi_null_free((indi_null_t *) object);
             break;
 
         case INDI_TYPE_NUMBER:
-            indi_number_free((indi_number_t *) obj);
+            indi_number_free((indi_number_t *) object);
             break;
 
         case INDI_TYPE_BOOLEAN:
-            indi_boolean_free((indi_boolean_t *) obj);
+            indi_boolean_free((indi_boolean_t *) object);
             break;
 
         case INDI_TYPE_STRING:
-            indi_string_free((indi_string_t *) obj);
+            indi_string_free((indi_string_t *) object);
             break;
 
         case INDI_TYPE_LIST:
-            indi_list_free((indi_list_t *) obj);
+            indi_list_free((indi_list_t *) object);
             break;
 
         case INDI_TYPE_DICT:
-            indi_dict_free((indi_dict_t *) obj);
+            indi_dict_free((indi_dict_t *) object);
             break;
 
         default:
@@ -300,39 +300,39 @@ void indi_object_free(indi_object_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_object_to_string(const indi_object_t *obj)
+str_t indi_object_to_string(const indi_object_t *object)
 {
-    if(obj == NULL)
+    if(object == NULL)
     {
         return NULL;
     }
 
-    if(obj->magic != INDI_OBJECT_MAGIC)
+    if(object->magic != INDI_OBJECT_MAGIC)
     {
         fprintf(stderr, "Invalid object in `indi_object_to_cstring`\n");
         fflush(stderr);
         exit(1);
     }
 
-    switch(obj->type)
+    switch(object->type)
     {
         case INDI_TYPE_NULL:
-            return indi_null_to_string((indi_null_t *) obj);
+            return indi_null_to_string((indi_null_t *) object);
 
         case INDI_TYPE_NUMBER:
-            return indi_number_to_string((indi_number_t *) obj);
+            return indi_number_to_string((indi_number_t *) object);
 
         case INDI_TYPE_BOOLEAN:
-            return indi_boolean_to_string((indi_boolean_t *) obj);
+            return indi_boolean_to_string((indi_boolean_t *) object);
 
         case INDI_TYPE_STRING:
-            return indi_string_to_string((indi_string_t *) obj);
+            return indi_string_to_string((indi_string_t *) object);
 
         case INDI_TYPE_LIST:
-            return indi_list_to_string((indi_list_t *) obj);
+            return indi_list_to_string((indi_list_t *) object);
 
         case INDI_TYPE_DICT:
-            return indi_dict_to_string((indi_dict_t *) obj);
+            return indi_dict_to_string((indi_dict_t *) object);
 
         default:
             fprintf(stderr, "Internal error in `indi_object_to_string`\n");
@@ -343,39 +343,39 @@ str_t indi_object_to_string(const indi_object_t *obj)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_object_to_cstring(const indi_object_t *obj)
+str_t indi_object_to_cstring(const indi_object_t *object)
 {
-    if(obj == NULL)
+    if(object == NULL)
     {
         return NULL;
     }
 
-    if(obj->magic != INDI_OBJECT_MAGIC)
+    if(object->magic != INDI_OBJECT_MAGIC)
     {
         fprintf(stderr, "Invalid object in `indi_object_to_cstring`\n");
         fflush(stderr);
         exit(1);
     }
 
-    switch(obj->type)
+    switch(object->type)
     {
         case INDI_TYPE_NULL:
-            return indi_null_to_string((indi_null_t *) obj);
+            return indi_null_to_string((indi_null_t *) object);
 
         case INDI_TYPE_NUMBER:
-            return indi_number_to_string((indi_number_t *) obj);
+            return indi_number_to_string((indi_number_t *) object);
 
         case INDI_TYPE_BOOLEAN:
-            return indi_boolean_to_string((indi_boolean_t *) obj);
+            return indi_boolean_to_string((indi_boolean_t *) object);
 
         case INDI_TYPE_STRING:
-            return indi_string_to_cstring((indi_string_t *) obj);
+            return indi_string_to_cstring((indi_string_t *) object);
 
         case INDI_TYPE_LIST:
-            return indi_list_to_string((indi_list_t *) obj);
+            return indi_list_to_string((indi_list_t *) object);
 
         case INDI_TYPE_DICT:
-            return indi_dict_to_string((indi_dict_t *) obj);
+            return indi_dict_to_string((indi_dict_t *) object);
 
         default:
             fprintf(stderr, "Internal error in `indi_object_to_cstring`\n");
