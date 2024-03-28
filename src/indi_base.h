@@ -439,8 +439,12 @@ typedef enum
 
 } indi_state_t;
 
-__NULLABLE__ STR_t indi_state_to_str(
+STR_t indi_state_to_str(
     indi_state_t state
+);
+
+indi_state_t indi_str_to_state(
+    STR_t state
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -453,8 +457,12 @@ typedef enum
 
 } indi_perm_t;
 
-__NULLABLE__ STR_t indi_perm_to_str(
+STR_t indi_perm_to_str(
     indi_perm_t perm
+);
+
+indi_perm_t indi_str_to_perm(
+    STR_t perm
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -467,8 +475,12 @@ typedef enum
 
 } indi_rule_t;
 
-__NULLABLE__ STR_t indi_rule_to_str(
+STR_t indi_rule_to_str(
     indi_rule_t rule
+);
+
+indi_rule_t indi_str_to_rule(
+    STR_t rule
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -480,8 +492,12 @@ typedef enum
 
 } indi_onoff_t;
 
-__NULLABLE__ STR_t indi_onoff_to_str(
+STR_t indi_onoff_to_str(
     indi_onoff_t onoff
+);
+
+indi_onoff_t indi_str_to_onoff(
+    STR_t onoff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -511,6 +527,9 @@ indi_dict_t *indi_number_def_new(
 #define indi_number_def_set(def, value) \
             indi_dict_set(def, "$", indi_number_from(value))
 
+#define indi_number_def_get(def) \
+            ((indi_number_t *) indi_dict_get(def, "$"))->data
+
 indi_dict_t *indi_number_vector_new(
     STR_t device,
     STR_t name,
@@ -530,6 +549,9 @@ indi_dict_t *indi_text_def_new(
 
 #define indi_text_def_set(def, value) \
             indi_dict_set(def, "$", indi_string_from(value))
+
+#define indi_text_def_get(def) \
+            ((indi_string_t *) indi_dict_get(def, "$"))->data
 
 indi_dict_t *indi_text_vector_new(
     STR_t device,
@@ -551,6 +573,9 @@ indi_dict_t *indi_light_def_new(
 #define indi_light_def_set(def, value) \
             indi_dict_set(def, "$", indi_string_from(indi_state_to_str(value)))
 
+#define indi_light_def_get(def) \
+            indi_str_to_state(((indi_string_t *) indi_dict_get(def, "$"))->data)
+
 indi_dict_t *indi_light_vector_new(
     STR_t device,
     STR_t name,
@@ -569,6 +594,9 @@ indi_dict_t *indi_switch_def_new(
 
 #define indi_switch_def_set(def, value) \
             indi_dict_set(def, "$", indi_string_from(indi_onoff_to_str(value)))
+
+#define indi_switch_def_get(def) \
+            indi_str_to_onoff(((indi_string_t *) indi_dict_get(def, "$"))->data)
 
 indi_dict_t *indi_switch_vector_new(
     STR_t device,

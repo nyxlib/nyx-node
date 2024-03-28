@@ -49,6 +49,8 @@ int main()
     indi_switch_def_set(def1, INDI_ONOFF_OFF);
     indi_switch_def_set(def1, INDI_ONOFF_ON);
 
+    printf("def value: %d\n", indi_switch_def_get(def1));
+
     indi_dict_free(switch_vector);
 
     /*----------------------------------------------------------------------------------------------------------------*/

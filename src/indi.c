@@ -1,6 +1,8 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "indi_base_internal.h"
 
@@ -8,8 +10,7 @@
 /* STATE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__
-STR_t indi_state_to_str(__NULLABLE__ indi_state_t state)
+STR_t indi_state_to_str(indi_state_t state)
 {
     switch(state)
     {
@@ -23,15 +24,38 @@ STR_t indi_state_to_str(__NULLABLE__ indi_state_t state)
             return "Alert";
     }
 
-    return NULL;
+    fprintf(stderr, "Internal error in `indi_state_to_str`\n");
+    fflush(stderr);
+    exit(1);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_state_t indi_str_to_state(STR_t state)
+{
+    /**/ if(strcmp("Idle", state) == 0) {
+        return INDI_STATE_IDLE;
+    }
+    else if(strcmp("Ok", state) == 0) {
+        return INDI_STATE_OK;
+    }
+    else if(strcmp("Busy", state) == 0) {
+        return INDI_STATE_BUSY;
+    }
+    else if(strcmp("Alert", state) == 0) {
+        return INDI_STATE_ALERT;
+    }
+
+    fprintf(stderr, "Internal error in `indi_str_to_state`\n");
+    fflush(stderr);
+    exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* PERM                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__
-STR_t indi_perm_to_str(__NULLABLE__ indi_perm_t perm)
+STR_t indi_perm_to_str(indi_perm_t perm)
 {
     switch(perm)
     {
@@ -43,15 +67,35 @@ STR_t indi_perm_to_str(__NULLABLE__ indi_perm_t perm)
             return "rw";
     }
 
-    return NULL;
+    fprintf(stderr, "Internal error in `indi_perm_to_str`\n");
+    fflush(stderr);
+    exit(1);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_perm_t indi_str_to_perm(STR_t perm)
+{
+    /**/ if(strcmp("ro", perm) == 0) {
+        return INDI_PERM_RO;
+    }
+    else if(strcmp("wo", perm) == 0) {
+        return INDI_PERM_WO;
+    }
+    else if(strcmp("rw", perm) == 0) {
+        return INDI_PERM_RW;
+    }
+
+    fprintf(stderr, "Internal error in `indi_str_to_perm`\n");
+    fflush(stderr);
+    exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* RULE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__
-STR_t indi_rule_to_str(__NULLABLE__ indi_rule_t rule)
+STR_t indi_rule_to_str(indi_rule_t rule)
 {
     switch(rule)
     {
@@ -63,15 +107,35 @@ STR_t indi_rule_to_str(__NULLABLE__ indi_rule_t rule)
             return "AnyOfMany";
     }
 
-    return NULL;
+    fprintf(stderr, "Internal error in `indi_rule_to_str`\n");
+    fflush(stderr);
+    exit(1);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_rule_t indi_str_to_rule(STR_t rule)
+{
+    /**/ if(strcmp("OneOfMany", rule) == 0) {
+        return INDI_RULE_ONE_OF_MANY;
+    }
+    else if(strcmp("AtMostOne", rule) == 0) {
+        return INDI_RULE_AT_MOST_ONE;
+    }
+    else if(strcmp("AnyOfMany", rule) == 0) {
+        return INDI_RULE_ANY_OF_MANY;
+    }
+
+    fprintf(stderr, "Internal error in `indi_str_to_rule`\n");
+    fflush(stderr);
+    exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* ONOFF                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__
-STR_t indi_onoff_to_str(__NULLABLE__ indi_onoff_t onoff)
+STR_t indi_onoff_to_str(indi_onoff_t onoff)
 {
     switch(onoff)
     {
@@ -81,7 +145,25 @@ STR_t indi_onoff_to_str(__NULLABLE__ indi_onoff_t onoff)
             return "Off";
     }
 
-    return NULL;
+    fprintf(stderr, "Internal error in `indi_onoff_to_str`\n");
+    fflush(stderr);
+    exit(1);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_onoff_t indi_str_to_onoff(STR_t onoff)
+{
+    /**/ if(strcmp("On", onoff) == 0) {
+        return INDI_ONOFF_ON;
+    }
+    else if(strcmp("Off", onoff) == 0) {
+        return INDI_ONOFF_OFF;
+    }
+
+    fprintf(stderr, "Internal error in `indi_str_to_onoff`\n");
+    fflush(stderr);
+    exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
