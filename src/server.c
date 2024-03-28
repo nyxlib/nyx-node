@@ -68,11 +68,8 @@ struct indi_server_ctx_s
     bool emit_xml;
     bool validate_xml;
 
-    str_t driver_topic;
-
     /**/
 
-    indi_list_t *driver_list;
     indi_dict_t **vector_list;
 };
 
@@ -89,7 +86,6 @@ static void signal_handler(int signo)
 
 static struct mg_str SPECIAL_TOPICS[] = {
     MG_C_STR("indi/cmd/get_clients"),
-    MG_C_STR("indi/cmd/get_drivers"),
     MG_C_STR("indi/cmd/get_properties"),
     MG_C_STR("indi/cmd/enable_blob"),
     MG_C_STR("indi/cmd/json"),
@@ -369,20 +365,6 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
             else if(mg_startswith(message->topic, SPECIAL_TOPICS[1]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
-                /* GET_DRIVERS                                                                                        */
-                /*----------------------------------------------------------------------------------------------------*/
-
-                str_t json = indi_list_to_string(ctx->driver_list);
-
-                mqtt_pub(connection, mg_str("indi/drivers"), mg_str(json), 1, false);
-
-                indi_memory_free(json);
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[2]))
-            {
-                /*----------------------------------------------------------------------------------------------------*/
                 /* GET_PROPERTIES                                                                                     */
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -397,7 +379,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[3]))
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[2]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* ENABLE_BLOB                                                                                        */
@@ -407,7 +389,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[4]))
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[3]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
@@ -427,7 +409,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[5]))
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[4]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* XML NEW XXX VECTOR                                                                                 */
@@ -474,7 +456,7 @@ static void timer_fn(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password, STR_t client_id, indi_list_t *driver_list, indi_dict_t *vector_list[], bool emit_xml, bool validate_xml)
+int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password, STR_t client_id, indi_dict_t *vector_list[], bool emit_xml, bool validate_xml)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -501,14 +483,7 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ctx.driver_list = driver_list;
     ctx.vector_list = vector_list;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    indi_string_builder_t *sb1 = indi_string_builder_from("indi", "/", "drivers", "/", client_id);
-    ctx.driver_topic = indi_string_builder_to_cstring(sb1);
-    indi_string_builder_free(sb1);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -535,10 +510,6 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     while(s_signo == 0) mg_mgr_poll(&ctx.mgr, 1000);
 
     mg_mgr_free(&ctx.mgr);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    indi_memory_free(ctx.driver_topic);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

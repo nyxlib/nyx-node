@@ -517,6 +517,24 @@ indi_onoff_t indi_str_to_onoff(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+typedef enum
+{
+    INDI_BLOB_NEVER = 600,
+    INDI_BLOB_ALSO = 601,
+    INDI_BLOB_ONLY = 602,
+
+} indi_blob_t;
+
+STR_t indi_blob_to_str(
+    indi_blob_t blob
+);
+
+indi_blob_t indi_str_to_blob(
+    STR_t blob
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
     __NULLABLE__ STR_t label;
@@ -674,7 +692,6 @@ int indi_run(
     __NULLABLE__ STR_t username,
     __NULLABLE__ STR_t password,
     STR_t client_id,
-    indi_list_t *driver_list,
     indi_dict_t *vector_list[],
     bool emit_xml,
     bool validate_xml

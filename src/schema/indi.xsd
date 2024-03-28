@@ -26,6 +26,13 @@
       <xs:enumeration value="AnyOfMany"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="blobEnable">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Never"/>
+      <xs:enumeration value="Also"/>
+      <xs:enumeration value="Only"/>
+    </xs:restriction>
+  </xs:simpleType>
   <!-- ************************************************************************************************************* -->
   <!-- Messages                                                                                                      -->
   <!-- ************************************************************************************************************* -->

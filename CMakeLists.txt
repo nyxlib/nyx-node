@@ -41,6 +41,7 @@ set(SOURCE_FILES
     src/indi/number.c
     src/indi/text.c
     src/indi/switch.c
+    src/indi/blob.c
     #
     src/alloc.c
     src/string_builder.c
@@ -82,7 +83,8 @@ add_library(indi-base-shared SHARED ${SOURCE_FILES}
         src/indi/switch.c
         src/indi/light.c
         src/indi/number.c
-        src/indi/text.c)
+        src/indi/text.c
+        src/indi/blob.c)
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)

@@ -167,6 +167,46 @@ indi_onoff_t indi_str_to_onoff(STR_t onoff)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* BLOB                                                                                                              */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+STR_t indi_blob_to_str(indi_blob_t blob)
+{
+    switch(blob)
+    {
+        case INDI_BLOB_NEVER:
+            return "Never";
+        case INDI_BLOB_ALSO:
+            return "Also";
+        case INDI_BLOB_ONLY:
+            return "Only";
+    }
+
+    fprintf(stderr, "Internal error in `indi_blob_to_str`\n");
+    fflush(stderr);
+    exit(1);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_blob_t indi_str_to_blob(STR_t blob)
+{
+    /**/ if(strcmp("Never", blob) == 0) {
+        return INDI_BLOB_NEVER;
+    }
+    else if(strcmp("Also", blob) == 0) {
+        return INDI_BLOB_ALSO;
+    }
+    else if(strcmp("Only", blob) == 0) {
+        return INDI_BLOB_ONLY;
+    }
+
+    fprintf(stderr, "Internal error in `indi_str_to_blob`\n");
+    fflush(stderr);
+    exit(1);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
