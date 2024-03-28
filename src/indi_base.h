@@ -144,7 +144,7 @@ typedef struct
 {
     indi_object_t base;
 
-    double data;
+    double value;
 
 } indi_number_t;
 
@@ -162,7 +162,7 @@ double indi_number_get(
 
 void indi_number_set(
     /*-*/ indi_number_t *obj,
-    double data
+    double value
 );
 
 str_t indi_number_to_string(
@@ -171,11 +171,11 @@ str_t indi_number_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ indi_number_t *indi_number_from(double data)
+__INLINE__ indi_number_t *indi_number_from(double value)
 {
     indi_number_t *result = indi_number_new();
 
-    indi_number_set(result, data);
+    indi_number_set(result, value);
 
     return result;
 }
@@ -188,7 +188,7 @@ typedef struct
 {
     indi_object_t base;
 
-    bool data;
+    bool value;
 
 } indi_boolean_t;
 
@@ -206,7 +206,7 @@ bool indi_boolean_get(
 
 void indi_boolean_set(
     /*-*/ indi_boolean_t *obj,
-    bool data
+    bool value
 );
 
 str_t indi_boolean_to_string(
@@ -215,11 +215,11 @@ str_t indi_boolean_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ indi_boolean_t *indi_boolean_from(bool data)
+__INLINE__ indi_boolean_t *indi_boolean_from(bool value)
 {
     indi_boolean_t *result = indi_boolean_new();
 
-    indi_boolean_set(result, data);
+    indi_boolean_set(result, value);
 
     return result;
 }
@@ -232,7 +232,7 @@ typedef struct
 {
     indi_object_t base;
 
-    str_t data;
+    str_t value;
 
 } indi_string_t;
 
@@ -250,7 +250,7 @@ STR_t indi_string_get(
 
 void indi_string_set(
     /*-*/ indi_string_t *obj,
-    STR_t data
+    STR_t value
 );
 
 str_t indi_string_to_string(
@@ -263,11 +263,11 @@ str_t indi_string_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ indi_string_t *indi_string_from(STR_t data)
+__INLINE__ indi_string_t *indi_string_from(STR_t value)
 {
     indi_string_t *result = indi_string_new();
 
-    indi_string_set(result, data);
+    indi_string_set(result, value);
 
     return result;
 }
@@ -333,7 +333,7 @@ indi_object_t *indi_dict_get(
 void indi_dict_set(
     /*-*/ indi_dict_t *obj,
     STR_t key,
-    buff_t val
+    buff_t value
 );
 
 size_t indi_dict_size(
@@ -405,7 +405,7 @@ indi_object_t *indi_list_get(
 indi_list_t *indi_list_set(
     /*-*/ indi_list_t *obj,
     size_t idx,
-    buff_t val
+    buff_t value
 );
 
 size_t indi_list_size(
@@ -623,7 +623,7 @@ indi_dict_t *indi_switch_def_new(
             indi_dict_set(def, "$", indi_string_from(indi_onoff_to_str(value)))
 
 #define indi_switch_def_get(def) \
-            indi_str_to_onoff(((indi_string_t *) indi_dict_get(def, "$"))->data)
+            indi_str_to_onoff(((indi_string_t *) indi_dict_get(def, "$"))->value)
 
 indi_dict_t *indi_switch_def_vector_new(
     STR_t device,

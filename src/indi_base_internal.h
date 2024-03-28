@@ -111,7 +111,7 @@ str_t indi_string_builder_to_cstring(
 
 void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt);
 
-void internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key);
+bool internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key);
 
 indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name);
 

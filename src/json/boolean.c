@@ -16,7 +16,7 @@ indi_boolean_t *indi_boolean_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->data = false;
+    obj->value = false;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -27,7 +27,7 @@ indi_boolean_t *indi_boolean_new()
 
 void indi_boolean_free(indi_boolean_t *obj)
 {
-    obj->data = false;
+    obj->value = false;
 
     indi_memory_free(obj);
 }
@@ -36,16 +36,16 @@ void indi_boolean_free(indi_boolean_t *obj)
 
 bool indi_boolean_get(const indi_boolean_t *obj)
 {
-    return obj->data;
+    return obj->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_boolean_set(indi_boolean_t *obj, bool data)
+void indi_boolean_set(indi_boolean_t *obj, bool value)
 {
-    if(obj->data != data)
+    if(obj->value != value)
     {
-        obj->data = data;
+        obj->value = value;
 
         indi_object_notify(&obj->base);
     }
@@ -55,7 +55,7 @@ void indi_boolean_set(indi_boolean_t *obj, bool data)
 
 str_t indi_boolean_to_string(const indi_boolean_t *obj)
 {
-    return indi_boolean_dup(obj->data);
+    return indi_boolean_dup(obj->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

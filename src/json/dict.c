@@ -173,11 +173,11 @@ indi_object_t *indi_dict_get(const indi_dict_t *obj, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t val)
+void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((indi_object_t *) val)->parent = (indi_object_t *) obj;
+    ((indi_object_t *) value)->parent = (indi_object_t *) obj;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -187,7 +187,7 @@ void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t val)
         {
             indi_object_free(curr_node->val);
 
-            curr_node->val = val;
+            curr_node->val = value;
 
             goto _ok;
         }
@@ -199,7 +199,7 @@ void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t val)
 
     node->key = strcpy((str_t) (node + 1), key);
 
-    node->val = val;
+    node->val = value;
     node->next = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -218,7 +218,7 @@ void indi_dict_set(indi_dict_t *obj, STR_t key, buff_t val)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    indi_object_notify((indi_object_t *) val);
+    indi_object_notify((indi_object_t *) value);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }

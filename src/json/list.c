@@ -169,11 +169,11 @@ indi_object_t *indi_list_get(const indi_list_t *obj, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t val)
+indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((indi_object_t *) val)->parent = (indi_object_t *) obj;
+    ((indi_object_t *) value)->parent = (indi_object_t *) obj;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -183,7 +183,7 @@ indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t val)
         {
             indi_object_free(curr_node->val);
 
-            curr_node->val = val;
+            curr_node->val = value;
 
             goto _ok;
         }
@@ -193,7 +193,7 @@ indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t val)
 
     node_t *node = indi_memory_alloc(sizeof(node_t));
 
-    node->val = val;
+    node->val = value;
     node->next = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -212,7 +212,7 @@ indi_list_t *indi_list_set(indi_list_t *obj, size_t idx, buff_t val)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    indi_object_notify((indi_object_t *) val);
+    indi_object_notify((indi_object_t *) value);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -19,7 +19,7 @@ indi_string_t *indi_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->data = NULL;
+    obj->value = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -30,7 +30,7 @@ indi_string_t *indi_string_new()
 
 void indi_string_free(indi_string_t *obj)
 {
-    indi_memory_free(obj->data);
+    indi_memory_free(obj->value);
 
     indi_memory_free(obj);
 }
@@ -39,25 +39,25 @@ void indi_string_free(indi_string_t *obj)
 
 STR_t indi_string_get(const indi_string_t *obj)
 {
-    return obj->data;
+    return obj->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_set(indi_string_t *obj, STR_t data)
+void indi_string_set(indi_string_t *obj, STR_t value)
 {
-    if(data == NULL)
+    if(value == NULL)
     {
         fprintf(stderr, "Null string not allowed in `indi_string_set`\n");
         fflush(stderr);
         return;
     }
 
-    if(obj->data == NULL || strcmp(obj->data, data) != 0)
+    if(obj->value == NULL || strcmp(obj->value, value) != 0)
     {
-        indi_memory_free(obj->data);
+        indi_memory_free(obj->value);
 
-        obj->data = indi_string_dup(data);
+        obj->value = indi_string_dup(value);
 
         indi_object_notify(&obj->base);
     }
@@ -67,7 +67,7 @@ void indi_string_set(indi_string_t *obj, STR_t data)
 
 str_t indi_string_to_string(const indi_string_t *obj)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(obj->data);
+    indi_string_builder_t *sb = indi_string_builder_from(obj->value);
 
     str_t result = indi_string_builder_to_string(sb);
 
@@ -80,7 +80,7 @@ str_t indi_string_to_string(const indi_string_t *obj)
 
 str_t indi_string_to_cstring(const indi_string_t *obj)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(obj->data);
+    indi_string_builder_t *sb = indi_string_builder_from(obj->value);
 
     str_t result = indi_string_builder_to_cstring(sb);
 

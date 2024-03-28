@@ -19,7 +19,7 @@ indi_number_t *indi_number_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    obj->data = 0.0;
+    obj->value = 0.0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -30,7 +30,7 @@ indi_number_t *indi_number_new()
 
 void indi_number_free(indi_number_t *obj)
 {
-    obj->data = 0.0;
+    obj->value = 0.0;
 
     indi_memory_free(obj);
 }
@@ -39,23 +39,23 @@ void indi_number_free(indi_number_t *obj)
 
 double indi_number_get(const indi_number_t *obj)
 {
-    return obj->data;
+    return obj->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_number_set(indi_number_t *obj, double data)
+void indi_number_set(indi_number_t *obj, double value)
 {
-    if(isnan(data))
+    if(isnan(value))
     {
         fprintf(stderr, "NaN number not allowed in `indi_number_set`\n");
         fflush(stderr);
         return;
     }
 
-    if(obj->data != data)
+    if(obj->value != value)
     {
-        obj->data = data;
+        obj->value = value;
 
         indi_object_notify(&obj->base);
     }
@@ -65,7 +65,7 @@ void indi_number_set(indi_number_t *obj, double data)
 
 str_t indi_number_to_string(const indi_number_t *obj)
 {
-    return indi_double_dup(obj->data);
+    return indi_double_dup(obj->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

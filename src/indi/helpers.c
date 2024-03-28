@@ -210,31 +210,71 @@ void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key)
+bool internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key)
 {
-    indi_object_t *object = indi_dict_get(src, key);
+    indi_object_t *src_object = indi_dict_get(src, key);
 
-    if(object != NULL)
+    if(src_object != NULL)
     {
-        switch(object->type)
+        indi_object_t *dst_object = indi_dict_get(dst, key);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        switch(src_object->type)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
             case INDI_TYPE_NUMBER:
-                indi_dict_set(
-                    dst, key,
-                    indi_number_from(indi_number_get((indi_number_t *) object))
-                );
+            {
+                double src_value = indi_number_get((indi_number_t *) src_object);
+
+                if(dst_object != NULL && dst_object->type == src_object->type)
+                {
+                    double dst_value = indi_number_get((indi_number_t *) dst_object);
+
+                    if(dst_value != src_value)
+                    {
+                        indi_dict_set(dst, key, indi_number_from(src_value));
+
+                        return true;
+                    }
+                }
+                else
+                {
+                    indi_dict_set(dst, key, indi_number_from(src_value));
+
+                    return true;
+                }
+
                 break;
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case INDI_TYPE_STRING:
-                indi_dict_set(
-                    dst, key,
-                    indi_string_from(indi_string_get((indi_string_t *) object))
-                );
+            {
+                STR_t src_value = indi_string_get((indi_string_t *) src_object);
+
+                if(dst_object != NULL && dst_object->type == src_object->type)
+                {
+                    STR_t dst_value = indi_string_get((indi_string_t *) dst_object);
+
+                    if(strcmp(dst_value, src_value) != 0)
+                    {
+                        indi_dict_set(dst, key, indi_string_from(src_value));
+
+                        return true;
+                    }
+                }
+                else
+                {
+                    indi_dict_set(dst, key, indi_string_from(src_value));
+
+                    return true;
+                }
+
                 break;
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -245,7 +285,11 @@ void internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key)
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -240,14 +240,13 @@ str_t indi_string_dup(STR_t s)
 
 void indi_object_notify(const indi_object_t *obj)
 {
-    do
+    for(; obj != NULL; obj = obj->parent)
     {
-        if(obj->out_callback)
+        if(obj->out_callback != NULL)
         {
             obj->out_callback(obj);
         }
-
-    } while((obj = obj->parent) != NULL);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
