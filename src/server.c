@@ -69,8 +69,6 @@ struct indi_server_ctx_s
     bool validate_xml;
 
     str_t driver_topic;
-    str_t main_topic_xml;
-    str_t main_topic_json;
 
     /**/
 
@@ -90,12 +88,12 @@ static void signal_handler(int signo)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static struct mg_str SPECIAL_TOPICS[] = {
-    MG_C_STR("indi/get_clients"),
-    MG_C_STR("indi/get_drivers"),
-    MG_C_STR("indi/get_properties"),
-    MG_C_STR("indi/enable_blob"),
-    MG_C_STR("indi/json"),
-    MG_C_STR("indi/xml"),
+    MG_C_STR("indi/cmd/get_clients"),
+    MG_C_STR("indi/cmd/get_drivers"),
+    MG_C_STR("indi/cmd/get_properties"),
+    MG_C_STR("indi/cmd/enable_blob"),
+    MG_C_STR("indi/cmd/json"),
+    MG_C_STR("indi/cmd/xml"),
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -143,7 +141,7 @@ static void out_callback(const indi_object_t *object)
                 /*----------------------------------------------------------------------------------------------------*/
 
                 str_t xml = indi_xmldoc_to_string(xmldoc);
-                mqtt_pub(ctx->connection, mg_str(ctx->main_topic_xml), mg_str(xml), 1, false);
+                mqtt_pub(ctx->connection, mg_str("indi/xml"), mg_str(xml), 1, false);
                 indi_memory_free(xml);
 
                 indi_xmldoc_free(xmldoc);
@@ -155,7 +153,7 @@ static void out_callback(const indi_object_t *object)
         /*------------------------------------------------------------------------------------------------------------*/
 
         str_t json = indi_dict_to_string(dict);
-        mqtt_pub(ctx->connection, mg_str(ctx->main_topic_json), mg_str(json), 1, false);
+        mqtt_pub(ctx->connection, mg_str("indi/json"), mg_str(json), 1, false);
         indi_memory_free(json);
 
         indi_dict_free(dict);
@@ -320,10 +318,6 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        mqtt_pub(connection, mg_str("indi/status"), ctx->opts.client_id, 1, false);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(struct mg_str); i++)
         {
             str_t topic = indi_memory_alloc(SPECIAL_TOPICS[i].len + ctx->opts.client_id.len + 2);
@@ -343,6 +337,10 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
             indi_memory_free(topic);
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        mqtt_pub(connection, mg_str("indi/cmd/get_properties"), mg_str("1.7"), 1, false);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -376,7 +374,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 str_t json = indi_list_to_string(ctx->driver_list);
 
-                mqtt_pub(connection, mg_str(ctx->driver_topic), mg_str(json), 1, false);
+                mqtt_pub(connection, mg_str("indi/drivers"), mg_str(json), 1, false);
 
                 indi_memory_free(json);
 
@@ -392,7 +390,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 {
                     str_t json = indi_dict_to_string(*vector_ptr);
 
-                    mqtt_pub(connection, ctx->opts.client_id, mg_str(json), 1, false);
+                    mqtt_pub(connection, mg_str("indi/json"), mg_str(json), 1, false);
 
                     indi_memory_free(json);
                 }
@@ -402,7 +400,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
             else if(mg_startswith(message->topic, SPECIAL_TOPICS[3]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
-                /* GET_PROPERTIES                                                                                     */
+                /* ENABLE_BLOB                                                                                        */
                 /*----------------------------------------------------------------------------------------------------*/
 
                 MG_INFO((">> TODO enable_blob"));
@@ -512,18 +510,12 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     ctx.driver_topic = indi_string_builder_to_cstring(sb1);
     indi_string_builder_free(sb1);
 
-    indi_string_builder_t *sb2 = indi_string_builder_from("indi", "/", client_id, "/xml");
-    ctx.main_topic_xml = indi_string_builder_to_cstring(sb2);
-    indi_string_builder_free(sb2);
-
-    indi_string_builder_t *sb3 = indi_string_builder_from("indi", "/", client_id, "/json");
-    ctx.main_topic_json = indi_string_builder_to_cstring(sb3);
-    indi_string_builder_free(sb3);
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
     {
+        indi_dict_set(*vector_ptr, "@client", indi_string_from(client_id));
+
         (*vector_ptr)->base.out_callback = &out_callback;
 
         (*vector_ptr)->base.server_ctx = &ctx;
@@ -547,10 +539,6 @@ int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password
     /*----------------------------------------------------------------------------------------------------------------*/
 
     indi_memory_free(ctx.driver_topic);
-
-    indi_memory_free(ctx.main_topic_xml);
-
-    indi_memory_free(ctx.main_topic_json);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

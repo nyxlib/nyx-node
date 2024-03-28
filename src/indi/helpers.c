@@ -306,6 +306,7 @@ indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_na
 
     indi_dict_set(result, "<>", indi_string_from(set_tag_name));
 
+    internal_copy_entry(result, def_vector, "@client");
     internal_copy_entry(result, def_vector, "@device");
     internal_copy_entry(result, def_vector, "@name");
     internal_copy_entry(result, def_vector, "@state");

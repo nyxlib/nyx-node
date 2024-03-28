@@ -68,6 +68,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defNumber"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -94,6 +95,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneNumber"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -125,6 +127,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defText"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -147,6 +150,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneText"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -178,6 +182,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defLight"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -198,6 +203,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneLight"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -218,6 +224,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defSwitch"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -241,6 +248,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneSwitch"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -272,6 +280,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defBLOB"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -294,9 +303,10 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneBLOB"/>
       </xs:sequence>
+      <xs:attribute name="client" type="xs:string" use="optional"/>
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
-      <xs:attribute name="value" type="propertyState" use="optional"/>
+      <xs:attribute name="state" type="propertyState" use="optional"/>
       <xs:attribute name="timeout" type="xs:decimal" use="optional"/>
       <xs:attribute name="timestamp" type="xs:dateTime" use="optional"/>
       <xs:attribute name="message" type="xs:string" use="optional"/>

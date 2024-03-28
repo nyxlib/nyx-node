@@ -69,6 +69,7 @@ indi_dict_t *indi_light_def_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    indi_dict_set(result, "@client", indi_string_from("unknown"));
     indi_dict_set(result, "@device", indi_string_from(device));
     indi_dict_set(result, "@name", indi_string_from(name));
 
