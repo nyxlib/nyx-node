@@ -493,7 +493,7 @@ indi_node_t *indi_node_init(
     /**/
     int retry_ms,
     bool emit_xml,
-    bool validate_xml,
+    bool validate_xml
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
