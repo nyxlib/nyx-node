@@ -662,7 +662,7 @@ indi_dict_t *indi_switch_set_vector_new(
 indi_dict_t *indi_blob_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
-    BUFF_t value
+    STR_t value
 );
 
 indi_dict_t *indi_blob_def_vector_new(
