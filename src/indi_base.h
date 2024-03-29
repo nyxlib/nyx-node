@@ -234,6 +234,8 @@ typedef struct
 
     str_t value;
 
+    bool dyn;
+
 } indi_string_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -248,7 +250,12 @@ STR_t indi_string_get(
     const indi_string_t *object
 );
 
-void indi_string_set(
+void indi_string_dynamic_set(
+    /*-*/ indi_string_t *object,
+    STR_t value
+);
+
+void indi_string_static_set(
     /*-*/ indi_string_t *object,
     STR_t value
 );
@@ -263,14 +270,31 @@ str_t indi_string_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ indi_string_t *indi_string_from(STR_t value)
+__INLINE__ indi_string_t *indi_string_dynamic_from(STR_t value)
 {
     indi_string_t *result = indi_string_new();
 
-    indi_string_set(result, value);
+    indi_string_dynamic_set(result, value);
 
     return result;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ indi_string_t *indi_string_static_from(STR_t value)
+{
+    indi_string_t *result = indi_string_new();
+
+    indi_string_static_set(result, value);
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define indi_string_set indi_string_set_dynamic
+
+#define indi_string_from indi_string_dynamic_from
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* DICT                                                                                                               */

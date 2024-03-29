@@ -19,7 +19,9 @@ indi_string_t *indi_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->value = indi_string_dup("");
+    object->value = (str_t) "";
+
+    object->dyn = false;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -30,7 +32,10 @@ indi_string_t *indi_string_new()
 
 void indi_string_free(indi_string_t *object)
 {
-    indi_memory_free(object->value);
+    if(object->dyn)
+    {
+        indi_memory_free(object->value);
+    }
 
     indi_memory_free(object);
 }
@@ -44,7 +49,7 @@ STR_t indi_string_get(const indi_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_set(indi_string_t *object, STR_t value)
+void indi_string_dynamic_set(indi_string_t *object, STR_t value)
 {
     if(value == NULL)
     {
@@ -53,13 +58,60 @@ void indi_string_set(indi_string_t *object, STR_t value)
         return;
     }
 
-    if(strcmp(object->value, value) != 0)
+    if(strcmp(object->value, value) != 0 || object->dyn == false)
     {
-        indi_memory_free(object->value);
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(object->dyn)
+        {
+            indi_memory_free(object->value);
+        }
+
+        object->dyn = true;
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         object->value = indi_string_dup(value);
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         indi_object_notify(&object->base);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_string_static_set(indi_string_t *object, STR_t value)
+{
+    if(value == NULL)
+    {
+        fprintf(stderr, "Null string not allowed in `indi_string_set`\n");
+        fflush(stderr);
+        return;
+    }
+
+    if(strcmp(object->value, value) != 0 || object->dyn == true)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(object->dyn)
+        {
+            indi_memory_free(object->value);
+        }
+
+        object->dyn = false;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        object->value = (/**/str_t/**/) value;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        indi_object_notify(&object->base);
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 }
 
