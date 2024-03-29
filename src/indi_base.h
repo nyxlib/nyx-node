@@ -82,9 +82,9 @@ typedef struct indi_object_s
 
     enum indi_type_e type;
 
-    __NULLABLE__ struct indi_object_s *parent;
+    __NULLABLE__ struct indi_node_s *node;
 
-    __NULLABLE__ struct indi_server_ctx_s *server_ctx;
+    __NULLABLE__ struct indi_object_s *parent;
 
     __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
     __NULLABLE__ void (* out_callback)(const struct indi_object_s *object);
@@ -94,7 +94,7 @@ typedef struct indi_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define INDI_OBJECT(_type) \
-            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .type = _type, .parent = NULL, .server_ctx = NULL, .in_callback = NULL, .out_callback = NULL})
+            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .type = _type, .node = NULL, .parent = NULL, .in_callback = NULL, .out_callback = NULL})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -739,14 +739,30 @@ indi_xmldoc_t *indi_object_to_xmldoc(
 /* SERVER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_run(
+typedef struct indi_node_s indi_node_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_node_t *indi_node_init(
     STR_t url,
     __NULLABLE__ STR_t username,
     __NULLABLE__ STR_t password,
-    STR_t client_id,
+    /**/
+    STR_t node_id,
     indi_dict_t *vector_list[],
+    /**/
+    int retry_ms,
     bool emit_xml,
     bool validate_xml
+);
+
+void indi_node_pool(
+    indi_node_t *node,
+    int timeout_ms
+);
+
+void indi_node_free(
+    indi_node_t *node
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

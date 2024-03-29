@@ -52,7 +52,7 @@ set(SOURCE_FILES
     src/validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
-    src/server.c
+        src/node.c
 )
 
 ########################################################################################################################

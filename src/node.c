@@ -22,7 +22,7 @@ static void mqtt_pub(struct mg_connection *connection, struct mg_str topic, stru
 {
     struct mg_mqtt_opts opts;
 
-    memset(&opts, 0, sizeof(struct mg_mqtt_opts));
+    memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
 
     opts.topic = topic;
     opts.message = message;
@@ -41,7 +41,7 @@ static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int 
 {
     struct mg_mqtt_opts opts;
 
-    memset(&opts, 0, sizeof(struct mg_mqtt_opts));
+    memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
 
     opts.topic = topic;
     ////.message = message;
@@ -55,7 +55,7 @@ static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int 
 /* SERVER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-struct indi_server_ctx_s
+struct indi_node_s
 {
     STR_t url;
 
@@ -79,15 +79,6 @@ struct indi_server_ctx_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int volatile s_signo = 0;
-
-static void signal_handler(int signo)
-{
-    s_signo = signo;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 static struct mg_str SPECIAL_TOPICS[] = {
     MG_C_STR("indi/cmd/get_clients"),
     MG_C_STR("indi/cmd/get_properties"),
@@ -100,7 +91,7 @@ static struct mg_str SPECIAL_TOPICS[] = {
 
 static void out_callback(const indi_object_t *object)
 {
-    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) object->server_ctx;
+    struct indi_node_s *node = (struct indi_node_s *) object->node;
 
     indi_object_t *string = indi_dict_get((indi_dict_t *) object, "<>");
 
@@ -143,25 +134,25 @@ static void out_callback(const indi_object_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if((is_blob == true && ctx->blob == INDI_BLOB_NEVER)
+        if((is_blob == true && node->blob == INDI_BLOB_NEVER)
            ||
-           (is_blob == false && ctx->blob == INDI_BLOB_ONLY)
+           (is_blob == false && node->blob == INDI_BLOB_ONLY)
         ) {
             return;
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(ctx->emit_xml)
+        if(node->emit_xml)
         {
-            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, ctx->validate_xml);
+            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, node->validate_xml);
 
             if(xmldoc != NULL)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
                 str_t xml = indi_xmldoc_to_string(xmldoc);
-                mqtt_pub(ctx->connection, mg_str("indi/xml"), mg_str(xml), 1, false);
+                mqtt_pub(node->connection, mg_str("indi/xml"), mg_str(xml), 1, false);
                 indi_memory_free(xml);
 
                 indi_xmldoc_free(xmldoc);
@@ -173,7 +164,7 @@ static void out_callback(const indi_object_t *object)
         /*------------------------------------------------------------------------------------------------------------*/
 
         str_t json = indi_dict_to_string(dict);
-        mqtt_pub(ctx->connection, mg_str("indi/json"), mg_str(json), 1, false);
+        mqtt_pub(node->connection, mg_str("indi/json"), mg_str(json), 1, false);
         indi_memory_free(json);
 
         indi_dict_free(dict);
@@ -310,7 +301,7 @@ static void update_props(unsigned long id, indi_dict_t *vector_list[], const ind
 
 static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 {
-    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) connection->fn_data;
+    struct indi_node_s *node = (struct indi_node_s *) connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -326,7 +317,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
     }
     else if(ev == MG_EV_CLOSE)
     {
-        ((struct indi_server_ctx_s *) connection->fn_data)->connection = NULL;
+        ((struct indi_node_s *) connection->fn_data)->connection = NULL;
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
@@ -340,9 +331,9 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
         for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(struct mg_str); i++)
         {
-            str_t topic = indi_memory_alloc(SPECIAL_TOPICS[i].len + ctx->opts.client_id.len + 2);
+            str_t topic = indi_memory_alloc(SPECIAL_TOPICS[i].len + node->opts.client_id.len + 2);
 
-            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, ctx->opts.client_id.ptr) > 0)
+            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, node->opts.client_id.ptr) > 0)
             {
                 MG_INFO(("%lu Subscribing to `%s` and `%s` topics",
                     connection->id,
@@ -382,7 +373,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 /* GET_CLIENTS                                                                                        */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                mqtt_pub(connection, mg_str("indi/clients"), ctx->opts.client_id, 1, false);
+                mqtt_pub(connection, mg_str("indi/clients"), node->opts.client_id, 1, false);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -392,7 +383,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 /* GET_PROPERTIES                                                                                     */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                for(indi_dict_t **vector_ptr = ctx->vector_list; *vector_ptr != NULL; vector_ptr++)
+                for(indi_dict_t **vector_ptr = node->vector_list; *vector_ptr != NULL; vector_ptr++)
                 {
                     str_t json = indi_dict_to_string(*vector_ptr);
 
@@ -410,18 +401,18 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 /*----------------------------------------------------------------------------------------------------*/
 
                 /**/ if(strnstr(message->data.ptr, "Never", message->data.len) != NULL) {
-                    ctx->blob = INDI_BLOB_NEVER;
+                    node->blob = INDI_BLOB_NEVER;
                 }
                 else if(strnstr(message->data.ptr, "Also", message->data.len) != NULL) {
-                    ctx->blob = INDI_BLOB_ALSO;
+                    node->blob = INDI_BLOB_ALSO;
                 }
                 else if(strnstr(message->data.ptr, "Only", message->data.len) != NULL) {
-                    ctx->blob = INDI_BLOB_ONLY;
+                    node->blob = INDI_BLOB_ONLY;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                MG_INFO((">> Blog behavior: %s", indi_blob_to_str(ctx->blob)));
+                MG_INFO((">> Blog behavior: %s", indi_blob_to_str(node->blob)));
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -437,7 +428,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 {
                     if(object->type == INDI_TYPE_DICT)
                     {
-                        update_props(connection->id, ctx->vector_list, (indi_dict_t *) object);
+                        update_props(connection->id, node->vector_list, (indi_dict_t *) object);
                     }
 
                     indi_dict_free((indi_dict_t *) object);
@@ -455,13 +446,13 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 if(xmldoc != NULL)
                 {
-                    indi_object_t *object = indi_xmldoc_to_object(xmldoc, ctx->validate_xml);
+                    indi_object_t *object = indi_xmldoc_to_object(xmldoc, node->validate_xml);
 
                     if(object != NULL)
                     {
                         if(object->type == INDI_TYPE_DICT)
                         {
-                            update_props(connection->id, ctx->vector_list, (indi_dict_t *) object);
+                            update_props(connection->id, node->vector_list, (indi_dict_t *) object);
                         }
 
                         indi_dict_free((indi_dict_t *) object);
@@ -482,78 +473,97 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
 static void timer_fn(void *arg)
 {
-    struct indi_server_ctx_s *ctx = (struct indi_server_ctx_s *) arg;
+    struct indi_node_s *node = (struct indi_node_s *) arg;
 
-    if(ctx->connection == NULL)
+    if(node->connection == NULL)
     {
-        ctx->connection = mg_mqtt_connect(&ctx->mgr, ctx->url, &ctx->opts, mqtt_fn, ctx);
+        node->connection = mg_mqtt_connect(&node->mgr, node->url, &node->opts, mqtt_fn, node);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_run(STR_t url, __NULLABLE__ STR_t username, __NULLABLE__ STR_t password, STR_t client_id, indi_dict_t *vector_list[], bool emit_xml, bool validate_xml)
-{
+indi_node_t *indi_node_init(
+    STR_t url,
+    __NULLABLE__ STR_t username,
+    __NULLABLE__ STR_t password,
+    /**/
+    STR_t node_id,
+    indi_dict_t *vector_list[],
+    /**/
+    int retry_ms,
+    bool emit_xml,
+    bool validate_xml,
+) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    struct indi_server_ctx_s ctx;
+    indi_node_t *node = indi_memory_alloc(sizeof(indi_node_t));
 
-    memset(&ctx, 0, sizeof(struct indi_server_ctx_s));
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    ctx.url = url;
-
-    ctx.opts.user = mg_str(username);
-    ctx.opts.pass = mg_str(password);
-
-    ctx.opts.clean = true;
-    ctx.opts.version = 0x04;
-
-    ctx.opts.client_id = mg_str(client_id);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    ctx.emit_xml = emit_xml;
-    ctx.validate_xml = validate_xml;
+    memset(node, 0x00, sizeof(struct indi_node_s));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ctx.blob = INDI_BLOB_NEVER;
+    node->url = url;
+
+    node->opts.user = mg_str(username);
+    node->opts.pass = mg_str(password);
+
+    node->opts.clean = true;
+    node->opts.version = 0x04;
+
+    node->opts.client_id = mg_str(node_id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ctx.vector_list = vector_list;
+    node->emit_xml = emit_xml;
+    node->validate_xml = validate_xml;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    node->blob = INDI_BLOB_NEVER;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    node->vector_list = vector_list;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
     {
-        indi_dict_set(*vector_ptr, "@client", indi_string_from(client_id));
+        indi_dict_set(*vector_ptr, "@client", indi_string_from(node_id));
 
-        (*vector_ptr)->base.out_callback = &out_callback;
+        (*vector_ptr)->base.out_callback = out_callback;
 
-        (*vector_ptr)->base.server_ctx = &ctx;
+        (*vector_ptr)->base.node = node;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
+    mg_mgr_init(&node->mgr);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_mgr_init(&ctx.mgr);
-
-    mg_timer_add(&ctx.mgr, 3000, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_fn, &ctx);
-
-    while(s_signo == 0) mg_mgr_poll(&ctx.mgr, 1000);
-
-    mg_mgr_free(&ctx.mgr);
+    mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_fn, node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return 0;
+    return node;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_node_pool(indi_node_t *node, int timeout_ms)
+{
+    mg_mgr_poll(&node->mgr, timeout_ms);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_node_free(indi_node_t *node)
+{
+    mg_mgr_free(&node->mgr);
+
+    indi_memory_free(node);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

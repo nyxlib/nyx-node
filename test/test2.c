@@ -1,8 +1,18 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <signal.h>
 
 #include "../src/indi_base.h"
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static int volatile s_signo = 0;
+
+static void signal_handler(int signo)
+{
+    s_signo = signo;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -42,7 +52,17 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_run("mqtt://localhost:1883", NULL, NULL, "TOTO", vector_list, true, true);
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
+
+    indi_node_t *node = indi_node_init("mqtt://localhost:1883", NULL, NULL, "TOTO", vector_list, 3000, true, true);
+
+    while(s_signo == 0)
+    {
+        indi_node_pool(node, 1000);
+    }
+
+    indi_node_free(node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
