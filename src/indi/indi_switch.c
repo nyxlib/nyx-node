@@ -100,7 +100,7 @@ indi_dict_t *indi_switch_def_vector_new(
 
 indi_dict_t *indi_switch_set_vector_new(indi_dict_t *def_vector)
 {
-    return indi_generate_set_message(def_vector, "setSwitchVector", "oneSwitch");
+    return internal_xxx_set_vector_new(def_vector, "setSwitchVector", "oneSwitch");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

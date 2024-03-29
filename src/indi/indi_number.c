@@ -103,7 +103,7 @@ indi_dict_t *indi_number_def_vector_new(
 
 indi_dict_t *indi_number_set_vector_new(indi_dict_t *def_vector)
 {
-    return indi_generate_set_message(def_vector, "setNumberVector", "oneNumber");
+    return internal_xxx_set_vector_new(def_vector, "setNumberVector", "oneNumber");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

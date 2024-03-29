@@ -98,7 +98,7 @@ indi_dict_t *indi_blob_def_vector_new(
 
 indi_dict_t *indi_blob_set_vector_new(indi_dict_t *def_vector)
 {
-    return indi_generate_set_message(def_vector, "setBLOBVector", "oneBLOB");
+    return internal_xxx_set_vector_new(def_vector, "setBLOBVector", "oneBLOB");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

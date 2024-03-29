@@ -304,31 +304,21 @@ void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt)
             indi_dict_set(dict, "@label", indi_string_from(opt->label));
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(opt->group != NULL) {
             indi_dict_set(dict, "@group", indi_string_from(opt->group));
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
 
         if(opt->driver != NULL) {
             indi_dict_set(dict, "@driver", indi_string_from(opt->driver));
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(opt->timeout > 0.00) {
             indi_dict_set(dict, "@timeout", indi_number_from(opt->timeout));
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(opt->timestamp != NULL) {
             indi_dict_set(dict, "@timestamp", indi_string_from(opt->timestamp));
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
 
         if(opt->message != NULL) {
             indi_dict_set(dict, "@message", indi_string_from(opt->message));
@@ -340,7 +330,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name)
+indi_dict_t *internal_xxx_set_vector_new(indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
