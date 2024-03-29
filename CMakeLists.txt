@@ -29,19 +29,21 @@ set(SOURCE_FILES
     src/indi_base_schema.h
     src/indi_base_internal.h
     #
-    src/json/boolean.c
-    src/json/dict.c
-    src/json/list.c
-    src/json/null.c
-    src/json/number.c
-    src/json/string.c
+    src/mongoose/mongoose.c
+    #
+    src/json/json_boolean.c
+    src/json/json_dict.c
+    src/json/json_list.c
+    src/json/json_null.c
+    src/json/json_number.c
+    src/json/json_string.c
     #
     src/indi/helpers.c
-    src/indi/light.c
-    src/indi/number.c
-    src/indi/text.c
-    src/indi/switch.c
-    src/indi/blob.c
+    src/indi/indi_blob.c
+    src/indi/indi_light.c
+    src/indi/indi_number.c
+    src/indi/indi_switch.c
+    src/indi/indi_text.c
     #
     src/alloc.c
     src/string_builder.c
@@ -51,8 +53,6 @@ set(SOURCE_FILES
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
     src/server.c
-    #
-    src/mongoose/mongoose.c
 )
 
 ########################################################################################################################
@@ -77,14 +77,7 @@ set_target_properties(indi-base-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-base-shared SHARED ${SOURCE_FILES}
-        src/string_builder.c
-        src/indi/helpers.c
-        src/indi/switch.c
-        src/indi/light.c
-        src/indi/number.c
-        src/indi/text.c
-        src/indi/blob.c)
+add_library(indi-base-shared SHARED ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)
