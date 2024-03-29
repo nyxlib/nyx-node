@@ -65,7 +65,7 @@ struct indi_node_s
 
     /**/
 
-    bool emit_xml;
+    bool enable_xml;
     bool validate_xml;
 
     /**/
@@ -143,7 +143,7 @@ static void out_callback(const indi_object_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(node->emit_xml)
+        if(node->enable_xml)
         {
             indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, node->validate_xml);
 
@@ -492,7 +492,7 @@ indi_node_t *indi_node_init(
     indi_dict_t *vector_list[],
     /**/
     int retry_ms,
-    bool emit_xml,
+    bool enable_xml,
     bool validate_xml
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -530,14 +530,11 @@ indi_node_t *indi_node_init(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->emit_xml = emit_xml;
+    node->enable_xml = enable_xml;
+
     node->validate_xml = validate_xml;
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     node->blob = INDI_BLOB_NEVER;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     node->vector_list = vector_list;
 

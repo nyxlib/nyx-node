@@ -147,7 +147,7 @@ buff_t indi_memory_realloc(buff_t buff, size_t size)
     }
 
     if(size == 0x00) {
-        return /*-------------*/(NULL);
+        indi_memory_free(buff); return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
