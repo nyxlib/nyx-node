@@ -112,24 +112,41 @@ static void out_callback(const indi_object_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        bool is_blob;
+
         indi_dict_t *dict;
 
         /**/ if(strcmp("defNumberVector", tag) == 0) {
+            is_blob = false;
             dict = indi_number_set_vector_new((indi_dict_t *) object);
         }
         else if(strcmp("defTextVector", tag) == 0) {
+            is_blob = false;
             dict = indi_text_set_vector_new((indi_dict_t *) object);
         }
         else if(strcmp("defLightVector", tag) == 0) {
+            is_blob = false;
             dict = indi_light_set_vector_new((indi_dict_t *) object);
         }
         else if(strcmp("defSwitchVector", tag) == 0) {
+            is_blob = false;
             dict = indi_switch_set_vector_new((indi_dict_t *) object);
         }
         else if(strcmp("defBLOBVector", tag) == 0) {
+            is_blob = true;
             dict = indi_blob_set_vector_new((indi_dict_t *) object);
+
         }
         else {
+            return;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if((is_blob == true && ctx->blob == INDI_BLOB_NEVER)
+           ||
+           (is_blob == false && ctx->blob == INDI_BLOB_ONLY)
+        ) {
             return;
         }
 
@@ -392,7 +409,19 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 /* ENABLE_BLOB                                                                                        */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                MG_INFO((">> TODO enable_blob"));
+                /**/ if(strnstr(message->data.ptr, "Never", message->data.len) != NULL) {
+                    ctx->blob = INDI_BLOB_NEVER;
+                }
+                else if(strnstr(message->data.ptr, "Also", message->data.len) != NULL) {
+                    ctx->blob = INDI_BLOB_ALSO;
+                }
+                else if(strnstr(message->data.ptr, "Only", message->data.len) != NULL) {
+                    ctx->blob = INDI_BLOB_ONLY;
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                MG_INFO((">> Blog behavior: %s", indi_blob_to_str(ctx->blob)));
 
                 /*----------------------------------------------------------------------------------------------------*/
             }

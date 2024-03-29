@@ -539,6 +539,7 @@ typedef struct
 {
     __NULLABLE__ STR_t label;
     __NULLABLE__ STR_t group;
+    __NULLABLE__ STR_t driver;
     __NULLABLE__ double timeout;
     __NULLABLE__ STR_t timestamp;
     __NULLABLE__ STR_t message;
@@ -664,6 +665,12 @@ indi_dict_t *indi_blob_def_new(
     __NULLABLE__ STR_t label,
     STR_t value
 );
+
+#define indi_blob_def_set(def, value) \
+            indi_dict_set(def, "$", indi_string_from(value))
+
+#define indi_blob_def_get(def) \
+            ((indi_string_t *) indi_dict_get(def, "$"))->data
 
 indi_dict_t *indi_blob_def_vector_new(
     STR_t device,
