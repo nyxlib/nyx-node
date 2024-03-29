@@ -762,7 +762,8 @@ void indi_node_pool(
 );
 
 void indi_node_free(
-    indi_node_t *node
+    indi_node_t *node,
+    bool free_vectors
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

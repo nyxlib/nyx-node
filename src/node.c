@@ -499,8 +499,23 @@ indi_node_t *indi_node_init(
 
     indi_node_t *node = indi_memory_alloc(sizeof(indi_node_t));
 
-    memset(node, 0x00, sizeof(struct indi_node_s));
+    memset(node, 0x00, sizeof(indi_node_t));
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* PATH VECTORS                                                                                                   */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
+    {
+        indi_dict_set(*vector_ptr, "@client", indi_string_from(node_id));
+
+        (*vector_ptr)->base.out_callback = out_callback;
+
+        (*vector_ptr)->base.node = node;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* SET NODE OPTIONS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     node->url = url;
@@ -527,16 +542,7 @@ indi_node_t *indi_node_init(
     node->vector_list = vector_list;
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
-    {
-        indi_dict_set(*vector_ptr, "@client", indi_string_from(node_id));
-
-        (*vector_ptr)->base.out_callback = out_callback;
-
-        (*vector_ptr)->base.node = node;
-    }
-
+    /* INITIALIZE MQTT CLIENT                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     mg_mgr_init(&node->mgr);
@@ -559,11 +565,25 @@ void indi_node_pool(indi_node_t *node, int timeout_ms)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_node_free(indi_node_t *node)
+void indi_node_free(indi_node_t *node, bool free_vectors)
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     mg_mgr_free(&node->mgr);
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(free_vectors)
+    {
+        for(indi_dict_t **vector_ptr = node->vector_list; *vector_ptr != NULL; vector_ptr++)
+        {
+            indi_dict_free(*vector_ptr);
+        }
+    }
+
     indi_memory_free(node);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -62,14 +62,7 @@ int main()
         indi_node_pool(node, 1000);
     }
 
-    indi_node_free(node);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
-    {
-        indi_dict_free(*vector_ptr);
-    }
+    indi_node_free(node, true);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
