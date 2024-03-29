@@ -658,6 +658,27 @@ indi_dict_t *indi_switch_set_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_dict_t *indi_blob_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label,
+    BUFF_t value
+);
+
+indi_dict_t *indi_blob_def_vector_new(
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_dict_t *defs[],
+    indi_opt_t *opt
+);
+
+indi_dict_t *indi_blob_set_vector_new(
+    indi_dict_t *def_vector
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VALIDATION                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 

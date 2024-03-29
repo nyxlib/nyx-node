@@ -122,6 +122,9 @@ static void out_callback(const indi_object_t *object)
         else if(strcmp("defSwitchVector", tag) == 0) {
             dict = indi_switch_set_vector_new((indi_dict_t *) object);
         }
+        else if(strcmp("defBLOBVector", tag) == 0) {
+            dict = indi_blob_set_vector_new((indi_dict_t *) object);
+        }
         else {
             return;
         }
@@ -164,15 +167,15 @@ static void update_props(unsigned long id, indi_dict_t *vector_list[], const ind
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_object_t *children1_list = indi_dict_get(dict, "children");
     indi_object_t *device1_string = indi_dict_get(dict, "@device");
     indi_object_t *name1_string = indi_dict_get(dict, "@name");
+    indi_object_t *children1_list = indi_dict_get(dict, "children");
 
-    if(children1_list != NULL && children1_list->type == INDI_TYPE_LIST
-       &&
-       device1_string != NULL && device1_string->type == INDI_TYPE_STRING
+    if(device1_string != NULL && device1_string->type == INDI_TYPE_STRING
        &&
        name1_string != NULL && name1_string->type == INDI_TYPE_STRING
+       &&
+       children1_list != NULL && children1_list->type == INDI_TYPE_LIST
     ) {
         STR_t device1 = indi_string_get((indi_string_t *) device1_string);
         STR_t name1 = indi_string_get((indi_string_t *) name1_string);
@@ -185,15 +188,15 @@ static void update_props(unsigned long id, indi_dict_t *vector_list[], const ind
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_t *children2_list = indi_dict_get(vector, "children");
             indi_object_t *device2_string = indi_dict_get(vector, "@device");
             indi_object_t *name2_string = indi_dict_get(vector, "@name");
+            indi_object_t *children2_list = indi_dict_get(vector, "children");
 
-            if(children2_list != NULL && children1_list->type == INDI_TYPE_LIST
-               &&
-               device2_string != NULL && device2_string->type == INDI_TYPE_STRING
+            if(device2_string != NULL && device2_string->type == INDI_TYPE_STRING
                &&
                name2_string != NULL && name2_string->type == INDI_TYPE_STRING
+               &&
+               children2_list != NULL && children1_list->type == INDI_TYPE_LIST
             ) {
                 STR_t device2 = indi_string_get((indi_string_t *) device2_string);
                 STR_t name2 = indi_string_get((indi_string_t *) name2_string);

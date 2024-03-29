@@ -373,6 +373,9 @@ indi_dict_t *indi_generate_set_message(indi_dict_t *def_vector, STR_t set_tag_na
         indi_dict_set(dict, "<>", indi_string_from(one_tag_name));
 
         internal_copy_entry(dict, (indi_dict_t *) object, "$");
+        internal_copy_entry(dict, (indi_dict_t *) object, "@name");
+        internal_copy_entry(dict, (indi_dict_t *) object, "@size");
+        internal_copy_entry(dict, (indi_dict_t *) object, "@format");
 
         indi_list_push(children, dict);
 
