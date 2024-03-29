@@ -74,7 +74,7 @@ struct indi_node_s
 
     /**/
 
-    indi_dict_t **vector_list;
+    indi_dict_t **vectors;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -175,7 +175,7 @@ static void out_callback(const indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void update_props(unsigned long id, indi_dict_t *vector_list[], const indi_dict_t *dict)
+static void update_props(unsigned long id, indi_dict_t *vectors[], const indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -194,7 +194,7 @@ static void update_props(unsigned long id, indi_dict_t *vector_list[], const ind
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
+        for(indi_dict_t **vector_ptr = vectors; *vector_ptr != NULL; vector_ptr++)
         {
             indi_dict_t *vector = *vector_ptr;
 
@@ -383,7 +383,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 /* GET_PROPERTIES                                                                                     */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                for(indi_dict_t **vector_ptr = node->vector_list; *vector_ptr != NULL; vector_ptr++)
+                for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
                 {
                     str_t json = indi_dict_to_string(*vector_ptr);
 
@@ -428,7 +428,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                 {
                     if(object->type == INDI_TYPE_DICT)
                     {
-                        update_props(connection->id, node->vector_list, (indi_dict_t *) object);
+                        update_props(connection->id, node->vectors, (indi_dict_t *) object);
                     }
 
                     indi_dict_free((indi_dict_t *) object);
@@ -452,7 +452,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
                     {
                         if(object->type == INDI_TYPE_DICT)
                         {
-                            update_props(connection->id, node->vector_list, (indi_dict_t *) object);
+                            update_props(connection->id, node->vectors, (indi_dict_t *) object);
                         }
 
                         indi_dict_free((indi_dict_t *) object);
@@ -489,7 +489,7 @@ indi_node_t *indi_node_init(
     __NULLABLE__ STR_t password,
     /**/
     STR_t node_id,
-    indi_dict_t *vector_list[],
+    indi_dict_t *vectors[],
     /**/
     int retry_ms,
     bool enable_xml,
@@ -505,7 +505,7 @@ indi_node_t *indi_node_init(
     /* PATH VECTORS                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(indi_dict_t **vector_ptr = vector_list; *vector_ptr != NULL; vector_ptr++)
+    for(indi_dict_t **vector_ptr = vectors; *vector_ptr != NULL; vector_ptr++)
     {
         indi_dict_set(*vector_ptr, "@client", indi_string_from(node_id));
 
@@ -536,7 +536,7 @@ indi_node_t *indi_node_init(
 
     node->blob = INDI_BLOB_NEVER;
 
-    node->vector_list = vector_list;
+    node->vectors = vectors;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE MQTT CLIENT                                                                                         */
@@ -572,7 +572,7 @@ void indi_node_free(indi_node_t *node, bool free_vectors)
 
     if(free_vectors)
     {
-        for(indi_dict_t **vector_ptr = node->vector_list; *vector_ptr != NULL; vector_ptr++)
+        for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
             indi_dict_free(*vector_ptr);
         }

@@ -749,7 +749,7 @@ indi_node_t *indi_node_init(
     __NULLABLE__ STR_t password,
     /**/
     STR_t node_id,
-    indi_dict_t *vector_list[],
+    indi_dict_t *vectors[],
     /**/
     int retry_ms,
     bool enable_xml,
