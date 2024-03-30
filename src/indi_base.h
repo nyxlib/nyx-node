@@ -18,6 +18,10 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+double nan(const char *tag);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #define __INLINE__ \
             static inline
 
@@ -369,6 +373,28 @@ str_t indi_dict_to_string(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ double indi_dict_get_number(const indi_dict_t *object, STR_t key)
+{
+    indi_object_t *number = indi_dict_get(object, key);
+
+    return (number != NULL && number->type == INDI_TYPE_NUMBER) ? indi_number_get((indi_number_t *) number)
+                                                                : nan("1")
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ STR_t indi_dict_get_string(const indi_dict_t *object, STR_t key)
+{
+    indi_object_t *string = indi_dict_get(object, key);
+
+    return (string != NULL && string->type == INDI_TYPE_STRING) ? indi_string_get((indi_string_t *) string)
+                                                                : NULL
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* LIST                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -442,6 +468,28 @@ str_t indi_list_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+__INLINE__ double indi_list_get_number(const indi_list_t *object, int idx)
+{
+    indi_object_t *number = indi_list_get(object, idx);
+
+    return (number != NULL && number->type == INDI_TYPE_NUMBER) ? indi_number_get((indi_number_t *) number)
+                                                                : nan("1")
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ STR_t indi_list_get_string(const indi_list_t *object, int idx)
+{
+    indi_object_t *string = indi_list_get(object, idx);
+
+    return (string != NULL && string->type == INDI_TYPE_STRING) ? indi_string_get((indi_string_t *) string)
+                                                                : NULL
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #define indi_list_push(object, val) \
             indi_list_set(object, -1, val)
 
@@ -458,15 +506,19 @@ indi_xmldoc_t *indi_xmldoc_parse(
 );
 
 void indi_xmldoc_free(
-    /*-*/ indi_xmldoc_t *doc
+    /*-*/ indi_xmldoc_t *xmldoc
 );
 
 str_t indi_xmldoc_to_string(
-    const indi_xmldoc_t *doc
+    const indi_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INDI                                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define INDI_VERSION "1.7"
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef enum

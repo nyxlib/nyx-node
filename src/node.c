@@ -65,24 +65,18 @@ struct indi_node_s
 
     /**/
 
+    indi_dict_t **vectors;
+
+    /**/
+
     bool enable_xml;
     bool validate_xml;
-
-    /**/
-
-    indi_blob_t blob;
-
-    /**/
-
-    indi_dict_t **vectors;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static struct mg_str SPECIAL_TOPICS[] = {
     MG_C_STR("indi/cmd/get_clients"),
-    MG_C_STR("indi/cmd/get_properties"),
-    MG_C_STR("indi/cmd/enable_blob"),
     MG_C_STR("indi/cmd/json"),
     MG_C_STR("indi/cmd/xml"),
 };
@@ -91,40 +85,27 @@ static struct mg_str SPECIAL_TOPICS[] = {
 
 static void out_callback(const indi_object_t *object)
 {
-    struct indi_node_s *node = (struct indi_node_s *) object->node;
+    STR_t tag_name = indi_dict_get_string((const indi_dict_t *) object, "<>");
 
-    indi_object_t *string = indi_dict_get((indi_dict_t *) object, "<>");
-
-    if(string != NULL && string->type == INDI_TYPE_STRING)
+    if(tag_name != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        STR_t tag = indi_string_get((indi_string_t *) string);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        bool is_blob;
-
         indi_dict_t *dict;
 
-        /**/ if(strcmp("defNumberVector", tag) == 0) {
-            is_blob = false;
+        /**/ if(strcmp("defNumberVector", tag_name) == 0) {
             dict = indi_number_set_vector_new((indi_dict_t *) object);
         }
-        else if(strcmp("defTextVector", tag) == 0) {
-            is_blob = false;
+        else if(strcmp("defTextVector", tag_name) == 0) {
             dict = indi_text_set_vector_new((indi_dict_t *) object);
         }
-        else if(strcmp("defLightVector", tag) == 0) {
-            is_blob = false;
+        else if(strcmp("defLightVector", tag_name) == 0) {
             dict = indi_light_set_vector_new((indi_dict_t *) object);
         }
-        else if(strcmp("defSwitchVector", tag) == 0) {
-            is_blob = false;
+        else if(strcmp("defSwitchVector", tag_name) == 0) {
             dict = indi_switch_set_vector_new((indi_dict_t *) object);
         }
-        else if(strcmp("defBLOBVector", tag) == 0) {
-            is_blob = true;
+        else if(strcmp("defBLOBVector", tag_name) == 0) {
             dict = indi_blob_set_vector_new((indi_dict_t *) object);
 
         }
@@ -134,12 +115,7 @@ static void out_callback(const indi_object_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if((is_blob == true && node->blob == INDI_BLOB_NEVER)
-           ||
-           (is_blob == false && node->blob == INDI_BLOB_ONLY)
-        ) {
-            return;
-        }
+        indi_node_t *node = object->node;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -175,7 +151,96 @@ static void out_callback(const indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void update_props(unsigned long id, indi_dict_t *vectors[], const indi_dict_t *dict)
+static void get_properties(indi_node_t *node, const indi_dict_t *dict)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t device1 = indi_dict_get_string(dict, "@device");
+    STR_t name1 = indi_dict_get_string(dict, "@name");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
+    {
+        indi_dict_t *vector = *vector_ptr;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        STR_t device2 = indi_dict_get_string(vector, "@device");
+        STR_t name2 = indi_dict_get_string(vector, "@name");
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(device1 != NULL)
+        {
+            if((device2 == NULL || strcmp(device1, device2) != 0))
+            {
+                break;
+            }
+
+            if(name1 != NULL)
+            {
+                if((name2 == NULL || strcmp(name1, name2) != 0))
+                {
+                    break;
+                }
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(node->enable_xml)
+        {
+            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc((indi_object_t *) vector, node->validate_xml);
+
+            if(xmldoc != NULL)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                str_t xml = indi_xmldoc_to_string(xmldoc);
+                mqtt_pub(node->connection, mg_str("indi/xml"), mg_str(xml), 1, false);
+                indi_memory_free(xml);
+
+                indi_xmldoc_free(xmldoc);
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        str_t json = indi_dict_to_string(vector);
+        mqtt_pub(node->connection, mg_str("indi/json"), mg_str(json), 1, false);
+        indi_memory_free(json);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void enable_blob(indi_node_t *node, const indi_dict_t *dict)
+{
+    STR_t device = indi_dict_get_string(dict, "@device");
+    STR_t name = indi_dict_get_string(dict, "@name");
+    STR_t val = indi_dict_get_string(dict, "$");
+
+    if(device != NULL && val != NULL)
+    {
+        if(name != NULL)
+        {
+            MG_INFO(("%lu Enable blob set to `%s` for `%s::%s` ", node->connection->id, val, device, name));
+        }
+        else
+        {
+            MG_INFO(("%lu Enable blob set to `%s` for `%s` ", node->connection->id, val, device));
+        }
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void update_props(indi_node_t *node, const indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -194,7 +259,7 @@ static void update_props(unsigned long id, indi_dict_t *vectors[], const indi_di
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(indi_dict_t **vector_ptr = vectors; *vector_ptr != NULL; vector_ptr++)
+        for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
             indi_dict_t *vector = *vector_ptr;
 
@@ -215,8 +280,10 @@ static void update_props(unsigned long id, indi_dict_t *vectors[], const indi_di
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(strcmp(device1, device2) == 0 && strcmp(name1, name2) == 0)
-                {
+                if(strcmp(device1, device2) == 0
+                   &&
+                   strcmp(name1, name2) == 0
+                ) {
                     int idx1;
                     int idx2;
 
@@ -260,7 +327,7 @@ static void update_props(unsigned long id, indi_dict_t *vectors[], const indi_di
                                                 if(notify)
                                                 {
                                                     str_t str = indi_object_to_string(object2);
-                                                    MG_INFO(("%lu Updating `%s::%s` with %s", id, device1, name1, str));
+                                                    MG_INFO(("%lu Updating `%s::%s` with %s", node->connection->id, device1, name1, str));
                                                     indi_memory_free(str);
 
                                                     if(object2->in_callback != NULL)
@@ -299,9 +366,32 @@ static void update_props(unsigned long id, indi_dict_t *vectors[], const indi_di
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void dispatch_message(indi_node_t *node, indi_object_t *object)
+{
+    if(object->type == INDI_TYPE_DICT)
+    {
+        STR_t tag_name = indi_dict_get_string((indi_dict_t *) object, "<>");
+
+        if(tag_name != NULL)
+        {
+            /**/ if(strcmp(tag_name, "getProperties") == 0) {
+                get_properties(node, (indi_dict_t *) object);
+            }
+            else if(strcmp(tag_name, "enableBLOB") == 0) {
+                enable_blob(node, (indi_dict_t *) object);
+            }
+            else {
+                update_props(node, (indi_dict_t *) object);
+            }
+        }
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 {
-    struct indi_node_s *node = (struct indi_node_s *) connection->fn_data;
+    indi_node_t *node = (indi_node_t *) connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -317,7 +407,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
     }
     else if(ev == MG_EV_CLOSE)
     {
-        ((struct indi_node_s *) connection->fn_data)->connection = NULL;
+        ((indi_node_t *) connection->fn_data)->connection = NULL;
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
@@ -380,45 +470,6 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
             else if(mg_startswith(message->topic, SPECIAL_TOPICS[1]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
-                /* GET_PROPERTIES                                                                                     */
-                /*----------------------------------------------------------------------------------------------------*/
-
-                for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
-                {
-                    str_t json = indi_dict_to_string(*vector_ptr);
-
-                    mqtt_pub(connection, mg_str("indi/json"), mg_str(json), 1, false);
-
-                    indi_memory_free(json);
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[2]))
-            {
-                /*----------------------------------------------------------------------------------------------------*/
-                /* ENABLE_BLOB                                                                                        */
-                /*----------------------------------------------------------------------------------------------------*/
-
-                /**/ if(strnstr(message->data.ptr, "Never", message->data.len) != NULL) {
-                    node->blob = INDI_BLOB_NEVER;
-                }
-                else if(strnstr(message->data.ptr, "Also", message->data.len) != NULL) {
-                    node->blob = INDI_BLOB_ALSO;
-                }
-                else if(strnstr(message->data.ptr, "Only", message->data.len) != NULL) {
-                    node->blob = INDI_BLOB_ONLY;
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                MG_INFO((">> Blog behavior: %s", indi_blob_to_str(node->blob)));
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[3]))
-            {
-                /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -426,17 +477,14 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                 if(object != NULL)
                 {
-                    if(object->type == INDI_TYPE_DICT)
-                    {
-                        update_props(connection->id, node->vectors, (indi_dict_t *) object);
-                    }
+                    dispatch_message(node, object);
 
-                    indi_dict_free((indi_dict_t *) object);
+                    indi_object_free(object);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[4]))
+            else if(mg_startswith(message->topic, SPECIAL_TOPICS[2]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* XML NEW XXX VECTOR                                                                                 */
@@ -450,12 +498,9 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
                     if(object != NULL)
                     {
-                        if(object->type == INDI_TYPE_DICT)
-                        {
-                            update_props(connection->id, node->vectors, (indi_dict_t *) object);
-                        }
+                        dispatch_message(node, object);
 
-                        indi_dict_free((indi_dict_t *) object);
+                        indi_object_free(object);
                     }
 
                     indi_xmldoc_free(xmldoc);
@@ -473,7 +518,7 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
 static void timer_fn(void *arg)
 {
-    struct indi_node_s *node = (struct indi_node_s *) arg;
+    indi_node_t *node = (indi_node_t *) arg;
 
     if(node->connection == NULL)
     {
@@ -530,13 +575,11 @@ indi_node_t *indi_node_init(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    node->vectors = vectors;
+
     node->enable_xml = enable_xml;
 
     node->validate_xml = validate_xml;
-
-    node->blob = INDI_BLOB_NEVER;
-
-    node->vectors = vectors;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE MQTT CLIENT                                                                                         */

@@ -33,14 +33,14 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *def1 = indi_switch_def_new("turn_on", "Turn ON", INDI_ONOFF_ON);
-    indi_dict_t *def2 = indi_switch_def_new("turn_off", "Turn OFF", INDI_ONOFF_OFF);
+    indi_dict_t *def1 = indi_switch_def_new("button1_on", "Turn ON", INDI_ONOFF_ON);
+    indi_dict_t *def2 = indi_switch_def_new("button2_off", "Turn OFF", INDI_ONOFF_OFF);
 
     indi_dict_t *defs[] = {def1, def2, NULL};
 
     indi_dict_t *switch_vector = indi_switch_def_vector_new(
-        "my_device",
-        "my_device_onoff",
+        "Telescope Simulator",
+        "button1",
         INDI_STATE_OK,
         INDI_PERM_RW,
         INDI_RULE_AT_MOST_ONE,
