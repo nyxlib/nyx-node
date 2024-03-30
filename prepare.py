@@ -28,13 +28,13 @@ def compile_schema():
 
     ####################################################################################################################
 
-    with open('src/indi_base_schema.h', 'wt') as f:
+    with open('src/indi_node_schema.h', 'wt') as f:
 
         f.write(f'/* file: indi.xsd */\n\n')
 
-        f.write(f'#define INDI_BASE_XSD_SIZE {data_len}\n\n')
+        f.write(f'#define INDI_NODE_XSD_SIZE {data_len}\n\n')
 
-        f.write(f'char indi_base_xsd_buff[] = {{{data_out}}};\n')
+        f.write(f'char indi_node_xsd_buff[] = {{{data_out}}};\n')
 
 ########################################################################################################################
 

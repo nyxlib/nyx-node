@@ -2,7 +2,7 @@
 
 #include "mongoose/mongoose.h"
 
-#include "indi_base_internal.h"
+#include "indi_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */

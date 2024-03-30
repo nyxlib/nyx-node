@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.5)
 
 ########################################################################################################################
 
-project(indi_base C)
+project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -25,9 +25,9 @@ check_function_exists(malloc_usable_size HAVE_MALLOC_USABLE_SIZE)
 ########################################################################################################################
 
 set(SOURCE_FILES
-    src/indi_base.h
-    src/indi_base_schema.h
-    src/indi_base_internal.h
+    src/indi_node.h
+    src/indi_node_schema.h
+    src/indi_node_internal.h
     #
     src/mongoose/mongoose.c
     #
@@ -52,59 +52,59 @@ set(SOURCE_FILES
     src/validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
-        src/node.c
+    src/node.c
 )
 
 ########################################################################################################################
 
-add_library(indi-base-static STATIC ${SOURCE_FILES})
+add_library(indi-node-static STATIC ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
-    target_compile_definitions(indi-base-static PRIVATE HAVE_MALLOC_SIZE)
+    target_compile_definitions(indi-node-static PRIVATE HAVE_MALLOC_SIZE)
 endif()
 
 if(HAVE_MALLOC_USABLE_SIZE)
-    target_compile_definitions(indi-base-static PRIVATE HAVE_MALLOC_USABLE_SIZE)
+    target_compile_definitions(indi-node-static PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
 
-target_include_directories(indi-base-static PRIVATE ${LIBXML2_INCLUDE_DIR})
+target_include_directories(indi-node-static PRIVATE ${LIBXML2_INCLUDE_DIR})
 
-######_link_libraries(indi-base-static ${LIBXML2_LIBRARIES})
+######_link_libraries(indi-node-static ${LIBXML2_LIBRARIES})
 
-set_target_properties(indi-base-static PROPERTIES
-    OUTPUT_NAME "indi-base"
+set_target_properties(indi-node-static PROPERTIES
+    OUTPUT_NAME "indi-node"
 )
 
 ########################################################################################################################
 
-add_library(indi-base-shared SHARED ${SOURCE_FILES})
+add_library(indi-node-shared SHARED ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
-    target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_SIZE)
+    target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_SIZE)
 endif()
 
 if(HAVE_MALLOC_USABLE_SIZE)
-    target_compile_definitions(indi-base-shared PRIVATE HAVE_MALLOC_USABLE_SIZE)
+    target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
 
-target_include_directories(indi-base-shared PRIVATE ${LIBXML2_INCLUDE_DIR})
+target_include_directories(indi-node-shared PRIVATE ${LIBXML2_INCLUDE_DIR})
 
-target_link_libraries(indi-base-shared ${LIBXML2_LIBRARIES})
+target_link_libraries(indi-node-shared ${LIBXML2_LIBRARIES})
 
-set_target_properties(indi-base-shared PROPERTIES
-    OUTPUT_NAME "indi-base"
+set_target_properties(indi-node-shared PROPERTIES
+    OUTPUT_NAME "indi-node"
 )
 
 ########################################################################################################################
 
 add_executable(test1 test/test1.c)
 
-target_link_libraries(test1 ${LIBXML2_LIBRARIES} indi-base-static)
+target_link_libraries(test1 ${LIBXML2_LIBRARIES} indi-node-static)
 
 ########################################################################################################################
 
 add_executable(test2 test/test2.c)
 
-target_link_libraries(test2 ${LIBXML2_LIBRARIES} indi-base-static)
+target_link_libraries(test2 ${LIBXML2_LIBRARIES} indi-node-static)
 
 ########################################################################################################################

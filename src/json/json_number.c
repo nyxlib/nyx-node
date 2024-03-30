@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "../indi_base_internal.h"
+#include "../indi_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

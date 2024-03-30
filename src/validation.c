@@ -4,9 +4,9 @@
 
 #include <libxml/xmlschemas.h>
 
-#include "indi_base_internal.h"
+#include "indi_node_internal.h"
 
-#include "indi_base_schema.h"
+#include "indi_node_schema.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -37,7 +37,7 @@ bool indi_validation_initialize()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlSchemaParserCtxt *context = xmlSchemaNewMemParserCtxt(indi_base_xsd_buff, INDI_BASE_XSD_SIZE);
+    xmlSchemaParserCtxt *context = xmlSchemaNewMemParserCtxt(indi_node_xsd_buff, INDI_NODE_XSD_SIZE);
 
     if(context == NULL)
     {
