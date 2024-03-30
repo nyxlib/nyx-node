@@ -65,7 +65,7 @@ struct indi_node_s
 
     /**/
 
-    indi_dict_t **vectors;
+    indi_dict_t **def_vectors;
 
     /**/
 
@@ -83,31 +83,32 @@ static struct mg_str SPECIAL_TOPICS[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void out_callback(const indi_object_t *object)
+static void out_callback(indi_object_t *object)
 {
-    STR_t tag_name = indi_dict_get_string((const indi_dict_t *) object, "<>");
+    const indi_dict_t *def_vector = (indi_dict_t *) object;
+
+    STR_t tag_name = indi_dict_get_string(def_vector, "<>");
 
     if(tag_name != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_dict_t *dict;
+        indi_dict_t *set_vector;
 
         /**/ if(strcmp("defNumberVector", tag_name) == 0) {
-            dict = indi_number_set_vector_new((indi_dict_t *) object);
+            set_vector = indi_number_set_vector_new(def_vector);
         }
         else if(strcmp("defTextVector", tag_name) == 0) {
-            dict = indi_text_set_vector_new((indi_dict_t *) object);
+            set_vector = indi_text_set_vector_new(def_vector);
         }
         else if(strcmp("defLightVector", tag_name) == 0) {
-            dict = indi_light_set_vector_new((indi_dict_t *) object);
+            set_vector = indi_light_set_vector_new(def_vector);
         }
         else if(strcmp("defSwitchVector", tag_name) == 0) {
-            dict = indi_switch_set_vector_new((indi_dict_t *) object);
+            set_vector = indi_switch_set_vector_new(def_vector);
         }
         else if(strcmp("defBLOBVector", tag_name) == 0) {
-            dict = indi_blob_set_vector_new((indi_dict_t *) object);
-
+            set_vector = indi_blob_set_vector_new(def_vector);
         }
         else {
             return;
@@ -139,11 +140,11 @@ static void out_callback(const indi_object_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        str_t json = indi_dict_to_string(dict);
+        str_t json = indi_dict_to_string(set_vector);
         mqtt_pub(node->connection, mg_str("indi/json"), mg_str(json), 1, false);
         indi_memory_free(json);
 
-        indi_dict_free(dict);
+        indi_dict_free(set_vector);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -160,14 +161,14 @@ static void get_properties(indi_node_t *node, const indi_dict_t *dict)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
+    for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
     {
-        indi_dict_t *vector = *vector_ptr;
+        indi_dict_t *def_vector = *def_vector_ptr;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        STR_t device2 = indi_dict_get_string(vector, "@device");
-        STR_t name2 = indi_dict_get_string(vector, "@name");
+        STR_t device2 = indi_dict_get_string(def_vector, "@device");
+        STR_t name2 = indi_dict_get_string(def_vector, "@name");
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -191,7 +192,7 @@ static void get_properties(indi_node_t *node, const indi_dict_t *dict)
 
         if(node->enable_xml)
         {
-            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc((indi_object_t *) vector, node->validate_xml);
+            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc((indi_object_t *) def_vector, node->validate_xml);
 
             if(xmldoc != NULL)
             {
@@ -209,11 +210,11 @@ static void get_properties(indi_node_t *node, const indi_dict_t *dict)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        str_t json = indi_dict_to_string(vector);
+        str_t json = indi_dict_to_string(def_vector);
         mqtt_pub(node->connection, mg_str("indi/json"), mg_str(json), 1, false);
         indi_memory_free(json);
 
-        ////_dict_free(vector);
+        ////_dict_free(def_vector);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -261,15 +262,15 @@ static void update_props(indi_node_t *node, const indi_dict_t *dict)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
+        for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
         {
-            indi_dict_t *vector = *vector_ptr;
+            indi_dict_t *def_vector = *def_vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_t *device2_string = indi_dict_get(vector, "@device");
-            indi_object_t *name2_string = indi_dict_get(vector, "@name");
-            indi_object_t *children2_list = indi_dict_get(vector, "children");
+            indi_object_t *device2_string = indi_dict_get(def_vector, "@device");
+            indi_object_t *name2_string = indi_dict_get(def_vector, "@name");
+            indi_object_t *children2_list = indi_dict_get(def_vector, "children");
 
             if(device2_string != NULL && device2_string->type == INDI_TYPE_STRING
                &&
@@ -351,6 +352,8 @@ static void update_props(indi_node_t *node, const indi_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
+                    /* property found */
+
                     break;
                 }
 
@@ -382,7 +385,16 @@ static void dispatch_message(indi_node_t *node, indi_object_t *object)
             else if(strcmp(tag_name, "enableBLOB") == 0) {
                 enable_blob(node, (indi_dict_t *) object);
             }
-            else {
+            else if(strcmp(tag_name, "defNumberVector") == 0
+                    ||
+                    strcmp(tag_name, "defTextVector") == 0
+                    ||
+                    strcmp(tag_name, "defLightVector") == 0
+                    ||
+                    strcmp(tag_name, "defSwitchVector") == 0
+                    ||
+                    strcmp(tag_name, "defBLOBVector") == 0
+            ) {
                 update_props(node, (indi_dict_t *) object);
             }
         }
@@ -536,7 +548,7 @@ indi_node_t *indi_node_init(
     __NULLABLE__ STR_t password,
     /**/
     STR_t node_id,
-    indi_dict_t *vectors[],
+    indi_dict_t *def_vectors[],
     /**/
     int retry_ms,
     bool enable_xml,
@@ -552,13 +564,13 @@ indi_node_t *indi_node_init(
     /* PATH VECTORS                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(indi_dict_t **vector_ptr = vectors; *vector_ptr != NULL; vector_ptr++)
+    for(indi_dict_t **def_vector_ptr = def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
     {
-        indi_dict_set(*vector_ptr, "@client", indi_string_from(node_id));
+        indi_dict_set(*def_vector_ptr, "@client", indi_string_from(node_id));
 
-        (*vector_ptr)->base.out_callback = out_callback;
+        (*def_vector_ptr)->base.out_callback = out_callback;
 
-        (*vector_ptr)->base.node = node;
+        (*def_vector_ptr)->base.node = node;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -577,7 +589,7 @@ indi_node_t *indi_node_init(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->vectors = vectors;
+    node->def_vectors = def_vectors;
 
     node->enable_xml = enable_xml;
 
@@ -617,11 +629,13 @@ void indi_node_free(indi_node_t *node, bool free_vectors)
 
     if(free_vectors)
     {
-        for(indi_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
+        for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
         {
-            indi_dict_free(*vector_ptr);
+            indi_dict_free(*def_vector_ptr);
         }
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     indi_memory_free(node);
 

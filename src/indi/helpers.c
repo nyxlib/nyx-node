@@ -210,7 +210,7 @@ indi_blob_t indi_str_to_blob(STR_t blob)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key)
+bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
 {
     indi_object_t *src_object = indi_dict_get(src, key);
 
@@ -330,7 +330,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *internal_xxx_set_vector_new(indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name)
+indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

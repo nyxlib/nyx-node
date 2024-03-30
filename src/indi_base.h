@@ -90,8 +90,8 @@ typedef struct indi_object_s
 
     __NULLABLE__ struct indi_object_s *parent;
 
-    __NULLABLE__ void (* in_callback)(const struct indi_object_s *object);
-    __NULLABLE__ void (* out_callback)(const struct indi_object_s *object);
+    __NULLABLE__ void (* in_callback)(struct indi_object_s *object);
+    __NULLABLE__ void (* out_callback)(struct indi_object_s *object);
 
 } indi_object_t;
 
@@ -650,7 +650,7 @@ indi_dict_t *indi_number_def_vector_new(
 );
 
 indi_dict_t *indi_number_set_vector_new(
-    indi_dict_t *def_vector
+    const indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -677,7 +677,7 @@ indi_dict_t *indi_text_def_vector_new(
 );
 
 indi_dict_t *indi_text_set_vector_new(
-    indi_dict_t *def_vector
+    const indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -703,7 +703,7 @@ indi_dict_t *indi_light_def_vector_new(
 );
 
 indi_dict_t *indi_light_set_vector_new(
-    indi_dict_t *def_vector
+    const indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -731,7 +731,7 @@ indi_dict_t *indi_switch_def_vector_new(
 );
 
 indi_dict_t *indi_switch_set_vector_new(
-    indi_dict_t *def_vector
+    const indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -758,7 +758,7 @@ indi_dict_t *indi_blob_def_vector_new(
 );
 
 indi_dict_t *indi_blob_set_vector_new(
-    indi_dict_t *def_vector
+    const indi_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -801,7 +801,7 @@ indi_node_t *indi_node_init(
     __NULLABLE__ STR_t password,
     /**/
     STR_t node_id,
-    indi_dict_t *vectors[],
+    indi_dict_t *def_vectors[],
     /**/
     int retry_ms,
     bool enable_xml,

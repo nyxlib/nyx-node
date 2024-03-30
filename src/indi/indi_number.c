@@ -6,7 +6,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void debug_callback(const indi_object_t *object)
+static void debug_callback(indi_object_t *object)
 {
     indi_dict_t *dict = indi_number_set_vector_new((indi_dict_t *) object);
 
@@ -101,7 +101,7 @@ indi_dict_t *indi_number_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_number_set_vector_new(indi_dict_t *def_vector)
+indi_dict_t *indi_number_set_vector_new(const indi_dict_t *def_vector)
 {
     return internal_xxx_set_vector_new(def_vector, "setNumberVector", "oneNumber");
 }

@@ -23,7 +23,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void indi_object_notify(
-    const indi_object_t *object
+    indi_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -111,9 +111,9 @@ str_t indi_string_builder_to_cstring(
 
 void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt);
 
-bool internal_copy_entry(indi_dict_t *dst, indi_dict_t *src, STR_t key);
+bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key);
 
-indi_dict_t *internal_xxx_set_vector_new(indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name);
+indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

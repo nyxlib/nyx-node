@@ -238,7 +238,7 @@ str_t indi_string_dup(STR_t s)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_notify(const indi_object_t *object)
+void indi_object_notify(indi_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {
