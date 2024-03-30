@@ -385,15 +385,15 @@ static void dispatch_message(indi_node_t *node, indi_object_t *object)
             else if(strcmp(tag_name, "enableBLOB") == 0) {
                 enable_blob(node, (indi_dict_t *) object);
             }
-            else if(strcmp(tag_name, "defNumberVector") == 0
+            else if(strcmp(tag_name, "newNumberVector") == 0
                     ||
-                    strcmp(tag_name, "defTextVector") == 0
+                    strcmp(tag_name, "newTextVector") == 0
                     ||
-                    strcmp(tag_name, "defLightVector") == 0
+                    strcmp(tag_name, "newLightVector") == 0
                     ||
-                    strcmp(tag_name, "defSwitchVector") == 0
+                    strcmp(tag_name, "newSwitchVector") == 0
                     ||
-                    strcmp(tag_name, "defBLOBVector") == 0
+                    strcmp(tag_name, "newBLOBVector") == 0
             ) {
                 update_props(node, (indi_dict_t *) object);
             }
