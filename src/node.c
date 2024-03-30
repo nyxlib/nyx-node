@@ -122,7 +122,7 @@ static void out_callback(indi_object_t *object)
 
         if(node->enable_xml)
         {
-            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, node->validate_xml);
+            indi_xmldoc_t *xmldoc = indi_object_to_xmldoc((indi_object_t *) set_vector, node->validate_xml);
 
             if(xmldoc != NULL)
             {
@@ -452,10 +452,6 @@ static void mqtt_fn(struct mg_connection *connection, int ev, void *ev_data)
 
             indi_memory_free(topic);
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        mqtt_pub(connection, mg_str("indi/cmd/get_properties"), mg_str("1.7"), 1, false);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
