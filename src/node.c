@@ -213,6 +213,8 @@ static void get_properties(indi_node_t *node, const indi_dict_t *dict)
         mqtt_pub(node->connection, mg_str("indi/json"), mg_str(json), 1, false);
         indi_memory_free(json);
 
+        ////_dict_free(vector);
+
         /*------------------------------------------------------------------------------------------------------------*/
     }
 }
