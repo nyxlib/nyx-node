@@ -116,6 +116,36 @@ bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key);
 indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* STREAM                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    int idx;
+
+    STR_t s_ptr;
+    STR_t e_ptr;
+
+    size_t pos;
+    size_t len;
+
+} tag_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool indi_stream_detect_opening_tag(
+    tag_t *tag,
+    size_t size,
+    BUFF_t buff
+);
+
+bool indi_stream_detect_closing_tag(
+    tag_t *tag,
+    size_t size,
+    BUFF_t buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 #endif /* INDI_BASE_INDI_BASE_INTERNAL_H */
 

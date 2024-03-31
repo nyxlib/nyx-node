@@ -376,7 +376,7 @@ static void update_props(indi_node_t *node, const indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void dispatch_message(indi_node_t *node, indi_object_t *object)
+static void process_message(indi_node_t *node, indi_object_t *object)
 {
     if(object->type == INDI_TYPE_DICT)
     {
@@ -410,7 +410,7 @@ static void dispatch_message(indi_node_t *node, indi_object_t *object)
 
 static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    //indi_node_t *node = (indi_node_t *) connection->fn_data;
+    indi_node_t *node = (indi_node_t *) connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -434,11 +434,39 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         /* MG_EV_READ                                                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
+        tag_t tag = {};
+
         struct mg_iobuf *r = &connection->recv;
 
-        MG_INFO(("SERVER got data: %.*s", r->len, r->buf));
+        if(indi_stream_detect_opening_tag(&tag, r->len, r->buf))
+        {
+            if(indi_stream_detect_closing_tag(&tag, r->len, r->buf))
+            {
+                /*----------------------------------------------------------------------------------------------------*/
 
-        mg_iobuf_del(r, 0, r->len);
+                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(tag.s_ptr, tag.len);
+
+                if(xmldoc != NULL)
+                {
+                    indi_object_t *object = indi_xmldoc_to_object(xmldoc, node->validate_xml);
+
+                    if(object != NULL)
+                    {
+                        process_message(node, object);
+
+                        indi_object_free(object);
+                    }
+
+                    indi_xmldoc_free(xmldoc);
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                mg_iobuf_del(r, 0, tag.pos + tag.len);
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -532,7 +560,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
                 if(object != NULL)
                 {
-                    dispatch_message(node, object);
+                    process_message(node, object);
 
                     indi_object_free(object);
                 }
@@ -553,7 +581,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
                     if(object != NULL)
                     {
-                        dispatch_message(node, object);
+                        process_message(node, object);
 
                         indi_object_free(object);
                     }

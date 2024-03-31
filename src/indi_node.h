@@ -501,6 +501,11 @@ typedef struct _xmlDoc indi_xmldoc_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+indi_xmldoc_t *indi_xmldoc_parse_buff(
+    __NULLABLE__ BUFF_t buff,
+    size_t size
+);
+
 indi_xmldoc_t *indi_xmldoc_parse(
     __NULLABLE__ STR_t text
 );
