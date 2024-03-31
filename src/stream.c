@@ -6,15 +6,11 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-struct tag_def_s
+static struct tag_def_s
 {
     STR_t s_tag;
     STR_t e_tag;
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-struct tag_def_s TAGS[] = {
+} TAGS[] = {
     {.s_tag = "<getProperties", .e_tag = "/>"},
     {.s_tag = "<delProperty", .e_tag = "/>"},
     {.s_tag = "<message", .e_tag = "/>"},
@@ -34,7 +30,7 @@ struct tag_def_s TAGS[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_opening_tag(stream_tag_t *tag, size_t size, BUFF_t buff)
+bool indi_stream_detect_opening_tag(indi_stream_t *stream, size_t size, BUFF_t buff)
 {
     for(int i = 0; i < TAG_NB; i++)
     {
@@ -42,10 +38,10 @@ bool indi_stream_detect_opening_tag(stream_tag_t *tag, size_t size, BUFF_t buff)
 
         if(p != NULL)
         {
-            tag->idx = i;
-            tag->s_ptr = p;
+            stream->idx = i;
+            stream->s_ptr = p;
 
-            tag->pos = (size_t) tag->s_ptr - (size_t) buff;
+            stream->pos = (size_t) stream->s_ptr - (size_t) buff;
 
             return true;
         }
@@ -56,15 +52,15 @@ bool indi_stream_detect_opening_tag(stream_tag_t *tag, size_t size, BUFF_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_closing_tag(indi_stream_t *tag, size_t size, BUFF_t buff)
+bool indi_stream_detect_closing_tag(indi_stream_t *stream, size_t size, BUFF_t buff)
 {
-    STR_t p = strnstr(tag->s_ptr, TAGS[tag->idx].e_tag, size - tag->pos);
+    STR_t p = strnstr(stream->s_ptr, TAGS[stream->idx].e_tag, size - stream->pos);
 
     if(p != NULL)
     {
-        tag->e_ptr = p + strlen(TAGS[tag->idx].e_tag);
+        stream->e_ptr = p + strlen(TAGS[stream->idx].e_tag);
 
-        tag->len = (size_t) tag->e_ptr - (size_t) tag->s_ptr;
+        stream->len = (size_t) stream->e_ptr - (size_t) stream->s_ptr;
 
         return true;
     }

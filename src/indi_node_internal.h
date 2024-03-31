@@ -139,13 +139,13 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 bool indi_stream_detect_opening_tag(
-        indi_stream_t *tag,
+        indi_stream_t *stream,
         size_t size,
         BUFF_t buff
 );
 
 bool indi_stream_detect_closing_tag(
-        indi_stream_t *tag,
+        indi_stream_t *stream,
         size_t size,
         BUFF_t buff
 );
