@@ -327,13 +327,13 @@ static void update_props(indi_node_t *node, const indi_dict_t *dict)
 
                                             if(strcmp(prop1, prop2) == 0)
                                             {
-                                                bool notify = internal_copy_entry(
+                                                bool modified = internal_copy_entry(
                                                     (indi_dict_t *) object2,
                                                     (indi_dict_t *) object1,
                                                     "$"
                                                 );
 
-                                                if(notify)
+                                                if(modified)
                                                 {
                                                     str_t str = indi_object_to_string(object2);
                                                     MG_INFO(("%lu Updating `%s::%s` with %s", node->mqtt_connection->id, device1, name1, str));
