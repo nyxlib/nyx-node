@@ -606,7 +606,13 @@ static void timer_handle(void *arg)
 
     if(node->mqtt_connection == NULL)
     {
-        node->mqtt_connection = mg_mqtt_connect(&node->mgr, node->mqtt_url, &node->mqtt_opts, mqtt_handler, node);
+        node->mqtt_connection = mg_mqtt_connect(
+            &node->mgr,
+            node->mqtt_url,
+            &node->mqtt_opts,
+            mqtt_handler,
+            node
+        );
     }
 }
 
