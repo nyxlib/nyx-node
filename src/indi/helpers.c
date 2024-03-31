@@ -366,6 +366,8 @@ indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t se
 
         indi_dict_t *dict = indi_dict_new();
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         indi_dict_set(dict, "<>", indi_string_from(one_tag_name));
 
         internal_copy_entry(dict, (indi_dict_t *) object, "$");
@@ -376,6 +378,8 @@ indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t se
             internal_copy_entry(dict, (indi_dict_t *) object, "@size");
             internal_copy_entry(dict, (indi_dict_t *) object, "@format");
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         indi_list_push(children, dict);
 

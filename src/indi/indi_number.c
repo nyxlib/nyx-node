@@ -54,12 +54,12 @@ indi_dict_t *indi_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t for
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_dict_t *indi_number_def_vector_new(
-        STR_t device,
-        STR_t name,
-        indi_state_t state,
-        indi_perm_t perm,
-        indi_dict_t *defs[],
-        indi_opts_t *opts
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_dict_t *defs[],
+    indi_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -531,6 +531,20 @@ bool indi_validation_check(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* TRANSFORM                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+indi_object_t *indi_xmldoc_to_object(
+    const indi_xmldoc_t *doc,
+    bool validate
+);
+
+indi_xmldoc_t *indi_object_to_xmldoc(
+    const indi_object_t *object,
+    bool validate
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* INDI                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -658,12 +672,12 @@ indi_dict_t *indi_number_def_new(
             ((indi_number_t *) indi_dict_get(def, "$"))->data
 
 indi_dict_t *indi_number_def_vector_new(
-        STR_t device,
-        STR_t name,
-        indi_state_t state,
-        indi_perm_t perm,
-        indi_dict_t *defs[],
-        indi_opts_t *opts
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_dict_t *defs[],
+    indi_opts_t *opts
 );
 
 indi_dict_t *indi_number_set_vector_new(
@@ -685,12 +699,12 @@ indi_dict_t *indi_text_def_new(
             ((indi_string_t *) indi_dict_get(def, "$"))->data
 
 indi_dict_t *indi_text_def_vector_new(
-        STR_t device,
-        STR_t name,
-        indi_perm_t perm,
-        indi_state_t state,
-        indi_dict_t *defs[],
-        indi_opts_t *opts
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_dict_t *defs[],
+    indi_opts_t *opts
 );
 
 indi_dict_t *indi_text_set_vector_new(
@@ -712,11 +726,11 @@ indi_dict_t *indi_light_def_new(
             indi_str_to_state(((indi_string_t *) indi_dict_get(def, "$"))->data)
 
 indi_dict_t *indi_light_def_vector_new(
-        STR_t device,
-        STR_t name,
-        indi_state_t state,
-        indi_dict_t *defs[],
-        indi_opts_t *opts
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_dict_t *defs[],
+    indi_opts_t *opts
 );
 
 indi_dict_t *indi_light_set_vector_new(
@@ -738,13 +752,13 @@ indi_dict_t *indi_switch_def_new(
             indi_str_to_onoff(((indi_string_t *) indi_dict_get(def, "$"))->value)
 
 indi_dict_t *indi_switch_def_vector_new(
-        STR_t device,
-        STR_t name,
-        indi_state_t state,
-        indi_perm_t perm,
-        indi_rule_t rule,
-        indi_dict_t *defs[],
-        indi_opts_t *opts
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_rule_t rule,
+    indi_dict_t *defs[],
+    indi_opts_t *opts
 );
 
 indi_dict_t *indi_switch_set_vector_new(
@@ -766,30 +780,16 @@ indi_dict_t *indi_blob_def_new(
             ((indi_string_t *) indi_dict_get(def, "$"))->data
 
 indi_dict_t *indi_blob_def_vector_new(
-        STR_t device,
-        STR_t name,
-        indi_state_t state,
-        indi_perm_t perm,
-        indi_dict_t *defs[],
-        indi_opts_t *opts
+    STR_t device,
+    STR_t name,
+    indi_state_t state,
+    indi_perm_t perm,
+    indi_dict_t *defs[],
+    indi_opts_t *opts
 );
 
 indi_dict_t *indi_blob_set_vector_new(
     const indi_dict_t *def_vector
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* TRANSFORM                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-indi_object_t *indi_xmldoc_to_object(
-    const indi_xmldoc_t *doc,
-    bool validate
-);
-
-indi_xmldoc_t *indi_object_to_xmldoc(
-    const indi_object_t *object,
-    bool validate
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
