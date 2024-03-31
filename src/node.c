@@ -574,7 +574,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_xmldoc_t *xmldoc = indi_xmldoc_parse(message->data.ptr);
+                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(message->data.ptr, message->data.len);
 
                 if(xmldoc != NULL)
                 {
@@ -643,8 +643,8 @@ indi_node_t *indi_node_init(
 
     for(indi_dict_t **def_vector_ptr = def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
     {
+        (*def_vector_ptr)->base.out_callback = ((((NULL))));
         indi_dict_set(*def_vector_ptr, "@client", indi_string_from(node_id));
-
         (*def_vector_ptr)->base.out_callback = out_callback;
 
         (*def_vector_ptr)->base.node = node;
@@ -685,8 +685,6 @@ indi_node_t *indi_node_init(
     {
         mg_listen(&node->mgr, node->tcp_url, tcp_handler, node);
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     if(mqtt_url != NULL)
     {
