@@ -370,8 +370,12 @@ indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t se
 
         internal_copy_entry(dict, (indi_dict_t *) object, "$");
         internal_copy_entry(dict, (indi_dict_t *) object, "@name");
-        internal_copy_entry(dict, (indi_dict_t *) object, "@size");
-        internal_copy_entry(dict, (indi_dict_t *) object, "@format");
+
+        if(strcmp(one_tag_name, "oneBLOB") == 0)
+        {
+            internal_copy_entry(dict, (indi_dict_t *) object, "@size");
+            internal_copy_entry(dict, (indi_dict_t *) object, "@format");
+        }
 
         indi_list_push(children, dict);
 

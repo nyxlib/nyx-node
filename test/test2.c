@@ -40,19 +40,48 @@ int main()
     indi_dict_t *def1 = indi_switch_def_new("button1_on", "Turn ON", INDI_ONOFF_ON);
     indi_dict_t *def2 = indi_switch_def_new("button2_off", "Turn OFF", INDI_ONOFF_OFF);
 
-    indi_dict_t *defs[] = {def1, def2, NULL};
+    indi_dict_t *defs1[] = {def1, def2, NULL};
 
-    indi_dict_t *switch_vector = indi_switch_def_vector_new(
+    indi_dict_t *switch_vector1 = indi_switch_def_vector_new(
         "Telescope Simulator",
-        "button1",
+        "foo",
         INDI_STATE_OK,
         INDI_PERM_RW,
         INDI_RULE_AT_MOST_ONE,
-        defs,
+        defs1,
         &opt
     );
 
-    indi_dict_t *vector_list[] = {switch_vector, NULL};
+    indi_dict_t *def3 = indi_switch_def_new("foo_on", "Foo ON", INDI_ONOFF_ON);
+    indi_dict_t *def4 = indi_switch_def_new("foo_off", "Foo OFF", INDI_ONOFF_OFF);
+
+    indi_dict_t *defs2[] = {def3, def4, NULL};
+
+    indi_dict_t *switch_vector2 = indi_switch_def_vector_new(
+        "Telescope Simulator",
+        "bar",
+        INDI_STATE_OK,
+        INDI_PERM_RW,
+        INDI_RULE_AT_MOST_ONE,
+        defs2,
+        &opt
+    );
+
+    indi_dict_t *def5 = indi_number_def_new("qux1", "Qux 1", "%.1f", 0.0, 1.0, 0.1, 0.5);
+    indi_dict_t *def6 = indi_number_def_new("qux2", "Qux 2", "%.1f", 0.0, 1.0, 0.1, 0.5);
+
+    indi_dict_t *defs3[] = {def5, def6, NULL};
+
+    indi_dict_t *number_vector1 = indi_number_def_vector_new(
+        "Telescope Simulator",
+        "qux",
+        INDI_STATE_OK,
+        INDI_PERM_RW,
+        defs3,
+        &opt
+    );
+
+    indi_dict_t *vector_list[] = {switch_vector1, switch_vector2, number_vector1, NULL};
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

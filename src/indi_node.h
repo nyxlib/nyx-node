@@ -660,8 +660,8 @@ indi_dict_t *indi_number_def_new(
 indi_dict_t *indi_number_def_vector_new(
         STR_t device,
         STR_t name,
-        indi_perm_t perm,
         indi_state_t state,
+        indi_perm_t perm,
         indi_dict_t *defs[],
         indi_opts_t *opts
 );
