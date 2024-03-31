@@ -33,6 +33,10 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    indi_opt_t opt = {
+        .group = "Test"
+    };
+
     indi_dict_t *def1 = indi_switch_def_new("button1_on", "Turn ON", INDI_ONOFF_ON);
     indi_dict_t *def2 = indi_switch_def_new("button2_off", "Turn OFF", INDI_ONOFF_OFF);
 
@@ -45,7 +49,7 @@ int main()
         INDI_PERM_RW,
         INDI_RULE_AT_MOST_ONE,
         defs,
-        NULL
+        &opt
     );
 
     indi_dict_t *vector_list[] = {switch_vector, NULL};
@@ -55,7 +59,17 @@ int main()
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    indi_node_t *node = indi_node_init("mqtt://localhost:1883", NULL, NULL, "TOTO", vector_list, 3000, true, true);
+    indi_node_t *node = indi_node_init(
+        "tcp://0.0.0.0:7625",
+        "mqtt://localhost:1883",
+        NULL,
+        NULL,
+        "TOTO",
+        vector_list,
+        3000,
+        true,
+        true
+    );
 
     while(s_signo == 0)
     {

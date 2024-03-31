@@ -801,7 +801,8 @@ typedef struct indi_node_s indi_node_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_node_t *indi_node_init(
-    STR_t url,
+    __NULLABLE__ STR_t tcp_url,
+    __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t username,
     __NULLABLE__ STR_t password,
     /**/

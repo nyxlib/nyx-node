@@ -57,7 +57,8 @@ static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int 
 
 struct indi_node_s
 {
-    STR_t url;
+    STR_t tcp_url;
+    STR_t mqtt_url;
 
     struct mg_mgr mgr;
     struct mg_mqtt_opts mqtt_opts;
@@ -599,20 +600,21 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void timer_fn(void *arg)
+static void timer_handle(void *arg)
 {
     indi_node_t *node = (indi_node_t *) arg;
 
     if(node->mqtt_connection == NULL)
     {
-        node->mqtt_connection = mg_mqtt_connect(&node->mgr, node->url, &node->mqtt_opts, mqtt_handler, node);
+        node->mqtt_connection = mg_mqtt_connect(&node->mgr, node->mqtt_url, &node->mqtt_opts, mqtt_handler, node);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_node_t *indi_node_init(
-    STR_t url,
+    __NULLABLE__ STR_t tcp_url,
+    __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t username,
     __NULLABLE__ STR_t password,
     /**/
@@ -646,7 +648,8 @@ indi_node_t *indi_node_init(
     /* SET NODE OPTIONS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->url = url;
+    node->tcp_url = tcp_url;
+    node->mqtt_url = mqtt_url;
 
     node->mqtt_opts.user = mg_str(username);
     node->mqtt_opts.pass = mg_str(password);
@@ -665,18 +668,24 @@ indi_node_t *indi_node_init(
     node->validate_xml = validate_xml;
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* INITIALIZE MQTT CLIENT                                                                                         */
+    /* INITIALIZE TCP & MQTT CLIENTS                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     mg_mgr_init(&node->mgr);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->tcp_connection = mg_listen(&node->mgr, "tcp://0.0.0.0:7625", tcp_handler, node);
+    if(tcp_url != NULL)
+    {
+        mg_listen(&node->mgr, node->tcp_url, tcp_handler, node);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_fn, node);
+    if(mqtt_url != NULL)
+    {
+        mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_handle, node);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
