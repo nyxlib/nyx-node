@@ -8,8 +8,6 @@ project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unknown-pragmas -O3 -fPIC -flto -fomit-frame-pointer")
-
 ########################################################################################################################
 
 find_package(LibXml2 REQUIRED)
@@ -52,6 +50,7 @@ set(SOURCE_FILES
     src/validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
+    src/stream.c
     src/node.c
 )
 
@@ -77,7 +76,8 @@ set_target_properties(indi-node-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-node-shared SHARED ${SOURCE_FILES})
+add_library(indi-node-shared SHARED ${SOURCE_FILES}
+        src/stream.c)
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_SIZE)
