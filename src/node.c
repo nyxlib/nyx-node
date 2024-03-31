@@ -427,7 +427,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
     }
     else if(ev == MG_EV_ERROR)
     {
-        MG_ERROR(("%lu ERROR %s", connection->id, (char *) ev_data));
+        MG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
     }
     else if(ev == MG_EV_READ)
     {
@@ -495,7 +495,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
     }
     else if(ev == MG_EV_ERROR)
     {
-        MG_ERROR(("%lu ERROR %s", connection->id, (char *) ev_data));
+        MG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
