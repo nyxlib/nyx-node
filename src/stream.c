@@ -26,13 +26,13 @@ static struct tag_def_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define TAG_NB (sizeof(TAGS) / sizeof(struct tag_def_s))
+#define TAG_DEF_NB (sizeof(TAGS) / sizeof(struct tag_def_s))
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 bool indi_stream_detect_opening_tag(indi_stream_t *stream, size_t size, BUFF_t buff)
 {
-    for(int i = 0; i < TAG_NB; i++)
+    for(int i = 0; i < TAG_DEF_NB; i++)
     {
         STR_t p = strnstr(buff, TAGS[i].s_tag, size);
 
@@ -41,7 +41,11 @@ bool indi_stream_detect_opening_tag(indi_stream_t *stream, size_t size, BUFF_t b
             stream->idx = i;
             stream->s_ptr = p;
 
-            stream->pos = (size_t) stream->s_ptr - (size_t) buff;
+            stream->pos = (
+                (size_t) stream->s_ptr
+                -
+                (size_t) buff
+            );
 
             return true;
         }
@@ -60,7 +64,11 @@ bool indi_stream_detect_closing_tag(indi_stream_t *stream, size_t size, BUFF_t b
     {
         stream->e_ptr = p + strlen(TAGS[stream->idx].e_tag);
 
-        stream->len = (size_t) stream->e_ptr - (size_t) stream->s_ptr;
+        stream->len = (
+            (size_t) stream->e_ptr
+            -
+            (size_t) stream->s_ptr
+        );
 
         return true;
     }

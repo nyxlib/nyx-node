@@ -436,11 +436,11 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
         indi_stream_t stream = INDI_STREAM();
 
-        struct mg_iobuf *r = &connection->recv;
+        struct mg_iobuf *iobuf = &connection->recv;
 
-        if(indi_stream_detect_opening_tag(&stream, r->len, r->buf))
+        if(indi_stream_detect_opening_tag(&stream, iobuf->len, iobuf->buf))
         {
-            if(indi_stream_detect_closing_tag(&stream, r->len, r->buf))
+            if(indi_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -462,7 +462,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                mg_iobuf_del(r, 0, stream.pos + stream.len);
+                mg_iobuf_del(iobuf, 0, stream.pos + stream.len);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
