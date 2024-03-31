@@ -45,7 +45,7 @@ bool indi_stream_detect_opening_tag(indi_stream_t *stream, size_t size, BUFF_t b
             stream->pos = (
                 (size_t) stream->s_ptr
                 -
-                (size_t) buff
+                (size_t) /**/buff/**/
             );
 
             return true;
