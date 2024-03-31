@@ -10,6 +10,7 @@ static struct tag_def_s
 {
     STR_t s_tag;
     STR_t e_tag;
+
 } TAGS[] = {
     {.s_tag = "<getProperties", .e_tag = "/>"},
     {.s_tag = "<delProperty", .e_tag = "/>"},
