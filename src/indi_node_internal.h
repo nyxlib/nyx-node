@@ -109,7 +109,7 @@ str_t indi_string_builder_to_cstring(
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt);
+void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts);
 
 bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key);
 

@@ -49,13 +49,13 @@ indi_dict_t *indi_switch_def_new(STR_t name, __NULLABLE__ STR_t label, indi_onof
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_dict_t *indi_switch_def_vector_new(
-    STR_t device,
-    STR_t name,
-    indi_state_t state,
-    indi_perm_t perm,
-    indi_rule_t rule,
-    indi_dict_t *defs[],
-    indi_opt_t *opt
+        STR_t device,
+        STR_t name,
+        indi_state_t state,
+        indi_perm_t perm,
+        indi_rule_t rule,
+        indi_dict_t *defs[],
+        indi_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -81,7 +81,7 @@ indi_dict_t *indi_switch_def_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    internal_set_opts(result, opt);
+    internal_set_opts(result, opts);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

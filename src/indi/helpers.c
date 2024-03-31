@@ -294,34 +294,34 @@ bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_set_opts(indi_dict_t *dict, indi_opt_t *opt)
+void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 {
-    if(opt != NULL)
+    if(opts != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(opt->label != NULL) {
-            indi_dict_set(dict, "@label", indi_string_from(opt->label));
+        if(opts->label != NULL) {
+            indi_dict_set(dict, "@label", indi_string_from(opts->label));
         }
 
-        if(opt->group != NULL) {
-            indi_dict_set(dict, "@group", indi_string_from(opt->group));
+        if(opts->group != NULL) {
+            indi_dict_set(dict, "@group", indi_string_from(opts->group));
         }
 
-        if(opt->driver != NULL) {
-            indi_dict_set(dict, "@driver", indi_string_from(opt->driver));
+        if(opts->driver != NULL) {
+            indi_dict_set(dict, "@driver", indi_string_from(opts->driver));
         }
 
-        if(opt->timeout > 0.00) {
-            indi_dict_set(dict, "@timeout", indi_number_from(opt->timeout));
+        if(opts->timeout > 0.00) {
+            indi_dict_set(dict, "@timeout", indi_number_from(opts->timeout));
         }
 
-        if(opt->timestamp != NULL) {
-            indi_dict_set(dict, "@timestamp", indi_string_from(opt->timestamp));
+        if(opts->timestamp != NULL) {
+            indi_dict_set(dict, "@timestamp", indi_string_from(opts->timestamp));
         }
 
-        if(opt->message != NULL) {
-            indi_dict_set(dict, "@message", indi_string_from(opt->message));
+        if(opts->message != NULL) {
+            indi_dict_set(dict, "@message", indi_string_from(opts->message));
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
