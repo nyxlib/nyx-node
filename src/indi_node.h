@@ -296,7 +296,7 @@ __INLINE__ indi_string_t *indi_string_static_from(STR_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define indi_string_set indi_string_set_dynamic
+#define indi_string_set indi_string_dynamic_set
 
 #define indi_string_from indi_string_dynamic_from
 

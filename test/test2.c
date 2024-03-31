@@ -16,6 +16,20 @@ static void signal_handler(int signo)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void on_callback(struct indi_object_s *def_vector)
+{
+    printf("ON button %d\n", indi_switch_def_get((indi_dict_t *) def_vector));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void off_callback(struct indi_object_s *def_vector)
+{
+    printf("OFF button %d\n", indi_switch_def_get((indi_dict_t *) def_vector));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 int main()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -51,6 +65,9 @@ int main()
         defs1,
         &opt
     );
+
+    def1->base.out_callback = on_callback;
+    def2->base.out_callback = off_callback;
 
     indi_dict_t *def3 = indi_switch_def_new("foo_on", "Foo ON", INDI_ONOFF_ON);
     indi_dict_t *def4 = indi_switch_def_new("foo_off", "Foo OFF", INDI_ONOFF_OFF);
