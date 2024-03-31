@@ -129,20 +129,25 @@ typedef struct
     size_t pos;
     size_t len;
 
-} tag_t;
+} indi_stream_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define INDI_STREAM() \
+            ((indi_stream_t) {.idx = 0x00, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 bool indi_stream_detect_opening_tag(
-    tag_t *tag,
-    size_t size,
-    BUFF_t buff
+        indi_stream_t *tag,
+        size_t size,
+        BUFF_t buff
 );
 
 bool indi_stream_detect_closing_tag(
-    tag_t *tag,
-    size_t size,
-    BUFF_t buff
+        indi_stream_t *tag,
+        size_t size,
+        BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

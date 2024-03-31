@@ -34,7 +34,7 @@ struct tag_def_s TAGS[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_opening_tag(tag_t *tag, size_t size, BUFF_t buff)
+bool indi_stream_detect_opening_tag(stream_tag_t *tag, size_t size, BUFF_t buff)
 {
     for(int i = 0; i < TAG_NB; i++)
     {
@@ -56,7 +56,7 @@ bool indi_stream_detect_opening_tag(tag_t *tag, size_t size, BUFF_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_closing_tag(tag_t *tag, size_t size, BUFF_t buff)
+bool indi_stream_detect_closing_tag(indi_stream_t *tag, size_t size, BUFF_t buff)
 {
     STR_t p = strnstr(tag->s_ptr, TAGS[tag->idx].e_tag, size - tag->pos);
 

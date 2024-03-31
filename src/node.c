@@ -434,17 +434,17 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         /* MG_EV_READ                                                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        tag_t tag = {};
+        indi_stream_t stream = INDI_STREAM();
 
         struct mg_iobuf *r = &connection->recv;
 
-        if(indi_stream_detect_opening_tag(&tag, r->len, r->buf))
+        if(indi_stream_detect_opening_tag(&stream, r->len, r->buf))
         {
-            if(indi_stream_detect_closing_tag(&tag, r->len, r->buf))
+            if(indi_stream_detect_closing_tag(&stream, r->len, r->buf))
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(tag.s_ptr, tag.len);
+                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(stream.s_ptr, stream.len);
 
                 if(xmldoc != NULL)
                 {
@@ -462,7 +462,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                mg_iobuf_del(r, 0, tag.pos + tag.len);
+                mg_iobuf_del(r, 0, stream.pos + stream.len);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
