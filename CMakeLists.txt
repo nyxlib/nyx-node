@@ -8,9 +8,7 @@ project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unused-result -Wno-unknown-pragmas -O3 -fPIC -flto -fomit-frame-pointer")
-
-add_definitions(-DMG_ENABLE_SSI=0)
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -O3 -fPIC -flto -fomit-frame-pointer)
 
 ########################################################################################################################
 
@@ -80,8 +78,7 @@ set_target_properties(indi-node-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-node-shared SHARED ${SOURCE_FILES}
-        src/stream.c)
+add_library(indi-node-shared SHARED ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_SIZE)
