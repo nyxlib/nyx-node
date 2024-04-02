@@ -1,6 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
 
 #include "../src/indi_node.h"
@@ -107,9 +108,9 @@ int main()
 
     indi_node_t *node = indi_node_init(
         "tcp://0.0.0.0:7625",
-        "mqtt://localhost:1883",
-        NULL,
-        NULL,
+        getenv("MQTT_URL"),
+        getenv("MQTT_USERNAME"),
+        getenv("MQTT_PASSWORD"),
         "TOTO",
         vector_list,
         3000,

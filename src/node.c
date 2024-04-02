@@ -20,16 +20,19 @@ static bool mg_startswith(struct mg_str topic, struct mg_str prefix)
 static void mqtt_pub(struct mg_connection *connection, struct mg_str topic, struct mg_str message, int qos, bool retain)
 #pragma clang diagnostic pop
 {
-    struct mg_mqtt_opts opts;
+    if(connection != NULL)
+    {
+        struct mg_mqtt_opts opts;
 
-    memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
+        memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
 
-    opts.topic = topic;
-    opts.message = message;
-    opts.qos = qos;
-    opts.retain = retain;
+        opts.topic = topic;
+        opts.message = message;
+        opts.qos = qos;
+        opts.retain = retain;
 
-    mg_mqtt_pub(connection, &opts);
+        mg_mqtt_pub(connection, &opts);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -39,16 +42,19 @@ static void mqtt_pub(struct mg_connection *connection, struct mg_str topic, stru
 static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int qos)
 #pragma clang diagnostic pop
 {
-    struct mg_mqtt_opts opts;
+    if(connection != NULL)
+    {
+        struct mg_mqtt_opts opts;
 
-    memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
+        memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
 
-    opts.topic = topic;
-    ////.message = message;
-    opts.qos = qos;
-    ////.retain = retain;
+        opts.topic = topic;
+        ////.message = message;
+        opts.qos = qos;
+        ////.retain = retain;
 
-    mg_mqtt_sub(connection, &opts);
+        mg_mqtt_sub(connection, &opts);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -238,11 +244,11 @@ static void enable_blob(indi_node_t *node, const indi_dict_t *dict)
     {
         if(name != NULL)
         {
-            MG_INFO(("%lu Enable blob set to `%s` for `%s::%s` ", node->mqtt_connection->id, val, device, name));
+            MG_INFO(("Enable blob set to `%s` for `%s::%s` ", val, device, name));
         }
         else
         {
-            MG_INFO(("%lu Enable blob set to `%s` for `%s` ", node->mqtt_connection->id, val, device));
+            MG_INFO(("Enable blob set to `%s` for `%s` ", val, device));
         }
     }
 }
@@ -336,7 +342,7 @@ static void update_props(indi_node_t *node, const indi_dict_t *dict)
                                                 if(modified)
                                                 {
                                                     str_t str = indi_object_to_string(object2);
-                                                    MG_INFO(("%lu Updating `%s::%s` with %s", node->mqtt_connection->id, device1, name1, str));
+                                                    MG_INFO(("Updating `%s::%s` with %s", device1, name1, str));
                                                     indi_memory_free(str);
 
                                                     if(object2->in_callback != NULL)
