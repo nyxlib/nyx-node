@@ -1,5 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -296,6 +297,32 @@ bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
 
 void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    char timestamp[20];
+
+    time_t now = time(NULL);
+
+    struct tm *tm_now = localtime(&now);
+
+    snprintf(
+        timestamp,
+        sizeof(timestamp),
+        "%04d-%02d-%02dT%02d:%02d:%02d",
+         tm_now->tm_year + 1900,
+         tm_now->tm_mon + 1,
+         tm_now->tm_mday,
+         tm_now->tm_hour,
+         tm_now->tm_min,
+         tm_now->tm_sec
+     );
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    indi_dict_set(dict, "@timestamp", indi_string_from(timestamp));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(opts != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
@@ -312,16 +339,14 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
             indi_dict_set(dict, "@timeout", indi_number_from(opts->timeout));
         }
 
-        if(opts->timestamp != NULL) {
-            indi_dict_set(dict, "@timestamp", indi_string_from(opts->timestamp));
-        }
-
         if(opts->message != NULL) {
             indi_dict_set(dict, "@message", indi_string_from(opts->message));
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -664,7 +664,7 @@ indi_node_t *indi_node_init(
 
         for(indi_list_iter_t iter = INDI_LIST_ITER((indi_list_t *) indi_dict_get(vector, "children")); indi_list_iterate(&iter, &idx, &object);)
         {
-            object->node = node;
+            object->/**/node/**/ = node;
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
