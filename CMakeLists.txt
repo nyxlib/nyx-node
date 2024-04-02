@@ -8,6 +8,8 @@ project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
+add_definitions(-DMG_ENABLE_SSI=0)
+
 ########################################################################################################################
 
 find_package(LibXml2 REQUIRED)
