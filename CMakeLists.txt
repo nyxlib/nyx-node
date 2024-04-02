@@ -41,6 +41,7 @@ set(SOURCE_FILES
     src/indi/helpers.c
     src/indi/indi_blob.c
     src/indi/indi_light.c
+    src/indi/indi_message.c
     src/indi/indi_number.c
     src/indi/indi_switch.c
     src/indi/indi_text.c
