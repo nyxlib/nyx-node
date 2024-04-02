@@ -27,6 +27,8 @@ static void on_callback(struct indi_object_s *def_vector)
 static void off_callback(struct indi_object_s *def_vector)
 {
     printf("OFF button %d\n", indi_switch_def_get((indi_dict_t *) def_vector));
+
+    indi_node_send_message(def_vector->node, "Telescope Simulator", "Hello World!", NULL);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

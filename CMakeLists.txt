@@ -8,7 +8,7 @@ project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -O3 -fPIC -flto -fomit-frame-pointer)
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -O3)
 
 ########################################################################################################################
 
@@ -101,12 +101,12 @@ set_target_properties(indi-node-shared PROPERTIES
 
 add_executable(test1 test/test1.c)
 
-target_link_libraries(test1 ${LIBXML2_LIBRARIES} indi-node-static)
+target_link_libraries(test1 indi-node-static ${LIBXML2_LIBRARIES})
 
 ########################################################################################################################
 
 add_executable(test2 test/test2.c)
 
-target_link_libraries(test2 ${LIBXML2_LIBRARIES} indi-node-static)
+target_link_libraries(test2 indi-node-static ${LIBXML2_LIBRARIES})
 
 ########################################################################################################################

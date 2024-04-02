@@ -649,11 +649,29 @@ indi_node_t *indi_node_init(
 
     for(indi_dict_t **def_vector_ptr = def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
     {
-        (*def_vector_ptr)->base.out_callback = ((((NULL))));
-        indi_dict_set(*def_vector_ptr, "@client", indi_string_from(node_id));
-        (*def_vector_ptr)->base.out_callback = out_callback;
+        indi_dict_t *vector = *def_vector_ptr;
 
-        (*def_vector_ptr)->base.node = node;
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        vector->base.out_callback = ((((NULL))));
+        indi_dict_set(vector, "@client", indi_string_from(node_id));
+        vector->base.out_callback = out_callback;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        int idx;
+        indi_object_t *object;
+
+        for(indi_list_iter_t iter = INDI_LIST_ITER((indi_list_t *) indi_dict_get(vector, "children")); indi_list_iterate(&iter, &idx, &object);)
+        {
+            object->node = node;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        vector->base.node = node;
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
