@@ -299,7 +299,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    char timestamp[20];
+    char timestamp[32];
 
     time_t now = time(NULL);
 
@@ -308,7 +308,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
     snprintf(
         timestamp,
         sizeof(timestamp),
-        "%04d-%02d-%02dT%02d:%02d:%02d.0000",
+        "%04d-%02d-%02dT%02d:%02d:%02d",
          tm_now->tm_year + 1900,
          tm_now->tm_mon + 1,
          tm_now->tm_mday,
