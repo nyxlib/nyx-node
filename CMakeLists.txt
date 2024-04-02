@@ -8,7 +8,7 @@ project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unused-result -Wno-unknown-pragmas -O3 -fPIC -flto -fomit-frame-pointer")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unused-result -Wno-unknown-pragmas -O3 -fPIC -fomit-frame-pointer")
 
 add_definitions(-DMG_ENABLE_SSI=0)
 
