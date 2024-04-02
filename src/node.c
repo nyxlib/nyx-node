@@ -738,11 +738,14 @@ void indi_node_free(indi_node_t *node, bool free_vectors)
 
 void indi_node_send_message(indi_node_t *node, STR_t device, STR_t message, indi_opts_t *opts)
 {
-    indi_dict_t *dict = indi_message_new(device, message, opts);
+    if(node != NULL)
+    {
+        indi_dict_t *dict = indi_message_new(device, message, opts);
 
-    sub_object(node, (indi_object_t *) dict);
+        sub_object(node, (indi_object_t *) dict);
 
-    indi_dict_free(dict);
+        indi_dict_free(dict);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
