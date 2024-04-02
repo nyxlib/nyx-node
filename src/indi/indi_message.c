@@ -14,6 +14,7 @@ indi_dict_t *indi_message_new(STR_t device, STR_t message, indi_opts_t *opts)
 
     indi_dict_set(result, "@client", indi_string_from("unknown"));
     indi_dict_set(result, "@device", indi_string_from(device));
+
     indi_dict_set(result, "$", indi_string_from(message));
 
     /*----------------------------------------------------------------------------------------------------------------*/
