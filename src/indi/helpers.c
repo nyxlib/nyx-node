@@ -308,10 +308,6 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
             indi_dict_set(dict, "@group", indi_string_from(opts->group));
         }
 
-        if(opts->driver != NULL) {
-            indi_dict_set(dict, "@driver", indi_string_from(opts->driver));
-        }
-
         if(opts->timeout > 0.00) {
             indi_dict_set(dict, "@timeout", indi_number_from(opts->timeout));
         }

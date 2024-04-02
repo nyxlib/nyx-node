@@ -145,7 +145,7 @@ static void sub_object(struct indi_node_s *node, indi_object_t *object)
 
 static void out_callback(indi_object_t *object)
 {
-    const indi_dict_t *def_vector = (indi_dict_t *) object;
+    indi_dict_t *def_vector = (indi_dict_t *) object;
 
     STR_t tag_name = indi_dict_get_string(def_vector, "<>");
 
@@ -188,7 +188,7 @@ static void out_callback(indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void get_properties(indi_node_t *node, const indi_dict_t *dict)
+static void get_properties(indi_node_t *node, indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -234,7 +234,7 @@ static void get_properties(indi_node_t *node, const indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void enable_blob(indi_node_t *node, const indi_dict_t *dict)
+static void enable_blob(indi_node_t *node, indi_dict_t *dict)
 {
     STR_t device = indi_dict_get_string(dict, "@device");
     STR_t name = indi_dict_get_string(dict, "@name");
@@ -255,7 +255,7 @@ static void enable_blob(indi_node_t *node, const indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void update_props(indi_node_t *node, const indi_dict_t *dict)
+static void update_props(indi_node_t *node, indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -732,6 +732,17 @@ void indi_node_free(indi_node_t *node, bool free_vectors)
     indi_memory_free(node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_node_send_message(indi_node_t *node, STR_t device, STR_t message, indi_opts_t *opts)
+{
+    indi_dict_t *dict = indi_message_new(device, message, opts);
+
+    sub_object(node, (indi_object_t *) dict);
+
+    indi_dict_free(dict);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

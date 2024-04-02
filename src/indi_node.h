@@ -646,7 +646,6 @@ typedef struct
 {
     __NULLABLE__ STR_t label;
     __NULLABLE__ STR_t group;
-    __NULLABLE__ STR_t driver;
     __NULLABLE__ double timeout;
     __NULLABLE__ STR_t timestamp;
     __NULLABLE__ STR_t message;
@@ -830,6 +829,15 @@ void indi_node_pool(
 void indi_node_free(
     indi_node_t *node,
     bool free_vectors
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_node_send_message(
+    indi_node_t *node,
+    STR_t device,
+    STR_t message,
+    indi_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
