@@ -28,7 +28,7 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
         {
             str_t value = indi_object_to_cstring(obj1);
 
-            xmlNodeSetagname(node, /*--------*/ BAD_CAST value);
+            xmlNodeSetName(node, /*--------*/ BAD_CAST value);
 
             indi_memory_free(value);
         }
