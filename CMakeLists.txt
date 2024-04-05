@@ -80,8 +80,7 @@ set_target_properties(indi-node-static PROPERTIES
 
 ########################################################################################################################
 
-add_library(indi-node-shared SHARED ${SOURCE_FILES}
-        src/indi/indi_del_property.c)
+add_library(indi-node-shared SHARED ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_SIZE)
