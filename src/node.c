@@ -211,19 +211,74 @@ static void get_properties(indi_node_t *node, indi_dict_t *dict)
     {
         indi_dict_t *def_vector = *def_vector_ptr;
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        STR_t device2 = indi_dict_get_string(def_vector, "@device");
-        STR_t name2 = indi_dict_get_string(def_vector, "@name");
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(device1 != NULL)
+        if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
         {
-            if((device2 == NULL || strcmp(device1, device2) != 0))
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            STR_t device2 = indi_dict_get_string(def_vector, "@device");
+            STR_t name2 = indi_dict_get_string(def_vector, "@name");
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(device1 != NULL)
             {
+                if((device2 == NULL || strcmp(device1, device2) != 0))
+                {
+                    break;
+                }
+
+                if(name1 != NULL)
+                {
+                    if((name2 == NULL || strcmp(name1, name2) != 0))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            sub_object(node, (indi_object_t *) def_vector);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void enable_blob(indi_node_t *node, indi_dict_t *dict)
+{
+    STR_t device1 = indi_dict_get_string(dict, "@device");
+    STR_t name1 = indi_dict_get_string(dict, "@name");
+    STR_t val1 = indi_dict_get_string(dict, "$");
+
+    if(device1 != NULL && val1 != NULL)
+    {
+        indi_blob_t blob = indi_str_to_blob(val1);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        {
+            indi_dict_t *def_vector = *def_vector_ptr;
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            STR_t device2 = indi_dict_get_string(def_vector, "@device");
+            STR_t name2 = indi_dict_get_string(def_vector, "@name");
+            STR_t type2 = indi_dict_get_string(dict, "<>");
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(type2 == NULL || strcmp(type2, "defBLOBVector") != 0
+               ||
+               device2 == NULL || strcmp(device1, /**/device2/**/) != 0
+            ) {
                 break;
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
 
             if(name1 != NULL)
             {
@@ -232,36 +287,17 @@ static void get_properties(indi_node_t *node, indi_dict_t *dict)
                     break;
                 }
             }
-        }
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
-        {
-            sub_object(node, (indi_object_t *) def_vector);
-        }
+            /**/ if(blob == INDI_BLOB_NEVER) {
+                def_vector->base.flags |= INDI_FLAGS_BLOB_DISABLED;
+            }
+            else if(blob == INDI_BLOB_ALSO) {
+                def_vector->base.flags &= ~INDI_FLAGS_BLOB_DISABLED;
+            }
 
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static void enable_blob(indi_node_t *node, indi_dict_t *dict)
-{
-    STR_t device = indi_dict_get_string(dict, "@device");
-    STR_t name = indi_dict_get_string(dict, "@name");
-    STR_t val = indi_dict_get_string(dict, "$");
-
-    if(device != NULL && val != NULL)
-    {
-        if(name != NULL)
-        {
-            MG_INFO(("Enable blob set to `%s` for `%s::%s` ", val, device, name));
-        }
-        else
-        {
-            MG_INFO(("Enable blob set to `%s` for `%s` ", val, device));
+            /*--------------------------------------------------------------------------------------------------------*/
         }
     }
 }
