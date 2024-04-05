@@ -255,7 +255,7 @@ static void enable_blob(indi_node_t *node, indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void update_props(indi_node_t *node, indi_dict_t *dict)
+static void set_properties(indi_node_t *node, indi_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -391,11 +391,11 @@ static void process_message(indi_node_t *node, indi_object_t *object)
 
         if(tag_name != NULL)
         {
-            /**/ if(strcmp(tag_name, "getProperties") == 0) {
-                get_properties(node, (indi_dict_t *) object);
-            }
-            else if(strcmp(tag_name, "enableBLOB") == 0) {
+            /**/ if(strcmp(tag_name, "enableBLOB") == 0) {
                 enable_blob(node, (indi_dict_t *) object);
+            }
+            else if(strcmp(tag_name, "getProperties") == 0) {
+                get_properties(node, (indi_dict_t *) object);
             }
             else if(strcmp(tag_name, "newNumberVector") == 0
                     ||
@@ -407,7 +407,7 @@ static void process_message(indi_node_t *node, indi_object_t *object)
                     ||
                     strcmp(tag_name, "newBLOBVector") == 0
             ) {
-                update_props(node, (indi_dict_t *) object);
+                set_properties(node, (indi_dict_t *) object);
             }
         }
     }
@@ -606,7 +606,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void timer_handle(void *arg)
+static void timer_handler(void *arg)
 {
     indi_node_t *node = (indi_node_t *) arg;
 
@@ -712,7 +712,7 @@ indi_node_t *indi_node_init(
 
     if(mqtt_url != NULL)
     {
-        mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_handle, node);
+        mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_handler, node);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
