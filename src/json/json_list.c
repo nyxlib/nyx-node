@@ -9,7 +9,7 @@
 
 typedef struct indi_list_node_s
 {
-    indi_object_t *val;
+    indi_object_t *value;
 
     struct indi_list_node_s *next;
 
@@ -68,7 +68,7 @@ static void internal_list_clear(indi_list_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_object_free(temp->val);
+        indi_object_free(temp->value);
 
         indi_memory_free(temp);
 
@@ -115,7 +115,7 @@ void indi_list_del(indi_list_t *object, int idx)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_free(curr_node->val);
+            indi_object_free(curr_node->value);
 
             indi_memory_free(curr_node);
 
@@ -139,7 +139,7 @@ bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **object)
         }
 
         if(object != NULL) {
-            *object = iter->head->val;
+            *object = iter->head->value;
         }
 
         iter->idx += 0x0000000000001;
@@ -161,7 +161,7 @@ indi_object_t *indi_list_get(const indi_list_t *object, int idx)
     {
         if(idx == 0)
         {
-            return curr_node->val;
+            return curr_node->value;
         }
     }
 
@@ -193,9 +193,9 @@ indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
     {
         if(idx == 0)
         {
-            indi_object_free(curr_node->val);
+            indi_object_free(curr_node->value);
 
-            curr_node->val = value;
+            curr_node->value = value;
 
             goto _ok;
         }
@@ -205,7 +205,7 @@ indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
 
     node_t *node = indi_memory_alloc(sizeof(node_t));
 
-    node->val = value;
+    node->value = value;
     node->next = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -256,7 +256,7 @@ str_t indi_list_to_string(const indi_list_t *object)
     /**/
     /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
-    /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
+    /**/        str_t curr_node_val = indi_object_to_string(curr_node->value);
     /**/
     /**/        /**/    indi_string_builder_append(sb, curr_node_val);
     /**/

@@ -26,33 +26,33 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
 
         /**/ if(strcmp(key, "<>") == 0)
         {
-            str_t val = indi_object_to_cstring(obj1);
+            str_t value = indi_object_to_cstring(obj1);
 
-            xmlNodeSetName(node, /*--------*/ BAD_CAST val);
+            xmlNodeSetagname(node, /*--------*/ BAD_CAST value);
 
-            indi_memory_free(val);
+            indi_memory_free(value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         else if(strcmp(key, "$") == 0)
         {
-            str_t val = indi_object_to_cstring(obj1);
+            str_t value = indi_object_to_cstring(obj1);
 
-            xmlNodeSetContent(node, /*--------*/ BAD_CAST val);
+            xmlNodeSetContent(node, /*--------*/ BAD_CAST value);
 
-            indi_memory_free(val);
+            indi_memory_free(value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         else if(key[0] == '@')
         {
-            str_t val = indi_object_to_cstring(obj1);
+            str_t value = indi_object_to_cstring(obj1);
 
-            xmlNewProp(node, BAD_CAST (key + 1), BAD_CAST val);
+            xmlNewProp(node, BAD_CAST (key + 1), BAD_CAST value);
 
-            indi_memory_free(val);
+            indi_memory_free(value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/

@@ -31,7 +31,7 @@ typedef enum json_token_type_e
 
 typedef struct json_token_s
 {
-    str_t val;
+    str_t value;
 
     json_token_type_t token_type;
 
@@ -187,9 +187,9 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        parser->curr_token.val = strncpy(indi_memory_alloc(length + 1), s, length);
+        parser->curr_token.value = strncpy(indi_memory_alloc(length + 1), s, length);
 
-        parser->curr_token.val[length] = '\0';
+        parser->curr_token.value[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -201,9 +201,9 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        parser->curr_token.val = strncpy(indi_memory_alloc(length + 1), s, length);
+        parser->curr_token.value = strncpy(indi_memory_alloc(length + 1), s, length);
 
-        parser->curr_token.val[length] = '\0';
+        parser->curr_token.value[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -273,11 +273,11 @@ static indi_number_t *json_parse_number(json_parser_t *parser)
         return NULL;
     }
 
-    str_t val = PEEK().val;
+    str_t value = PEEK().value;
 
-    indi_number_t *result = indi_number_from(atof(val)); // NOLINT(*-err34-c)
+    indi_number_t *result = indi_number_from(atof(value)); // NOLINT(*-err34-c)
 
-    indi_memory_free(val);
+    indi_memory_free(value);
 
     NEXT();
 
@@ -293,11 +293,11 @@ static indi_string_t *json_parse_string(json_parser_t *parser)
         return NULL;
     }
 
-    str_t val = PEEK().val;
+    str_t value = PEEK().value;
 
-    indi_string_t *result = indi_string_from(/**/(val)); // NOLINT(*-err34-c)
+    indi_string_t *result = indi_string_from(/**/(value)); // NOLINT(*-err34-c)
 
-    indi_memory_free(val);
+    indi_memory_free(value);
 
     NEXT();
 
@@ -332,7 +332,7 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
             goto _err;
         }
 
-        str_t key = PEEK().val;
+        str_t key = PEEK().value;
 
         NEXT();
 
@@ -416,7 +416,7 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
 _err:
     if(CHECK(JSON_TOKEN_NUMBER) || CHECK(JSON_TOKEN_STRING))
     {
-        indi_memory_free(PEEK().val);
+        indi_memory_free(PEEK().value);
     }
 
     indi_dict_free(result);
@@ -508,7 +508,7 @@ static indi_list_t *json_parse_list(json_parser_t *parser) // NOLINT(misc-no-rec
 _err:
     if(CHECK(JSON_TOKEN_NUMBER) || CHECK(JSON_TOKEN_STRING))
     {
-        indi_memory_free(PEEK().val);
+        indi_memory_free(PEEK().value);
     }
 
     indi_list_free(result);
@@ -537,7 +537,7 @@ indi_object_t *indi_object_parse(__NULLABLE__ STR_t text)
 
     parser->pos = text;
 
-    parser->curr_token.val = NULL;
+    parser->curr_token.value = NULL;
 
     parser->curr_token.token_type = JSON_TOKEN_ERROR;
 

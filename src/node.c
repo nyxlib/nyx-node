@@ -149,27 +149,27 @@ static void out_callback(indi_object_t *object)
 
     if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
     {
-        STR_t tag_name = indi_dict_get_string(def_vector, "<>");
+        STR_t tagname = indi_dict_get_string(def_vector, "<>");
 
-        if(tag_name != NULL)
+        if(tagname != NULL)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
             indi_dict_t *set_vector;
 
-            /**/ if(strcmp("defNumberVector", tag_name) == 0) {
+            /**/ if(strcmp("defNumberVector", tagname) == 0) {
                 set_vector = indi_number_set_vector_new(def_vector);
             }
-            else if(strcmp("defTextVector", tag_name) == 0) {
+            else if(strcmp("defTextVector", tagname) == 0) {
                 set_vector = indi_text_set_vector_new(def_vector);
             }
-            else if(strcmp("defLightVector", tag_name) == 0) {
+            else if(strcmp("defLightVector", tagname) == 0) {
                 set_vector = indi_light_set_vector_new(def_vector);
             }
-            else if(strcmp("defSwitchVector", tag_name) == 0) {
+            else if(strcmp("defSwitchVector", tagname) == 0) {
                 set_vector = indi_switch_set_vector_new(def_vector);
             }
-            else if(strcmp("defBLOBVector", tag_name) == 0) {
+            else if(strcmp("defBLOBVector", tagname) == 0) {
 
                 if((def_vector->base.flags & INDI_FLAGS_BLOB_DISABLED) == 0)
                 {
@@ -251,11 +251,11 @@ static void enable_blob(indi_node_t *node, indi_dict_t *dict)
 {
     STR_t device1 = indi_dict_get_string(dict, "@device");
     STR_t name1 = indi_dict_get_string(dict, "@name");
-    STR_t val1 = indi_dict_get_string(dict, "$");
+    STR_t value1 = indi_dict_get_string(dict, "$");
 
-    if(device1 != NULL && val1 != NULL)
+    if(device1 != NULL && value1 != NULL)
     {
-        indi_blob_t blob = indi_str_to_blob(val1);
+        indi_blob_t blob = indi_str_to_blob(value1);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -267,13 +267,13 @@ static void enable_blob(indi_node_t *node, indi_dict_t *dict)
 
             STR_t device2 = indi_dict_get_string(def_vector, "@device");
             STR_t name2 = indi_dict_get_string(def_vector, "@name");
-            STR_t type2 = indi_dict_get_string(dict, "<>");
+            STR_t tagname2 = indi_dict_get_string(dict, "<>");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(type2 == NULL || strcmp(type2, "defBLOBVector") != 0
+            if(tagname2 == NULL || strcmp(tagname2, "defBLOBVector") != 0
                ||
-               device2 == NULL || strcmp(device1, /**/device2/**/) != 0
+               device2 == NULL || strcmp(device1, device2) != 0
             ) {
                 break;
             }
@@ -436,25 +436,25 @@ static void process_message(indi_node_t *node, indi_object_t *object)
 {
     if(object->type == INDI_TYPE_DICT)
     {
-        STR_t tag_name = indi_dict_get_string((indi_dict_t *) object, "<>");
+        STR_t tagname = indi_dict_get_string((indi_dict_t *) object, "<>");
 
-        if(tag_name != NULL)
+        if(tagname != NULL)
         {
-            /**/ if(strcmp(tag_name, "enableBLOB") == 0) {
+            /**/ if(strcmp(tagname, "enableBLOB") == 0) {
                 enable_blob(node, (indi_dict_t *) object);
             }
-            else if(strcmp(tag_name, "getProperties") == 0) {
+            else if(strcmp(tagname, "getProperties") == 0) {
                 get_properties(node, (indi_dict_t *) object);
             }
-            else if(strcmp(tag_name, "newNumberVector") == 0
+            else if(strcmp(tagname, "newNumberVector") == 0
                     ||
-                    strcmp(tag_name, "newTextVector") == 0
+                    strcmp(tagname, "newTextVector") == 0
                     ||
-                    strcmp(tag_name, "newLightVector") == 0
+                    strcmp(tagname, "newLightVector") == 0
                     ||
-                    strcmp(tag_name, "newSwitchVector") == 0
+                    strcmp(tagname, "newSwitchVector") == 0
                     ||
-                    strcmp(tag_name, "newBLOBVector") == 0
+                    strcmp(tagname, "newBLOBVector") == 0
             ) {
                 set_properties(node, (indi_dict_t *) object);
             }

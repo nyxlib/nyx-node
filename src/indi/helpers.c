@@ -356,7 +356,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name)
+indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -366,7 +366,7 @@ indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t se
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_set(result, "<>", indi_string_from(set_tag_name));
+    indi_dict_set(result, "<>", indi_string_from(set_tagname));
 
     internal_copy_entry(result, def_vector, "@client");
     internal_copy_entry(result, def_vector, "@device");
@@ -394,12 +394,12 @@ indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t se
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_dict_set(dict, "<>", indi_string_from(one_tag_name));
+        indi_dict_set(dict, "<>", indi_string_from(one_tagname));
 
         internal_copy_entry(dict, (indi_dict_t *) object, "$");
         internal_copy_entry(dict, (indi_dict_t *) object, "@name");
 
-        if(strcmp(one_tag_name, "oneBLOB") == 0)
+        if(strcmp(one_tagname, "oneBLOB") == 0)
         {
             internal_copy_entry(dict, (indi_dict_t *) object, "@size");
             internal_copy_entry(dict, (indi_dict_t *) object, "@format");

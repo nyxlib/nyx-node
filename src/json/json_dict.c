@@ -12,7 +12,7 @@ typedef struct indi_dict_node_s
 {
     STR_t key;
 
-    indi_object_t *val;
+    indi_object_t *value;
 
     struct indi_dict_node_s *next;
 
@@ -71,7 +71,7 @@ static void internal_dict_clear(indi_dict_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_object_free(temp->val);
+        indi_object_free(temp->value);
 
         indi_memory_free(temp);
 
@@ -118,7 +118,7 @@ void indi_dict_del(indi_dict_t *object, STR_t key)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_free(curr_node->val);
+            indi_object_free(curr_node->value);
 
             indi_memory_free(curr_node);
 
@@ -142,7 +142,7 @@ bool indi_dict_iterate(indi_dict_iter_t *iter, STR_t *key, indi_object_t **objec
         }
 
         if(object != NULL) {
-            *object = iter->head->val;
+            *object = iter->head->value;
         }
 
         iter->idx += 0x0000000000001;
@@ -164,7 +164,7 @@ indi_object_t *indi_dict_get(const indi_dict_t *object, STR_t key)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
-            return curr_node->val;
+            return curr_node->value;
         }
     }
 
@@ -196,9 +196,9 @@ void indi_dict_set(indi_dict_t *object, STR_t key, buff_t value)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
-            indi_object_free(curr_node->val);
+            indi_object_free(curr_node->value);
 
-            curr_node->val = value;
+            curr_node->value = value;
 
             goto _ok;
         }
@@ -210,7 +210,7 @@ void indi_dict_set(indi_dict_t *object, STR_t key, buff_t value)
 
     node->key = strcpy((str_t) (node + 1), key);
 
-    node->val = value;
+    node->value = value;
     node->next = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -259,7 +259,7 @@ str_t indi_dict_to_string(const indi_dict_t *object)
     /**/
     /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
-    /**/        str_t curr_node_val = indi_object_to_string(curr_node->val);
+    /**/        str_t curr_node_val = indi_object_to_string(curr_node->value);
     /**/
     /**/        /**/    indi_string_builder_append(sb, "\"", curr_node->key, "\"", ":", curr_node_val);
     /**/

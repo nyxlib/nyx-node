@@ -496,8 +496,8 @@ __INLINE__ STR_t indi_list_get_string(const indi_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define indi_list_push(object, val) \
-            indi_list_set(object, -1, val)
+#define indi_list_push(object, value) \
+            indi_list_set(object, -1, value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* XMLDOC                                                                                                             */

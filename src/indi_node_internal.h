@@ -115,7 +115,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts);
 
 bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key);
 
-indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tag_name, STR_t one_tag_name);
+indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STREAM                                                                                                             */
