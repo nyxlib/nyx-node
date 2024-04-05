@@ -83,6 +83,7 @@ typedef enum indi_type_e
 typedef struct indi_object_s
 {
     uint64_t magic;
+    uint32_t flags;
 
     enum indi_type_e type;
 
@@ -98,7 +99,7 @@ typedef struct indi_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define INDI_OBJECT(_type) \
-            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .type = _type, .node = NULL, .parent = NULL, .in_callback = NULL, .out_callback = NULL})
+            ((struct indi_object_s) {.magic = INDI_OBJECT_MAGIC, .flags = 0x00, .type = _type, .node = NULL, .parent = NULL, .in_callback = NULL, .out_callback = NULL})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
