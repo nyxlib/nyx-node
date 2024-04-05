@@ -147,42 +147,52 @@ static void out_callback(indi_object_t *object)
 {
     indi_dict_t *def_vector = (indi_dict_t *) object;
 
-    STR_t tag_name = indi_dict_get_string(def_vector, "<>");
-
-    if(tag_name != NULL)
+    if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
+        STR_t tag_name = indi_dict_get_string(def_vector, "<>");
 
-        indi_dict_t *set_vector;
+        if(tag_name != NULL)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(strcmp("defNumberVector", tag_name) == 0) {
-            set_vector = indi_number_set_vector_new(def_vector);
+            indi_dict_t *set_vector;
+
+            /**/ if(strcmp("defNumberVector", tag_name) == 0) {
+                set_vector = indi_number_set_vector_new(def_vector);
+            }
+            else if(strcmp("defTextVector", tag_name) == 0) {
+                set_vector = indi_text_set_vector_new(def_vector);
+            }
+            else if(strcmp("defLightVector", tag_name) == 0) {
+                set_vector = indi_light_set_vector_new(def_vector);
+            }
+            else if(strcmp("defSwitchVector", tag_name) == 0) {
+                set_vector = indi_switch_set_vector_new(def_vector);
+            }
+            else if(strcmp("defBLOBVector", tag_name) == 0) {
+
+                if((def_vector->base.flags & INDI_FLAGS_BLOB_DISABLED) == 0)
+                {
+                    set_vector = indi_blob_set_vector_new(def_vector);
+                }
+                else {
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            sub_object(object->node, (indi_object_t *) set_vector);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            indi_dict_free(set_vector);
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
-        else if(strcmp("defTextVector", tag_name) == 0) {
-            set_vector = indi_text_set_vector_new(def_vector);
-        }
-        else if(strcmp("defLightVector", tag_name) == 0) {
-            set_vector = indi_light_set_vector_new(def_vector);
-        }
-        else if(strcmp("defSwitchVector", tag_name) == 0) {
-            set_vector = indi_switch_set_vector_new(def_vector);
-        }
-        else if(strcmp("defBLOBVector", tag_name) == 0) {
-            set_vector = indi_blob_set_vector_new(def_vector);
-        }
-        else {
-            return;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        sub_object(object->node, (indi_object_t *) set_vector);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        indi_dict_free(set_vector);
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 }
 
@@ -226,7 +236,10 @@ static void get_properties(indi_node_t *node, indi_dict_t *dict)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        sub_object(node, (indi_object_t *) def_vector);
+        if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
+        {
+            sub_object(node, (indi_object_t *) def_vector);
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
