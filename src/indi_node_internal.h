@@ -109,6 +109,8 @@ str_t indi_string_builder_to_cstring(
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size);
+
 void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts);
 
 bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key);

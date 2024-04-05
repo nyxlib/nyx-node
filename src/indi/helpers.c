@@ -295,29 +295,35 @@ bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
+{
+    time_t now = time(NULL);
+
+    struct tm *tm_now = localtime(&now);
+
+    snprintf(
+        timestamp_buff,
+        timestamp_size,
+        "%04d-%02d-%02dT%02d:%02d:%02d",
+        tm_now->tm_year + 1900,
+        tm_now->tm_mon + 1,
+        tm_now->tm_mday,
+        tm_now->tm_hour,
+        tm_now->tm_min,
+        tm_now->tm_sec
+    );
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     char timestamp[32];
 
-    time_t now = time(NULL);
-
-    struct tm *tm_now = localtime(&now);
-
-    snprintf(
-        timestamp,
-        sizeof(timestamp),
-        "%04d-%02d-%02dT%02d:%02d:%02d",
-         tm_now->tm_year + 1900,
-         tm_now->tm_mon + 1,
-         tm_now->tm_mday,
-         tm_now->tm_hour,
-         tm_now->tm_min,
-         tm_now->tm_sec
-     );
-
-    /*----------------------------------------------------------------------------------------------------------------*/
+    internal_get_timestamp(timestamp, sizeof(timestamp));
 
     indi_dict_set(dict, "@timestamp", indi_string_from(timestamp));
 

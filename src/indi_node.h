@@ -795,8 +795,13 @@ indi_dict_t *indi_blob_set_vector_new(
 
 indi_dict_t *indi_message_new(
     STR_t device,
-    STR_t message,
-    indi_opts_t *opts
+    STR_t message
+);
+
+indi_dict_t *indi_del_property_new(
+    STR_t device,
+    __NULLABLE__ STR_t name,
+    __NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -836,8 +841,16 @@ void indi_node_free(
 void indi_node_send_message(
     indi_node_t *node,
     STR_t device,
-    STR_t message,
-    indi_opts_t *opts
+    STR_t message
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_node_send_del_property(
+    indi_node_t *node,
+    STR_t device,
+    __NULLABLE__ STR_t name,
+    __NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

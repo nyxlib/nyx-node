@@ -754,11 +754,25 @@ void indi_node_free(indi_node_t *node, bool free_vectors)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_node_send_message(indi_node_t *node, STR_t device, STR_t message, indi_opts_t *opts)
+void indi_node_send_message(indi_node_t *node, STR_t device, STR_t message)
 {
     if(node != NULL)
     {
-        indi_dict_t *dict = indi_message_new(device, message, opts);
+        indi_dict_t *dict = indi_message_new(device, message);
+
+        sub_object(node, (indi_object_t *) dict);
+
+        indi_dict_free(dict);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void indi_node_send_del_property(indi_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+{
+    if(node != NULL)
+    {
+        indi_dict_t *dict = indi_del_property_new(device, name, message);
 
         sub_object(node, (indi_object_t *) dict);
 
