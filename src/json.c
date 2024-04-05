@@ -132,13 +132,23 @@ static void tokenizer_next(json_parser_t *parser)
         case '"':
             type = JSON_TOKEN_STRING;
             end++;
-            for(; *end != '\"'; end++)
+            while(*end != '\"')
             {
                 if(*end == '\0')
                 {
                     type = JSON_TOKEN_ERROR;
                     goto _err;
                 }
+                if(*end == '\\')
+                {
+                    if(*end == '\0')
+                    {
+                        type = JSON_TOKEN_ERROR;
+                        goto _err;
+                    }
+                    end++;
+                }
+                end++;
             }
             end++;
             break;
