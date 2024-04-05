@@ -4,9 +4,8 @@
 
 #include <libxml/xmlschemas.h>
 
-#include "indi_node_internal.h"
-
 #include "indi_node_schema.h"
+#include "indi_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
