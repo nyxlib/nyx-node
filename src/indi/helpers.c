@@ -314,7 +314,6 @@ void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
     );
 }
 
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
