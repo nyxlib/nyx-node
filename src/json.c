@@ -157,13 +157,20 @@ static void tokenizer_next(json_parser_t *parser)
             if(*end == '-' || *end == '+' || isdigit(*end))
             {
                 type = JSON_TOKEN_NUMBER;
-
-                for(; *end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end); end++)
+                end++;
+                for(;;)
                 {
                     if(*end == '\0')
                     {
                         type = JSON_TOKEN_ERROR;
                         goto _err;
+                    }
+
+                    if(*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end)) {
+                        end++;
+                    }
+                    else {
+                        break;
                     }
                 }
             }
