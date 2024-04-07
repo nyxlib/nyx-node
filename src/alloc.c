@@ -69,7 +69,7 @@ void indi_memory_finalize()
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_memory_free(buff_t buff)
+size_t indi_memory_free(__NULLABLE__ buff_t buff)
 {
     if(buff == NULL)
     {
@@ -105,7 +105,7 @@ size_t indi_memory_free(buff_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t indi_memory_alloc(size_t size)
+buff_t indi_memory_alloc(__ZEROABLE__ size_t size)
 {
     if(size == 0x00)
     {
@@ -140,7 +140,7 @@ buff_t indi_memory_alloc(size_t size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t indi_memory_realloc(buff_t buff, size_t size)
+buff_t indi_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
 {
     if(buff == NULL) {
         return indi_memory_alloc(size);

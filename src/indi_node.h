@@ -50,16 +50,16 @@ void indi_memory_finalize();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 size_t indi_memory_free(
-    buff_t buff
+    __NULLABLE__ buff_t buff
 );
 
 buff_t indi_memory_alloc(
-    size_t size
+    __ZEROABLE__ size_t size
 );
 
 buff_t indi_memory_realloc(
-    buff_t buff,
-    size_t size
+    __NULLABLE__ buff_t buff,
+    __ZEROABLE__ size_t size
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
