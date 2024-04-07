@@ -251,7 +251,7 @@ void indi_object_notify(indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_free(indi_object_t *object)
+void indi_object_free(__NULLABLE__ indi_object_t *object)
 {
     if(object == NULL)
     {
@@ -300,7 +300,7 @@ void indi_object_free(indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_object_to_string(const indi_object_t *object)
+str_t indi_object_to_string(__NULLABLE__ const indi_object_t *object)
 {
     if(object == NULL)
     {
@@ -343,7 +343,7 @@ str_t indi_object_to_string(const indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_object_to_cstring(const indi_object_t *object)
+str_t indi_object_to_cstring(__NULLABLE__ const indi_object_t *object)
 {
     if(object == NULL)
     {

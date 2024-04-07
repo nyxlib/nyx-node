@@ -28,6 +28,9 @@ double nan(const char *tag);
 #define __NULLABLE__ \
             /* do nothing */
 
+#define __ZEROABLE__ \
+            /* do nothing */
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef /* */ void *buff_t;
@@ -113,15 +116,15 @@ indi_object_t *indi_object_parse(
 );
 
 void indi_object_free(
-    /*-*/ indi_object_t *object
+    __NULLABLE__ /*-*/ indi_object_t *object
 );
 
 str_t indi_object_to_string(
-    const indi_object_t *object
+    __NULLABLE__ const indi_object_t *object
 );
 
 str_t indi_object_to_cstring(
-    const indi_object_t *object
+    __NULLABLE__ const indi_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -509,7 +512,7 @@ typedef struct _xmlDoc indi_xmldoc_t;
 
 indi_xmldoc_t *indi_xmldoc_parse_buff(
     __NULLABLE__ BUFF_t buff,
-    size_t size
+    __ZEROABLE__ size_t size
 );
 
 indi_xmldoc_t *indi_xmldoc_parse(
@@ -517,11 +520,11 @@ indi_xmldoc_t *indi_xmldoc_parse(
 );
 
 void indi_xmldoc_free(
-    /*-*/ indi_xmldoc_t *xmldoc
+    __NULLABLE__ /*-*/ indi_xmldoc_t *xmldoc
 );
 
 str_t indi_xmldoc_to_string(
-    const indi_xmldoc_t *xmldoc
+    __NULLABLE__ const indi_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -533,7 +536,7 @@ bool indi_validation_initialize();
 bool indi_validation_finalize();
 
 bool indi_validation_check(
-    const indi_xmldoc_t *doc
+    __NULLABLE__ const indi_xmldoc_t *doc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -541,12 +544,12 @@ bool indi_validation_check(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 indi_object_t *indi_xmldoc_to_object(
-    const indi_xmldoc_t *doc,
+    __NULLABLE__ const indi_xmldoc_t *xmldoc,
     bool validate
 );
 
 indi_xmldoc_t *indi_object_to_xmldoc(
-    const indi_object_t *object,
+    __NULLABLE__ const indi_object_t *object,
     bool validate
 );
 
@@ -653,7 +656,6 @@ typedef struct
     __NULLABLE__ STR_t label;
     __NULLABLE__ STR_t group;
     __NULLABLE__ double timeout;
-    __NULLABLE__ STR_t timestamp;
     __NULLABLE__ STR_t message;
 
 } indi_opts_t;

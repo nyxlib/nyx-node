@@ -22,7 +22,7 @@ indi_xmldoc_t *indi_xmldoc_parse(__NULLABLE__ STR_t text)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_xmldoc_free(indi_xmldoc_t *xmldoc)
+void indi_xmldoc_free(__NULLABLE__ indi_xmldoc_t *xmldoc)
 {
     if(xmldoc != NULL)
     {
@@ -32,7 +32,7 @@ void indi_xmldoc_free(indi_xmldoc_t *xmldoc)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_xmldoc_to_string(const indi_xmldoc_t *xmldoc)
+str_t indi_xmldoc_to_string(__NULLABLE__ const indi_xmldoc_t *xmldoc)
 {
     if(xmldoc == NULL)
     {

@@ -79,7 +79,7 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_xmldoc_t *indi_object_to_xmldoc(const indi_object_t *object, bool validate)
+indi_xmldoc_t *indi_object_to_xmldoc(__NULLABLE__ const indi_object_t *object, bool validate)
 {
     if(object == NULL)
     {

@@ -96,16 +96,16 @@ static indi_object_t *transform(const xmlNode *curr_node) // NOLINT(misc-no-recu
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_xmldoc_to_object(const indi_xmldoc_t *doc, bool validate)
+indi_object_t *indi_xmldoc_to_object(__NULLABLE__ const indi_xmldoc_t *xmldoc, bool validate)
 {
-    if(doc == NULL)
+    if(xmldoc == NULL)
     {
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlNode *root = xmlDocGetRootElement(doc);
+    xmlNode *root = xmlDocGetRootElement(xmldoc);
 
     if(root == NULL)
     {
@@ -114,7 +114,7 @@ indi_object_t *indi_xmldoc_to_object(const indi_xmldoc_t *doc, bool validate)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(validate == false || indi_validation_check(doc) == true)
+    if(validate == false || indi_validation_check(xmldoc) == true)
     {
         return transform(root);
     }
