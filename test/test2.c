@@ -108,7 +108,7 @@ int main()
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    indi_node_t *node = indi_node_init(
+    indi_node_t *node = indi_node_initialize(
         "tcp://0.0.0.0:7625",
         getenv("MQTT_URL"),
         getenv("MQTT_USERNAME"),

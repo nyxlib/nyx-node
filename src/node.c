@@ -677,7 +677,7 @@ static void timer_handler(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_node_t *indi_node_init(
+indi_node_t *indi_node_initialize(
     __NULLABLE__ STR_t tcp_url,
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t username,
