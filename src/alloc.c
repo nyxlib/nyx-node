@@ -225,7 +225,7 @@ str_t indi_string_dup(STR_t s)
 {
     if(s != NULL)
     {
-        str_t str = indi_memory_alloc(strlen(s));
+        str_t str = indi_memory_alloc(strlen(s) + 1);
 
         strcpy(str, s);
 
