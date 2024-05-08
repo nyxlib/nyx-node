@@ -23,7 +23,7 @@ static void debug_callback(indi_object_t *object)
 
 indi_dict_t *indi_switch_def_new(STR_t name, __NULLABLE__ STR_t label, indi_onoff_t value)
 {
-    if(label == NULL)
+    if(label == NULL || label[0] == '\0')
     {
         label = name;
     }

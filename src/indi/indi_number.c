@@ -23,7 +23,7 @@ static void debug_callback(indi_object_t *object)
 
 indi_dict_t *indi_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, float min, float max, float step, float value)
 {
-    if(label == NULL)
+    if(label == NULL || label[0] == '\0')
     {
         label = name;
     }
