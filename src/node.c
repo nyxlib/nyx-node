@@ -10,7 +10,7 @@
 
 static bool mg_startswith(struct mg_str topic, struct mg_str prefix)
 {
-    return topic.len >= prefix.len && memcmp(topic.ptr, prefix.ptr, prefix.len) == 0;
+    return topic.len >= prefix.len && memcmp(topic.buf, prefix.buf, prefix.len) == 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -86,6 +86,8 @@ struct indi_node_s
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+#define MG_C_STR(a) {(char *) (a), sizeof(a) - 1}
 
 static struct mg_str SPECIAL_TOPICS[] = {
     MG_C_STR("indi/cmd/get_clients"),
@@ -570,11 +572,11 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
         {
             str_t topic = indi_memory_alloc(SPECIAL_TOPICS[i].len + node->mqtt_opts.client_id.len + 2);
 
-            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].ptr, node->mqtt_opts.client_id.ptr) > 0)
+            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].buf, node->mqtt_opts.client_id.buf) > 0)
             {
                 MG_INFO(("%lu Subscribing to `%s` and `%s` topics",
                     connection->id,
-                    SPECIAL_TOPICS[i].ptr,
+                    SPECIAL_TOPICS[i].buf,
                     /*-----*/ topic /*-----*/
                 ));
 
@@ -596,9 +598,9 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
         struct mg_mqtt_message *message = (struct mg_mqtt_message *) ev_data;
 
-        if(message->topic.len > 0 && message->topic.ptr != NULL
+        if(message->topic.len > 0 && message->topic.buf != NULL
            &&
-           message->data.len > 0 && message->data.ptr != NULL
+           message->data.len > 0 && message->data.buf != NULL
         ) {
             /**/ if(mg_startswith(message->topic, SPECIAL_TOPICS[0]))
             {
@@ -616,7 +618,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_object_t *object = indi_object_parse(message->data.ptr);
+                indi_object_t *object = indi_object_parse(message->data.buf);
 
                 if(object != NULL)
                 {
@@ -633,7 +635,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(message->data.ptr, message->data.len);
+                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(message->data.buf, message->data.len);
 
                 if(xmldoc != NULL)
                 {
