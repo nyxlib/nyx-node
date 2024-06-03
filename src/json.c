@@ -344,7 +344,7 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
 
         if(CHECK(JSON_TOKEN_STRING) == false)
         {
-            ////_free(key);
+            ////_memory_free(key);
 
             goto _err;
         }
