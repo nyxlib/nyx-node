@@ -231,12 +231,12 @@ static void tokenizer_next(json_parser_t *parser)
                 {
                     case '\"': *p = '\"'; break;
                     case '\\': *p = '\\'; break;
-                    case '/':  *p = '/'; break;
-                    case 'b':  *p = '\b'; break;
-                    case 'f':  *p = '\f'; break;
-                    case 'n':  *p = '\n'; break;
-                    case 'r':  *p = '\r'; break;
-                    case 't':  *p = '\t'; break;
+                    case '/': *p = '/'; break;
+                    case 'b': *p = '\b'; break;
+                    case 'f': *p = '\f'; break;
+                    case 'n': *p = '\n'; break;
+                    case 'r': *p = '\r'; break;
+                    case 't': *p = '\t'; break;
                     default:
                         *p = *s;
                         break;
