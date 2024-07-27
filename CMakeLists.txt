@@ -8,7 +8,7 @@ project(indi_node C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -O3)
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -Wno-format-truncation -O3)
 
 ########################################################################################################################
 

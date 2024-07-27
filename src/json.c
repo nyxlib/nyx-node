@@ -139,15 +139,12 @@ static void tokenizer_next(json_parser_t *parser)
                     type = JSON_TOKEN_ERROR;
                     goto _err;
                 }
-                if(*end == '\\')
+
+                if(*(end + 0) == '\\' && *(end + 1) != '\0')
                 {
-                    if(*end == '\0')
-                    {
-                        type = JSON_TOKEN_ERROR;
-                        goto _err;
-                    }
                     end++;
                 }
+
                 end++;
             }
             end++;
@@ -204,9 +201,11 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        parser->curr_token.value = strncpy(indi_memory_alloc(length + 1), s, length);
+        str_t p = parser->curr_token.value = indi_memory_alloc(length + 1);
 
-        parser->curr_token.value[length] = '\0';
+        /* COPY VALUE */
+
+        strncpy(p, s, length)[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -218,9 +217,41 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        parser->curr_token.value = strncpy(indi_memory_alloc(length + 1), s, length);
+        str_t p = parser->curr_token.value = indi_memory_alloc(length + 1);
 
-        parser->curr_token.value[length] = '\0';
+        /* COPY VALUE */
+
+        while(s < e)
+        {
+            if(*s == '\\' && (s + 1 < e))
+            {
+                s++;
+
+                switch(*s)
+                {
+                    case '\"': *p = '\"'; break;
+                    case '\\': *p = '\\'; break;
+                    case '/':  *p = '/'; break;
+                    case 'b':  *p = '\b'; break;
+                    case 'f':  *p = '\f'; break;
+                    case 'n':  *p = '\n'; break;
+                    case 'r':  *p = '\r'; break;
+                    case 't':  *p = '\t'; break;
+                    default:
+                        *p = *s;
+                        break;
+                }
+            }
+            else
+            {
+                *p = *s;
+            }
+
+            s++;
+            p++;
+        }
+
+        *p = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
