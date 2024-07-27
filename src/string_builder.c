@@ -142,8 +142,9 @@ static str_t to_string(indi_string_builder_t *sb, bool json_string)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t result = indi_memory_alloc(json_string ? 2 * length + 3
-                                                      : 1 * length + 1
+    str_t result = indi_memory_alloc(
+        json_string ? 2 * length + 3
+                    : 1 * length + 1
     ), p = result;
 
     /*----------------------------------------------------------------------------------------------------------------*/
