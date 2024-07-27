@@ -185,24 +185,13 @@ static void tokenizer_next(json_parser_t *parser)
             break;
 
         default:
-            if(*end == '-' || *end == '+' || isdigit(*end))
+            /**/ if(*end == '-' || isdigit(*end))
             {
                 type = JSON_TOKEN_NUMBER;
                 end++;
-                for(;;)
+                while(*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end))
                 {
-                    if(*end == '\0')
-                    {
-                        type = JSON_TOKEN_ERROR;
-                        goto _err;
-                    }
-
-                    if(*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end)) {
-                        end++;
-                    }
-                    else {
-                        break;
-                    }
+                    end++;
                 }
             }
             else if(strncmp(end, "null", 4) == 0)
@@ -224,6 +213,7 @@ static void tokenizer_next(json_parser_t *parser)
             {
                 type = JSON_TOKEN_ERROR;
             }
+            break;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -281,8 +271,8 @@ static void tokenizer_next(json_parser_t *parser)
 
                             uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
 
-                            s += 0x00000000000000000000000000000000004;
-                            p += indi_unicode_to_utf8(unicode_char, p);
+                            s += 0x00000000000000000000000000000000004 - 1;
+                            p += indi_unicode_to_utf8(unicode_char, p) - 1;
                         }
                         else
                         {
@@ -297,6 +287,7 @@ static void tokenizer_next(json_parser_t *parser)
             else
             {
                 *p = *s;
+                /*--*/
             }
 
             s++;
