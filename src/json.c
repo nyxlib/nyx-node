@@ -226,7 +226,6 @@ static void tokenizer_next(json_parser_t *parser)
             if(*s == '\\' && (s + 1 < e))
             {
                 s++;
-
                 switch(*s)
                 {
                     case '\"': *p = '\"'; break;
