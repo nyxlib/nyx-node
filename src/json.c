@@ -80,6 +80,40 @@ typedef struct json_parser_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+int indi_unicode_to_utf8(uint32_t unicode_char, str_t p)
+{
+    unsigned char *up = (unsigned char *) p;
+
+    /**/ if(unicode_char <= 0x7F)
+    {
+        *up = unicode_char;
+        return 1;
+    }
+    else if(unicode_char <= 0x7FF)
+    {
+        *up++ = 0xC0 | ((unicode_char >> 6) & 0x1F);
+        *up   = 0x80 | ((unicode_char >> 0) & 0x3F);
+        return 2;
+    }
+    else if(unicode_char <= 0xFFFF)
+    {
+        *up++ = 0xE0 | ((unicode_char >> 12) & 0x0F);
+        *up++ = 0x80 | ((unicode_char >> 6) & 0x3F);
+        *up   = 0x80 | ((unicode_char >> 0) & 0x3F);
+        return 3;
+    }
+    else
+    {
+        *up++ = 0xF0 | ((unicode_char >> 18) & 0x07);
+        *up++ = 0x80 | ((unicode_char >> 12) & 0x3F);
+        *up++ = 0x80 | ((unicode_char >> 6) & 0x3F);
+        *up   = 0x80 | ((unicode_char >> 0) & 0x3F);
+        return 4;
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static void tokenizer_next(json_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -236,6 +270,25 @@ static void tokenizer_next(json_parser_t *parser)
                     case 'n': *p = '\n'; break;
                     case 'r': *p = '\r'; break;
                     case 't': *p = '\t'; break;
+                    case 'u':
+                        if(s + 4 < e)
+                        {
+                            char hex[5] = {
+                                s[1], s[2],
+                                s[3], s[4],
+                                '\0',
+                            };
+
+                            uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
+
+                            s += 0x00000000000000000000000000000000004;
+                            p += indi_unicode_to_utf8(unicode_char, p);
+                        }
+                        else
+                        {
+                            *p = '\0';
+                        }
+                        break;
                     default:
                         *p = *s;
                         break;
