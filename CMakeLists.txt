@@ -100,6 +100,12 @@ set_target_properties(indi-node-shared PROPERTIES
 
 ########################################################################################################################
 
+add_executable(check_json test/check_json.c)
+
+target_link_libraries(check_json indi-node-static ${LIBXML2_LIBRARIES})
+
+########################################################################################################################
+
 add_executable(test1 test/test1.c)
 
 target_link_libraries(test1 indi-node-static ${LIBXML2_LIBRARIES})

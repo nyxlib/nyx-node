@@ -171,7 +171,7 @@ static void tokenizer_next(json_parser_t *parser)
                 if(*end == '\0')
                 {
                     type = JSON_TOKEN_ERROR;
-                    goto _err;
+                    goto _bye;
                 }
 
                 if(*(end + 0) == '\\' && *(end + 1) != '\0')
@@ -247,41 +247,55 @@ static void tokenizer_next(json_parser_t *parser)
 
         while(s < e)
         {
-            if(*s == '\\' && (s + 1 < e))
+            if(*s == '\\')
             {
                 s++;
-                switch(*s)
+                if(e - s < 1)
                 {
-                    case '\"': *p = '\"'; break;
-                    case '\\': *p = '\\'; break;
-                    case '/': *p = '/'; break;
-                    case 'b': *p = '\b'; break;
-                    case 'f': *p = '\f'; break;
-                    case 'n': *p = '\n'; break;
-                    case 'r': *p = '\r'; break;
-                    case 't': *p = '\t'; break;
-                    case 'u':
-                        if(s + 4 < e)
-                        {
-                            char hex[5] = {
-                                s[1], s[2],
-                                s[3], s[4],
-                                '\0',
-                            };
+                    indi_memory_free(parser->curr_token.value);
+                    parser->curr_token.value = NULL;
+                    type = JSON_TOKEN_ERROR;
+                    goto _bye;
+                }
+                else
+                {
+                    switch(*s)
+                    {
+                        case '\"': *p = '\"'; break;
+                        case '\\': *p = '\\'; break;
+                        case '/': *p = '/'; break;
+                        case 'b': *p = '\b'; break;
+                        case 'f': *p = '\f'; break;
+                        case 'n': *p = '\n'; break;
+                        case 'r': *p = '\r'; break;
+                        case 't': *p = '\t'; break;
+                        case 'u':
+                            s++;
+                            if(e - s < 4)
+                            {
+                                indi_memory_free(parser->curr_token.value);
+                                parser->curr_token.value = NULL;
+                                type = JSON_TOKEN_ERROR;
+                                goto _bye;
+                            }
+                            else
+                            {
+                                char hex[5] = {
+                                    s[0], s[1],
+                                    s[2], s[3],
+                                    '\0',
+                                };
 
-                            uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
+                                uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
 
-                            s += 0x00000000000000000000000000000000004 - 1;
-                            p += indi_unicode_to_utf8(unicode_char, p) - 1;
-                        }
-                        else
-                        {
-                            *p = '\0';
-                        }
-                        break;
-                    default:
-                        *p = *s;
-                        break;
+                                s += 0x00000000000000000000000000000000004 - 1;
+                                p += indi_unicode_to_utf8(unicode_char, p) - 1;
+                            }
+                            break;
+                        default:
+                            *p = *s;
+                            break;
+                    }
                 }
             }
             else
@@ -299,7 +313,7 @@ static void tokenizer_next(json_parser_t *parser)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-_err:
+_bye:
     parser->curr_token.token_type = type;
 
     parser->pos = end;
