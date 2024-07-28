@@ -174,8 +174,10 @@ static void tokenizer_next(json_parser_t *parser)
                     goto _bye;
                 }
 
-                if(*(end + 0) == '\\' && *(end + 1) != '\0')
-                {
+                if(*(end + 0) == '\\'
+                   &&
+                   *(end + 1) != '\0'
+                ) {
                     end++;
                 }
 
