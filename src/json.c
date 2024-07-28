@@ -98,7 +98,7 @@ typedef struct json_parser_s
 
 int indi_unicode_to_utf8(uint32_t unicode_char, str_t p)
 {
-    unsigned char *up = (unsigned char *) p;
+    uint8_t *up = (uint8_t *) p;
 
     /**/ if(unicode_char <= 0x7F)
     {
@@ -664,8 +664,8 @@ indi_object_t *indi_object_parse(__NULLABLE__ STR_t text)
         .pos = text,
         .curr_token = {
             .value = NULL,
-            .token_type = JSON_TOKEN_ERROR
-        }
+            .token_type = JSON_TOKEN_ERROR,
+        },
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
