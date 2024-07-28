@@ -39,14 +39,14 @@ int main(int argc, char **argv)
 
     indi_memory_finalize();
 
-    printf("[SUCCESS]\n");
+    printf("[SUCCESS]\n\n");
 
     return 0;
 
 _err:
     indi_memory_finalize();
 
-    printf("[ERROR]\n");
+    printf("[ERROR]\n\n");
 
     return 1;
 }
