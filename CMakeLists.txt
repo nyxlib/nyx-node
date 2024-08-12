@@ -38,14 +38,14 @@ set(SOURCE_FILES
     src/json/json_number.c
     src/json/json_string.c
     #
-    src/nyx/helpers.c
-    src/nyx/nyx_blob.c
-    src/nyx/nyx_del_property.c
-    src/nyx/nyx_light.c
-    src/nyx/nyx_message.c
-    src/nyx/nyx_number.c
-    src/nyx/nyx_switch.c
-    src/nyx/nyx_text.c
+    src/indi/helpers.c
+    src/indi/indi_blob.c
+    src/indi/indi_del_property.c
+    src/indi/indi_light.c
+    src/indi/indi_message.c
+    src/indi/indi_number.c
+    src/indi/indi_switch.c
+    src/indi/indi_text.c
     #
     src/alloc.c
     src/string_builder.c
