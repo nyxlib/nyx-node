@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.5)
 
 ########################################################################################################################
 
-project(indi_node C)
+project(nyx_node C)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -25,9 +25,9 @@ check_function_exists(malloc_usable_size HAVE_MALLOC_USABLE_SIZE)
 ########################################################################################################################
 
 set(SOURCE_FILES
-    src/indi_node.h
-    src/indi_node_schema.h
-    src/indi_node_internal.h
+    src/nyx_node.h
+    src/nyx_node_schema.h
+    src/nyx_node_internal.h
     #
     src/mongoose/mongoose.c
     #
@@ -38,14 +38,14 @@ set(SOURCE_FILES
     src/json/json_number.c
     src/json/json_string.c
     #
-    src/indi/helpers.c
-    src/indi/indi_blob.c
-    src/indi/indi_del_property.c
-    src/indi/indi_light.c
-    src/indi/indi_message.c
-    src/indi/indi_number.c
-    src/indi/indi_switch.c
-    src/indi/indi_text.c
+    src/nyx/helpers.c
+    src/nyx/nyx_blob.c
+    src/nyx/nyx_del_property.c
+    src/nyx/nyx_light.c
+    src/nyx/nyx_message.c
+    src/nyx/nyx_number.c
+    src/nyx/nyx_switch.c
+    src/nyx/nyx_text.c
     #
     src/alloc.c
     src/string_builder.c
@@ -60,60 +60,60 @@ set(SOURCE_FILES
 
 ########################################################################################################################
 
-add_library(indi-node-static STATIC ${SOURCE_FILES})
+add_library(nyx-node-static STATIC ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
-    target_compile_definitions(indi-node-static PRIVATE HAVE_MALLOC_SIZE)
+    target_compile_definitions(nyx-node-static PRIVATE HAVE_MALLOC_SIZE)
 endif()
 
 if(HAVE_MALLOC_USABLE_SIZE)
-    target_compile_definitions(indi-node-static PRIVATE HAVE_MALLOC_USABLE_SIZE)
+    target_compile_definitions(nyx-node-static PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
 
-target_include_directories(indi-node-static PRIVATE ${LIBXML2_INCLUDE_DIR})
+target_include_directories(nyx-node-static PRIVATE ${LIBXML2_INCLUDE_DIR})
 
-######_link_libraries(indi-node-static ${LIBXML2_LIBRARIES})
+######_link_libraries(nyx-node-static ${LIBXML2_LIBRARIES})
 
-set_target_properties(indi-node-static PROPERTIES
-    OUTPUT_NAME "indi-node"
+set_target_properties(nyx-node-static PROPERTIES
+    OUTPUT_NAME "nyx-node"
 )
 
 ########################################################################################################################
 
-add_library(indi-node-shared SHARED ${SOURCE_FILES})
+add_library(nyx-node-shared SHARED ${SOURCE_FILES})
 
 if(HAVE_MALLOC_SIZE)
-    target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_SIZE)
+    target_compile_definitions(nyx-node-shared PRIVATE HAVE_MALLOC_SIZE)
 endif()
 
 if(HAVE_MALLOC_USABLE_SIZE)
-    target_compile_definitions(indi-node-shared PRIVATE HAVE_MALLOC_USABLE_SIZE)
+    target_compile_definitions(nyx-node-shared PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
 
-target_include_directories(indi-node-shared PRIVATE ${LIBXML2_INCLUDE_DIR})
+target_include_directories(nyx-node-shared PRIVATE ${LIBXML2_INCLUDE_DIR})
 
-target_link_libraries(indi-node-shared ${LIBXML2_LIBRARIES})
+target_link_libraries(nyx-node-shared ${LIBXML2_LIBRARIES})
 
-set_target_properties(indi-node-shared PROPERTIES
-    OUTPUT_NAME "indi-node"
+set_target_properties(nyx-node-shared PROPERTIES
+    OUTPUT_NAME "nyx-node"
 )
 
 ########################################################################################################################
 
 add_executable(check_json test/check_json.c)
 
-target_link_libraries(check_json indi-node-static ${LIBXML2_LIBRARIES})
+target_link_libraries(check_json nyx-node-static ${LIBXML2_LIBRARIES})
 
 ########################################################################################################################
 
 add_executable(test1 test/test1.c)
 
-target_link_libraries(test1 indi-node-static ${LIBXML2_LIBRARIES})
+target_link_libraries(test1 nyx-node-static ${LIBXML2_LIBRARIES})
 
 ########################################################################################################################
 
 add_executable(test2 test/test2.c)
 
-target_link_libraries(test2 indi-node-static ${LIBXML2_LIBRARIES})
+target_link_libraries(test2 nyx-node-static ${LIBXML2_LIBRARIES})
 
 ########################################################################################################################

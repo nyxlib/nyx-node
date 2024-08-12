@@ -3,35 +3,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct indi_list_node_s
+typedef struct nyx_list_node_s
 {
-    indi_object_t *value;
+    nyx_object_t *value;
 
-    struct indi_list_node_s *next;
+    struct nyx_list_node_s *next;
 
 } node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void internal_list_clear(
-    indi_list_t *object
+    nyx_list_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_list_t *indi_list_new()
+nyx_list_t *nyx_list_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_list_t *object = indi_memory_alloc(sizeof(indi_list_t));
+    nyx_list_t *object = nyx_memory_alloc(sizeof(nyx_list_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->base = INDI_OBJECT(INDI_TYPE_LIST);
+    object->base = NYX_OBJECT(NYX_TYPE_LIST);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -45,16 +45,16 @@ indi_list_t *indi_list_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_list_free(indi_list_t *object)
+void nyx_list_free(nyx_list_t *object)
 {
     internal_list_clear(object);
 
-    indi_memory_free(object);
+    nyx_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_list_clear(indi_list_t *object)
+static void internal_list_clear(nyx_list_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -68,9 +68,9 @@ static void internal_list_clear(indi_list_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_object_free(temp->value);
+        nyx_object_free(temp->value);
 
-        indi_memory_free(temp);
+        nyx_memory_free(temp);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -85,16 +85,16 @@ static void internal_list_clear(indi_list_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_list_clear(indi_list_t *object)
+void nyx_list_clear(nyx_list_t *object)
 {
     internal_list_clear(object);
 
-    indi_object_notify(&object->base);
+    nyx_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_list_del(indi_list_t *object, int idx)
+void nyx_list_del(nyx_list_t *object, int idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -115,9 +115,9 @@ void indi_list_del(indi_list_t *object, int idx)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_free(curr_node->value);
+            nyx_object_free(curr_node->value);
 
-            indi_memory_free(curr_node);
+            nyx_memory_free(curr_node);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -130,9 +130,9 @@ void indi_list_del(indi_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **object)
+bool nyx_list_iterate(nyx_list_iter_t *iter, int *idx, nyx_object_t **object)
 {
-    if(iter->type == INDI_TYPE_LIST && iter->head != NULL)
+    if(iter->type == NYX_TYPE_LIST && iter->head != NULL)
     {
         if(idx != NULL) {
             *idx = iter->idx;
@@ -153,7 +153,7 @@ bool indi_list_iterate(indi_list_iter_t *iter, int *idx, indi_object_t **object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_list_get(const indi_list_t *object, int idx)
+nyx_object_t *nyx_list_get(const nyx_list_t *object, int idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -172,20 +172,20 @@ indi_object_t *indi_list_get(const indi_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
+nyx_list_t *nyx_list_set(nyx_list_t *object, size_t idx, buff_t value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(((indi_object_t *) value)->magic != INDI_OBJECT_MAGIC)
+    if(((nyx_object_t *) value)->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `indi_list_set`\n");
+        fprintf(stderr, "Invalid object in `nyx_list_set`\n");
         fflush(stderr);
         exit(1);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((indi_object_t *) value)->parent = (indi_object_t *) object;
+    ((nyx_object_t *) value)->parent = (nyx_object_t *) object;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -193,7 +193,7 @@ indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
     {
         if(idx == 0)
         {
-            indi_object_free(curr_node->value);
+            nyx_object_free(curr_node->value);
 
             curr_node->value = value;
 
@@ -203,7 +203,7 @@ indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node_t *node = indi_memory_alloc(sizeof(node_t));
+    node_t *node = nyx_memory_alloc(sizeof(node_t));
 
     node->value = value;
     node->next = NULL;
@@ -224,7 +224,7 @@ indi_list_t *indi_list_set(indi_list_t *object, size_t idx, buff_t value)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    indi_object_notify((indi_object_t *) value);
+    nyx_object_notify((nyx_object_t *) value);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -233,7 +233,7 @@ _ok:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_list_size(const indi_list_t *object)
+size_t nyx_list_size(const nyx_list_t *object)
 {
     size_t result = 0;
 
@@ -248,31 +248,31 @@ size_t indi_list_size(const indi_list_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_list_to_string(const indi_list_t *object)
+str_t nyx_list_to_string(const nyx_list_t *object)
 {
-    indi_string_builder_t *sb = indi_string_builder_new();
+    nyx_string_builder_t *sb = nyx_string_builder_new();
 
-    /**/    indi_string_builder_append(sb, "[");
+    /**/    nyx_string_builder_append(sb, "[");
     /**/
     /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
-    /**/        str_t curr_node_val = indi_object_to_string(curr_node->value);
+    /**/        str_t curr_node_val = nyx_object_to_string(curr_node->value);
     /**/
-    /**/        /**/    indi_string_builder_append(sb, curr_node_val);
+    /**/        /**/    nyx_string_builder_append(sb, curr_node_val);
     /**/
-    /**/        indi_memory_free(curr_node_val);
+    /**/        nyx_memory_free(curr_node_val);
     /**/
     /**/        if(curr_node->next != NULL)
     /**/        {
-    /**/            indi_string_builder_append(sb, ",");
+    /**/            nyx_string_builder_append(sb, ",");
     /**/        }
     /**/    }
     /**/
-    /**/    indi_string_builder_append(sb, "]");
+    /**/    nyx_string_builder_append(sb, "]");
 
-    str_t result = indi_string_builder_to_cstring(sb);
+    str_t result = nyx_string_builder_to_cstring(sb);
 
-    indi_string_builder_free(sb);
+    nyx_string_builder_free(sb);
 
     return result;
 }

@@ -5,49 +5,49 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STATE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_state_to_str(indi_state_t state)
+STR_t nyx_state_to_str(nyx_state_t state)
 {
     switch(state)
     {
-        case INDI_STATE_IDLE:
+        case NYX_STATE_IDLE:
             return "Idle";
-        case INDI_STATE_OK:
+        case NYX_STATE_OK:
             return "Ok";
-        case INDI_STATE_BUSY:
+        case NYX_STATE_BUSY:
             return "Busy";
-        case INDI_STATE_ALERT:
+        case NYX_STATE_ALERT:
             return "Alert";
     }
 
-    fprintf(stderr, "Internal error in `indi_state_to_str`\n");
+    fprintf(stderr, "Internal error in `nyx_state_to_str`\n");
     fflush(stderr);
     exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_state_t indi_str_to_state(STR_t state)
+nyx_state_t nyx_str_to_state(STR_t state)
 {
     /**/ if(strcmp("Idle", state) == 0) {
-        return INDI_STATE_IDLE;
+        return NYX_STATE_IDLE;
     }
     else if(strcmp("Ok", state) == 0) {
-        return INDI_STATE_OK;
+        return NYX_STATE_OK;
     }
     else if(strcmp("Busy", state) == 0) {
-        return INDI_STATE_BUSY;
+        return NYX_STATE_BUSY;
     }
     else if(strcmp("Alert", state) == 0) {
-        return INDI_STATE_ALERT;
+        return NYX_STATE_ALERT;
     }
 
-    fprintf(stderr, "Internal error in `indi_str_to_state`\n");
+    fprintf(stderr, "Internal error in `nyx_str_to_state`\n");
     fflush(stderr);
     exit(1);
 }
@@ -56,38 +56,38 @@ indi_state_t indi_str_to_state(STR_t state)
 /* PERM                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_perm_to_str(indi_perm_t perm)
+STR_t nyx_perm_to_str(nyx_perm_t perm)
 {
     switch(perm)
     {
-        case INDI_PERM_RO:
+        case NYX_PERM_RO:
             return "ro";
-        case INDI_PERM_WO:
+        case NYX_PERM_WO:
             return "wo";
-        case INDI_PERM_RW:
+        case NYX_PERM_RW:
             return "rw";
     }
 
-    fprintf(stderr, "Internal error in `indi_perm_to_str`\n");
+    fprintf(stderr, "Internal error in `nyx_perm_to_str`\n");
     fflush(stderr);
     exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_perm_t indi_str_to_perm(STR_t perm)
+nyx_perm_t nyx_str_to_perm(STR_t perm)
 {
     /**/ if(strcmp("ro", perm) == 0) {
-        return INDI_PERM_RO;
+        return NYX_PERM_RO;
     }
     else if(strcmp("wo", perm) == 0) {
-        return INDI_PERM_WO;
+        return NYX_PERM_WO;
     }
     else if(strcmp("rw", perm) == 0) {
-        return INDI_PERM_RW;
+        return NYX_PERM_RW;
     }
 
-    fprintf(stderr, "Internal error in `indi_str_to_perm`\n");
+    fprintf(stderr, "Internal error in `nyx_str_to_perm`\n");
     fflush(stderr);
     exit(1);
 }
@@ -96,38 +96,38 @@ indi_perm_t indi_str_to_perm(STR_t perm)
 /* RULE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_rule_to_str(indi_rule_t rule)
+STR_t nyx_rule_to_str(nyx_rule_t rule)
 {
     switch(rule)
     {
-        case INDI_RULE_ONE_OF_MANY:
+        case NYX_RULE_ONE_OF_MANY:
             return "OneOfMany";
-        case INDI_RULE_AT_MOST_ONE:
+        case NYX_RULE_AT_MOST_ONE:
             return "AtMostOne";
-        case INDI_RULE_ANY_OF_MANY:
+        case NYX_RULE_ANY_OF_MANY:
             return "AnyOfMany";
     }
 
-    fprintf(stderr, "Internal error in `indi_rule_to_str`\n");
+    fprintf(stderr, "Internal error in `nyx_rule_to_str`\n");
     fflush(stderr);
     exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_rule_t indi_str_to_rule(STR_t rule)
+nyx_rule_t nyx_str_to_rule(STR_t rule)
 {
     /**/ if(strcmp("OneOfMany", rule) == 0) {
-        return INDI_RULE_ONE_OF_MANY;
+        return NYX_RULE_ONE_OF_MANY;
     }
     else if(strcmp("AtMostOne", rule) == 0) {
-        return INDI_RULE_AT_MOST_ONE;
+        return NYX_RULE_AT_MOST_ONE;
     }
     else if(strcmp("AnyOfMany", rule) == 0) {
-        return INDI_RULE_ANY_OF_MANY;
+        return NYX_RULE_ANY_OF_MANY;
     }
 
-    fprintf(stderr, "Internal error in `indi_str_to_rule`\n");
+    fprintf(stderr, "Internal error in `nyx_str_to_rule`\n");
     fflush(stderr);
     exit(1);
 }
@@ -136,33 +136,33 @@ indi_rule_t indi_str_to_rule(STR_t rule)
 /* ONOFF                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_onoff_to_str(indi_onoff_t onoff)
+STR_t nyx_onoff_to_str(nyx_onoff_t onoff)
 {
     switch(onoff)
     {
-        case INDI_ONOFF_ON:
+        case NYX_ONOFF_ON:
             return "On";
-        case INDI_ONOFF_OFF:
+        case NYX_ONOFF_OFF:
             return "Off";
     }
 
-    fprintf(stderr, "Internal error in `indi_onoff_to_str`\n");
+    fprintf(stderr, "Internal error in `nyx_onoff_to_str`\n");
     fflush(stderr);
     exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_onoff_t indi_str_to_onoff(STR_t onoff)
+nyx_onoff_t nyx_str_to_onoff(STR_t onoff)
 {
     /**/ if(strcmp("On", onoff) == 0) {
-        return INDI_ONOFF_ON;
+        return NYX_ONOFF_ON;
     }
     else if(strcmp("Off", onoff) == 0) {
-        return INDI_ONOFF_OFF;
+        return NYX_ONOFF_OFF;
     }
 
-    fprintf(stderr, "Internal error in `indi_str_to_onoff`\n");
+    fprintf(stderr, "Internal error in `nyx_str_to_onoff`\n");
     fflush(stderr);
     exit(1);
 }
@@ -171,38 +171,38 @@ indi_onoff_t indi_str_to_onoff(STR_t onoff)
 /* BLOB                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_blob_to_str(indi_blob_t blob)
+STR_t nyx_blob_to_str(nyx_blob_t blob)
 {
     switch(blob)
     {
-        case INDI_BLOB_NEVER:
+        case NYX_BLOB_NEVER:
             return "Never";
-        case INDI_BLOB_ALSO:
+        case NYX_BLOB_ALSO:
             return "Also";
-        case INDI_BLOB_ONLY:
+        case NYX_BLOB_ONLY:
             return "Only";
     }
 
-    fprintf(stderr, "Internal error in `indi_blob_to_str`\n");
+    fprintf(stderr, "Internal error in `nyx_blob_to_str`\n");
     fflush(stderr);
     exit(1);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_blob_t indi_str_to_blob(STR_t blob)
+nyx_blob_t nyx_str_to_blob(STR_t blob)
 {
     /**/ if(strcmp("Never", blob) == 0) {
-        return INDI_BLOB_NEVER;
+        return NYX_BLOB_NEVER;
     }
     else if(strcmp("Also", blob) == 0) {
-        return INDI_BLOB_ALSO;
+        return NYX_BLOB_ALSO;
     }
     else if(strcmp("Only", blob) == 0) {
-        return INDI_BLOB_ONLY;
+        return NYX_BLOB_ONLY;
     }
 
-    fprintf(stderr, "Internal error in `indi_str_to_blob`\n");
+    fprintf(stderr, "Internal error in `nyx_str_to_blob`\n");
     fflush(stderr);
     exit(1);
 }
@@ -211,13 +211,13 @@ indi_blob_t indi_str_to_blob(STR_t blob)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
+bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 {
-    indi_object_t *src_object = indi_dict_get(src, key);
+    nyx_object_t *src_object = nyx_dict_get(src, key);
 
     if(src_object != NULL)
     {
-        indi_object_t *dst_object = indi_dict_get(dst, key);
+        nyx_object_t *dst_object = nyx_dict_get(dst, key);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -225,24 +225,24 @@ bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            case INDI_TYPE_NUMBER:
+            case NYX_TYPE_NUMBER:
             {
-                double src_value = indi_number_get((indi_number_t *) src_object);
+                double src_value = nyx_number_get((nyx_number_t *) src_object);
 
                 if(dst_object != NULL && dst_object->type == src_object->type)
                 {
-                    double dst_value = indi_number_get((indi_number_t *) dst_object);
+                    double dst_value = nyx_number_get((nyx_number_t *) dst_object);
 
                     if(dst_value != src_value)
                     {
-                        indi_dict_set(dst, key, indi_number_from(src_value));
+                        nyx_dict_set(dst, key, nyx_number_from(src_value));
 
                         return true;
                     }
                 }
                 else
                 {
-                    indi_dict_set(dst, key, indi_number_from(src_value));
+                    nyx_dict_set(dst, key, nyx_number_from(src_value));
 
                     return true;
                 }
@@ -252,24 +252,24 @@ bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            case INDI_TYPE_STRING:
+            case NYX_TYPE_STRING:
             {
-                STR_t src_value = indi_string_get((indi_string_t *) src_object);
+                STR_t src_value = nyx_string_get((nyx_string_t *) src_object);
 
                 if(dst_object != NULL && dst_object->type == src_object->type)
                 {
-                    STR_t dst_value = indi_string_get((indi_string_t *) dst_object);
+                    STR_t dst_value = nyx_string_get((nyx_string_t *) dst_object);
 
                     if(strcmp(dst_value, src_value) != 0)
                     {
-                        indi_dict_set(dst, key, indi_string_from(src_value));
+                        nyx_dict_set(dst, key, nyx_string_from(src_value));
 
                         return true;
                     }
                 }
                 else
                 {
-                    indi_dict_set(dst, key, indi_string_from(src_value));
+                    nyx_dict_set(dst, key, nyx_string_from(src_value));
 
                     return true;
                 }
@@ -316,7 +316,7 @@ void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
+void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -324,7 +324,7 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 
     internal_get_timestamp(timestamp, sizeof(timestamp));
 
-    indi_dict_set(dict, "@timestamp", indi_string_from(timestamp));
+    nyx_dict_set(dict, "@timestamp", nyx_string_from(timestamp));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -333,19 +333,19 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
         /*------------------------------------------------------------------------------------------------------------*/
 
         if(opts->label != NULL) {
-            indi_dict_set(dict, "@label", indi_string_from(opts->label));
+            nyx_dict_set(dict, "@label", nyx_string_from(opts->label));
         }
 
         if(opts->group != NULL) {
-            indi_dict_set(dict, "@group", indi_string_from(opts->group));
+            nyx_dict_set(dict, "@group", nyx_string_from(opts->group));
         }
 
         if(opts->timeout > 0.00) {
-            indi_dict_set(dict, "@timeout", indi_number_from(opts->timeout));
+            nyx_dict_set(dict, "@timeout", nyx_number_from(opts->timeout));
         }
 
         if(opts->message != NULL) {
-            indi_dict_set(dict, "@message", indi_string_from(opts->message));
+            nyx_dict_set(dict, "@message", nyx_string_from(opts->message));
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -356,17 +356,17 @@ void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname)
+nyx_dict_t *internal_xxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *result = indi_dict_new();
+    nyx_dict_t *result = nyx_dict_new();
 
-    indi_list_t *children = indi_list_new();
+    nyx_list_t *children = nyx_list_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_set(result, "<>", indi_string_from(set_tagname));
+    nyx_dict_set(result, "<>", nyx_string_from(set_tagname));
 
     internal_copy_entry(result, def_vector, "@client");
     internal_copy_entry(result, def_vector, "@device");
@@ -376,38 +376,38 @@ indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t se
     internal_copy_entry(result, def_vector, "@timestamp");
     internal_copy_entry(result, def_vector, "@message");
 
-    indi_dict_set(result, "children", children);
+    nyx_dict_set(result, "children", children);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     int idx;
 
-    indi_object_t *object;
+    nyx_object_t *object;
 
-    indi_object_t *list = indi_dict_get(def_vector, "children");
+    nyx_object_t *list = nyx_dict_get(def_vector, "children");
 
-    for(indi_list_iter_t iter = INDI_LIST_ITER(list); indi_list_iterate(&iter, &idx, &object);)
+    for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &object);)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_dict_t *dict = indi_dict_new();
+        nyx_dict_t *dict = nyx_dict_new();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_dict_set(dict, "<>", indi_string_from(one_tagname));
+        nyx_dict_set(dict, "<>", nyx_string_from(one_tagname));
 
-        internal_copy_entry(dict, (indi_dict_t *) object, "$");
-        internal_copy_entry(dict, (indi_dict_t *) object, "@name");
+        internal_copy_entry(dict, (nyx_dict_t *) object, "$");
+        internal_copy_entry(dict, (nyx_dict_t *) object, "@name");
 
         if(strcmp(one_tagname, "oneBLOB") == 0)
         {
-            internal_copy_entry(dict, (indi_dict_t *) object, "@size");
-            internal_copy_entry(dict, (indi_dict_t *) object, "@format");
+            internal_copy_entry(dict, (nyx_dict_t *) object, "@size");
+            internal_copy_entry(dict, (nyx_dict_t *) object, "@format");
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_list_push(children, dict);
+        nyx_list_push(children, dict);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

@@ -7,12 +7,12 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef INDI_BASE_INDI_BASE_INTERNAL_H
-#define INDI_BASE_INDI_BASE_INTERNAL_H
+#ifndef NYX_BASE_NYX_BASE_INTERNAL_H
+#define NYX_BASE_NYX_BASE_INTERNAL_H
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include "indi_node.h"
+#include "nyx_node.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -28,23 +28,23 @@ extern "C" {
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_notify(
-    indi_object_t *object
+void nyx_object_notify(
+    nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_boolean_dup(
+str_t nyx_boolean_dup(
     bool b
 );
 
-str_t indi_double_dup(
+str_t nyx_double_dup(
     double d
 );
 
-str_t indi_string_dup(
+str_t nyx_string_dup(
     STR_t s
 );
 
@@ -52,7 +52,7 @@ str_t indi_string_dup(
 /* UTF-8                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_unicode_to_utf8(
+int nyx_unicode_to_utf8(
     uint32_t unicode_char,
     str_t p
 );
@@ -63,59 +63,59 @@ int indi_unicode_to_utf8(
 
 typedef struct
 {
-    struct indi_string_builder_node_s *head;
-    struct indi_string_builder_node_s *tail;
+    struct nyx_string_builder_node_s *head;
+    struct nyx_string_builder_node_s *tail;
 
-} indi_string_builder_t;
+} nyx_string_builder_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_string_builder_t *indi_string_builder_new();
+nyx_string_builder_t *nyx_string_builder_new();
 
-void indi_string_builder_free(
-    indi_string_builder_t *sb
+void nyx_string_builder_free(
+    nyx_string_builder_t *sb
 );
 
-void indi_string_builder_clear(
-    indi_string_builder_t *sb
+void nyx_string_builder_clear(
+    nyx_string_builder_t *sb
 );
 
-void indi_string_builder_append_n(
-    indi_string_builder_t *sb,
+void nyx_string_builder_append_n(
+    nyx_string_builder_t *sb,
     STR_t args[],
     size_t n
 );
 
-size_t indi_string_builder_length(
-    indi_string_builder_t *sb
+size_t nyx_string_builder_length(
+    nyx_string_builder_t *sb
 );
 
-str_t indi_string_builder_to_string(
-    indi_string_builder_t *sb
+str_t nyx_string_builder_to_string(
+    nyx_string_builder_t *sb
 );
 
-str_t indi_string_builder_to_cstring(
-    indi_string_builder_t *sb
+str_t nyx_string_builder_to_cstring(
+    nyx_string_builder_t *sb
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define indi_string_builder_append(sb, ...) ({                                                                         \
+#define nyx_string_builder_append(sb, ...) ({                                                                         \
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
-    indi_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                              \
+    nyx_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                              \
 })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define indi_string_builder_from(...) ({                                                                               \
+#define nyx_string_builder_from(...) ({                                                                               \
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
-    indi_string_builder_t *_sb = indi_string_builder_new();                                                             \
+    nyx_string_builder_t *_sb = nyx_string_builder_new();                                                             \
                                                                                                                        \
-    indi_string_builder_append_n(_sb, args, sizeof(args) / sizeof(STR_t));                                              \
+    nyx_string_builder_append_n(_sb, args, sizeof(args) / sizeof(STR_t));                                              \
                                                                                                                        \
     _sb;                                                                                                                \
 })
@@ -126,11 +126,11 @@ str_t indi_string_builder_to_cstring(
 
 void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size);
 
-void internal_set_opts(indi_dict_t *dict, indi_opts_t *opts);
+void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts);
 
-bool internal_copy_entry(indi_dict_t *dst, const indi_dict_t *src, STR_t key);
+bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key);
 
-indi_dict_t *internal_xxx_set_vector_new(const indi_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname);
+nyx_dict_t *internal_xxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STREAM                                                                                                             */
@@ -146,23 +146,23 @@ typedef struct
     size_t pos;
     size_t len;
 
-} indi_stream_t;
+} nyx_stream_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define INDI_STREAM() \
-            ((indi_stream_t) {.idx = 0x00, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
+#define NYX_STREAM() \
+            ((nyx_stream_t) {.idx = 0x00, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_opening_tag(
-        indi_stream_t *stream,
+bool nyx_stream_detect_opening_tag(
+        nyx_stream_t *stream,
         size_t size,
         BUFF_t buff
 );
 
-bool indi_stream_detect_closing_tag(
-        indi_stream_t *stream,
+bool nyx_stream_detect_closing_tag(
+        nyx_stream_t *stream,
         size_t size,
         BUFF_t buff
 );
@@ -175,7 +175,7 @@ bool indi_stream_detect_closing_tag(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#endif /* INDI_BASE_INDI_BASE_INTERNAL_H */
+#endif /* NYX_BASE_NYX_BASE_INTERNAL_H */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

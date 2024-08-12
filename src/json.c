@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -68,7 +68,7 @@ typedef struct json_parser_s
 #define RELEASE(t) \
             if(CHECK(JSON_TOKEN_NUMBER) || CHECK(JSON_TOKEN_STRING))        \
             {                                                               \
-                indi_memory_free(PEEK().value);                             \
+                nyx_memory_free(PEEK().value);                             \
                                                                             \
                 PEEK().value = NULL;                                        \
             }                                                               \
@@ -96,7 +96,7 @@ typedef struct json_parser_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int indi_unicode_to_utf8(uint32_t unicode_char, str_t p)
+int nyx_unicode_to_utf8(uint32_t unicode_char, str_t p)
 {
     uint8_t *up = (uint8_t *) p;
 
@@ -243,7 +243,7 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        str_t p = parser->curr_token.value = indi_memory_alloc(length + 1);
+        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
         /* COPY VALUE */
 
@@ -259,7 +259,7 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        str_t p = parser->curr_token.value = indi_memory_alloc(length + 1);
+        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
         /* COPY VALUE */
 
@@ -270,7 +270,7 @@ static void tokenizer_next(json_parser_t *parser)
                 s++;
                 if(e - s < 1)
                 {
-                    indi_memory_free(parser->curr_token.value);
+                    nyx_memory_free(parser->curr_token.value);
                     parser->curr_token.value = NULL;
                     type = JSON_TOKEN_ERROR;
                     goto _bye;
@@ -291,7 +291,7 @@ static void tokenizer_next(json_parser_t *parser)
                             s++;
                             if(e - s < 4)
                             {
-                                indi_memory_free(parser->curr_token.value);
+                                nyx_memory_free(parser->curr_token.value);
                                 parser->curr_token.value = NULL;
                                 type = JSON_TOKEN_ERROR;
                                 goto _bye;
@@ -307,7 +307,7 @@ static void tokenizer_next(json_parser_t *parser)
                                 uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
 
                                 s += 0x00000000000000000000000000000000004 - 1;
-                                p += indi_unicode_to_utf8(unicode_char, p) - 1;
+                                p += nyx_unicode_to_utf8(unicode_char, p) - 1;
                             }
                             break;
                         default:
@@ -340,14 +340,14 @@ _bye:
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_dict_t *json_parse_dict(json_parser_t *parser);
+static nyx_dict_t *json_parse_dict(json_parser_t *parser);
 
-static indi_list_t *json_parse_list(json_parser_t *parser);
+static nyx_list_t *json_parse_list(json_parser_t *parser);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_null_t *json_parse_null(json_parser_t *parser)
+static nyx_null_t *json_parse_null(json_parser_t *parser)
 {
     if(CHECK(JSON_TOKEN_NULL) == false)
     {
@@ -356,12 +356,12 @@ static indi_null_t *json_parse_null(json_parser_t *parser)
 
     NEXT();
 
-    return indi_null_new();
+    return nyx_null_new();
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_boolean_t *json_parse_true(json_parser_t *parser)
+static nyx_boolean_t *json_parse_true(json_parser_t *parser)
 {
     if(CHECK(JSON_TOKEN_TRUE) == false)
     {
@@ -370,12 +370,12 @@ static indi_boolean_t *json_parse_true(json_parser_t *parser)
 
     NEXT();
 
-    return indi_boolean_from(true);
+    return nyx_boolean_from(true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_boolean_t *json_parse_false(json_parser_t *parser)
+static nyx_boolean_t *json_parse_false(json_parser_t *parser)
 {
     if(CHECK(JSON_TOKEN_FALSE) == false)
     {
@@ -384,12 +384,12 @@ static indi_boolean_t *json_parse_false(json_parser_t *parser)
 
     NEXT();
 
-    return indi_boolean_from(false);
+    return nyx_boolean_from(false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_number_t *json_parse_number(json_parser_t *parser)
+static nyx_number_t *json_parse_number(json_parser_t *parser)
 {
     if(CHECK(JSON_TOKEN_NUMBER == false))
     {
@@ -398,9 +398,9 @@ static indi_number_t *json_parse_number(json_parser_t *parser)
 
     str_t value = PEEK().value;
 
-    indi_number_t *result = indi_number_from(atof(value)); // NOLINT(*-err34-c)
+    nyx_number_t *result = nyx_number_from(atof(value)); // NOLINT(*-err34-c)
 
-    indi_memory_free(value);
+    nyx_memory_free(value);
 
     NEXT();
 
@@ -409,7 +409,7 @@ static indi_number_t *json_parse_number(json_parser_t *parser)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_string_t *json_parse_string(json_parser_t *parser)
+static nyx_string_t *json_parse_string(json_parser_t *parser)
 {
     if(CHECK(JSON_TOKEN_STRING) == false)
     {
@@ -418,9 +418,9 @@ static indi_string_t *json_parse_string(json_parser_t *parser)
 
     str_t value = PEEK().value;
 
-    indi_string_t *result = indi_string_from(/**/(value)); // NOLINT(*-err34-c)
+    nyx_string_t *result = nyx_string_from(/**/(value)); // NOLINT(*-err34-c)
 
-    indi_memory_free(value);
+    nyx_memory_free(value);
 
     NEXT();
 
@@ -429,9 +429,9 @@ static indi_string_t *json_parse_string(json_parser_t *parser)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-recursion)
+static nyx_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-recursion)
 {
-    indi_dict_t *result = indi_dict_new();
+    nyx_dict_t *result = nyx_dict_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -461,7 +461,7 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
 
         if(CHECK(JSON_TOKEN_COLON) == false)
         {
-            indi_memory_free(key);
+            nyx_memory_free(key);
 
             goto _err;
         }
@@ -496,18 +496,18 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
 
         if(value == NULL)
         {
-            indi_memory_free(key);
+            nyx_memory_free(key);
 
             goto _err;
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_dict_set(result, key, value);
+        nyx_dict_set(result, key, value);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_memory_free(key);
+        nyx_memory_free(key);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -547,16 +547,16 @@ static indi_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-rec
 _err:
     RELEASE(JSON_TOKEN_ERROR);
 
-    indi_dict_free(result);
+    nyx_dict_free(result);
 
     return NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static indi_list_t *json_parse_list(json_parser_t *parser) // NOLINT(misc-no-recursion)
+static nyx_list_t *json_parse_list(json_parser_t *parser) // NOLINT(misc-no-recursion)
 {
-    indi_list_t *result = indi_list_new();
+    nyx_list_t *result = nyx_list_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -604,7 +604,7 @@ static indi_list_t *json_parse_list(json_parser_t *parser) // NOLINT(misc-no-rec
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_list_push(result, value);
+        nyx_list_push(result, value);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -644,14 +644,14 @@ static indi_list_t *json_parse_list(json_parser_t *parser) // NOLINT(misc-no-rec
 _err:
     RELEASE(JSON_TOKEN_ERROR);
 
-    indi_list_free(result);
+    nyx_list_free(result);
 
     return NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_object_t *indi_object_parse(__NULLABLE__ STR_t text)
+nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
 {
     if(text == NULL)
     {
@@ -674,35 +674,35 @@ indi_object_t *indi_object_parse(__NULLABLE__ STR_t text)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_object_t *result = NULL;
+    nyx_object_t *result = NULL;
 
     /**/ if(CHECK(JSON_TOKEN_NULL)) {
-        result = (indi_object_t *) json_parse_null(parser);
+        result = (nyx_object_t *) json_parse_null(parser);
     }
     else if(CHECK(JSON_TOKEN_TRUE)) {
-        result = (indi_object_t *) json_parse_true(parser);
+        result = (nyx_object_t *) json_parse_true(parser);
     }
     else if(CHECK(JSON_TOKEN_FALSE)) {
-        result = (indi_object_t *) json_parse_false(parser);
+        result = (nyx_object_t *) json_parse_false(parser);
     }
     else if(CHECK(JSON_TOKEN_NUMBER)) {
-        result = (indi_object_t *) json_parse_number(parser);
+        result = (nyx_object_t *) json_parse_number(parser);
     }
     else if(CHECK(JSON_TOKEN_STRING)) {
-        result = (indi_object_t *) json_parse_string(parser);
+        result = (nyx_object_t *) json_parse_string(parser);
     }
     else if(CHECK(JSON_TOKEN_CURLY_OPEN)) {
-        result = (indi_object_t *) json_parse_dict(parser);
+        result = (nyx_object_t *) json_parse_dict(parser);
     }
     else if(CHECK(JSON_TOKEN_SQUARE_OPEN)) {
-        result = (indi_object_t *) json_parse_list(parser);
+        result = (nyx_object_t *) json_parse_list(parser);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(result != NULL && CHECK(JSON_TOKEN_EOF) == false)
     {
-        indi_object_free(result);
+        nyx_object_free(result);
 
         return NULL;
     }

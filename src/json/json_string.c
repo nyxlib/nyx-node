@@ -3,19 +3,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_string_t *indi_string_new()
+nyx_string_t *nyx_string_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_string_t *object = indi_memory_alloc(sizeof(indi_string_t));
+    nyx_string_t *object = nyx_memory_alloc(sizeof(nyx_string_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->base = INDI_OBJECT(INDI_TYPE_STRING);
+    object->base = NYX_OBJECT(NYX_TYPE_STRING);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -30,30 +30,30 @@ indi_string_t *indi_string_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_free(indi_string_t *object)
+void nyx_string_free(nyx_string_t *object)
 {
     if(object->dyn)
     {
-        indi_memory_free(object->value);
+        nyx_memory_free(object->value);
     }
 
-    indi_memory_free(object);
+    nyx_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t indi_string_get(const indi_string_t *object)
+STR_t nyx_string_get(const nyx_string_t *object)
 {
     return object->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_dynamic_set(indi_string_t *object, STR_t value)
+void nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
 {
     if(value == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `indi_string_set`\n");
+        fprintf(stderr, "Null string not allowed in `nyx_string_set`\n");
         fflush(stderr);
         return;
     }
@@ -64,18 +64,18 @@ void indi_string_dynamic_set(indi_string_t *object, STR_t value)
 
         if(object->dyn)
         {
-            indi_memory_free(object->value);
+            nyx_memory_free(object->value);
         }
 
         object->dyn = true;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->value = indi_string_dup(value);
+        object->value = nyx_string_dup(value);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_object_notify(&object->base);
+        nyx_object_notify(&object->base);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -83,11 +83,11 @@ void indi_string_dynamic_set(indi_string_t *object, STR_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_static_set(indi_string_t *object, STR_t value)
+void nyx_string_static_set(nyx_string_t *object, STR_t value)
 {
     if(value == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `indi_string_set`\n");
+        fprintf(stderr, "Null string not allowed in `nyx_string_set`\n");
         fflush(stderr);
         return;
     }
@@ -98,7 +98,7 @@ void indi_string_static_set(indi_string_t *object, STR_t value)
 
         if(object->dyn)
         {
-            indi_memory_free(object->value);
+            nyx_memory_free(object->value);
         }
 
         object->dyn = false;
@@ -109,7 +109,7 @@ void indi_string_static_set(indi_string_t *object, STR_t value)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_object_notify(&object->base);
+        nyx_object_notify(&object->base);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -117,26 +117,26 @@ void indi_string_static_set(indi_string_t *object, STR_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_string(const indi_string_t *object)
+str_t nyx_string_to_string(const nyx_string_t *object)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(object->value);
+    nyx_string_builder_t *sb = nyx_string_builder_from(object->value);
 
-    str_t result = indi_string_builder_to_string(sb);
+    str_t result = nyx_string_builder_to_string(sb);
 
-    indi_string_builder_free(sb);
+    nyx_string_builder_free(sb);
 
     return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_to_cstring(const indi_string_t *object)
+str_t nyx_string_to_cstring(const nyx_string_t *object)
 {
-    indi_string_builder_t *sb = indi_string_builder_from(object->value);
+    nyx_string_builder_t *sb = nyx_string_builder_from(object->value);
 
-    str_t result = indi_string_builder_to_cstring(sb);
+    str_t result = nyx_string_builder_to_cstring(sb);
 
-    indi_string_builder_free(sb);
+    nyx_string_builder_free(sb);
 
     return result;
 }

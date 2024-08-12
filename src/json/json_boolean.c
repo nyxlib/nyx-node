@@ -1,18 +1,18 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_boolean_t *indi_boolean_new()
+nyx_boolean_t *nyx_boolean_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_boolean_t *object = indi_memory_alloc(sizeof(indi_boolean_t));
+    nyx_boolean_t *object = nyx_memory_alloc(sizeof(nyx_boolean_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->base = INDI_OBJECT(INDI_TYPE_BOOLEAN);
+    object->base = NYX_OBJECT(NYX_TYPE_BOOLEAN);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -25,37 +25,37 @@ indi_boolean_t *indi_boolean_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_boolean_free(indi_boolean_t *object)
+void nyx_boolean_free(nyx_boolean_t *object)
 {
     object->value = false;
 
-    indi_memory_free(object);
+    nyx_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_boolean_get(const indi_boolean_t *object)
+bool nyx_boolean_get(const nyx_boolean_t *object)
 {
     return object->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_boolean_set(indi_boolean_t *object, bool value)
+void nyx_boolean_set(nyx_boolean_t *object, bool value)
 {
     if(object->value != value)
     {
         object->value = value;
 
-        indi_object_notify(&object->base);
+        nyx_object_notify(&object->base);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_boolean_to_string(const indi_boolean_t *object)
+str_t nyx_boolean_to_string(const nyx_boolean_t *object)
 {
-    return indi_boolean_dup(object->value);
+    return nyx_boolean_dup(object->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -7,7 +7,7 @@
 
 #include <libxml/parser.h>
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -29,15 +29,15 @@ static size_t used_mem = 0;
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_memory_initialize()
+void nyx_memory_initialize()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     xmlMemSetup(
-        (buff_t) indi_memory_free,
-        (buff_t) indi_memory_alloc,
-        (buff_t) indi_memory_realloc,
-        (buff_t) indi_string_dup
+        (buff_t) nyx_memory_free,
+        (buff_t) nyx_memory_alloc,
+        (buff_t) nyx_memory_realloc,
+        (buff_t) nyx_string_dup
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -51,7 +51,7 @@ void indi_memory_initialize()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_memory_finalize()
+void nyx_memory_finalize()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -69,7 +69,7 @@ void indi_memory_finalize()
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_memory_free(__NULLABLE__ buff_t buff)
+size_t nyx_memory_free(__NULLABLE__ buff_t buff)
 {
     if(buff == NULL)
     {
@@ -105,7 +105,7 @@ size_t indi_memory_free(__NULLABLE__ buff_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t indi_memory_alloc(__ZEROABLE__ size_t size)
+buff_t nyx_memory_alloc(__ZEROABLE__ size_t size)
 {
     if(size == 0x00)
     {
@@ -140,14 +140,14 @@ buff_t indi_memory_alloc(__ZEROABLE__ size_t size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t indi_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
+buff_t nyx_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
 {
     if(buff == NULL) {
-        return indi_memory_alloc(size);
+        return nyx_memory_alloc(size);
     }
 
     if(size == 0x00) {
-        indi_memory_free(buff); return NULL;
+        nyx_memory_free(buff); return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -189,15 +189,15 @@ buff_t indi_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_boolean_dup(bool b)
+str_t nyx_boolean_dup(bool b)
 {
     str_t str;
 
     if(b) {
-        str = strcpy(indi_memory_alloc(4 + 1), "true");
+        str = strcpy(nyx_memory_alloc(4 + 1), "true");
     }
     else {
-        str = strcpy(indi_memory_alloc(5 + 1), "false");
+        str = strcpy(nyx_memory_alloc(5 + 1), "false");
     }
 
     return str;
@@ -205,11 +205,11 @@ str_t indi_boolean_dup(bool b)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_double_dup(double d)
+str_t nyx_double_dup(double d)
 {
     if(!isnan(d))
     {
-        str_t str = indi_memory_alloc(32 + 1);
+        str_t str = nyx_memory_alloc(32 + 1);
 
         snprintf(str, 32, "%lf", d);
 
@@ -221,11 +221,11 @@ str_t indi_double_dup(double d)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_dup(STR_t s)
+str_t nyx_string_dup(STR_t s)
 {
     if(s != NULL)
     {
-        str_t str = indi_memory_alloc(strlen(s) + 1);
+        str_t str = nyx_memory_alloc(strlen(s) + 1);
 
         strcpy(str, s);
 
@@ -238,7 +238,7 @@ str_t indi_string_dup(STR_t s)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_notify(indi_object_t *object)
+void nyx_object_notify(nyx_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {
@@ -251,48 +251,48 @@ void indi_object_notify(indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_object_free(__NULLABLE__ indi_object_t *object)
+void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 {
     if(object == NULL)
     {
         return;
     }
 
-    if(object->magic != INDI_OBJECT_MAGIC)
+    if(object->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `indi_object_free`\n");
+        fprintf(stderr, "Invalid object in `nyx_object_free`\n");
         fflush(stderr);
         exit(1);
     }
 
     switch(object->type)
     {
-        case INDI_TYPE_NULL:
-            indi_null_free((indi_null_t *) object);
+        case NYX_TYPE_NULL:
+            nyx_null_free((nyx_null_t *) object);
             break;
 
-        case INDI_TYPE_NUMBER:
-            indi_number_free((indi_number_t *) object);
+        case NYX_TYPE_NUMBER:
+            nyx_number_free((nyx_number_t *) object);
             break;
 
-        case INDI_TYPE_BOOLEAN:
-            indi_boolean_free((indi_boolean_t *) object);
+        case NYX_TYPE_BOOLEAN:
+            nyx_boolean_free((nyx_boolean_t *) object);
             break;
 
-        case INDI_TYPE_STRING:
-            indi_string_free((indi_string_t *) object);
+        case NYX_TYPE_STRING:
+            nyx_string_free((nyx_string_t *) object);
             break;
 
-        case INDI_TYPE_LIST:
-            indi_list_free((indi_list_t *) object);
+        case NYX_TYPE_LIST:
+            nyx_list_free((nyx_list_t *) object);
             break;
 
-        case INDI_TYPE_DICT:
-            indi_dict_free((indi_dict_t *) object);
+        case NYX_TYPE_DICT:
+            nyx_dict_free((nyx_dict_t *) object);
             break;
 
         default:
-            fprintf(stderr, "Internal error in `indi_object_free`\n");
+            fprintf(stderr, "Internal error in `nyx_object_free`\n");
             fflush(stderr);
             exit(1);
     }
@@ -300,42 +300,42 @@ void indi_object_free(__NULLABLE__ indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_object_to_string(__NULLABLE__ const indi_object_t *object)
+str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
 {
     if(object == NULL)
     {
         return NULL;
     }
 
-    if(object->magic != INDI_OBJECT_MAGIC)
+    if(object->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `indi_object_to_cstring`\n");
+        fprintf(stderr, "Invalid object in `nyx_object_to_cstring`\n");
         fflush(stderr);
         exit(1);
     }
 
     switch(object->type)
     {
-        case INDI_TYPE_NULL:
-            return indi_null_to_string((indi_null_t *) object);
+        case NYX_TYPE_NULL:
+            return nyx_null_to_string((nyx_null_t *) object);
 
-        case INDI_TYPE_NUMBER:
-            return indi_number_to_string((indi_number_t *) object);
+        case NYX_TYPE_NUMBER:
+            return nyx_number_to_string((nyx_number_t *) object);
 
-        case INDI_TYPE_BOOLEAN:
-            return indi_boolean_to_string((indi_boolean_t *) object);
+        case NYX_TYPE_BOOLEAN:
+            return nyx_boolean_to_string((nyx_boolean_t *) object);
 
-        case INDI_TYPE_STRING:
-            return indi_string_to_string((indi_string_t *) object);
+        case NYX_TYPE_STRING:
+            return nyx_string_to_string((nyx_string_t *) object);
 
-        case INDI_TYPE_LIST:
-            return indi_list_to_string((indi_list_t *) object);
+        case NYX_TYPE_LIST:
+            return nyx_list_to_string((nyx_list_t *) object);
 
-        case INDI_TYPE_DICT:
-            return indi_dict_to_string((indi_dict_t *) object);
+        case NYX_TYPE_DICT:
+            return nyx_dict_to_string((nyx_dict_t *) object);
 
         default:
-            fprintf(stderr, "Internal error in `indi_object_to_string`\n");
+            fprintf(stderr, "Internal error in `nyx_object_to_string`\n");
             fflush(stderr);
             exit(1);
     }
@@ -343,42 +343,42 @@ str_t indi_object_to_string(__NULLABLE__ const indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_object_to_cstring(__NULLABLE__ const indi_object_t *object)
+str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
 {
     if(object == NULL)
     {
         return NULL;
     }
 
-    if(object->magic != INDI_OBJECT_MAGIC)
+    if(object->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `indi_object_to_cstring`\n");
+        fprintf(stderr, "Invalid object in `nyx_object_to_cstring`\n");
         fflush(stderr);
         exit(1);
     }
 
     switch(object->type)
     {
-        case INDI_TYPE_NULL:
-            return indi_null_to_string((indi_null_t *) object);
+        case NYX_TYPE_NULL:
+            return nyx_null_to_string((nyx_null_t *) object);
 
-        case INDI_TYPE_NUMBER:
-            return indi_number_to_string((indi_number_t *) object);
+        case NYX_TYPE_NUMBER:
+            return nyx_number_to_string((nyx_number_t *) object);
 
-        case INDI_TYPE_BOOLEAN:
-            return indi_boolean_to_string((indi_boolean_t *) object);
+        case NYX_TYPE_BOOLEAN:
+            return nyx_boolean_to_string((nyx_boolean_t *) object);
 
-        case INDI_TYPE_STRING:
-            return indi_string_to_cstring((indi_string_t *) object);
+        case NYX_TYPE_STRING:
+            return nyx_string_to_cstring((nyx_string_t *) object);
 
-        case INDI_TYPE_LIST:
-            return indi_list_to_string((indi_list_t *) object);
+        case NYX_TYPE_LIST:
+            return nyx_list_to_string((nyx_list_t *) object);
 
-        case INDI_TYPE_DICT:
-            return indi_dict_to_string((indi_dict_t *) object);
+        case NYX_TYPE_DICT:
+            return nyx_dict_to_string((nyx_dict_t *) object);
 
         default:
-            fprintf(stderr, "Internal error in `indi_object_to_cstring`\n");
+            fprintf(stderr, "Internal error in `nyx_object_to_cstring`\n");
             fflush(stderr);
             exit(1);
     }

@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -31,7 +31,7 @@ static struct tag_def_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_opening_tag(indi_stream_t *stream, size_t size, BUFF_t buff)
+bool nyx_stream_detect_opening_tag(nyx_stream_t *stream, size_t size, BUFF_t buff)
 {
     for(int i = 0; i < TAG_DEF_NB; i++)
     {
@@ -57,7 +57,7 @@ bool indi_stream_detect_opening_tag(indi_stream_t *stream, size_t size, BUFF_t b
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_stream_detect_closing_tag(indi_stream_t *stream, size_t size, __USED__ BUFF_t buff)
+bool nyx_stream_detect_closing_tag(nyx_stream_t *stream, size_t size, __USED__ BUFF_t buff)
 {
     STR_t p = memmem(stream->s_ptr, size - stream->pos, TAGS[stream->idx].e_tag, strlen(TAGS[stream->idx].e_tag));
 

@@ -2036,7 +2036,7 @@ struct mg_connection {
   unsigned is_tls_hs : 1;      // TLS handshake is in progress
   unsigned is_udp : 1;         // UDP connection
   unsigned is_websocket : 1;   // WebSocket connection
-  unsigned is_mqtt5 : 1;       // For MQTT connection, v5 indicator
+  unsigned is_mqtt5 : 1;       // For MQTT connection, v5 nyxcator
   unsigned is_hexdumping : 1;  // Hexdump in/out traffic
   unsigned is_draining : 1;    // Send remaining data, then close and free
   unsigned is_closing : 1;     // Close and free the connection immediately
@@ -2281,7 +2281,7 @@ int64_t mg_sntp_parse(const unsigned char *buf, size_t len);
 #define MQTT_CMD_DISCONNECT 14
 #define MQTT_CMD_AUTH 15
 
-#define MQTT_PROP_PAYLOAD_FORMAT_INDICATOR 0x01
+#define MQTT_PROP_PAYLOAD_FORMAT_NYXCATOR 0x01
 #define MQTT_PROP_MESSAGE_EXPIRY_INTERVAL 0x02
 #define MQTT_PROP_CONTENT_TYPE 0x03
 #define MQTT_PROP_RESPONSE_TOPIC 0x08

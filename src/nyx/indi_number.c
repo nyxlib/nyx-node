@@ -2,26 +2,26 @@
 
 #include <stdio.h>
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void debug_callback(indi_object_t *object)
+static void debug_callback(nyx_object_t *object)
 {
-    indi_dict_t *dict = indi_text_set_vector_new((indi_dict_t *) object);
+    nyx_dict_t *dict = nyx_number_set_vector_new((nyx_dict_t *) object);
 
-    str_t json = indi_dict_to_string(dict);
+    str_t json = nyx_dict_to_string(dict);
     printf("** \033[91mNOT REGISTERED\033[0m **\n%s\n", json);
-    indi_memory_free(json);
+    nyx_memory_free(json);
 
-    indi_dict_free(dict);
+    nyx_dict_free(dict);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
+nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, float min, float max, float step, float value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -30,14 +30,19 @@ indi_dict_t *indi_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *result = indi_dict_new();
+    nyx_dict_t *result = nyx_dict_new();
 
-    indi_dict_set(result, "<>", indi_string_from("defText"));
+    nyx_dict_set(result, "<>", nyx_string_from("defNumber"));
 
-    indi_dict_set(result, "@name", indi_string_from(name));
-    indi_dict_set(result, "@label", indi_string_from(label));
+    nyx_dict_set(result, "@name", nyx_string_from(name));
+    nyx_dict_set(result, "@label", nyx_string_from(label));
+    nyx_dict_set(result, "@format", nyx_string_from(format));
 
-    indi_dict_set(result, "$", indi_string_from(value));
+    nyx_dict_set(result, "@min", nyx_number_from(min));
+    nyx_dict_set(result, "@max", nyx_number_from(max));
+    nyx_dict_set(result, "@step", nyx_number_from(step));
+
+    nyx_dict_set(result, "$", nyx_number_from(value));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -48,34 +53,34 @@ indi_dict_t *indi_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value
 /* DEF VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_text_def_vector_new(
+nyx_dict_t *nyx_number_def_vector_new(
     STR_t device,
     STR_t name,
-    indi_state_t state,
-    indi_perm_t perm,
-    indi_dict_t *defs[],
-    indi_opts_t *opts
+    nyx_state_t state,
+    nyx_perm_t perm,
+    nyx_dict_t *defs[],
+    nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *result = indi_dict_new();
+    nyx_dict_t *result = nyx_dict_new();
 
-    indi_list_t *children = indi_list_new();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    indi_dict_set(result, "<>", indi_string_from("defTextVector"));
-
-    indi_dict_set(result, "children", children);
+    nyx_list_t *children = nyx_list_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_set(result, "@client", indi_string_from("unknown"));
-    indi_dict_set(result, "@device", indi_string_from(device));
-    indi_dict_set(result, "@name", indi_string_from(name));
+    nyx_dict_set(result, "<>", nyx_string_from("defNumberVector"));
 
-    indi_dict_set(result, "@state", indi_string_from(indi_state_to_str(state)));
-    indi_dict_set(result, "@perm", indi_string_from(indi_perm_to_str(perm)));
+    nyx_dict_set(result, "children", children);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_dict_set(result, "@client", nyx_string_from("unknown"));
+    nyx_dict_set(result, "@device", nyx_string_from(device));
+    nyx_dict_set(result, "@name", nyx_string_from(name));
+
+    nyx_dict_set(result, "@state", nyx_string_from(nyx_state_to_str(state)));
+    nyx_dict_set(result, "@perm", nyx_string_from(nyx_perm_to_str(perm)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -83,7 +88,7 @@ indi_dict_t *indi_text_def_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(; *defs != NULL; defs++) indi_list_push(children, *defs);
+    for(; *defs != NULL; defs++) nyx_list_push(children, *defs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -96,9 +101,9 @@ indi_dict_t *indi_text_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_text_set_vector_new(const indi_dict_t *def_vector)
+nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *def_vector)
 {
-    return internal_xxx_set_vector_new(def_vector, "setTextVector", "oneText");
+    return internal_xxx_set_vector_new(def_vector, "setNumberVector", "oneNumber");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

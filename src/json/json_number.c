@@ -3,19 +3,19 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_number_t *indi_number_new()
+nyx_number_t *nyx_number_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_number_t *object = indi_memory_alloc(sizeof(indi_number_t));
+    nyx_number_t *object = nyx_memory_alloc(sizeof(nyx_number_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->base = INDI_OBJECT(INDI_TYPE_NUMBER);
+    object->base = NYX_OBJECT(NYX_TYPE_NUMBER);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -28,27 +28,27 @@ indi_number_t *indi_number_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_number_free(indi_number_t *object)
+void nyx_number_free(nyx_number_t *object)
 {
     object->value = 0.0;
 
-    indi_memory_free(object);
+    nyx_memory_free(object);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double indi_number_get(const indi_number_t *object)
+double nyx_number_get(const nyx_number_t *object)
 {
     return object->value;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_number_set(indi_number_t *object, double value)
+void nyx_number_set(nyx_number_t *object, double value)
 {
     if(isnan(value))
     {
-        fprintf(stderr, "NaN number not allowed in `indi_number_set`\n");
+        fprintf(stderr, "NaN number not allowed in `nyx_number_set`\n");
         fflush(stderr);
         return;
     }
@@ -57,15 +57,15 @@ void indi_number_set(indi_number_t *object, double value)
     {
         object->value = value;
 
-        indi_object_notify(&object->base);
+        nyx_object_notify(&object->base);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_number_to_string(const indi_number_t *object)
+str_t nyx_number_to_string(const nyx_number_t *object)
 {
-    return indi_double_dup(object->value);
+    return nyx_double_dup(object->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

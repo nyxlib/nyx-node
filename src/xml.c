@@ -4,25 +4,25 @@
 
 #include <libxml/tree.h>
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_xmldoc_t *indi_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, size_t size)
+nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, size_t size)
 {
     return (buff != NULL && size > 0x00) ? xmlReadMemory(buff, (int) size, "message.xml", "iso-8859-1", 0) : NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_xmldoc_t *indi_xmldoc_parse(__NULLABLE__ STR_t text)
+nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t text)
 {
     return (text != NULL) ? xmlReadMemory(text, (int) strlen(text), "message.xml", "iso-8859-1", 0) : NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_xmldoc_free(__NULLABLE__ indi_xmldoc_t *xmldoc)
+void nyx_xmldoc_free(__NULLABLE__ nyx_xmldoc_t *xmldoc)
 {
     if(xmldoc != NULL)
     {
@@ -32,7 +32,7 @@ void indi_xmldoc_free(__NULLABLE__ indi_xmldoc_t *xmldoc)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_xmldoc_to_string(__NULLABLE__ const indi_xmldoc_t *xmldoc)
+str_t nyx_xmldoc_to_string(__NULLABLE__ const nyx_xmldoc_t *xmldoc)
 {
     if(xmldoc == NULL)
     {

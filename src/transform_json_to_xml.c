@@ -4,11 +4,11 @@
 
 #include <libxml/tree.h>
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion)
+static xmlNode *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -18,41 +18,41 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
 
     STR_t key;
 
-    indi_object_t *obj1;
+    nyx_object_t *obj1;
 
-    for(indi_dict_iter_t iter1 = INDI_DICT_ITER(dict); indi_dict_iterate(&iter1, &key, &obj1);)
+    for(nyx_dict_iter_t iter1 = NYX_DICT_ITER(dict); nyx_dict_iterate(&iter1, &key, &obj1);)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
         /**/ if(strcmp(key, "<>") == 0)
         {
-            str_t value = indi_object_to_cstring(obj1);
+            str_t value = nyx_object_to_cstring(obj1);
 
             xmlNodeSetName(node, /*--------*/ BAD_CAST value);
 
-            indi_memory_free(value);
+            nyx_memory_free(value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         else if(strcmp(key, "$") == 0)
         {
-            str_t value = indi_object_to_cstring(obj1);
+            str_t value = nyx_object_to_cstring(obj1);
 
             xmlNodeSetContent(node, /*--------*/ BAD_CAST value);
 
-            indi_memory_free(value);
+            nyx_memory_free(value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         else if(key[0] == '@')
         {
-            str_t value = indi_object_to_cstring(obj1);
+            str_t value = nyx_object_to_cstring(obj1);
 
             xmlNewProp(node, BAD_CAST (key + 1), BAD_CAST value);
 
-            indi_memory_free(value);
+            nyx_memory_free(value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -61,9 +61,9 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
         {
             int idx;
 
-            indi_object_t *obj2;
+            nyx_object_t *obj2;
 
-            for(indi_list_iter_t iter2 = INDI_LIST_ITER(obj1); indi_list_iterate(&iter2, &idx, &obj2);)
+            for(nyx_list_iter_t iter2 = NYX_LIST_ITER(obj1); nyx_list_iterate(&iter2, &idx, &obj2);)
             {
                 xmlAddChild(node, transform(obj2));
             }
@@ -79,7 +79,7 @@ static xmlNode *transform(const indi_object_t *dict) // NOLINT(misc-no-recursion
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_xmldoc_t *indi_object_to_xmldoc(__NULLABLE__ const indi_object_t *object, bool validate)
+nyx_xmldoc_t *nyx_object_to_xmldoc(__NULLABLE__ const nyx_object_t *object, bool validate)
 {
     if(object == NULL)
     {
@@ -97,13 +97,13 @@ indi_xmldoc_t *indi_object_to_xmldoc(__NULLABLE__ const indi_object_t *object, b
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_xmldoc_t *xml = xmlNewDoc(BAD_CAST "1.0");
+    nyx_xmldoc_t *xml = xmlNewDoc(BAD_CAST "1.0");
 
     xmlDocSetRootElement(xml, root);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(validate == true && indi_validation_check(xml) == false)
+    if(validate == true && nyx_validation_check(xml) == false)
     {
         xmlFreeDoc(xml);
 

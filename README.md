@@ -1,4 +1,4 @@
-# Indi Node
+# Nyx Node
 
 
 # Build instructions

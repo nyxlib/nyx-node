@@ -13,7 +13,7 @@ def compile_schema():
 
     ####################################################################################################################
 
-    with open('src/schema/indi.xsd', 'rb') as f:
+    with open('src/schema/nyx.xsd', 'rb') as f:
 
         data_in = bytearray(f.read())
 
@@ -28,13 +28,13 @@ def compile_schema():
 
     ####################################################################################################################
 
-    with open('src/indi_node_schema.h', 'wt') as f:
+    with open('src/nyx_node_schema.h', 'wt') as f:
 
-        f.write(f'/* file: indi.xsd */\n\n')
+        f.write(f'/* file: nyx.xsd */\n\n')
 
-        f.write(f'#define INDI_NODE_XSD_SIZE {data_len}\n\n')
+        f.write(f'#define NYX_NODE_XSD_SIZE {data_len}\n\n')
 
-        f.write(f'char indi_node_xsd_buff[] = {{{data_out}}};\n')
+        f.write(f'char nyx_node_xsd_buff[] = {{{data_out}}};\n')
 
 ########################################################################################################################
 

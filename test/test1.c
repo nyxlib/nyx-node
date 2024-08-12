@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "../src/indi_node.h"
+#include "../src/nyx_node.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -10,11 +10,11 @@ int main()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_memory_initialize();
+    nyx_memory_initialize();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(indi_validation_initialize() == false)
+    if(nyx_validation_initialize() == false)
     {
         printf("Error initializing validation\n");
 
@@ -23,39 +23,39 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_t *def1 = indi_switch_def_new("turn_on", "Turn ON", INDI_ONOFF_ON);
-    indi_dict_t *def2 = indi_switch_def_new("turn_off", "Turn OFF", INDI_ONOFF_OFF);
+    nyx_dict_t *def1 = nyx_switch_def_new("turn_on", "Turn ON", NYX_ONOFF_ON);
+    nyx_dict_t *def2 = nyx_switch_def_new("turn_off", "Turn OFF", NYX_ONOFF_OFF);
 
-    indi_dict_t *defs[] = {def1, def2, NULL};
+    nyx_dict_t *defs[] = {def1, def2, NULL};
 
-    indi_dict_t *switch_vector = indi_switch_def_vector_new(
+    nyx_dict_t *switch_vector = nyx_switch_def_vector_new(
         "my_device",
         "my_device_onoff",
-        INDI_STATE_OK,
-        INDI_PERM_RW,
-        INDI_RULE_AT_MOST_ONE,
+        NYX_STATE_OK,
+        NYX_PERM_RW,
+        NYX_RULE_AT_MOST_ONE,
         defs,
         NULL
     );
 
-    indi_xmldoc_t *doc = indi_object_to_xmldoc(&switch_vector->base, true);
+    nyx_xmldoc_t *doc = nyx_object_to_xmldoc(&switch_vector->base, true);
 
-    str_t xml = indi_xmldoc_to_string(doc);
+    str_t xml = nyx_xmldoc_to_string(doc);
     printf("%s\n", xml);
-    indi_memory_free(xml);
+    nyx_memory_free(xml);
 
-    indi_xmldoc_free(doc);
+    nyx_xmldoc_free(doc);
 
-    indi_switch_def_set(def1, INDI_ONOFF_OFF);
-    indi_switch_def_set(def1, INDI_ONOFF_ON);
+    nyx_switch_def_set(def1, NYX_ONOFF_OFF);
+    nyx_switch_def_set(def1, NYX_ONOFF_ON);
 
-    printf("def value: %d\n", indi_switch_def_get(def1));
+    printf("def value: %d\n", nyx_switch_def_get(def1));
 
-    indi_dict_free(switch_vector);
+    nyx_dict_free(switch_vector);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(indi_validation_finalize() == false)
+    if(nyx_validation_finalize() == false)
     {
         printf("Error finalizing validation\n");
 
@@ -64,14 +64,14 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_memory_finalize();
+    nyx_memory_finalize();
 
     printf("[SUCCESS]\n");
 
     return 0;
 
 _err:
-    indi_memory_finalize();
+    nyx_memory_finalize();
 
     printf("[ERROR]\n");
 

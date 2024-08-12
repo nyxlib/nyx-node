@@ -2,7 +2,7 @@
 
 #include "mongoose/mongoose.h"
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */
@@ -61,7 +61,7 @@ static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int 
 /* SERVER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-struct indi_node_s
+struct nyx_node_s
 {
     STR_t tcp_url;
     STR_t mqtt_url;
@@ -73,7 +73,7 @@ struct indi_node_s
 
     /**/
 
-    indi_dict_t **def_vectors;
+    nyx_dict_t **def_vectors;
 
     /**/
 
@@ -90,14 +90,14 @@ struct indi_node_s
 #define MG_C_STR(a) {(char *) (a), sizeof(a) - 1}
 
 static struct mg_str SPECIAL_TOPICS[] = {
-    MG_C_STR("indi/cmd/get_clients"),
-    MG_C_STR("indi/cmd/json"),
-    MG_C_STR("indi/cmd/xml"),
+    MG_C_STR("nyx/cmd/get_clients"),
+    MG_C_STR("nyx/cmd/json"),
+    MG_C_STR("nyx/cmd/xml"),
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void tcp_sub(struct indi_node_s *node, STR_t message)
+static void tcp_sub(struct nyx_node_s *node, STR_t message)
 {
     for(struct mg_connection *connection = node->mgr.conns; connection != NULL; connection = connection->next)
     {
@@ -112,26 +112,26 @@ static void tcp_sub(struct indi_node_s *node, STR_t message)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void sub_object(struct indi_node_s *node, indi_object_t *object)
+static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(node->enable_xml)
     {
-        indi_xmldoc_t *xmldoc = indi_object_to_xmldoc(object, node->validate_xml);
+        nyx_xmldoc_t *xmldoc = nyx_object_to_xmldoc(object, node->validate_xml);
 
         if(xmldoc != NULL)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            str_t xml = indi_xmldoc_to_string(xmldoc);
-            mqtt_pub(node->mqtt_connection, mg_str("indi/xml"), mg_str(xml), 1, false);
+            str_t xml = nyx_xmldoc_to_string(xmldoc);
+            mqtt_pub(node->mqtt_connection, mg_str("nyx/xml"), mg_str(xml), 1, false);
             tcp_sub(node, xml);
-            indi_memory_free(xml);
+            nyx_memory_free(xml);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_xmldoc_free(xmldoc);
+            nyx_xmldoc_free(xmldoc);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -139,47 +139,47 @@ static void sub_object(struct indi_node_s *node, indi_object_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t json = indi_object_to_string(object);
-    mqtt_pub(node->mqtt_connection, mg_str("indi/json"), mg_str(json), 1, false);
+    str_t json = nyx_object_to_string(object);
+    mqtt_pub(node->mqtt_connection, mg_str("nyx/json"), mg_str(json), 1, false);
     ////_sub(node, json);
-    indi_memory_free(json);
+    nyx_memory_free(json);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void out_callback(indi_object_t *object)
+static void out_callback(nyx_object_t *object)
 {
-    indi_dict_t *def_vector = (indi_dict_t *) object;
+    nyx_dict_t *def_vector = (nyx_dict_t *) object;
 
-    if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
+    if((def_vector->base.flags & NYX_FLAGS_XXXX_DISABLED) == 0)
     {
-        STR_t tagname = indi_dict_get_string(def_vector, "<>");
+        STR_t tagname = nyx_dict_get_string(def_vector, "<>");
 
         if(tagname != NULL)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_dict_t *set_vector;
+            nyx_dict_t *set_vector;
 
             /**/ if(strcmp("defNumberVector", tagname) == 0) {
-                set_vector = indi_number_set_vector_new(def_vector);
+                set_vector = nyx_number_set_vector_new(def_vector);
             }
             else if(strcmp("defTextVector", tagname) == 0) {
-                set_vector = indi_text_set_vector_new(def_vector);
+                set_vector = nyx_text_set_vector_new(def_vector);
             }
             else if(strcmp("defLightVector", tagname) == 0) {
-                set_vector = indi_light_set_vector_new(def_vector);
+                set_vector = nyx_light_set_vector_new(def_vector);
             }
             else if(strcmp("defSwitchVector", tagname) == 0) {
-                set_vector = indi_switch_set_vector_new(def_vector);
+                set_vector = nyx_switch_set_vector_new(def_vector);
             }
             else if(strcmp("defBLOBVector", tagname) == 0) {
 
-                if((def_vector->base.flags & INDI_FLAGS_BLOB_DISABLED) == 0)
+                if((def_vector->base.flags & NYX_FLAGS_BLOB_DISABLED) == 0)
                 {
-                    set_vector = indi_blob_set_vector_new(def_vector);
+                    set_vector = nyx_blob_set_vector_new(def_vector);
                 }
                 else {
                     return;
@@ -191,11 +191,11 @@ static void out_callback(indi_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            sub_object(object->node, (indi_object_t *) set_vector);
+            sub_object(object->node, (nyx_object_t *) set_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_dict_free(set_vector);
+            nyx_dict_free(set_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -204,25 +204,25 @@ static void out_callback(indi_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void get_properties(indi_node_t *node, indi_dict_t *dict)
+static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t device1 = indi_dict_get_string(dict, "@device");
-    STR_t name1 = indi_dict_get_string(dict, "@name");
+    STR_t device1 = nyx_dict_get_string(dict, "@device");
+    STR_t name1 = nyx_dict_get_string(dict, "@name");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+    for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
     {
-        indi_dict_t *def_vector = *def_vector_ptr;
+        nyx_dict_t *def_vector = *def_vector_ptr;
 
-        if((def_vector->base.flags & INDI_FLAGS_XXXX_DISABLED) == 0)
+        if((def_vector->base.flags & NYX_FLAGS_XXXX_DISABLED) == 0)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t device2 = indi_dict_get_string(def_vector, "@device");
-            STR_t name2 = indi_dict_get_string(def_vector, "@name");
+            STR_t device2 = nyx_dict_get_string(def_vector, "@device");
+            STR_t name2 = nyx_dict_get_string(def_vector, "@name");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -244,7 +244,7 @@ static void get_properties(indi_node_t *node, indi_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            sub_object(node, (indi_object_t *) def_vector);
+            sub_object(node, (nyx_object_t *) def_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -253,27 +253,27 @@ static void get_properties(indi_node_t *node, indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void enable_blob(indi_node_t *node, indi_dict_t *dict)
+static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 {
-    STR_t device1 = indi_dict_get_string(dict, "@device");
-    STR_t name1 = indi_dict_get_string(dict, "@name");
-    STR_t value1 = indi_dict_get_string(dict, "$");
+    STR_t device1 = nyx_dict_get_string(dict, "@device");
+    STR_t name1 = nyx_dict_get_string(dict, "@name");
+    STR_t value1 = nyx_dict_get_string(dict, "$");
 
     if(device1 != NULL && value1 != NULL)
     {
-        indi_blob_t blob = indi_str_to_blob(value1);
+        nyx_blob_t blob = nyx_str_to_blob(value1);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
         {
-            indi_dict_t *def_vector = *def_vector_ptr;
+            nyx_dict_t *def_vector = *def_vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t device2 = indi_dict_get_string(def_vector, "@device");
-            STR_t name2 = indi_dict_get_string(def_vector, "@name");
-            STR_t tagname2 = indi_dict_get_string(dict, "<>");
+            STR_t device2 = nyx_dict_get_string(def_vector, "@device");
+            STR_t name2 = nyx_dict_get_string(def_vector, "@name");
+            STR_t tagname2 = nyx_dict_get_string(dict, "<>");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -296,11 +296,11 @@ static void enable_blob(indi_node_t *node, indi_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            /**/ if(blob == INDI_BLOB_NEVER) {
-                def_vector->base.flags |= INDI_FLAGS_BLOB_DISABLED;
+            /**/ if(blob == NYX_BLOB_NEVER) {
+                def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
             }
-            else if(blob == INDI_BLOB_ALSO) {
-                def_vector->base.flags &= ~INDI_FLAGS_BLOB_DISABLED;
+            else if(blob == NYX_BLOB_ALSO) {
+                def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -310,43 +310,43 @@ static void enable_blob(indi_node_t *node, indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void set_properties(indi_node_t *node, indi_dict_t *dict)
+static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_object_t *device1_string = indi_dict_get(dict, "@device");
-    indi_object_t *name1_string = indi_dict_get(dict, "@name");
-    indi_object_t *children1_list = indi_dict_get(dict, "children");
+    nyx_object_t *device1_string = nyx_dict_get(dict, "@device");
+    nyx_object_t *name1_string = nyx_dict_get(dict, "@name");
+    nyx_object_t *children1_list = nyx_dict_get(dict, "children");
 
-    if(device1_string != NULL && device1_string->type == INDI_TYPE_STRING
+    if(device1_string != NULL && device1_string->type == NYX_TYPE_STRING
        &&
-       name1_string != NULL && name1_string->type == INDI_TYPE_STRING
+       name1_string != NULL && name1_string->type == NYX_TYPE_STRING
        &&
-       children1_list != NULL && children1_list->type == INDI_TYPE_LIST
+       children1_list != NULL && children1_list->type == NYX_TYPE_LIST
     ) {
-        STR_t device1 = indi_string_get((indi_string_t *) device1_string);
-        STR_t name1 = indi_string_get((indi_string_t *) name1_string);
+        STR_t device1 = nyx_string_get((nyx_string_t *) device1_string);
+        STR_t name1 = nyx_string_get((nyx_string_t *) name1_string);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
         {
-            indi_dict_t *def_vector = *def_vector_ptr;
+            nyx_dict_t *def_vector = *def_vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            indi_object_t *device2_string = indi_dict_get(def_vector, "@device");
-            indi_object_t *name2_string = indi_dict_get(def_vector, "@name");
-            indi_object_t *children2_list = indi_dict_get(def_vector, "children");
+            nyx_object_t *device2_string = nyx_dict_get(def_vector, "@device");
+            nyx_object_t *name2_string = nyx_dict_get(def_vector, "@name");
+            nyx_object_t *children2_list = nyx_dict_get(def_vector, "children");
 
-            if(device2_string != NULL && device2_string->type == INDI_TYPE_STRING
+            if(device2_string != NULL && device2_string->type == NYX_TYPE_STRING
                &&
-               name2_string != NULL && name2_string->type == INDI_TYPE_STRING
+               name2_string != NULL && name2_string->type == NYX_TYPE_STRING
                &&
-               children2_list != NULL && children1_list->type == INDI_TYPE_LIST
+               children2_list != NULL && children1_list->type == NYX_TYPE_LIST
             ) {
-                STR_t device2 = indi_string_get((indi_string_t *) device2_string);
-                STR_t name2 = indi_string_get((indi_string_t *) name2_string);
+                STR_t device2 = nyx_string_get((nyx_string_t *) device2_string);
+                STR_t name2 = nyx_string_get((nyx_string_t *) name2_string);
 
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -357,48 +357,48 @@ static void set_properties(indi_node_t *node, indi_dict_t *dict)
                     int idx1;
                     int idx2;
 
-                    indi_object_t *object1;
-                    indi_object_t *object2;
+                    nyx_object_t *object1;
+                    nyx_object_t *object2;
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(indi_list_iter_t iter1 = INDI_LIST_ITER(children1_list); indi_list_iterate(&iter1, &idx1, &object1);)
+                    for(nyx_list_iter_t iter1 = NYX_LIST_ITER(children1_list); nyx_list_iterate(&iter1, &idx1, &object1);)
                     {
-                        if(object1->type == INDI_TYPE_DICT)
+                        if(object1->type == NYX_TYPE_DICT)
                         {
-                            indi_object_t *prop1_string = indi_dict_get((indi_dict_t *) object1, "@name");
+                            nyx_object_t *prop1_string = nyx_dict_get((nyx_dict_t *) object1, "@name");
 
-                            if(prop1_string != NULL && prop1_string->type == INDI_TYPE_STRING)
+                            if(prop1_string != NULL && prop1_string->type == NYX_TYPE_STRING)
                             {
-                                STR_t prop1 = indi_string_get((indi_string_t *) prop1_string);
+                                STR_t prop1 = nyx_string_get((nyx_string_t *) prop1_string);
 
                                 /*------------------------------------------------------------------------------------*/
 
-                                for(indi_list_iter_t iter2 = INDI_LIST_ITER(children2_list); indi_list_iterate(&iter2, &idx2, &object2);)
+                                for(nyx_list_iter_t iter2 = NYX_LIST_ITER(children2_list); nyx_list_iterate(&iter2, &idx2, &object2);)
                                 {
-                                    if(object2->type == INDI_TYPE_DICT)
+                                    if(object2->type == NYX_TYPE_DICT)
                                     {
-                                        indi_object_t *prop2_string = indi_dict_get((indi_dict_t *) object2, "@name");
+                                        nyx_object_t *prop2_string = nyx_dict_get((nyx_dict_t *) object2, "@name");
 
-                                        if(prop2_string != NULL && prop2_string->type == INDI_TYPE_STRING)
+                                        if(prop2_string != NULL && prop2_string->type == NYX_TYPE_STRING)
                                         {
-                                            STR_t prop2 = indi_string_get((indi_string_t *) prop2_string);
+                                            STR_t prop2 = nyx_string_get((nyx_string_t *) prop2_string);
 
                                             /*------------------------------------------------------------------------*/
 
                                             if(strcmp(prop1, prop2) == 0)
                                             {
                                                 bool modified = internal_copy_entry(
-                                                    (indi_dict_t *) object2,
-                                                    (indi_dict_t *) object1,
+                                                    (nyx_dict_t *) object2,
+                                                    (nyx_dict_t *) object1,
                                                     "$"
                                                 );
 
                                                 if(modified)
                                                 {
-                                                    str_t str = indi_object_to_string(object2);
+                                                    str_t str = nyx_object_to_string(object2);
                                                     MG_INFO(("Updating `%s::%s` with %s", device1, name1, str));
-                                                    indi_memory_free(str);
+                                                    nyx_memory_free(str);
 
                                                     if(object2->in_callback != NULL)
                                                     {
@@ -438,19 +438,19 @@ static void set_properties(indi_node_t *node, indi_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void process_message(indi_node_t *node, indi_object_t *object)
+static void process_message(nyx_node_t *node, nyx_object_t *object)
 {
-    if(object->type == INDI_TYPE_DICT)
+    if(object->type == NYX_TYPE_DICT)
     {
-        STR_t tagname = indi_dict_get_string((indi_dict_t *) object, "<>");
+        STR_t tagname = nyx_dict_get_string((nyx_dict_t *) object, "<>");
 
         if(tagname != NULL)
         {
             /**/ if(strcmp(tagname, "enableBLOB") == 0) {
-                enable_blob(node, (indi_dict_t *) object);
+                enable_blob(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tagname, "getProperties") == 0) {
-                get_properties(node, (indi_dict_t *) object);
+                get_properties(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tagname, "newNumberVector") == 0
                     ||
@@ -462,7 +462,7 @@ static void process_message(indi_node_t *node, indi_object_t *object)
                     ||
                     strcmp(tagname, "newBLOBVector") == 0
             ) {
-                set_properties(node, (indi_dict_t *) object);
+                set_properties(node, (nyx_dict_t *) object);
             }
         }
     }
@@ -472,7 +472,7 @@ static void process_message(indi_node_t *node, indi_object_t *object)
 
 static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    indi_node_t *node = (indi_node_t *) connection->fn_data;
+    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -496,30 +496,30 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         /* MG_EV_READ                                                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_stream_t stream = INDI_STREAM();
+        nyx_stream_t stream = NYX_STREAM();
 
         struct mg_iobuf *iobuf = &connection->recv;
 
-        if(indi_stream_detect_opening_tag(&stream, iobuf->len, iobuf->buf))
+        if(nyx_stream_detect_opening_tag(&stream, iobuf->len, iobuf->buf))
         {
-            if(indi_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
+            if(nyx_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(stream.s_ptr, stream.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
 
                 if(xmldoc != NULL)
                 {
-                    indi_object_t *object = indi_xmldoc_to_object(xmldoc, node->validate_xml);
+                    nyx_object_t *object = nyx_xmldoc_to_object(xmldoc, node->validate_xml);
 
                     if(object != NULL)
                     {
                         process_message(node, object);
 
-                        indi_object_free(object);
+                        nyx_object_free(object);
                     }
 
-                    indi_xmldoc_free(xmldoc);
+                    nyx_xmldoc_free(xmldoc);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -538,7 +538,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
 static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    indi_node_t *node = (indi_node_t *) connection->fn_data;
+    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -552,7 +552,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
     {
         MG_INFO(("%lu CLOSE", connection->id));
 
-        ((indi_node_t *) connection->fn_data)->mqtt_connection = NULL;
+        ((nyx_node_t *) connection->fn_data)->mqtt_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
@@ -570,7 +570,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
         for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(struct mg_str); i++)
         {
-            str_t topic = indi_memory_alloc(SPECIAL_TOPICS[i].len + node->mqtt_opts.client_id.len + 2);
+            str_t topic = nyx_memory_alloc(SPECIAL_TOPICS[i].len + node->mqtt_opts.client_id.len + 2);
 
             if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].buf, node->mqtt_opts.client_id.buf) > 0)
             {
@@ -585,7 +585,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 mqtt_sub(connection, mg_str(topic), 1);
             }
 
-            indi_memory_free(topic);
+            nyx_memory_free(topic);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -608,7 +608,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* GET_CLIENTS                                                                                        */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                mqtt_pub(connection, mg_str("indi/clients"), node->mqtt_opts.client_id, 1, false);
+                mqtt_pub(connection, mg_str("nyx/clients"), node->mqtt_opts.client_id, 1, false);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -618,13 +618,13 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_object_t *object = indi_object_parse(message->data.buf);
+                nyx_object_t *object = nyx_object_parse(message->data.buf);
 
                 if(object != NULL)
                 {
                     process_message(node, object);
 
-                    indi_object_free(object);
+                    nyx_object_free(object);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -635,20 +635,20 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                indi_xmldoc_t *xmldoc = indi_xmldoc_parse_buff(message->data.buf, message->data.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(message->data.buf, message->data.len);
 
                 if(xmldoc != NULL)
                 {
-                    indi_object_t *object = indi_xmldoc_to_object(xmldoc, node->validate_xml);
+                    nyx_object_t *object = nyx_xmldoc_to_object(xmldoc, node->validate_xml);
 
                     if(object != NULL)
                     {
                         process_message(node, object);
 
-                        indi_object_free(object);
+                        nyx_object_free(object);
                     }
 
-                    indi_xmldoc_free(xmldoc);
+                    nyx_xmldoc_free(xmldoc);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -663,7 +663,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 static void timer_handler(void *arg)
 {
-    indi_node_t *node = (indi_node_t *) arg;
+    nyx_node_t *node = (nyx_node_t *) arg;
 
     if(node->mqtt_connection == NULL)
     {
@@ -679,14 +679,14 @@ static void timer_handler(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_node_t *indi_node_initialize(
+nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t tcp_url,
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t username,
     __NULLABLE__ STR_t password,
     /**/
     STR_t node_id,
-    indi_dict_t *def_vectors[],
+    nyx_dict_t *def_vectors[],
     /**/
     int retry_ms,
     bool enable_xml,
@@ -694,30 +694,30 @@ indi_node_t *indi_node_initialize(
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_node_t *node = indi_memory_alloc(sizeof(indi_node_t));
+    nyx_node_t *node = nyx_memory_alloc(sizeof(nyx_node_t));
 
-    memset(node, 0x00, sizeof(indi_node_t));
+    memset(node, 0x00, sizeof(nyx_node_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* PATH VECTORS                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(indi_dict_t **def_vector_ptr = def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+    for(nyx_dict_t **def_vector_ptr = def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
     {
-        indi_dict_t *vector = *def_vector_ptr;
+        nyx_dict_t *vector = *def_vector_ptr;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         vector->base.out_callback = ((((NULL))));
-        indi_dict_set(vector, "@client", indi_string_from(node_id));
+        nyx_dict_set(vector, "@client", nyx_string_from(node_id));
         vector->base.out_callback = out_callback;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         int idx;
-        indi_object_t *object;
+        nyx_object_t *object;
 
-        for(indi_list_iter_t iter = INDI_LIST_ITER((indi_list_t *) indi_dict_get(vector, "children")); indi_list_iterate(&iter, &idx, &object);)
+        for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) nyx_dict_get(vector, "children")); nyx_list_iterate(&iter, &idx, &object);)
         {
             object->/**/node/**/ = node;
         }
@@ -777,7 +777,7 @@ indi_node_t *indi_node_initialize(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_node_pool(indi_node_t *node, int timeout_ms)
+void nyx_node_pool(nyx_node_t *node, int timeout_ms)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -791,7 +791,7 @@ void indi_node_pool(indi_node_t *node, int timeout_ms)
     {
         node->last_ping_ms = 0x00000000000000;
 
-        mqtt_pub(node->mqtt_connection, mg_str("indi/ping/node"), node->mqtt_opts.client_id, 1, false);
+        mqtt_pub(node->mqtt_connection, mg_str("nyx/ping/node"), node->mqtt_opts.client_id, 1, false);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -799,7 +799,7 @@ void indi_node_pool(indi_node_t *node, int timeout_ms)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_node_free(indi_node_t *node, bool free_vectors)
+void nyx_node_free(nyx_node_t *node, bool free_vectors)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -809,44 +809,44 @@ void indi_node_free(indi_node_t *node, bool free_vectors)
 
     if(free_vectors)
     {
-        for(indi_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
         {
-            indi_dict_free(*def_vector_ptr);
+            nyx_dict_free(*def_vector_ptr);
         }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_memory_free(node);
+    nyx_memory_free(node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_node_send_message(indi_node_t *node, STR_t device, STR_t message)
+void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
 {
     if(node != NULL)
     {
-        indi_dict_t *dict = indi_message_new(device, message);
+        nyx_dict_t *dict = nyx_message_new(device, message);
 
-        sub_object(node, (indi_object_t *) dict);
+        sub_object(node, (nyx_object_t *) dict);
 
-        indi_dict_free(dict);
+        nyx_dict_free(dict);
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_node_send_del_property(indi_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
 {
     if(node != NULL)
     {
-        indi_dict_t *dict = indi_del_property_new(device, name, message);
+        nyx_dict_t *dict = nyx_del_property_new(device, name, message);
 
-        sub_object(node, (indi_object_t *) dict);
+        sub_object(node, (nyx_object_t *) dict);
 
-        indi_dict_free(dict);
+        nyx_dict_free(dict);
     }
 }
 

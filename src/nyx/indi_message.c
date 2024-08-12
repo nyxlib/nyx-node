@@ -1,12 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include "../indi_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_dict_t *indi_message_new(STR_t device, STR_t message)
+nyx_dict_t *nyx_message_new(STR_t device, STR_t message)
 {
-    indi_dict_t *result = indi_dict_new();
+    nyx_dict_t *result = nyx_dict_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -16,12 +16,12 @@ indi_dict_t *indi_message_new(STR_t device, STR_t message)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_dict_set(result, "<>", indi_string_from("message"));
+    nyx_dict_set(result, "<>", nyx_string_from("message"));
 
-    indi_dict_set(result, "@client", indi_string_from("unknown"));
-    indi_dict_set(result, "@device", indi_string_from(device));
-    indi_dict_set(result, "@message", indi_string_from(message));
-    indi_dict_set(result, "@timestamp", indi_string_from(timestamp));
+    nyx_dict_set(result, "@client", nyx_string_from("unknown"));
+    nyx_dict_set(result, "@device", nyx_string_from(device));
+    nyx_dict_set(result, "@message", nyx_string_from(message));
+    nyx_dict_set(result, "@timestamp", nyx_string_from(timestamp));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

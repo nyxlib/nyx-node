@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "../src/indi_node.h"
+#include "../src/nyx_node.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -17,34 +17,34 @@ int main(int argc, char **argv)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_memory_initialize();
+    nyx_memory_initialize();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_object_t *object = indi_object_parse(argv[1]);
+    nyx_object_t *object = nyx_object_parse(argv[1]);
 
     if(object == NULL)
     {
         goto _err;
     }
 
-    str_t string = indi_object_to_string(object);
+    str_t string = nyx_object_to_string(object);
 
     printf("%s\n", string);
 
-    indi_memory_free(string);
-    indi_object_free(object);
+    nyx_memory_free(string);
+    nyx_object_free(object);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_memory_finalize();
+    nyx_memory_finalize();
 
     printf("[SUCCESS]\n\n");
 
     return 0;
 
 _err:
-    indi_memory_finalize();
+    nyx_memory_finalize();
 
     printf("[ERROR]\n\n");
 

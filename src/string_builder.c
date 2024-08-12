@@ -2,23 +2,23 @@
 
 #include <string.h>
 
-#include "indi_node_internal.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct indi_string_builder_node_s
+typedef struct nyx_string_builder_node_s
 {
-    struct indi_string_builder_node_s *next;
+    struct nyx_string_builder_node_s *next;
 
 } node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-indi_string_builder_t *indi_string_builder_new()
+nyx_string_builder_t *nyx_string_builder_new()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    indi_string_builder_t *sb = indi_memory_alloc(sizeof(indi_string_builder_t));
+    nyx_string_builder_t *sb = nyx_memory_alloc(sizeof(nyx_string_builder_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -32,16 +32,16 @@ indi_string_builder_t *indi_string_builder_new()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_builder_free(indi_string_builder_t *sb)
+void nyx_string_builder_free(nyx_string_builder_t *sb)
 {
-    indi_string_builder_clear(sb);
+    nyx_string_builder_clear(sb);
 
-    indi_memory_free(sb);
+    nyx_memory_free(sb);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_builder_clear(indi_string_builder_t *sb)
+void nyx_string_builder_clear(nyx_string_builder_t *sb)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -55,7 +55,7 @@ void indi_string_builder_clear(indi_string_builder_t *sb)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        indi_memory_free(temp);
+        nyx_memory_free(temp);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -70,7 +70,7 @@ void indi_string_builder_clear(indi_string_builder_t *sb)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void indi_string_builder_append_n(indi_string_builder_t *sb, STR_t args[], size_t n)
+void nyx_string_builder_append_n(nyx_string_builder_t *sb, STR_t args[], size_t n)
 {
     for(size_t i = 0; i < n; i++)
     {
@@ -84,13 +84,13 @@ void indi_string_builder_append_n(indi_string_builder_t *sb, STR_t args[], size_
 
         if(data == NULL)
         {
-            node = indi_memory_alloc(sizeof(node_t) + 0x00000000000006 + 1);
+            node = nyx_memory_alloc(sizeof(node_t) + 0x00000000000006 + 1);
 
             strcpy((str_t) (node + 1), "(null)");
         }
         else
         {
-            node = indi_memory_alloc(sizeof(node_t) + strlen(data) + 1);
+            node = nyx_memory_alloc(sizeof(node_t) + strlen(data) + 1);
 
             strcpy((str_t) (node + 1), data);
         }
@@ -116,7 +116,7 @@ void indi_string_builder_append_n(indi_string_builder_t *sb, STR_t args[], size_
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t indi_string_builder_length(indi_string_builder_t *sb)
+size_t nyx_string_builder_length(nyx_string_builder_t *sb)
 {
     size_t length = 0;
 
@@ -134,15 +134,15 @@ size_t indi_string_builder_length(indi_string_builder_t *sb)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static str_t to_string(indi_string_builder_t *sb, bool json_string)
+static str_t to_string(nyx_string_builder_t *sb, bool json_string)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t length = indi_string_builder_length(sb);
+    size_t length = nyx_string_builder_length(sb);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t result = indi_memory_alloc(
+    str_t result = nyx_memory_alloc(
         json_string ? 2 * length + 3
                     : 1 * length + 1
     ), p = result;
@@ -218,14 +218,14 @@ static str_t to_string(indi_string_builder_t *sb, bool json_string)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_builder_to_string(indi_string_builder_t *sb)
+str_t nyx_string_builder_to_string(nyx_string_builder_t *sb)
 {
     return to_string(sb, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t indi_string_builder_to_cstring(indi_string_builder_t *sb)
+str_t nyx_string_builder_to_cstring(nyx_string_builder_t *sb)
 {
     return to_string(sb, false);
 }

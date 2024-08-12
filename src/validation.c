@@ -4,22 +4,22 @@
 
 #include <libxml/xmlschemas.h>
 
-#include "indi_node_schema.h"
-#include "indi_node_internal.h"
+#include "nyx_node_schema.h"
+#include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static xmlSchema *INDI_SCHEMA = NULL;
+static xmlSchema *NYX_SCHEMA = NULL;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_validation_finalize()
+bool nyx_validation_finalize()
 {
-    if(INDI_SCHEMA != NULL)
+    if(NYX_SCHEMA != NULL)
     {
-        xmlSchemaFree(INDI_SCHEMA);
+        xmlSchemaFree(NYX_SCHEMA);
 
-        INDI_SCHEMA = NULL;
+        NYX_SCHEMA = NULL;
     }
 
     return true;
@@ -27,16 +27,16 @@ bool indi_validation_finalize()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_validation_initialize()
+bool nyx_validation_initialize()
 {
-    if(INDI_SCHEMA != NULL)
+    if(NYX_SCHEMA != NULL)
     {
         return true;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlSchemaParserCtxt *context = xmlSchemaNewMemParserCtxt(indi_node_xsd_buff, INDI_NODE_XSD_SIZE);
+    xmlSchemaParserCtxt *context = xmlSchemaNewMemParserCtxt(nyx_node_xsd_buff, NYX_NODE_XSD_SIZE);
 
     if(context == NULL)
     {
@@ -54,7 +54,7 @@ bool indi_validation_initialize()
     /**/
     /**/    /*--------------------------------------------------------------------------------------------------------*/
     /**/
-    /**/    INDI_SCHEMA = xmlSchemaParse(context);
+    /**/    NYX_SCHEMA = xmlSchemaParse(context);
     /**/
     /**/    /*--------------------------------------------------------------------------------------------------------*/
 
@@ -62,23 +62,23 @@ bool indi_validation_initialize()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return INDI_SCHEMA != NULL;
+    return NYX_SCHEMA != NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool indi_validation_check(const indi_xmldoc_t *xmldoc)
+bool nyx_validation_check(const nyx_xmldoc_t *xmldoc)
 {
-    if(INDI_SCHEMA == NULL)
+    if(NYX_SCHEMA == NULL)
     {
         return false;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlSchemaValidCtxt *context = xmlSchemaNewValidCtxt(INDI_SCHEMA);
+    xmlSchemaValidCtxt *context = xmlSchemaNewValidCtxt(NYX_SCHEMA);
 
     if(context == NULL)
     {
