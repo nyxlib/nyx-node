@@ -182,7 +182,7 @@ static void tokenizer_next(json_parser_t *parser)
         case '"':
             type = JSON_TOKEN_STRING;
             end++;
-            while(*end != '\"')
+            while(*end != '"')
             {
                 if(*end == '\0')
                 {

@@ -100,24 +100,24 @@ str_t nyx_string_builder_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define nyx_string_builder_append(sb, ...) ({                                                                         \
+#define nyx_string_builder_append(sb, ...) ({                                                                          \
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
-    nyx_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                              \
+    nyx_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t));                                               \
 })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define nyx_string_builder_from(...) ({                                                                               \
+#define nyx_string_builder_from(...) ({                                                                                \
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
-    nyx_string_builder_t *_sb = nyx_string_builder_new();                                                             \
+    nyx_string_builder_t *_sb = nyx_string_builder_new();                                                              \
                                                                                                                        \
     nyx_string_builder_append_n(_sb, args, sizeof(args) / sizeof(STR_t));                                              \
                                                                                                                        \
-    _sb;                                                                                                                \
+    _sb;                                                                                                               \
 })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
