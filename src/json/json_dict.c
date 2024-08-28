@@ -92,7 +92,7 @@ void nyx_dict_clear(nyx_dict_t *object)
 {
     internal_dict_clear(object);
 
-    nyx_object_notify(&object->base);
+    nyx_object_notify(&object->base, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -192,10 +192,14 @@ void nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    bool modified = true;
+
     for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
+            modified = nyx_object_compare(curr_node->value, value);
+
             nyx_object_free(curr_node->value);
 
             curr_node->value = value;
@@ -229,7 +233,7 @@ void nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    nyx_object_notify((nyx_object_t *) value);
+    nyx_object_notify((nyx_object_t *) value, modified);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }

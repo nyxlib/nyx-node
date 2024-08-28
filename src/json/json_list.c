@@ -89,7 +89,7 @@ void nyx_list_clear(nyx_list_t *object)
 {
     internal_list_clear(object);
 
-    nyx_object_notify(&object->base);
+    nyx_object_notify(&object->base, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -189,10 +189,14 @@ nyx_list_t *nyx_list_set(nyx_list_t *object, size_t idx, buff_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    bool modified = true;
+
     if(idx >= 0) for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
+            modified = nyx_object_compare(curr_node->value, value);
+
             nyx_object_free(curr_node->value);
 
             curr_node->value = value;
@@ -224,7 +228,7 @@ nyx_list_t *nyx_list_set(nyx_list_t *object, size_t idx, buff_t value)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    nyx_object_notify((nyx_object_t *) value);
+    nyx_object_notify((nyx_object_t *) value, modified);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
