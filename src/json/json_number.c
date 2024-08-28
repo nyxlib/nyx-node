@@ -53,12 +53,11 @@ void nyx_number_set(nyx_number_t *object, double value)
         return;
     }
 
-    if(object->value != value)
-    {
-        object->value = value;
+    bool modified = \
+    object->value != value;
+    object->value = value;
 
-        nyx_object_notify(&object->base);
-    }
+    nyx_object_notify(&object->base, modified);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
