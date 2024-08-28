@@ -158,15 +158,15 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 bool nyx_stream_detect_opening_tag(
-        nyx_stream_t *stream,
-        size_t size,
-        BUFF_t buff
+    nyx_stream_t *stream,
+    size_t size,
+    BUFF_t buff
 );
 
 bool nyx_stream_detect_closing_tag(
-        nyx_stream_t *stream,
-        size_t size,
-        BUFF_t buff
+    nyx_stream_t *stream,
+    size_t size,
+    BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
