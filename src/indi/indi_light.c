@@ -6,7 +6,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void debug_callback(nyx_object_t *object)
+static void debug_callback(nyx_object_t *object, bool modified)
 {
     nyx_dict_t *dict = nyx_light_set_vector_new((nyx_dict_t *) object);
 
