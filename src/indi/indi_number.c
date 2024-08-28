@@ -6,7 +6,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void debug_callback(nyx_object_t *object, __USED__ bool modified)
+static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 {
     nyx_dict_t *dict = nyx_number_set_vector_new((nyx_dict_t *) object);
 
