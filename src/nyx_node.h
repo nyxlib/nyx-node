@@ -105,8 +105,8 @@ typedef struct nyx_object_s
 
     __NULLABLE__ struct nyx_object_s *parent;
 
-    __NULLABLE__ void (* in_callback)(struct nyx_object_s *object);
-    __NULLABLE__ void (* out_callback)(struct nyx_object_s *object);
+    __NULLABLE__ void (* in_callback)(struct nyx_object_s *object, bool modified);
+    __NULLABLE__ void (* out_callback)(struct nyx_object_s *object, bool modified);
 
 } nyx_object_t;
 
@@ -123,6 +123,11 @@ nyx_object_t *nyx_object_parse(
 
 void nyx_object_free(
     __NULLABLE__ /*-*/ nyx_object_t *object
+);
+
+bool nyx_object_compare(
+    __NULLABLE__ const nyx_object_t *object1,
+    __NULLABLE__ const nyx_object_t *object2
 );
 
 str_t nyx_object_to_string(
