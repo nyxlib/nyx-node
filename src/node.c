@@ -149,7 +149,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void out_callback(nyx_object_t *object)
+static void out_callback(nyx_object_t *object, __USED__ bool modified)
 {
     nyx_dict_t *def_vector = (nyx_dict_t *) object;
 
@@ -394,16 +394,13 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                     "$"
                                                 );
 
-                                                if(modified)
-                                                {
-                                                    str_t str = nyx_object_to_string(object2);
-                                                    MG_INFO(("Updating `%s::%s` with %s", device1, name1, str));
-                                                    nyx_memory_free(str);
+                                                str_t str = nyx_object_to_string(object2);
+                                                MG_INFO(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
+                                                nyx_memory_free(str);
 
-                                                    if(object2->in_callback != NULL)
-                                                    {
-                                                        object2->in_callback(object2);
-                                                    }
+                                                if(object2->in_callback != NULL)
+                                                {
+                                                    object2->in_callback(object2, modified);
                                                 }
                                             }
 
