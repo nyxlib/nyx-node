@@ -149,7 +149,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void out_callback(nyx_object_t *object, __USED__ bool modified)
+static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 {
     nyx_dict_t *def_vector = (nyx_dict_t *) object;
 
@@ -501,6 +501,15 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         {
             if(nyx_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
             {
+                for(long i = 0; i < iobuf->len; i++)
+                {
+                    fprintf(stdout, "%c", iobuf->buf[i]);
+                    fflush(stdout);
+                }
+
+                fprintf(stdout, "\n\n");
+                fflush(stdout);
+
                 /*----------------------------------------------------------------------------------------------------*/
 
                 nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
