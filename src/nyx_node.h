@@ -37,9 +37,6 @@ double nan(const char *tag);
 #define __ZEROABLE__ \
             /* do nothing */
 
-#define __USED__ \
-            __attribute__((unused))
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef /* */ void *buff_t;
