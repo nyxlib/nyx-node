@@ -238,13 +238,16 @@ str_t nyx_string_dup(STR_t s)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_notify(nyx_object_t *object)
+void nyx_object_notify(nyx_object_t *object, bool modified)
 {
     for(; object != NULL; object = object->parent)
     {
         if(object->out_callback != NULL)
         {
-            object->out_callback(object);
+            object->out_callback(
+                object,
+                modified
+            );
         }
     }
 }
@@ -293,6 +296,52 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 
         default:
             fprintf(stderr, "Internal error in `nyx_object_free`\n");
+            fflush(stderr);
+            exit(1);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_object_compare(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ const nyx_object_t *object2)
+{
+    if(object1 == NULL || object2 == NULL)
+    {
+        return false;
+    }
+
+    if(object1->magic != NYX_OBJECT_MAGIC || object2->magic != NYX_OBJECT_MAGIC)
+    {
+        fprintf(stderr, "Invalid object in `nyx_object_compare`\n");
+        fflush(stderr);
+        exit(1);
+    }
+
+    if(object1->type != object2->type)
+    {
+        return false;
+    }
+
+    switch(object1->type)
+    {
+        case NYX_TYPE_NULL:
+            return true;
+
+        case NYX_TYPE_NUMBER:
+            return ((nyx_number_t *) object1)->value == ((nyx_number_t *) object2)->value;
+
+        case NYX_TYPE_BOOLEAN:
+            return ((nyx_boolean_t *) object1)->value == ((nyx_boolean_t *) object2)->value;
+
+        case NYX_TYPE_STRING:
+            return strcmp(((nyx_string_t *) object1)->value, ((nyx_string_t *) object2)->value) == 0;
+
+        case NYX_TYPE_LIST:
+        case NYX_TYPE_DICT:
+            return object1 == object2;
+
+        default:
+            fprintf(stderr, "Internal error in `nyx_object_compare`\n");
             fflush(stderr);
             exit(1);
     }
