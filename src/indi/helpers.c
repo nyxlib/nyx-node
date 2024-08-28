@@ -231,14 +231,11 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 
                 if(dst_object != NULL && dst_object->type == src_object->type)
                 {
-                    double dst_value = nyx_number_get((nyx_number_t *) dst_object);
+                    bool modified = nyx_number_get((nyx_number_t *) dst_object) == src_value;
 
-                    if(dst_value != src_value)
-                    {
-                        nyx_dict_set(dst, key, nyx_number_from(src_value));
+                    nyx_dict_set(dst, key, nyx_number_from(src_value));
 
-                        return true;
-                    }
+                    return modified;
                 }
                 else
                 {
@@ -246,8 +243,6 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 
                     return true;
                 }
-
-                break;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -258,14 +253,11 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 
                 if(dst_object != NULL && dst_object->type == src_object->type)
                 {
-                    STR_t dst_value = nyx_string_get((nyx_string_t *) dst_object);
+                    bool modified = strcmp(nyx_string_get((nyx_string_t *) dst_object), src_value) != 0;
 
-                    if(strcmp(dst_value, src_value) != 0)
-                    {
-                        nyx_dict_set(dst, key, nyx_string_from(src_value));
+                    nyx_dict_set(dst, key, nyx_string_from(src_value));
 
-                        return true;
-                    }
+                    return modified;
                 }
                 else
                 {
@@ -273,8 +265,6 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 
                     return true;
                 }
-
-                break;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
