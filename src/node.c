@@ -277,30 +277,40 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(tagname2 == NULL || strcmp(tagname2, "defBLOBVector") != 0
+            if(device2 == NULL
                ||
-               device2 == NULL || strcmp(device1, device2) != 0
+               tagname2 == NULL
+               ||
+               strcmp(device1, device2) != 0
+               ||
+               (name1 != NULL) && (name2 == NULL || strcmp(name1, name2) != 0)
             ) {
-                break;
+                continue;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(name1 != NULL)
+            /**/ if(blob == NYX_BLOB_ALSO)
             {
-                if((name2 == NULL || strcmp(name1, name2) != 0))
-                {
-                    break;
+                def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
+            }
+            else if(blob == NYX_BLOB_NEVER)
+            {
+                if(strcmp(tagname2, "defBLOBVector") == 0) {
+                    def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
+                }
+                else {
+                    def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
                 }
             }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            /**/ if(blob == NYX_BLOB_NEVER) {
-                def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
-            }
-            else if(blob == NYX_BLOB_ALSO) {
-                def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
+            else if(blob == NYX_BLOB_ONLY)
+            {
+                if(strcmp(tagname2, "defBLOBVector") == 0) {
+                    def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
+                }
+                else {
+                    def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
+                }
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
