@@ -43,7 +43,7 @@ Developer
 
 * [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-[Build Status]:https://gitlab.in2p3.fr/ami-team/AMITaskServer/-/commits/master
+[Build Status]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/-/commits/main
 [Build Status img]:https://gitlab.in2p3.fr/ami-team/AMITaskServer/badges/master/pipeline.svg
 
 [License]:http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.txt
