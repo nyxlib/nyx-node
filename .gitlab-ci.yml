@@ -1,0 +1,16 @@
+image: alpine:latest
+
+stages:
+  - build
+
+before_script:
+  - apk update
+  - apk add --no-cache gcc make cmake libxml2-dev
+
+build_project:
+  stage: build
+  script:
+    - mkdir -p ./build/
+    - cd ./build/
+    - cmake ..
+    - make
