@@ -35,8 +35,8 @@ cmake ..
 make
 sudo make install
 ```
-Developers
-==========
+Developer
+=========
 
 * [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
