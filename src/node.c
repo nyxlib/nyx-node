@@ -153,7 +153,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 {
     nyx_dict_t *def_vector = (nyx_dict_t *) object;
 
-    if((def_vector->base.flags & NYX_FLAGS_XXXX_DISABLED) == 0)
+    if((def_vector->base.flags & NYX_FLAGS_BOTH_DISABLED) == 0)
     {
         STR_t tagname = nyx_dict_get_string(def_vector, "<>");
 
@@ -176,14 +176,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
                 set_vector = nyx_switch_set_vector_new(def_vector);
             }
             else if(strcmp("defBLOBVector", tagname) == 0) {
-
-                if((def_vector->base.flags & NYX_FLAGS_BLOB_DISABLED) == 0)
-                {
-                    set_vector = nyx_blob_set_vector_new(def_vector);
-                }
-                else {
-                    return;
-                }
+                set_vector = nyx_blob_set_vector_new(def_vector);
             }
             else {
                 return;
@@ -217,7 +210,7 @@ static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
     {
         nyx_dict_t *def_vector = *def_vector_ptr;
 
-        if((def_vector->base.flags & NYX_FLAGS_XXXX_DISABLED) == 0)
+        if((def_vector->base.flags & NYX_FLAGS_BOTH_DISABLED) == 0)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 

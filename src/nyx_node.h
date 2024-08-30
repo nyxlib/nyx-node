@@ -89,8 +89,9 @@ typedef enum nyx_type_e
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_XXXX_DISABLED    ((uint32_t) (1 << 0))
-#define NYX_FLAGS_BLOB_DISABLED    ((uint32_t) (1 << 1))
+#define NYX_FLAGS_XXXX_DISABLED     ((uint32_t) (1 << 0))
+#define NYX_FLAGS_BLOB_DISABLED     ((uint32_t) (1 << 1))
+#define NYX_FLAGS_BOTH_DISABLED     (NYX_FLAGS_XXXX_DISABLED | NYX_FLAGS_BLOB_DISABLED)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
