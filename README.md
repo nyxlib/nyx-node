@@ -43,5 +43,5 @@ Developer
 [Build Status]:https://gitlab.in2p3.fr/ami-team/AMITaskServer/-/commits/master
 [Build Status img]:https://gitlab.in2p3.fr/ami-team/AMITaskServer/badges/master/pipeline.svg
 
-[License]:http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt
-[License img]:https://img.shields.io/badge/license-CeCILL-blue.svg
+[License]:http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.txt
+[License img]:https://img.shields.io/badge/license-CeCILL_C-blue.svg
