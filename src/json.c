@@ -306,7 +306,7 @@ static void tokenizer_next(json_parser_t *parser)
 
                                 uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
 
-                                s += 0x00000000000000000000000000000000004 - 1;
+                                s += 0x0000000000000000000000000000000004 - 1;
                                 p += nyx_unicode_to_utf8(unicode_char, p) - 1;
                             }
                             break;
