@@ -298,9 +298,13 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
                 switch(blob)
                 {
+                    /*------------------------------------------------------------------------------------------------*/
+
                     case NYX_BLOB_ALSO:
                         def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
                         break;
+
+                    /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
                         if(strcmp(tagname2, "defBLOBVector") == 0) {
@@ -311,6 +315,8 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
                         }
                         break;
 
+                    /*------------------------------------------------------------------------------------------------*/
+
                     case NYX_BLOB_ONLY:
                         if(strcmp(tagname2, "defBLOBVector") == 0) {
                             def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
@@ -319,6 +325,8 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
                             def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
                         }
                         break;
+
+                    /*------------------------------------------------------------------------------------------------*/
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
