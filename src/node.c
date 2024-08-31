@@ -474,11 +474,11 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 
         if(tagname != NULL)
         {
-            /**/ if(strcmp(tagname, "enableBLOB") == 0) {
-                enable_blob(node, (nyx_dict_t *) object);
-            }
-            else if(strcmp(tagname, "getProperties") == 0) {
+            /**/ if(strcmp(tagname, "getProperties") == 0) {
                 get_properties(node, (nyx_dict_t *) object);
+            }
+            else if(strcmp(tagname, "enableBLOB") == 0) {
+                enable_blob(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tagname, "newNumberVector") == 0
                     ||
