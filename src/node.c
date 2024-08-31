@@ -287,7 +287,7 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(strcmp(device1, device2) != 0
+                if((strcmp(device1, device2) != 0)
                    ||
                    (name1 != NULL && name2 != NULL && strcmp(name1, name2) != 0)
                 ) {
