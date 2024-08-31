@@ -219,38 +219,51 @@ static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(device1 != NULL)
+            if(device2 != NULL && name2 != NULL)
             {
-                if((device2 == NULL || strcmp(device1, device2) != 0))
-                {
-                    break;
-                }
+                /*----------------------------------------------------------------------------------------------------*/
 
-                if(name1 != NULL)
+                if(device1 != NULL)
                 {
-                    if((name2 == NULL || strcmp(name1, name2) != 0))
+                    if(strcmp(device1, device2) != 0)
                     {
-                        break;
+                        continue;
+                    }
+
+                    if(name1 != NULL)
+                    {
+                        if(strcmp(name1, name2) != 0)
+                        {
+                            continue;
+                        }
                     }
                 }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                sub_object(node, (nyx_object_t *) def_vector);
+
+                /*----------------------------------------------------------------------------------------------------*/
             }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            sub_object(node, (nyx_object_t *) def_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     STR_t device1 = nyx_dict_get_string(dict, "@device");
     STR_t name1 = nyx_dict_get_string(dict, "@name");
     STR_t value1 = nyx_dict_get_string(dict, "$");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     if(device1 != NULL && value1 != NULL)
     {
@@ -313,7 +326,11 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -325,6 +342,8 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
     nyx_object_t *device1_string = nyx_dict_get(dict, "@device");
     nyx_object_t *name1_string = nyx_dict_get(dict, "@name");
     nyx_object_t *children1_list = nyx_dict_get(dict, "children");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     if(device1_string != NULL && device1_string->type == NYX_TYPE_STRING
        &&
@@ -347,12 +366,16 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
             nyx_object_t *name2_string = nyx_dict_get(def_vector, "@name");
             nyx_object_t *children2_list = nyx_dict_get(def_vector, "children");
 
+            /*--------------------------------------------------------------------------------------------------------*/
+
             if(device2_string != NULL && device2_string->type == NYX_TYPE_STRING
                &&
                name2_string != NULL && name2_string->type == NYX_TYPE_STRING
                &&
                children2_list != NULL && children1_list->type == NYX_TYPE_LIST
             ) {
+                /*----------------------------------------------------------------------------------------------------*/
+
                 STR_t device2 = nyx_string_get((nyx_string_t *) device2_string);
                 STR_t name2 = nyx_string_get((nyx_string_t *) name2_string);
 
