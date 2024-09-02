@@ -279,7 +279,7 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             STR_t device2 = nyx_dict_get_string(def_vector, "@device");
             STR_t name2 = nyx_dict_get_string(def_vector, "@name");
-            STR_t tagname2 = nyx_dict_get_string(dict, "<>");
+            STR_t tagname2 = nyx_dict_get_string(def_vector, "<>");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -865,6 +865,20 @@ void nyx_node_free(nyx_node_t *node, bool free_vectors)
     nyx_memory_free(node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_enable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name)
+{
+    internal_mask(node->def_vectors, device, name, NYX_FLAGS_XXXX_DISABLED, true);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_disable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name)
+{
+    internal_mask(node->def_vectors, device, name, NYX_FLAGS_XXXX_DISABLED, false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

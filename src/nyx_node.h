@@ -862,6 +862,20 @@ void nyx_node_free(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+void nyx_node_enable(
+    nyx_node_t *node,
+    /*--------*/ STR_t device,
+    __NULLABLE__ STR_t name
+);
+
+void nyx_node_disable(
+    nyx_node_t *node,
+    /*--------*/ STR_t device,
+    __NULLABLE__ STR_t name
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_node_send_message(
     nyx_node_t *node,
     STR_t device,
@@ -872,7 +886,7 @@ void nyx_node_send_message(
 
 void nyx_node_send_del_property(
     nyx_node_t *node,
-    STR_t device,
+    /*--------*/ STR_t device,
     __NULLABLE__ STR_t name,
     __NULLABLE__ STR_t message
 );

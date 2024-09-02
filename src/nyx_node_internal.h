@@ -126,13 +126,35 @@ str_t nyx_string_builder_to_cstring(
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size);
+void internal_get_timestamp(
+    str_t timestamp_buff,
+    size_t timestamp_size
+);
 
-void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts);
+void internal_set_opts(
+    nyx_dict_t *dict,
+    nyx_opts_t *opts
+);
 
-bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key);
+void internal_mask(
+    nyx_dict_t **def_vectors,
+    /*--------*/ STR_t device,
+    __NULLABLE__ STR_t name,
+    uint32_t mask,
+    bool clear
+);
 
-nyx_dict_t *internal_xxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname);
+bool internal_copy_entry(
+    /*-*/ nyx_dict_t *dst,
+    const nyx_dict_t *src,
+    STR_t key
+);
+
+nyx_dict_t *internal_xxxx_set_vector_new(
+    const nyx_dict_t *def_vector,
+    STR_t set_tagname,
+    STR_t one_tagname
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STREAM                                                                                                             */
