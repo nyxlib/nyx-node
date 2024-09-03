@@ -186,10 +186,10 @@ double nyx_number_get(
     const nyx_number_t *object
 );
 
-void nyx_number_set2(
+bool nyx_number_set2(
     /*-*/ nyx_number_t *object,
     double value,
-    bool notify
+    bool propagate
 );
 
 str_t nyx_number_to_string(
@@ -198,9 +198,9 @@ str_t nyx_number_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_number_set(nyx_number_t *object, double value)
+__INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
 {
-    nyx_number_set2(object, value, true);
+    return nyx_number_set2(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -238,10 +238,10 @@ bool nyx_boolean_get(
     const nyx_boolean_t *object
 );
 
-void nyx_boolean_set2(
+bool nyx_boolean_set2(
     /*-*/ nyx_boolean_t *object,
     bool value,
-    bool notify
+    bool propagate
 );
 
 str_t nyx_boolean_to_string(
@@ -250,9 +250,9 @@ str_t nyx_boolean_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_boolean_set(nyx_boolean_t *object, bool value)
+__INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
 {
-    nyx_boolean_set2(object, value, true);
+    return nyx_boolean_set2(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -292,16 +292,16 @@ STR_t nyx_string_get(
     const nyx_string_t *object
 );
 
-void nyx_string_dynamic_set2(
+bool nyx_string_dynamic_set2(
     /*-*/ nyx_string_t *object,
     STR_t value,
-    bool notify
+    bool propagate
 );
 
-void nyx_string_static_set2(
+bool nyx_string_static_set2(
     /*-*/ nyx_string_t *object,
     STR_t value,
-    bool notify
+    bool propagate
 );
 
 str_t nyx_string_to_string(
@@ -314,16 +314,16 @@ str_t nyx_string_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
+__INLINE__ bool nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
 {
-    nyx_string_dynamic_set2(object, value, true);
+    return nyx_string_dynamic_set2(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_string_static_set(nyx_string_t *object, STR_t value)
+__INLINE__ bool nyx_string_static_set(nyx_string_t *object, STR_t value)
 {
-    nyx_string_static_set2(object, value, true);
+    return nyx_string_static_set2(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -412,11 +412,11 @@ nyx_object_t *nyx_dict_get(
     STR_t key
 );
 
-nyx_dict_t *nyx_dict_set2(
+bool nyx_dict_set2(
     /*-*/ nyx_dict_t *object,
     STR_t key,
     buff_t value,
-    bool notify
+    bool propagate
 );
 
 size_t nyx_dict_size(
@@ -451,7 +451,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ nyx_dict_t *nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
+__INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
 {
     return nyx_dict_set2(object, key, value, true);
 }
@@ -518,7 +518,7 @@ nyx_list_t *nyx_list_set2(
     /*-*/ nyx_list_t *object,
     size_t idx,
     buff_t value,
-    bool notify
+    bool propagate
 );
 
 size_t nyx_list_size(
@@ -553,7 +553,7 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ nyx_list_t *nyx_list_push(nyx_list_t *object, buff_t value)
+__INLINE__ bool nyx_list_push(nyx_list_t *object, buff_t value)
 {
     return nyx_list_set2(object, -1, value, true);
 }

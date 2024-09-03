@@ -399,6 +399,15 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                     nyx_object_t *object1;
                     nyx_object_t *object2;
 
+                    bool vector_modified = false;
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    bool is_radio_button = strcmp(nyx_dict_get_string(def_vector, "<>"), "defSwitchVector") == 0
+                                           &&
+                                           strcmp(nyx_dict_get_string(def_vector, "@rule"), "OneOfMany") == 0
+                    ;
+
                     /*------------------------------------------------------------------------------------------------*/
 
                     for(nyx_list_iter_t iter1 = NYX_LIST_ITER(children1_list); nyx_list_iterate(&iter1, &idx1, &object1);)
@@ -425,13 +434,38 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                                             /*------------------------------------------------------------------------*/
 
-                                            if(strcmp(prop1, prop2) == 0)
+                                            bool is_current = strcmp(prop1, prop2) == 0;
+
+                                            if(is_current || is_radio_button)
                                             {
-                                                bool modified = internal_copy_entry(
-                                                    (nyx_dict_t *) object2,
-                                                    (nyx_dict_t *) object1,
-                                                    "$"
-                                                );
+                                                /*--------------------------------------------------------------------*/
+
+                                                bool modified;
+
+                                                if(is_current)
+                                                {
+                                                    modified = internal_copy_entry(
+                                                        (nyx_dict_t *) object2,
+                                                        (nyx_dict_t *) object1,
+                                                        "$",
+                                                        false
+                                                    );
+                                                }
+                                                else
+                                                {
+                                                    modified = nyx_dict_set2(
+                                                        (nyx_dict_t *) object2,
+                                                        "$",
+                                                        nyx_string_static_from("Off"),
+                                                        false
+                                                    );
+                                                }
+
+                                                /*--------------------------------------------------------------------*/
+
+                                                vector_modified = vector_modified || modified;
+
+                                                /*--------------------------------------------------------------------*/
 
                                                 str_t str = nyx_object_to_string(object2);
                                                 MG_INFO(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
@@ -441,6 +475,8 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                 {
                                                     object2->in_callback(object2, modified);
                                                 }
+
+                                                /*--------------------------------------------------------------------*/
                                             }
 
                                             /*------------------------------------------------------------------------*/
@@ -452,6 +488,10 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                             }
                         }
                     }
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    nyx_object_notify(object2, vector_modified, true);
 
                     /*------------------------------------------------------------------------------------------------*/
 
@@ -540,6 +580,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         {
             if(nyx_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
             {
+/*
                 for(long i = 0; i < iobuf->len; i++)
                 {
                     fprintf(stdout, "%c", iobuf->buf[i]);
@@ -548,7 +589,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
                 fprintf(stdout, "\n\n");
                 fflush(stdout);
-
+*/
                 /*----------------------------------------------------------------------------------------------------*/
 
                 nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);

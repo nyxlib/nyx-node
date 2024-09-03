@@ -49,13 +49,13 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
+bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool propagate)
 {
     if(value == NULL)
     {
         fprintf(stderr, "Null string not allowed in `nyx_string_set`\n");
         fflush(stderr);
-        return;
+        return false;
     }
 
     if(strcmp(object->value, value) != 0 || object->dyn == false)
@@ -77,24 +77,25 @@ void nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(notify)
-        {
-            nyx_object_notify(&object->base, modified);
-        }
+        nyx_object_notify(&object->base, modified, propagate);
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        return modified;
     }
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
+bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool propagate)
 {
     if(value == NULL)
     {
         fprintf(stderr, "Null string not allowed in `nyx_string_set`\n");
         fflush(stderr);
-        return;
+        return false;
     }
 
     if(strcmp(object->value, value) != 0 || object->dyn == true)
@@ -116,13 +117,14 @@ void nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(notify)
-        {
-            nyx_object_notify(&object->base, modified);
-        }
+        nyx_object_notify(&object->base, modified, propagate);
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        return modified;
     }
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

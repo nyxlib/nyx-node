@@ -238,9 +238,22 @@ str_t nyx_string_dup(STR_t s)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_notify(nyx_object_t *object, bool modified)
+void nyx_object_notify(nyx_object_t *object, bool modified, bool propagate)
 {
-    for(; object != NULL; object = object->parent)
+    if(propagate)
+    {
+        for(; object != NULL; object = object->parent)
+        {
+            if(object->out_callback != NULL)
+            {
+                object->out_callback(
+                    object,
+                    modified
+                );
+            }
+        }
+    }
+    else
     {
         if(object->out_callback != NULL)
         {

@@ -44,23 +44,22 @@ double nyx_number_get(const nyx_number_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_number_set2(nyx_number_t *object, double value, bool notify)
+bool nyx_number_set2(nyx_number_t *object, double value, bool propagate)
 {
     if(isnan(value))
     {
         fprintf(stderr, "NaN number not allowed in `nyx_number_set`\n");
         fflush(stderr);
-        return;
+        return false;
     }
 
     bool modified = \
     object->value != value;
     object->value = value;
 
-    if(notify)
-    {
-        nyx_object_notify(&object->base, modified);
-    }
+    nyx_object_notify(&object->base, modified, propagate);
+
+    return modified;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

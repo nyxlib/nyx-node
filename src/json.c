@@ -68,7 +68,7 @@ typedef struct json_parser_s
 #define RELEASE(t) \
             if(CHECK(JSON_TOKEN_NUMBER) || CHECK(JSON_TOKEN_STRING))        \
             {                                                               \
-                nyx_memory_free(PEEK().value);                             \
+                nyx_memory_free(PEEK().value);                              \
                                                                             \
                 PEEK().value = NULL;                                        \
             }                                                               \

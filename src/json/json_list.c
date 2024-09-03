@@ -89,7 +89,7 @@ void nyx_list_clear(nyx_list_t *object)
 {
     internal_list_clear(object);
 
-    nyx_object_notify(&object->base, true);
+    nyx_object_notify(&object->base, true, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -172,7 +172,7 @@ nyx_object_t *nyx_list_get(const nyx_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool notify)
+nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool propagate)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -228,10 +228,7 @@ nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool not
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    if(notify)
-    {
-        nyx_object_notify((nyx_object_t *) value, modified);
-    }
+    nyx_object_notify((nyx_object_t *) value, modified, propagate);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

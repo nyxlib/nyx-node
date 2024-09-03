@@ -92,7 +92,7 @@ void nyx_dict_clear(nyx_dict_t *object)
 {
     internal_dict_clear(object);
 
-    nyx_object_notify(&object->base, true);
+    nyx_object_notify(&object->base, true, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -175,7 +175,7 @@ nyx_object_t *nyx_dict_get(const nyx_dict_t *object, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
+bool nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool propagate)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -233,14 +233,11 @@ nyx_dict_t *nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool noti
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    if(notify)
-    {
-        nyx_object_notify((nyx_object_t *) value, modified);
-    }
+    nyx_object_notify((nyx_object_t *) value, modified, propagate);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return object;
+    return modified;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

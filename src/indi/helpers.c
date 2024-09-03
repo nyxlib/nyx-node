@@ -264,7 +264,7 @@ void internal_mask(nyx_dict_t **def_vectors, STR_t device, __NULLABLE__ STR_t na
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
+bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool propagate)
 {
     nyx_object_t *src_object = nyx_dict_get(src, key);
 
@@ -286,13 +286,13 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
                 {
                     bool modified = nyx_number_get((nyx_number_t *) dst_object) == src_value;
 
-                    nyx_dict_set(dst, key, nyx_number_from(src_value));
+                    nyx_dict_set2(dst, key, nyx_number_from(src_value), propagate);
 
                     return modified;
                 }
                 else
                 {
-                    nyx_dict_set(dst, key, nyx_number_from(src_value));
+                    nyx_dict_set2(dst, key, nyx_number_from(src_value), propagate);
 
                     return true;
                 }
@@ -308,13 +308,13 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
                 {
                     bool modified = strcmp(nyx_string_get((nyx_string_t *) dst_object), src_value) != 0;
 
-                    nyx_dict_set(dst, key, nyx_string_from(src_value));
+                    nyx_dict_set2(dst, key, nyx_string_from(src_value), propagate);
 
                     return modified;
                 }
                 else
                 {
-                    nyx_dict_set(dst, key, nyx_string_from(src_value));
+                    nyx_dict_set2(dst, key, nyx_string_from(src_value), propagate);
 
                     return true;
                 }
@@ -420,13 +420,13 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
     nyx_dict_set(result, "<>", nyx_string_from(set_tagname));
 
-    internal_copy_entry(result, def_vector, "@client");
-    internal_copy_entry(result, def_vector, "@device");
-    internal_copy_entry(result, def_vector, "@name");
-    internal_copy_entry(result, def_vector, "@state");
-    internal_copy_entry(result, def_vector, "@timeout");
-    internal_copy_entry(result, def_vector, "@timestamp");
-    internal_copy_entry(result, def_vector, "@message");
+    internal_copy_entry(result, def_vector, "@client", true);
+    internal_copy_entry(result, def_vector, "@device", true);
+    internal_copy_entry(result, def_vector, "@name", true);
+    internal_copy_entry(result, def_vector, "@state", true);
+    internal_copy_entry(result, def_vector, "@timeout", true);
+    internal_copy_entry(result, def_vector, "@timestamp", true);
+    internal_copy_entry(result, def_vector, "@message", true);
 
     nyx_dict_set(result, "children", children);
 
@@ -448,13 +448,13 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
         nyx_dict_set(dict, "<>", nyx_string_from(one_tagname));
 
-        internal_copy_entry(dict, (nyx_dict_t *) object, "$");
-        internal_copy_entry(dict, (nyx_dict_t *) object, "@name");
+        internal_copy_entry(dict, (nyx_dict_t *) object, "$", true);
+        internal_copy_entry(dict, (nyx_dict_t *) object, "@name", true);
 
         if(strcmp(one_tagname, "oneBLOB") == 0)
         {
-            internal_copy_entry(dict, (nyx_dict_t *) object, "@size");
-            internal_copy_entry(dict, (nyx_dict_t *) object, "@format");
+            internal_copy_entry(dict, (nyx_dict_t *) object, "@size", true);
+            internal_copy_entry(dict, (nyx_dict_t *) object, "@format", true);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
