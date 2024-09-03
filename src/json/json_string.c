@@ -49,7 +49,7 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
+void nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
@@ -77,7 +77,10 @@ void nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_object_notify(&object->base, modified);
+        if(notify)
+        {
+            nyx_object_notify(&object->base, modified);
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -85,7 +88,7 @@ void nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_static_set(nyx_string_t *object, STR_t value)
+void nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
@@ -113,7 +116,10 @@ void nyx_string_static_set(nyx_string_t *object, STR_t value)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_object_notify(&object->base, modified);
+        if(notify)
+        {
+            nyx_object_notify(&object->base, modified);
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

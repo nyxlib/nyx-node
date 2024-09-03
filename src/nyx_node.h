@@ -2,6 +2,7 @@
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedMacroInspection"
+#pragma ide diagnostic ignored "UnreachableCallsOfFunction"
 #pragma ide diagnostic ignored "bugprone-reserved-identifier"
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
@@ -185,14 +186,22 @@ double nyx_number_get(
     const nyx_number_t *object
 );
 
-void nyx_number_set(
+void nyx_number_set2(
     /*-*/ nyx_number_t *object,
-    double value
+    double value,
+    bool notify
 );
 
 str_t nyx_number_to_string(
     const nyx_number_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void nyx_number_set(nyx_number_t *object, double value)
+{
+    nyx_number_set2(object, value, true);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -229,14 +238,22 @@ bool nyx_boolean_get(
     const nyx_boolean_t *object
 );
 
-void nyx_boolean_set(
+void nyx_boolean_set2(
     /*-*/ nyx_boolean_t *object,
-    bool value
+    bool value,
+    bool notify
 );
 
 str_t nyx_boolean_to_string(
     const nyx_boolean_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void nyx_boolean_set(nyx_boolean_t *object, bool value)
+{
+    nyx_boolean_set2(object, value, true);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -275,14 +292,16 @@ STR_t nyx_string_get(
     const nyx_string_t *object
 );
 
-void nyx_string_dynamic_set(
+void nyx_string_dynamic_set2(
     /*-*/ nyx_string_t *object,
-    STR_t value
+    STR_t value,
+    bool notify
 );
 
-void nyx_string_static_set(
+void nyx_string_static_set2(
     /*-*/ nyx_string_t *object,
-    STR_t value
+    STR_t value,
+    bool notify
 );
 
 str_t nyx_string_to_string(
@@ -292,6 +311,20 @@ str_t nyx_string_to_string(
 str_t nyx_string_to_cstring(
     const nyx_string_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
+{
+    nyx_string_dynamic_set2(object, value, true);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void nyx_string_static_set(nyx_string_t *object, STR_t value)
+{
+    nyx_string_static_set2(object, value, true);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -379,10 +412,11 @@ nyx_object_t *nyx_dict_get(
     STR_t key
 );
 
-void nyx_dict_set(
+nyx_dict_t *nyx_dict_set2(
     /*-*/ nyx_dict_t *object,
     STR_t key,
-    buff_t value
+    buff_t value,
+    bool notify
 );
 
 size_t nyx_dict_size(
@@ -413,6 +447,13 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
     return (string != NULL && string->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) string)
                                                                 : NULL
     ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ nyx_dict_t *nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
+{
+    return nyx_dict_set2(object, key, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -473,10 +514,11 @@ nyx_object_t *nyx_list_get(
     int idx
 );
 
-nyx_list_t *nyx_list_set(
+nyx_list_t *nyx_list_set2(
     /*-*/ nyx_list_t *object,
     size_t idx,
-    buff_t value
+    buff_t value,
+    bool notify
 );
 
 size_t nyx_list_size(
@@ -511,8 +553,10 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define nyx_list_push(object, value) \
-            nyx_list_set(object, -1, value)
+__INLINE__ nyx_list_t *nyx_list_push(nyx_list_t *object, buff_t value)
+{
+    return nyx_list_set2(object, -1, value, true);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* XMLDOC                                                                                                             */

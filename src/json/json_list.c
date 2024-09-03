@@ -172,7 +172,7 @@ nyx_object_t *nyx_list_get(const nyx_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_list_t *nyx_list_set(nyx_list_t *object, size_t idx, buff_t value)
+nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool notify)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -228,7 +228,10 @@ nyx_list_t *nyx_list_set(nyx_list_t *object, size_t idx, buff_t value)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    nyx_object_notify((nyx_object_t *) value, modified);
+    if(notify)
+    {
+        nyx_object_notify((nyx_object_t *) value, modified);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

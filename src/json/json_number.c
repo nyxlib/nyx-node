@@ -44,7 +44,7 @@ double nyx_number_get(const nyx_number_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_number_set(nyx_number_t *object, double value)
+void nyx_number_set2(nyx_number_t *object, double value, bool notify)
 {
     if(isnan(value))
     {
@@ -57,7 +57,10 @@ void nyx_number_set(nyx_number_t *object, double value)
     object->value != value;
     object->value = value;
 
-    nyx_object_notify(&object->base, modified);
+    if(notify)
+    {
+        nyx_object_notify(&object->base, modified);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
