@@ -439,9 +439,6 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                             {
                                                 /*--------------------------------------------------------------------*/
 
-                                                fprintf(stdout, "%s <> %s\n", prop1, prop2);
-                                                fflush(stdout);
-
                                                 bool modified;
 
                                                 if(is_current) {
