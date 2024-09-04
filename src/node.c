@@ -441,23 +441,11 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                                                 bool modified;
 
-                                                if(is_current)
-                                                {
-                                                    modified = internal_copy_entry(
-                                                        (nyx_dict_t *) object2,
-                                                        (nyx_dict_t *) object1,
-                                                        "$",
-                                                        false
-                                                    );
+                                                if(is_current) {
+                                                    modified = internal_copy((nyx_dict_t *) object2,(nyx_dict_t *) object1, "$", false);
                                                 }
-                                                else
-                                                {
-                                                    modified = nyx_dict_set2(
-                                                        (nyx_dict_t *) object2,
-                                                        "$",
-                                                        nyx_string_static_from("Off"),
-                                                        false
-                                                    );
+                                                else {
+                                                    modified = nyx_dict_set2((nyx_dict_t *) object2,"$",nyx_string_static_from("Off"),false);
                                                 }
 
                                                 /*--------------------------------------------------------------------*/

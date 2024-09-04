@@ -264,7 +264,7 @@ void internal_mask(nyx_dict_t **def_vectors, STR_t device, __NULLABLE__ STR_t na
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notify)
+bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notify)
 {
     nyx_object_t *src_object = nyx_dict_get(src, key);
 
@@ -304,7 +304,7 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool
             /*--------------------------------------------------------------------------------------------------------*/
 
             default:
-                fprintf(stderr, "Internal error in `internal_copy_entry`\n");
+                fprintf(stderr, "Internal error in `internal_copy`\n");
                 fflush(stderr);
                 break;
 
@@ -401,13 +401,13 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
     nyx_dict_set(result, "<>", nyx_string_from(set_tagname));
 
-    internal_copy_entry(result, def_vector, "@client", true);
-    internal_copy_entry(result, def_vector, "@device", true);
-    internal_copy_entry(result, def_vector, "@name", true);
-    internal_copy_entry(result, def_vector, "@state", true);
-    internal_copy_entry(result, def_vector, "@timeout", true);
-    internal_copy_entry(result, def_vector, "@timestamp", true);
-    internal_copy_entry(result, def_vector, "@message", true);
+    internal_copy(result, def_vector, "@client", true);
+    internal_copy(result, def_vector, "@device", true);
+    internal_copy(result, def_vector, "@name", true);
+    internal_copy(result, def_vector, "@state", true);
+    internal_copy(result, def_vector, "@timeout", true);
+    internal_copy(result, def_vector, "@timestamp", true);
+    internal_copy(result, def_vector, "@message", true);
 
     nyx_dict_set(result, "children", children);
 
@@ -429,13 +429,13 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
         nyx_dict_set(dict, "<>", nyx_string_from(one_tagname));
 
-        internal_copy_entry(dict, (nyx_dict_t *) object, "$", true);
-        internal_copy_entry(dict, (nyx_dict_t *) object, "@name", true);
+        internal_copy(dict, (nyx_dict_t *) object, "$", true);
+        internal_copy(dict, (nyx_dict_t *) object, "@name", true);
 
         if(strcmp(one_tagname, "oneBLOB") == 0)
         {
-            internal_copy_entry(dict, (nyx_dict_t *) object, "@size", true);
-            internal_copy_entry(dict, (nyx_dict_t *) object, "@format", true);
+            internal_copy(dict, (nyx_dict_t *) object, "@size", true);
+            internal_copy(dict, (nyx_dict_t *) object, "@format", true);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/

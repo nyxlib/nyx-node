@@ -132,7 +132,7 @@ void internal_mask(
     bool clear
 );
 
-bool internal_copy_entry(
+bool internal_copy(
     /*-*/ nyx_dict_t *dst,
     const nyx_dict_t *src,
     STR_t key,
