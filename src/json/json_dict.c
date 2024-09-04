@@ -198,7 +198,7 @@ bool nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
-            modified = nyx_object_compare(curr_node->value, value);
+            modified = !nyx_object_equal(curr_node->value, value);
 
             nyx_object_free(curr_node->value);
 

@@ -303,7 +303,7 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_object_compare(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ const nyx_object_t *object2)
+bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ const nyx_object_t *object2)
 {
     if(object1 == NULL || object2 == NULL)
     {

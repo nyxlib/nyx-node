@@ -195,7 +195,7 @@ nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool not
     {
         if(idx == 0)
         {
-            modified = nyx_object_compare(curr_node->value, value);
+            modified = !nyx_object_equal(curr_node->value, value);
 
             nyx_object_free(curr_node->value);
 

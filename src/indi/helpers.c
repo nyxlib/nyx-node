@@ -270,8 +270,6 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool
 
     if(src_object != NULL)
     {
-        nyx_object_t *dst_object = nyx_dict_get(dst, key);
-
         /*------------------------------------------------------------------------------------------------------------*/
 
         switch(src_object->type)
@@ -282,20 +280,16 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool
             {
                 double src_value = nyx_number_get((nyx_number_t *) src_object);
 
-                if(dst_object != NULL && dst_object->type == src_object->type)
-                {
-                    bool modified = nyx_number_get((nyx_number_t *) dst_object) == src_value;
+                return nyx_dict_set2(dst, key, nyx_number_from(src_value), notify);
+            }
 
-                    nyx_dict_set2(dst, key, nyx_number_from(src_value), notify);
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                    return modified;
-                }
-                else
-                {
-                    nyx_dict_set2(dst, key, nyx_number_from(src_value), notify);
+            case NYX_TYPE_BOOLEAN:
+            {
+                bool src_value = nyx_boolean_get((nyx_boolean_t *) src_object);
 
-                    return true;
-                }
+                return nyx_dict_set2(dst, key, nyx_boolean_from(src_value), notify);
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -304,20 +298,7 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool
             {
                 STR_t src_value = nyx_string_get((nyx_string_t *) src_object);
 
-                if(dst_object != NULL && dst_object->type == src_object->type)
-                {
-                    bool modified = strcmp(nyx_string_get((nyx_string_t *) dst_object), src_value) != 0;
-
-                    nyx_dict_set2(dst, key, nyx_string_from(src_value), notify);
-
-                    return modified;
-                }
-                else
-                {
-                    nyx_dict_set2(dst, key, nyx_string_from(src_value), notify);
-
-                    return true;
-                }
+                return nyx_dict_set2(dst, key, nyx_string_from(src_value), notify);
             }
 
             /*--------------------------------------------------------------------------------------------------------*/

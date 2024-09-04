@@ -127,7 +127,7 @@ void nyx_object_free(
     __NULLABLE__ /*-*/ nyx_object_t *object
 );
 
-bool nyx_object_compare(
+bool nyx_object_equal(
     __NULLABLE__ const nyx_object_t *object1,
     __NULLABLE__ const nyx_object_t *object2
 );

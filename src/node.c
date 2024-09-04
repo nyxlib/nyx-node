@@ -460,6 +460,9 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                     );
                                                 }
 
+                                                fprintf(stdout, "%d\n", modified);
+                                                fflush(stdout);
+
                                                 /*--------------------------------------------------------------------*/
 
                                                 vector_modified = vector_modified || modified;
