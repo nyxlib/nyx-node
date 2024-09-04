@@ -405,7 +405,11 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                     STR_t rule = nyx_dict_get_string(def_vector, "@rule");
 
-                    bool is_one_of_many = rule != NULL && strcmp(rule, "OneOfMany") == 0;
+                    bool is_one_switch = rule != NULL && (
+                        strcmp(rule, "AtMostOne") == 0
+                        ||
+                        strcmp(rule, "OneOfMany") == 0
+                    );
 
                     /*------------------------------------------------------------------------------------------------*/
 
@@ -435,7 +439,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                                             bool is_current = strcmp(prop1, prop2) == 0;
 
-                                            if(is_current || is_one_of_many)
+                                            if(is_current || is_one_switch)
                                             {
                                                 /*--------------------------------------------------------------------*/
 
@@ -566,16 +570,20 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         {
             if(nyx_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
             {
-/*
-                for(long i = 0; i < iobuf->len; i++)
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(true)
                 {
-                    fprintf(stdout, "%c", iobuf->buf[i]);
+                    for(long i = 0; i < iobuf->len; i++)
+                    {
+                        fprintf(stdout, "%c", iobuf->buf[i]);
+                    }
+
+                    fprintf(stdout, "\n\n");
+
                     fflush(stdout);
                 }
 
-                fprintf(stdout, "\n\n");
-                fflush(stdout);
-*/
                 /*----------------------------------------------------------------------------------------------------*/
 
                 nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
@@ -689,6 +697,18 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
+
+                if(true)
+                {
+                    for(long i = 0; i < message->data.len; i++)
+                    {
+                        fprintf(stdout, "%c", message->data.buf[i]);
+                    }
+
+                    fprintf(stdout, "\n\n");
+
+                    fflush(stdout);
+                }
 
                 nyx_object_t *object = nyx_object_parse(message->data.buf);
 
