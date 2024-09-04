@@ -2,9 +2,9 @@
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedMacroInspection"
-#pragma ide diagnostic ignored "UnreachableCallsOfFunction"
-#pragma ide diagnostic ignored "bugprone-reserved-identifier"
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+#pragma ide diagnostic ignored "bugprone-reserved-identifier"
+#pragma ide diagnostic ignored "UnreachableCallsOfFunction"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -30,13 +30,16 @@ double nan(const char *tag);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define __INLINE__ \
-            static inline
+            static inline __attribute__((always_inline))
 
 #define __NULLABLE__ \
             /* do nothing */
 
 #define __ZEROABLE__ \
             /* do nothing */
+
+#define __UNUSED__ \
+            __attribute__((unused))
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

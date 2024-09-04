@@ -343,7 +343,7 @@ void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
 void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    char timestamp[32];
+    char timestamp[36];
 
     internal_get_timestamp(timestamp, sizeof(timestamp));
 

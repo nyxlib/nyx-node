@@ -8,7 +8,7 @@ project(nyx_node LANGUAGES C VERSION 1.0.0)
 
 set(CMAKE_C_STANDARD 99)
 
-add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -Wno-format-truncation -O3)
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -O3)
 
 ########################################################################################################################
 
