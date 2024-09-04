@@ -29,9 +29,6 @@ double nan(const char *tag);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define __INLINE__ \
-            static inline __attribute__((always_inline))
-
 #define __NULLABLE__ \
             /* do nothing */
 
@@ -40,6 +37,9 @@ double nan(const char *tag);
 
 #define __UNUSED__ \
             __attribute__((unused))
+
+#define __INLINE__ \
+            __attribute__((always_inline)) static inline
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
