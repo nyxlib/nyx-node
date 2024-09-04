@@ -409,27 +409,27 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    for(nyx_list_iter_t iter2 = NYX_LIST_ITER(children2_list); nyx_list_iterate(&iter2, &idx2, &object2);)
+                    for(nyx_list_iter_t iter1 = NYX_LIST_ITER(children1_list); nyx_list_iterate(&iter1, &idx1, &object1);)
                     {
-                        if(object2->type == NYX_TYPE_DICT)
+                        if(object1->type == NYX_TYPE_DICT)
                         {
-                            nyx_object_t *prop2_string = nyx_dict_get((nyx_dict_t *) object2, "@name");
+                            nyx_object_t *prop1_string = nyx_dict_get((nyx_dict_t *) object1, "@name");
 
-                            if(prop2_string != NULL && prop2_string->type == NYX_TYPE_STRING)
+                            if(prop1_string != NULL && prop1_string->type == NYX_TYPE_STRING)
                             {
-                                STR_t prop2 = nyx_string_get((nyx_string_t *) prop2_string);
+                                STR_t prop1 = nyx_string_get((nyx_string_t *) prop1_string);
 
                                 /*------------------------------------------------------------------------------------*/
 
-                                for(nyx_list_iter_t iter1 = NYX_LIST_ITER(children1_list); nyx_list_iterate(&iter1, &idx1, &object1);)
+                                for(nyx_list_iter_t iter2 = NYX_LIST_ITER(children2_list); nyx_list_iterate(&iter2, &idx2, &object2);)
                                 {
-                                    if(object1->type == NYX_TYPE_DICT)
+                                    if(object2->type == NYX_TYPE_DICT)
                                     {
-                                        nyx_object_t *prop1_string = nyx_dict_get((nyx_dict_t *) object1, "@name");
+                                        nyx_object_t *prop2_string = nyx_dict_get((nyx_dict_t *) object2, "@name");
 
-                                        if(prop1_string != NULL && prop1_string->type == NYX_TYPE_STRING)
+                                        if(prop2_string != NULL && prop2_string->type == NYX_TYPE_STRING)
                                         {
-                                            STR_t prop1 = nyx_string_get((nyx_string_t *) prop1_string);
+                                            STR_t prop2 = nyx_string_get((nyx_string_t *) prop2_string);
 
                                             /*------------------------------------------------------------------------*/
 
