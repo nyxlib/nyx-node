@@ -479,15 +479,11 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                     if(def_vector->base.in_callback != NULL) def_vector->base.in_callback(&def_vector->base, vector_modified);
 
-                    /*------------------------------------------------------------------------------------------------*/
-
                     nyx_object_notify(&def_vector->base, vector_modified);
 
+                    break; /* property found */
+
                     /*------------------------------------------------------------------------------------------------*/
-
-                    /* property found */
-
-                    break;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
