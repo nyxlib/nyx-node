@@ -276,6 +276,13 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
+            case NYX_TYPE_NULL:
+            {
+                return src_object->type == NYX_TYPE_NULL;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
             case NYX_TYPE_NUMBER:
             {
                 double src_value = nyx_number_get((nyx_number_t *) src_object);

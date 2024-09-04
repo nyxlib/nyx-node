@@ -1,8 +1,5 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include <math.h>
-#include <stdio.h>
-
 #include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -46,13 +43,6 @@ double nyx_number_get(const nyx_number_t *object)
 
 bool nyx_number_set2(nyx_number_t *object, double value, bool notify)
 {
-    if(isnan(value))
-    {
-        fprintf(stderr, "NaN number not allowed in `nyx_number_set`\n");
-        fflush(stderr);
-        return false;
-    }
-
     bool modified = \
     object->value != value;
     object->value = value;
