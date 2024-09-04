@@ -47,7 +47,7 @@ set(SOURCE_FILES
     src/indi/indi_switch.c
     src/indi/indi_text.c
     #
-    src/alloc.c
+    src/base.c
     src/string_builder.c
     src/json.c
     src/xml.c

@@ -238,22 +238,6 @@ str_t nyx_string_dup(STR_t s)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_notify(nyx_object_t *object, bool modified)
-{
-    for(; object != NULL; object = object->parent)
-    {
-        if(object->out_callback != NULL)
-        {
-            object->out_callback(
-                object,
-                modified
-            );
-        }
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 {
     if(object == NULL)
@@ -430,6 +414,22 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
             fprintf(stderr, "Internal error in `nyx_object_to_cstring`\n");
             fflush(stderr);
             exit(1);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_object_notify(nyx_object_t *object, bool modified)
+{
+    for(; object != NULL; object = object->parent)
+    {
+        if(object->out_callback != NULL)
+        {
+            object->out_callback(
+                    object,
+                    modified
+            );
+        }
     }
 }
 
