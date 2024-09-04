@@ -189,7 +189,7 @@ double nyx_number_get(
 bool nyx_number_set2(
     /*-*/ nyx_number_t *object,
     double value,
-    bool propagate
+    bool notify
 );
 
 str_t nyx_number_to_string(
@@ -241,7 +241,7 @@ bool nyx_boolean_get(
 bool nyx_boolean_set2(
     /*-*/ nyx_boolean_t *object,
     bool value,
-    bool propagate
+    bool notify
 );
 
 str_t nyx_boolean_to_string(
@@ -295,13 +295,13 @@ STR_t nyx_string_get(
 bool nyx_string_dynamic_set2(
     /*-*/ nyx_string_t *object,
     STR_t value,
-    bool propagate
+    bool notify
 );
 
 bool nyx_string_static_set2(
     /*-*/ nyx_string_t *object,
     STR_t value,
-    bool propagate
+    bool notify
 );
 
 str_t nyx_string_to_string(
@@ -416,7 +416,7 @@ bool nyx_dict_set2(
     /*-*/ nyx_dict_t *object,
     STR_t key,
     buff_t value,
-    bool propagate
+    bool notify
 );
 
 size_t nyx_dict_size(
@@ -518,7 +518,7 @@ nyx_list_t *nyx_list_set2(
     /*-*/ nyx_list_t *object,
     size_t idx,
     buff_t value,
-    bool propagate
+    bool notify
 );
 
 size_t nyx_list_size(

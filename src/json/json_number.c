@@ -44,7 +44,7 @@ double nyx_number_get(const nyx_number_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_number_set2(nyx_number_t *object, double value, bool propagate)
+bool nyx_number_set2(nyx_number_t *object, double value, bool notify)
 {
     if(isnan(value))
     {
@@ -57,7 +57,10 @@ bool nyx_number_set2(nyx_number_t *object, double value, bool propagate)
     object->value != value;
     object->value = value;
 
-    nyx_object_notify(&object->base, modified, propagate);
+    if(notify)
+    {
+        nyx_object_notify(&object->base, modified);
+    }
 
     return modified;
 }

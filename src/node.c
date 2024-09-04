@@ -403,10 +403,9 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    bool is_radio_button = strcmp(nyx_dict_get_string(def_vector, "<>"), "defSwitchVector") == 0
-                                           &&
-                                           strcmp(nyx_dict_get_string(def_vector, "@rule"), "OneOfMany") == 0
-                    ;
+                    STR_t rule = nyx_dict_get_string(def_vector, "@rule");
+
+                    bool is_one_of_many = rule != NULL && strcmp(rule, "OneOfMany") == 0;
 
                     /*------------------------------------------------------------------------------------------------*/
 
@@ -436,7 +435,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                                             bool is_current = strcmp(prop1, prop2) == 0;
 
-                                            if(is_current || is_radio_button)
+                                            if(is_current || is_one_of_many)
                                             {
                                                 /*--------------------------------------------------------------------*/
 
@@ -471,10 +470,9 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                 MG_INFO(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
                                                 nyx_memory_free(str);
 
-                                                if(object2->in_callback != NULL)
-                                                {
-                                                    object2->in_callback(object2, modified);
-                                                }
+                                                /*--------------------------------------------------------------------*/
+
+                                                if(object2->in_callback != NULL) object2->in_callback(object2, modified);
 
                                                 /*--------------------------------------------------------------------*/
                                             }
@@ -491,7 +489,11 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    nyx_object_notify(object2, vector_modified, true);
+                    if(def_vector->base.in_callback != NULL) def_vector->base.in_callback(&def_vector->base, vector_modified);
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    nyx_object_notify(&def_vector->base, vector_modified);
 
                     /*------------------------------------------------------------------------------------------------*/
 

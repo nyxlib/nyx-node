@@ -41,13 +41,16 @@ bool nyx_boolean_get(const nyx_boolean_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_boolean_set2(nyx_boolean_t *object, bool value, bool propagate)
+bool nyx_boolean_set2(nyx_boolean_t *object, bool value, bool notify)
 {
     bool modified = \
     object->value != value;
     object->value = value;
 
-    nyx_object_notify(&object->base, modified, propagate);
+    if(notify)
+    {
+        nyx_object_notify(&object->base, modified);
+    }
 
     return modified;
 }

@@ -264,7 +264,7 @@ void internal_mask(nyx_dict_t **def_vectors, STR_t device, __NULLABLE__ STR_t na
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool propagate)
+bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notify)
 {
     nyx_object_t *src_object = nyx_dict_get(src, key);
 
@@ -286,13 +286,13 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool
                 {
                     bool modified = nyx_number_get((nyx_number_t *) dst_object) == src_value;
 
-                    nyx_dict_set2(dst, key, nyx_number_from(src_value), propagate);
+                    nyx_dict_set2(dst, key, nyx_number_from(src_value), notify);
 
                     return modified;
                 }
                 else
                 {
-                    nyx_dict_set2(dst, key, nyx_number_from(src_value), propagate);
+                    nyx_dict_set2(dst, key, nyx_number_from(src_value), notify);
 
                     return true;
                 }
@@ -308,13 +308,13 @@ bool internal_copy_entry(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool
                 {
                     bool modified = strcmp(nyx_string_get((nyx_string_t *) dst_object), src_value) != 0;
 
-                    nyx_dict_set2(dst, key, nyx_string_from(src_value), propagate);
+                    nyx_dict_set2(dst, key, nyx_string_from(src_value), notify);
 
                     return modified;
                 }
                 else
                 {
-                    nyx_dict_set2(dst, key, nyx_string_from(src_value), propagate);
+                    nyx_dict_set2(dst, key, nyx_string_from(src_value), notify);
 
                     return true;
                 }

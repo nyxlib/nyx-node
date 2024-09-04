@@ -31,8 +31,7 @@ extern "C" {
 
 void nyx_object_notify(
     nyx_object_t *object,
-    bool modified,
-    bool propagate
+    bool modified
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -149,7 +148,7 @@ bool internal_copy_entry(
     /*-*/ nyx_dict_t *dst,
     const nyx_dict_t *src,
     STR_t key,
-    bool propagate
+    bool notify
 );
 
 nyx_dict_t *internal_xxxx_set_vector_new(
