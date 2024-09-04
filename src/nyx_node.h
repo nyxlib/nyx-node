@@ -118,7 +118,15 @@ typedef struct nyx_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define NYX_OBJECT(_type) \
-            ((struct nyx_object_s) {.magic = NYX_OBJECT_MAGIC, .flags = 0x00, .type = _type, .node = NULL, .parent = NULL, .in_callback = NULL, .out_callback = NULL})
+            ((struct nyx_object_s) {            \
+                .magic = NYX_OBJECT_MAGIC,      \
+                .flags = 0x00000000000000,      \
+                .type = _type,                  \
+                .node = NULL,                   \
+                .parent = NULL,                 \
+                .in_callback = NULL,            \
+                .out_callback = NULL            \
+            })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -437,7 +445,7 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
     nyx_object_t *number = nyx_dict_get(object, key);
 
     return (number != NULL && number->type == NYX_TYPE_NUMBER) ? nyx_number_get((nyx_number_t *) number)
-                                                                : nan("1")
+                                                               : nan("1")
     ;
 }
 
@@ -448,7 +456,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
     nyx_object_t *string = nyx_dict_get(object, key);
 
     return (string != NULL && string->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) string)
-                                                                : NULL
+                                                               : NULL
     ;
 }
 
