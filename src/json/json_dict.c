@@ -233,7 +233,7 @@ bool nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool propagate)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    nyx_object_notify((nyx_object_t *) value, modified, propagate);
+    nyx_object_notify(&object->base, modified, propagate);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

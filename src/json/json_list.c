@@ -228,7 +228,7 @@ nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool pro
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    nyx_object_notify((nyx_object_t *) value, modified, propagate);
+    nyx_object_notify(&object->base, modified, propagate);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
