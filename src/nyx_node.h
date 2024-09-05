@@ -563,7 +563,7 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, int idx)
     nyx_object_t *number = nyx_list_get(object, idx);
 
     return (number != NULL && number->type == NYX_TYPE_NUMBER) ? nyx_number_get((nyx_number_t *) number)
-                                                                : nan("1")
+                                                               : nan("1")
     ;
 }
 
@@ -574,7 +574,7 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
     nyx_object_t *string = nyx_list_get(object, idx);
 
     return (string != NULL && string->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) string)
-                                                                : NULL
+                                                               : NULL
     ;
 }
 
