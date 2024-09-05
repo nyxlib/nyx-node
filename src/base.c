@@ -420,7 +420,7 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_notify(nyx_object_t *object, bool modified)
+void nyx_object_notify(__NULLABLE__ const nyx_object_t *object, bool modified)
 {
     for(; object != NULL; object = object->parent)
     {
