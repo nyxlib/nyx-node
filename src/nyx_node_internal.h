@@ -124,14 +124,6 @@ void internal_set_opts(
     nyx_opts_t *opts
 );
 
-void internal_mask(
-    nyx_dict_t **def_vectors,
-    /*--------*/ STR_t device,
-    __NULLABLE__ STR_t name,
-    uint32_t mask,
-    bool clear
-);
-
 bool internal_copy(
     /*-*/ nyx_dict_t *dst,
     const nyx_dict_t *src,

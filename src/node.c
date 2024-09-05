@@ -886,16 +886,83 @@ void nyx_node_free(nyx_node_t *node, bool free_vectors)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_enable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name)
+static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message, nyx_onoff_t onoff)
 {
-    internal_mask(node->def_vectors, device, name, NYX_FLAGS_XXXX_DISABLED, true);
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(device != NULL)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        {
+            nyx_dict_t *def_vector = *def_vector_ptr;
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            STR_t device2 = nyx_dict_get_string(def_vector, "@device");
+            STR_t name2 = nyx_dict_get_string(def_vector, "@name");
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(device2 == NULL || strcmp(device, device2) != 0)
+            {
+                continue;
+            }
+
+            if(name != NULL)
+            {
+                if(name2 == NULL || strcmp(name, name2) != 0)
+                {
+                    continue;
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            switch(onoff)
+            {
+                case NYX_ONOFF_OFF:
+                    def_vector->base.flags |= NYX_FLAGS_XXXX_DISABLED;
+                    break;
+
+                case NYX_ONOFF_ON:
+                    def_vector->base.flags &= ~NYX_FLAGS_XXXX_DISABLED;
+
+                    sub_object(node, (nyx_object_t *) def_vector);
+                    break;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(onoff == NYX_ONOFF_OFF)
+        {
+            nyx_dict_t *del_property_new = nyx_del_property_new(device, name, message);
+
+            sub_object(node, (nyx_object_t *) del_property_new);
+
+            nyx_dict_free(del_property_new);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_disable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name)
+void nyx_node_enable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
 {
-    internal_mask(node->def_vectors, device, name, NYX_FLAGS_XXXX_DISABLED, false);
+    device_onoff(node, device, name, message, NYX_ONOFF_ON);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_disable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+{
+    device_onoff(node, device, name, message, NYX_ONOFF_OFF);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -905,20 +972,6 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
     if(node != NULL)
     {
         nyx_dict_t *dict = nyx_message_new(device, message);
-
-        sub_object(node, (nyx_object_t *) dict);
-
-        nyx_dict_free(dict);
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
-{
-    if(node != NULL)
-    {
-        nyx_dict_t *dict = nyx_del_property_new(device, name, message);
 
         sub_object(node, (nyx_object_t *) dict);
 
