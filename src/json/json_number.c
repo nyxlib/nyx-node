@@ -59,7 +59,14 @@ bool nyx_number_set2(nyx_number_t *object, double value, bool notify)
 
 str_t nyx_number_to_string(const nyx_number_t *object)
 {
-    return nyx_double_dup(object->value);
+    str_t result = nyx_double_dup(object->value);
+
+    if(result == NULL)
+    {
+        result = nyx_string_dup("null");
+    }
+
+    return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

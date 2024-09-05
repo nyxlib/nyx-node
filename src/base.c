@@ -354,12 +354,7 @@ str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
             return nyx_null_to_string((nyx_null_t *) object);
 
         case NYX_TYPE_NUMBER:
-            if(isnan(((nyx_number_t *) object)->value)) {
-                return nyx_null_to_string((nyx_null_t *) object);
-            }
-            else {
-                return nyx_number_to_string((nyx_number_t *) object);
-            }
+            return nyx_number_to_string((nyx_number_t *) object);
 
         case NYX_TYPE_BOOLEAN:
             return nyx_boolean_to_string((nyx_boolean_t *) object);
@@ -402,12 +397,7 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
             return nyx_null_to_string((nyx_null_t *) object);
 
         case NYX_TYPE_NUMBER:
-            if(isnan(((nyx_number_t *) object)->value)) {
-                return nyx_null_to_string((nyx_null_t *) object);
-            }
-            else {
-                return nyx_number_to_string((nyx_number_t *) object);
-            }
+            return nyx_number_to_string((nyx_number_t *) object);
 
         case NYX_TYPE_BOOLEAN:
             return nyx_boolean_to_string((nyx_boolean_t *) object);
