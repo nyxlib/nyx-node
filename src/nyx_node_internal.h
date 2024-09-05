@@ -63,29 +63,29 @@ typedef struct
 nyx_string_builder_t *nyx_string_builder_new();
 
 void nyx_string_builder_free(
-    nyx_string_builder_t *sb
+    /*-*/ nyx_string_builder_t *sb
 );
 
 void nyx_string_builder_clear(
-    nyx_string_builder_t *sb
+    /*-*/ nyx_string_builder_t *sb
 );
 
 void nyx_string_builder_append_n(
-    nyx_string_builder_t *sb,
+    /*-*/ nyx_string_builder_t *sb,
     STR_t args[],
     size_t n
 );
 
 size_t nyx_string_builder_length(
-    nyx_string_builder_t *sb
+    const nyx_string_builder_t *sb
 );
 
 str_t nyx_string_builder_to_string(
-    nyx_string_builder_t *sb
+    const nyx_string_builder_t *sb
 );
 
 str_t nyx_string_builder_to_cstring(
-    nyx_string_builder_t *sb
+    const nyx_string_builder_t *sb
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

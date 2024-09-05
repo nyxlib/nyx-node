@@ -301,6 +301,7 @@ typedef struct
 {
     nyx_object_t base;
 
+    size_t length;
     str_t value;
 
     bool dyn;
@@ -331,6 +332,17 @@ bool nyx_string_static_set2(
     bool notify
 );
 
+bool nyx_string_buff_set2(
+    /*-*/ nyx_string_t *object,
+    size_t size,
+    BUFF_t buff,
+    bool notify
+);
+
+size_t nyx_string_length(
+    const nyx_string_t *object
+);
+
 str_t nyx_string_to_string(
     const nyx_string_t *object
 );
@@ -352,6 +364,12 @@ __INLINE__ bool nyx_string_static_set(nyx_string_t *object, STR_t value)
 {
     return nyx_string_static_set2(object, value, true);
 }
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ bool nyx_string_buff_set(nyx_string_t *object, size_t size, BUFF_t buff)
+{
+    return nyx_string_buff_set2(object, size, buff, true);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -371,6 +389,17 @@ __INLINE__ nyx_string_t *nyx_string_static_from(STR_t value)
     nyx_string_t *result = nyx_string_new();
 
     nyx_string_static_set(result, value);
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
+{
+    nyx_string_t *result = nyx_string_new();
+
+    nyx_string_buff_set(result, size, buff);
 
     return result;
 }

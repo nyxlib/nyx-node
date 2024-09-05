@@ -568,20 +568,6 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(true)
-                {
-                    for(long i = 0; i < iobuf->len; i++)
-                    {
-                        fprintf(stdout, "%c", iobuf->buf[i]);
-                    }
-
-                    fprintf(stdout, "\n\n");
-
-                    fflush(stdout);
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
                 nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
 
                 if(xmldoc != NULL)
@@ -693,18 +679,6 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
-
-                if(true)
-                {
-                    for(long i = 0; i < message->data.len; i++)
-                    {
-                        fprintf(stdout, "%c", message->data.buf[i]);
-                    }
-
-                    fprintf(stdout, "\n\n");
-
-                    fflush(stdout);
-                }
 
                 nyx_object_t *object = nyx_object_parse(message->data.buf);
 

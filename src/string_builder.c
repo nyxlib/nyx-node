@@ -116,7 +116,7 @@ void nyx_string_builder_append_n(nyx_string_builder_t *sb, STR_t args[], size_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t nyx_string_builder_length(nyx_string_builder_t *sb)
+size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
 {
     size_t length = 0;
 
@@ -134,7 +134,7 @@ size_t nyx_string_builder_length(nyx_string_builder_t *sb)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static str_t to_string(nyx_string_builder_t *sb, bool json_string)
+static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -218,14 +218,14 @@ static str_t to_string(nyx_string_builder_t *sb, bool json_string)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_string_builder_to_string(nyx_string_builder_t *sb)
+str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 {
     return to_string(sb, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_string_builder_to_cstring(nyx_string_builder_t *sb)
+str_t nyx_string_builder_to_cstring(const nyx_string_builder_t *sb)
 {
     return to_string(sb, false);
 }

@@ -19,6 +19,7 @@ nyx_string_t *nyx_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    object->length = 0x00000000;
     object->value = (str_t) "";
 
     object->dyn = false;
@@ -53,12 +54,14 @@ bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `nyx_string_set`\n");
+        fprintf(stderr, "Null string not allowed in `nyx_string_dynamic_set`\n");
         fflush(stderr);
         return false;
     }
 
-    if(strcmp(object->value, value) != 0 || object->dyn == false)
+    bool modified = strcmp(object->value, value) != 0;
+
+    if(modified || object->dyn == false)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -71,8 +74,7 @@ bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        bool modified = strcmp(object->value, value) != 0;
-
+        object->length = strlen(value);
         object->value = nyx_string_dup(value);
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -96,12 +98,14 @@ bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `nyx_string_set`\n");
+        fprintf(stderr, "Null string not allowed in `nyx_string_static_set`\n");
         fflush(stderr);
         return false;
     }
 
-    if(strcmp(object->value, value) != 0 || object->dyn == true)
+    bool modified = strcmp(object->value, value) != 0;
+
+    if(modified || object->dyn == true)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -114,8 +118,7 @@ bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        bool modified = strcmp(object->value, value) != 0;
-
+        object->length = strlen(value);
         object->value = (/**/str_t/**/) value;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -131,6 +134,49 @@ bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
     }
 
     return false;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_string_buff_set2(nyx_string_t *object, size_t size, BUFF_t buff, bool notify)
+{
+    if(size == 0x00 || buff == NULL)
+    {
+        fprintf(stderr, "Null string not allowed in `nyx_string_buff_set`\n");
+        fflush(stderr);
+        return false;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(object->dyn)
+    {
+        nyx_memory_free(object->value);
+    }
+
+    object->dyn = true;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    object->value = nyx_base64_encode(&object->length, size, buff);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(notify)
+    {
+        nyx_object_notify(&object->base, true);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return true;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+size_t nyx_string_length(const nyx_string_t *object)
+{
+    return object->length;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

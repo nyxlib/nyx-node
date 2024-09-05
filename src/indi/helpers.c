@@ -244,10 +244,10 @@ void internal_mask(nyx_dict_t **def_vectors, STR_t device, __NULLABLE__ STR_t na
                 /*----------------------------------------------------------------------------------------------------*/
 
                 if(clear) {
-                    def_vector->base.flags &= ~NYX_FLAGS_XXXX_DISABLED;
+                    def_vector->base.flags &= ~mask;
                 }
                 else {
-                    def_vector->base.flags |= NYX_FLAGS_XXXX_DISABLED;
+                    def_vector->base.flags |= mask;
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -408,13 +408,13 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
     nyx_dict_set(result, "<>", nyx_string_from(set_tag));
 
-    internal_copy(result, def_vector, "@client", true);
-    internal_copy(result, def_vector, "@device", true);
-    internal_copy(result, def_vector, "@name", true);
-    internal_copy(result, def_vector, "@state", true);
-    internal_copy(result, def_vector, "@timeout", true);
-    internal_copy(result, def_vector, "@timestamp", true);
-    internal_copy(result, def_vector, "@message", true);
+    internal_copy(result, def_vector, "@client", false);
+    internal_copy(result, def_vector, "@device", false);
+    internal_copy(result, def_vector, "@name", false);
+    internal_copy(result, def_vector, "@state", false);
+    internal_copy(result, def_vector, "@timeout", false);
+    internal_copy(result, def_vector, "@timestamp", false);
+    internal_copy(result, def_vector, "@message", false);
 
     nyx_dict_set(result, "children", children);
 
@@ -436,13 +436,20 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
         nyx_dict_set(dict, "<>", nyx_string_from(one_tag));
 
-        internal_copy(dict, (nyx_dict_t *) object, "$", true);
-        internal_copy(dict, (nyx_dict_t *) object, "@name", true);
+        internal_copy(dict, (nyx_dict_t *) object, "$", false);
+        internal_copy(dict, (nyx_dict_t *) object, "@name", false);
 
         if(strcmp(one_tag, "oneBLOB") == 0)
         {
-            internal_copy(dict, (nyx_dict_t *) object, "@size", true);
-            internal_copy(dict, (nyx_dict_t *) object, "@format", true);
+            internal_copy(dict, (nyx_dict_t *) object, "@format", false);
+
+            size_t size = nyx_string_length(
+                (nyx_string_t *) nyx_dict_get(
+                    (nyx_dict_t *) object, "$"
+                )
+            );
+
+            nyx_dict_set2(dict, "@size", nyx_number_from((double) size), false);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
