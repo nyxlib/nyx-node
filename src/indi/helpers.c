@@ -224,36 +224,22 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_NULL:
-            {
                 return src_object->type == NYX_TYPE_NULL;
-            }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_NUMBER:
-            {
-                double src_value = nyx_number_get((nyx_number_t *) src_object);
-
-                return nyx_dict_set2(dst, key, nyx_number_from(src_value), notify);
-            }
+                return nyx_dict_set2(dst, key, nyx_number_from(nyx_number_get((nyx_number_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_BOOLEAN:
-            {
-                bool src_value = nyx_boolean_get((nyx_boolean_t *) src_object);
-
-                return nyx_dict_set2(dst, key, nyx_boolean_from(src_value), notify);
-            }
+                return nyx_dict_set2(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_STRING:
-            {
-                STR_t src_value = nyx_string_get((nyx_string_t *) src_object);
-
-                return nyx_dict_set2(dst, key, nyx_string_from(src_value), notify);
-            }
+                return nyx_dict_set2(dst, key, nyx_string_from(nyx_string_get((nyx_string_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
