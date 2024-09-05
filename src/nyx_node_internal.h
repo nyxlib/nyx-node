@@ -43,7 +43,7 @@ int nyx_unicode_to_utf8(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_object_notify(
-    __NULLABLE__ const nyx_object_t *object,
+    __NULLABLE__ nyx_object_t *object,
     bool modified
 );
 
