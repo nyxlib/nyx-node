@@ -133,11 +133,11 @@ typedef struct nyx_object_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT(_type) \
+#define NYX_OBJECT(kind) \
             ((struct nyx_object_s) {            \
                 .magic = NYX_OBJECT_MAGIC,      \
                 .flags = 0x00000000000000,      \
-                .type = _type,                  \
+                .type = kind,                   \
                 .node = NULL,                   \
                 .parent = NULL,                 \
                 .in_callback = NULL,            \
