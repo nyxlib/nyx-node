@@ -48,6 +48,7 @@ set(SOURCE_FILES
     src/indi/indi_text.c
     #
     src/base.c
+    src/base64.c
     src/string_builder.c
     src/json.c
     src/xml.c
