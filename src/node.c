@@ -283,51 +283,50 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(device2 != NULL && tag2 != NULL)
+            if(device2 == NULL || strcmp(device1, device2) != 0)
+            {
+                continue;
+            }
+
+            if(name1 != NULL)
+            {
+                if(name2 == NULL || strcmp(name1, name2) != 0)
+                {
+                    continue;
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            switch(blob)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if((strcmp(device1, device2) != 0)
-                   ||
-                   (name1 != NULL && name2 != NULL && strcmp(name1, name2) != 0)
-                ) {
-                    continue;
-                }
+                case NYX_BLOB_ALSO:
+                    def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
+                    break;
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                switch(blob)
-                {
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    case NYX_BLOB_ALSO:
+                case NYX_BLOB_NEVER:
+                    if(tag2 != NULL && strcmp(tag2, "defBLOBVector") == 0) {
+                        def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
+                    }
+                    else {
                         def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
-                        break;
+                    }
+                    break;
 
-                    /*------------------------------------------------------------------------------------------------*/
+                /*----------------------------------------------------------------------------------------------------*/
 
-                    case NYX_BLOB_NEVER:
-                        if(strcmp(tag2, "defBLOBVector") == 0) {
-                            def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
-                        }
-                        else {
-                            def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
-                        }
-                        break;
-
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    case NYX_BLOB_ONLY:
-                        if(strcmp(tag2, "defBLOBVector") == 0) {
-                            def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
-                        }
-                        else {
-                            def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
-                        }
-                        break;
-
-                    /*------------------------------------------------------------------------------------------------*/
-                }
+                case NYX_BLOB_ONLY:
+                    if(tag2 != NULL && strcmp(tag2, "defBLOBVector") == 0) {
+                        def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
+                    }
+                    else {
+                        def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
+                    }
+                    break;
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
