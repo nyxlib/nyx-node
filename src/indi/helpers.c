@@ -396,7 +396,7 @@ void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts) {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set_tagname, STR_t one_tagname)
+nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set_tag, STR_t one_tag)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -406,7 +406,7 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from(set_tagname));
+    nyx_dict_set(result, "<>", nyx_string_from(set_tag));
 
     internal_copy(result, def_vector, "@client", true);
     internal_copy(result, def_vector, "@device", true);
@@ -434,12 +434,12 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set(dict, "<>", nyx_string_from(one_tagname));
+        nyx_dict_set(dict, "<>", nyx_string_from(one_tag));
 
         internal_copy(dict, (nyx_dict_t *) object, "$", true);
         internal_copy(dict, (nyx_dict_t *) object, "@name", true);
 
-        if(strcmp(one_tagname, "oneBLOB") == 0)
+        if(strcmp(one_tag, "oneBLOB") == 0)
         {
             internal_copy(dict, (nyx_dict_t *) object, "@size", true);
             internal_copy(dict, (nyx_dict_t *) object, "@format", true);

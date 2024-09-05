@@ -32,7 +32,7 @@ nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set(result, "<>", nyx_string_from("defSwitch"));
+    nyx_dict_set(result, "<>", nyx_string_from("defBLOB"));
 
     nyx_dict_set(result, "@name", nyx_string_from(name));
     nyx_dict_set(result, "@label", nyx_string_from(label));

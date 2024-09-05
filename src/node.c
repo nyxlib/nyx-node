@@ -155,27 +155,27 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 
     if((def_vector->base.flags & NYX_FLAGS_BOTH_DISABLED) == 0)
     {
-        STR_t tagname = nyx_dict_get_string(def_vector, "<>");
+        STR_t tag = nyx_dict_get_string(def_vector, "<>");
 
-        if(tagname != NULL)
+        if(tag != NULL)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
             nyx_dict_t *set_vector;
 
-            /**/ if(strcmp("defNumberVector", tagname) == 0) {
+            /**/ if(strcmp("defNumberVector", tag) == 0) {
                 set_vector = nyx_number_set_vector_new(def_vector);
             }
-            else if(strcmp("defTextVector", tagname) == 0) {
+            else if(strcmp("defTextVector", tag) == 0) {
                 set_vector = nyx_text_set_vector_new(def_vector);
             }
-            else if(strcmp("defLightVector", tagname) == 0) {
+            else if(strcmp("defLightVector", tag) == 0) {
                 set_vector = nyx_light_set_vector_new(def_vector);
             }
-            else if(strcmp("defSwitchVector", tagname) == 0) {
+            else if(strcmp("defSwitchVector", tag) == 0) {
                 set_vector = nyx_switch_set_vector_new(def_vector);
             }
-            else if(strcmp("defBLOBVector", tagname) == 0) {
+            else if(strcmp("defBLOBVector", tag) == 0) {
                 set_vector = nyx_blob_set_vector_new(def_vector);
             }
             else {
@@ -279,11 +279,11 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             STR_t device2 = nyx_dict_get_string(def_vector, "@device");
             STR_t name2 = nyx_dict_get_string(def_vector, "@name");
-            STR_t tagname2 = nyx_dict_get_string(def_vector, "<>");
+            STR_t tag2 = nyx_dict_get_string(def_vector, "<>");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(device2 != NULL && tagname2 != NULL)
+            if(device2 != NULL && tag2 != NULL)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -307,7 +307,7 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
-                        if(strcmp(tagname2, "defBLOBVector") == 0) {
+                        if(strcmp(tag2, "defBLOBVector") == 0) {
                             def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
                         }
                         else {
@@ -318,7 +318,7 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_ONLY:
-                        if(strcmp(tagname2, "defBLOBVector") == 0) {
+                        if(strcmp(tag2, "defBLOBVector") == 0) {
                             def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
                         }
                         else {
@@ -455,7 +455,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                 /*--------------------------------------------------------------------*/
 
                                                 str_t str = nyx_object_to_string(object2);
-                                                MG_INFO(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
+                                                MG_DEBUG(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
                                                 nyx_memory_free(str);
 
                                                 /*--------------------------------------------------------------------*/
@@ -504,25 +504,25 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 {
     if(object->type == NYX_TYPE_DICT)
     {
-        STR_t tagname = nyx_dict_get_string((nyx_dict_t *) object, "<>");
+        STR_t tag = nyx_dict_get_string((nyx_dict_t *) object, "<>");
 
-        if(tagname != NULL)
+        if(tag != NULL)
         {
-            /**/ if(strcmp(tagname, "getProperties") == 0) {
+            /**/ if(strcmp(tag, "getProperties") == 0) {
                 get_properties(node, (nyx_dict_t *) object);
             }
-            else if(strcmp(tagname, "enableBLOB") == 0) {
+            else if(strcmp(tag, "enableBLOB") == 0) {
                 enable_blob(node, (nyx_dict_t *) object);
             }
-            else if(strcmp(tagname, "newNumberVector") == 0
+            else if(strcmp(tag, "newNumberVector") == 0
                     ||
-                    strcmp(tagname, "newTextVector") == 0
+                    strcmp(tag, "newTextVector") == 0
                     ||
-                    strcmp(tagname, "newLightVector") == 0
+                    strcmp(tag, "newLightVector") == 0
                     ||
-                    strcmp(tagname, "newSwitchVector") == 0
+                    strcmp(tag, "newSwitchVector") == 0
                     ||
-                    strcmp(tagname, "newBLOBVector") == 0
+                    strcmp(tag, "newBLOBVector") == 0
             ) {
                 set_properties(node, (nyx_dict_t *) object);
             }
