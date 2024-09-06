@@ -5,7 +5,7 @@ stages:
 
 before_script:
     - apk update
-    - apk add --no-cache gcc make cmake musl-dev libxml2-dev
+    - apk add --no-cache gcc make cmake doxygen musl-dev libxml2-dev
 
 build_project:
     stage: build
@@ -13,4 +13,4 @@ build_project:
         - mkdir -p ./build/
         - cd ./build/
         - cmake ..
-        - make
+        - make all docs
