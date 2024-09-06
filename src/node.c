@@ -200,6 +200,19 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* CHECK PROTOCOL VERSION                                                                                         */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t version1 = nyx_dict_get_string(dict, "@version");
+
+    if(version1 != NULL && strcmp(version1, NYX_INDI_VERSION) != 0)
+    {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* GET PROPERTIES                                                                                                 */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     STR_t device1 = nyx_dict_get_string(dict, "@device");
     STR_t name1 = nyx_dict_get_string(dict, "@name");

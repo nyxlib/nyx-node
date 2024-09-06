@@ -14,6 +14,10 @@ add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -
 
 find_package(LibXml2 REQUIRED)
 
+find_package(Doxygen)
+
+########################################################################################################################
+# LIBS                                                                                                                 #
 ########################################################################################################################
 
 include(CheckFunctionExists)
@@ -121,6 +125,8 @@ configure_file(
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/LibNyxNodeConfig.cmake" DESTINATION lib/cmake/LibNyxNode)
 
 ########################################################################################################################
+# TESTS                                                                                                                #
+########################################################################################################################
 
 add_executable(check_json test/check_json.c)
 target_link_libraries(check_json nyx-node-static ${LIBXML2_LIBRARIES})
@@ -130,5 +136,27 @@ target_link_libraries(test1 nyx-node-static ${LIBXML2_LIBRARIES})
 
 add_executable(test2 test/test2.c)
 target_link_libraries(test2 nyx-node-static ${LIBXML2_LIBRARIES})
+
+########################################################################################################################
+# DOCS                                                                                                                 #
+########################################################################################################################
+
+if(DOXYGEN_FOUND)
+
+    set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+
+    set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/)
+
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_IN}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+    add_custom_command(TARGET docs PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR})
+
+else()
+    message("Doxygen needs to be installed")
+endif()
 
 ########################################################################################################################
