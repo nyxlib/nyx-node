@@ -27,8 +27,6 @@ nyx_number_t *nyx_number_new()
 
 void nyx_number_free(nyx_number_t *object)
 {
-    object->value = 0.0;
-
     nyx_memory_free(object);
 }
 

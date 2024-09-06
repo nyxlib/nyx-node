@@ -27,8 +27,6 @@ nyx_boolean_t *nyx_boolean_new()
 
 void nyx_boolean_free(nyx_boolean_t *object)
 {
-    object->value = false;
-
     nyx_memory_free(object);
 }
 
