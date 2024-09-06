@@ -43,29 +43,55 @@ double nan(const char *tag);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef /* */ void *buff_t;
+typedef /*-*/ void *buff_t;
 typedef const void *BUFF_t;
 
-typedef /* */ char *str_t;
+typedef /*-*/ char *str_t;
 typedef const char *STR_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup MEMORY Memory primitives
+  * Memory primitives with leak detection.
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Initialize the memory subsystem.
+ */
 
 void nyx_memory_initialize();
+
+/**
+ * \brief Finalize the memory subsystem.
+ */
 
 void nyx_memory_finalize();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Similar to libc free.
+ */
+
 size_t nyx_memory_free(
     __NULLABLE__ buff_t buff
 );
 
+/**
+ * \brief Similar to libc malloc.
+ */
+
 buff_t nyx_memory_alloc(
     __ZEROABLE__ size_t size
 );
+
+/**
+ * \brief Similar to libc realloc.
+ */
 
 buff_t nyx_memory_realloc(
     __NULLABLE__ buff_t buff,
@@ -75,12 +101,36 @@ buff_t nyx_memory_realloc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* BASE64                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup BASE64 Base64 encoding/decoding
+  * Fast Base64 encoding/decoding.
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Encodes a buffer to a Base64-encoded string.
+ *
+ * \param result_len Optional pointer to store the length of the encoded string.
+ * \param size Size of the buffer to encode.
+ * \param buff Input buffer to encode.
+ * \return Encoded string.
+ */
 
 str_t nyx_base64_encode(
     __NULLABLE__ size_t *result_len,
     size_t size,
     BUFF_t buff
 );
+
+/**
+ * \brief Decodes a Base64-encoded string to a buffer.
+ *
+ * \param result_size Optional pointer to store the size of the decoded buffer.
+ * \param len Length of the string to decode.
+ * \param str Input string to decode.
+ * \return Decoded buffer.
+ */
 
 buff_t nyx_base64_decode(
     __NULLABLE__ size_t *result_size,
@@ -90,6 +140,11 @@ buff_t nyx_base64_decode(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* OBJECT                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup OBJECT JSON serialization/deserialization
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define NYX_OBJECT_MAGIC 0x6565656565656565
@@ -145,6 +200,13 @@ typedef struct nyx_object_s
             })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Parses a JSON document.
+ *
+ * \param text ???
+ * \return ???.
+ */
 
 nyx_object_t *nyx_object_parse(
     __NULLABLE__ STR_t text
@@ -617,15 +679,35 @@ __INLINE__ bool nyx_list_push(nyx_list_t *object, buff_t value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* XMLDOC                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup XMLDOC XML serialization/deserialization
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct _xmlDoc nyx_xmldoc_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Parses an XML document from a buffer.
+ *
+ * \param buff ???
+ * \param size ???
+ * \return ???.
+ */
+
 nyx_xmldoc_t *nyx_xmldoc_parse_buff(
     __NULLABLE__ BUFF_t buff,
     __ZEROABLE__ size_t size
 );
+
+/**
+ * \brief Parses an XML document from a string.
+ *
+ * \param text ???
+ * \return ???.
+ */
 
 nyx_xmldoc_t *nyx_xmldoc_parse(
     __NULLABLE__ STR_t text
@@ -642,8 +724,21 @@ str_t nyx_xmldoc_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VALIDATION                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup VALIDATION XML validation
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Initialize the XML validation subsystem.
+ */
 
 bool nyx_validation_initialize();
+
+/**
+ * \brief Initialize the XML validation subsystem.
+ */
 
 bool nyx_validation_finalize();
 
@@ -653,6 +748,11 @@ bool nyx_validation_check(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* TRANSFORM                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup TRANSFORM JSON<->XML transform
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_object_t *nyx_xmldoc_to_object(
@@ -668,8 +768,13 @@ nyx_xmldoc_t *nyx_object_to_xmldoc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* NYX                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX Nyx protocol
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_VERSION "1.7"
+#define NYX_INDI_VERSION "1.7"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -925,7 +1030,12 @@ nyx_dict_t *nyx_del_property_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SERVER                                                                                                             */
+/* NODE                                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NODE Nyx node
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define INI_PING_MS 5000
