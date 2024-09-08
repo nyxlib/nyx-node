@@ -8,16 +8,9 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, size_t size)
+nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size)
 {
     return (buff != NULL && size > 0x00) ? xmlReadMemory(buff, (int) size, "message.xml", "iso-8859-1", 0) : NULL;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t text)
-{
-    return (text != NULL) ? xmlReadMemory(text, (int) strlen(text), "message.xml", "iso-8859-1", 0) : NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

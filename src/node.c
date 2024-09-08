@@ -580,7 +580,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse(stream.s_ptr, stream.len);
 
                 if(xmldoc != NULL)
                 {
@@ -709,7 +709,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(message->data.buf, message->data.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse(message->data.buf, message->data.len);
 
                 if(xmldoc != NULL)
                 {

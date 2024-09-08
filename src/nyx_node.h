@@ -920,27 +920,16 @@ typedef struct _xmlDoc nyx_xmldoc_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Parses an XML document from a buffer.
+ * \brief Parses an XML document from a text buffer.
  *
- * \param buff ???
- * \param size ???
- * \return The new XML document.
- */
-
-nyx_xmldoc_t *nyx_xmldoc_parse_buff(
-    __NULLABLE__ BUFF_t buff,
-    __ZEROABLE__ size_t size
-);
-
-/**
- * \brief Parses an XML document from a string.
- *
- * \param text ???
+ * \param buff The text buffer pointer.
+ * \param size The text buffer size.
  * \return The new XML document.
  */
 
 nyx_xmldoc_t *nyx_xmldoc_parse(
-    __NULLABLE__ STR_t text
+    __NULLABLE__ BUFF_t buff,
+    __ZEROABLE__ size_t size
 );
 
 /**
@@ -986,7 +975,7 @@ bool nyx_validation_initialize();
 bool nyx_validation_finalize();
 
 /**
- * \brief Validate the provided XML document using sur XSD schema bellow.
+ * \brief Validate the provided XML document using the INDI XSD schema + Nyx additions.
  *
  * @param xmldoc The provided XML document.
  * @return `True` if the document is valid.
