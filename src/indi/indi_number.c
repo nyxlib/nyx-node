@@ -21,7 +21,7 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, float min, float max, float step, float value)
+nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
 {
     if(label == NULL || label[0] == '\0')
     {

@@ -243,6 +243,12 @@ str_t nyx_object_to_cstring(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* NULL                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NULL_OBJECT JSON Null Object
+  * @ingroup OBJECT
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
 {
@@ -283,6 +289,12 @@ str_t nyx_null_to_string(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* NUMBER                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NUMBER_OBJECT JSON Number Object
+  * @ingroup OBJECT
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
@@ -359,6 +371,12 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* BOOLEAN                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup BOOLEAN_OBJECT JSON Boolean Object
+  * @ingroup OBJECT
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
 {
@@ -433,6 +451,12 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STRING                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup STRING_OBJECT JSON String Object
+  * @ingroup OBJECT
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
@@ -597,6 +621,12 @@ __INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* DICT                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup DICT_OBJECT JSON Dict Object
+  * @ingroup OBJECT
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
 {
@@ -734,6 +764,12 @@ __INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* LIST                                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup LIST_OBJECT JSON List Object
+  * @ingroup OBJECT
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
@@ -1085,22 +1121,32 @@ typedef struct
 } nyx_opts_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_NUMBER Nyx Number
+  * @ingroup NYX
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_number_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     STR_t format,
-    float min,
-    float max,
-    float step,
-    float value
+    double min,
+    double max,
+    double step,
+    double value
 );
 
-#define nyx_number_def_set(def, value) \
-            nyx_dict_set(def, "$", nyx_number_from(value))
+__INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
+{
+    return nyx_dict_set(def, "$", nyx_number_from(value));
+}
 
-#define nyx_number_def_get(def) \
-            ((nyx_number_t *) nyx_dict_get(def, "$"))->data
+__INLINE__ double nyx_number_def_get(nyx_dict_t *def)
+{
+    return ((nyx_number_t *) nyx_dict_get(def, "$"))->value;
+}
 
 nyx_dict_t *nyx_number_def_vector_new(
     STR_t device,
@@ -1116,6 +1162,12 @@ nyx_dict_t *nyx_number_set_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_TEXT Nyx Text
+  * @ingroup NYX
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_text_def_new(
     STR_t name,
@@ -1123,11 +1175,15 @@ nyx_dict_t *nyx_text_def_new(
     STR_t value
 );
 
-#define nyx_text_def_set(def, value) \
-            nyx_dict_set(def, "$", nyx_string_from(value))
+__INLINE__ bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
+{
+    return  nyx_dict_set(def, "$", nyx_string_from(value));
+}
 
-#define nyx_text_def_get(def) \
-            ((nyx_string_t *) nyx_dict_get(def, "$"))->data
+__INLINE__ STR_t nyx_text_def_get(nyx_dict_t *def)
+{
+    return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
+}
 
 nyx_dict_t *nyx_text_def_vector_new(
     STR_t device,
@@ -1143,6 +1199,12 @@ nyx_dict_t *nyx_text_set_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_LIGHT Nyx Light
+  * @ingroup NYX
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_light_def_new(
     STR_t name,
@@ -1150,11 +1212,15 @@ nyx_dict_t *nyx_light_def_new(
     nyx_state_t value
 );
 
-#define nyx_light_def_set(def, value) \
-            nyx_dict_set(def, "$", nyx_string_from(nyx_state_to_str(value)))
+__INLINE__ bool nyx_light_def_set(nyx_dict_t *def, nyx_state_t value)
+{
+    return nyx_dict_set(def, "$", nyx_string_from(nyx_state_to_str(value)));
+}
 
-#define nyx_light_def_get(def) \
-            nyx_str_to_state(((nyx_string_t *) nyx_dict_get(def, "$"))->data)
+__INLINE__ nyx_state_t nyx_light_def_get(nyx_dict_t *def)
+{
+    return nyx_str_to_state(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
+}
 
 nyx_dict_t *nyx_light_def_vector_new(
     STR_t device,
@@ -1169,6 +1235,12 @@ nyx_dict_t *nyx_light_set_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_SWITCH Nyx Switch
+  * @ingroup NYX
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_switch_def_new(
     STR_t name,
@@ -1176,11 +1248,15 @@ nyx_dict_t *nyx_switch_def_new(
     nyx_onoff_t value
 );
 
-#define nyx_switch_def_set(def, value) \
-            nyx_dict_set(def, "$", nyx_string_from(nyx_onoff_to_str(value)))
+__INLINE__ bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
+{
+    return nyx_dict_set(def, "$", nyx_string_from(nyx_onoff_to_str(value)));
+}
 
-#define nyx_switch_def_get(def) \
-            nyx_str_to_onoff(((nyx_string_t *) nyx_dict_get(def, "$"))->value)
+__INLINE__ nyx_onoff_t nyx_switch_def_get(nyx_dict_t *def)
+{
+    return nyx_str_to_onoff(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
+}
 
 nyx_dict_t *nyx_switch_def_vector_new(
     STR_t device,
@@ -1197,6 +1273,12 @@ nyx_dict_t *nyx_switch_set_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_BLOB Nyx BLOB
+  * @ingroup NYX
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_blob_def_new(
     STR_t name,
@@ -1204,11 +1286,15 @@ nyx_dict_t *nyx_blob_def_new(
     STR_t value
 );
 
-#define nyx_blob_def_set(def, value) \
-            nyx_dict_set(def, "$", nyx_string_from(value))
+__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, STR_t value)
+{
+    return nyx_dict_set(def, "$", nyx_string_from(value));
+}
 
-#define nyx_blob_def_get(def) \
-            ((nyx_string_t *) nyx_dict_get(def, "$"))->data
+__INLINE__ STR_t nyx_blob_def_get(nyx_dict_t *def)
+{
+    return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
+}
 
 nyx_dict_t *nyx_blob_def_vector_new(
     STR_t device,
@@ -1223,6 +1309,12 @@ nyx_dict_t *nyx_blob_set_vector_new(
     const nyx_dict_t *def_vector
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_MESSAGE_PROPERTY Nyx Message and Property
+  * @ingroup NYX
+  * @{
+  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_message_new(
