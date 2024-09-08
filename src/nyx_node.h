@@ -260,7 +260,7 @@ str_t nyx_object_to_cstring(
 
 typedef struct
 {
-    nyx_object_t base;
+    nyx_object_t base;                                                                          //!< ???
 
 } nyx_null_t;
 
@@ -301,7 +301,7 @@ str_t nyx_null_to_string(
 
 typedef struct
 {
-    nyx_object_t base;
+    nyx_object_t base;                                                                          //!< ???
 
     double value;
 
@@ -376,7 +376,7 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 
 typedef struct
 {
-    nyx_object_t base;
+    nyx_object_t base;                                                                          //!< ???
 
     bool value;
 
@@ -451,7 +451,7 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 
 typedef struct
 {
-    nyx_object_t base;
+    nyx_object_t base;                                                                          //!< ???
 
     size_t length;
     str_t value;
@@ -606,7 +606,7 @@ __INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
 
 typedef struct
 {
-    nyx_object_t base;
+    nyx_object_t base;                                                                          //!< ???
 
     struct nyx_dict_node_s *head;
     struct nyx_dict_node_s *tail;
@@ -744,7 +744,7 @@ __INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
 
 typedef struct
 {
-    nyx_object_t base;
+    nyx_object_t base;                                                                          //!< ???
 
     struct nyx_list_node_s *head;
     struct nyx_list_node_s *tail;
