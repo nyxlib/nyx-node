@@ -582,7 +582,15 @@ __INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @copydoc nyx_string_dynamic_set
+ */
+
 #define nyx_string_set nyx_string_dynamic_set
+
+/**
+ * @copydoc nyx_string_dynamic_from
+ */
 
 #define nyx_string_from nyx_string_dynamic_from
 
@@ -1293,6 +1301,8 @@ void nyx_node_send_message(
     STR_t message
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @} */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #ifdef __cplusplus

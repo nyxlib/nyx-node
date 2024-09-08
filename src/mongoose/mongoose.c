@@ -3587,7 +3587,7 @@ int mg_json_get(struct mg_str json, const char *path, int *toklen) {
         if (c == '{') {
           if (depth >= (int) sizeof(nesting)) return MG_JSON_TOO_DEEP;
           if (depth == ed && path[pos] == '.' && ci == ei) {
-            // If we start the object, reset array nyxces
+            // If we start the object, reset array indices
             ed++, pos++, ci = ei = -1;
           }
           nesting[depth++] = c;
@@ -4090,7 +4090,7 @@ struct mg_mqtt_pmap {
 };
 
 static const struct mg_mqtt_pmap s_prop_map[] = {
-    {MQTT_PROP_PAYLOAD_FORMAT_NYXCATOR, MQTT_PROP_TYPE_BYTE},
+    {MQTT_PROP_PAYLOAD_FORMAT_INDICATOR, MQTT_PROP_TYPE_BYTE},
     {MQTT_PROP_MESSAGE_EXPIRY_INTERVAL, MQTT_PROP_TYPE_INT},
     {MQTT_PROP_CONTENT_TYPE, MQTT_PROP_TYPE_STRING},
     {MQTT_PROP_RESPONSE_TOPIC, MQTT_PROP_TYPE_STRING},
@@ -5186,7 +5186,7 @@ static void tx_dhcp_request_sel(struct mg_tcpip_if *ifp, uint32_t ip_req,
   MG_DEBUG(("DHCP req sent"));
 }
 
-// RFC-2131 #4.3.6, #4.4.5 (renewing: unicast, rebnyxng: bcast)
+// RFC-2131 #4.3.6, #4.4.5 (renewing: unicast, rebinding: bcast)
 static void tx_dhcp_request_re(struct mg_tcpip_if *ifp, uint8_t *mac_dst,
                                uint32_t ip_src, uint32_t ip_dst) {
   uint8_t opts[] = {
@@ -5798,7 +5798,7 @@ static void mg_tcpip_poll(struct mg_tcpip_if *ifp, uint64_t now) {
   if (ifp->state == MG_TCPIP_STATE_UP && expired_1000ms) {
     tx_dhcp_discover(ifp);  // INIT (4.4.1)
   } else if (expired_1000ms && ifp->state == MG_TCPIP_STATE_READY &&
-             ifp->lease_expire > 0) {  // BOUND / RENEWING / REBNYXNG
+             ifp->lease_expire > 0) {  // BOUND / RENEWING / REBINDING
     if (ifp->now >= ifp->lease_expire) {
       ifp->state = MG_TCPIP_STATE_UP, ifp->ip = 0;  // expired, release IP
       onstatechange(ifp);
@@ -5806,7 +5806,7 @@ static void mg_tcpip_poll(struct mg_tcpip_if *ifp, uint64_t now) {
                ((ifp->now / 1000) % 60) == 0) {
       // hack: 30 min before deadline, try to rebind (4.3.6) every min
       tx_dhcp_request_re(ifp, (uint8_t *) broadcast, ifp->ip, 0xffffffff);
-    }  // TODO(): Handle T1 (RENEWING) and T2 (REBNYXNG) (4.4.5)
+    }  // TODO(): Handle T1 (RENEWING) and T2 (REBINDING) (4.4.5)
   }
 
   // Read data from the network
@@ -6161,7 +6161,7 @@ bool mg_ota_end(void) {
 #define MG_OTADATA_KEY 0xb07afed0
 
 static char *s_addr;      // Current address to write to
-static size_t s_size;     // Firmware size to flash. In-progress nyxcator
+static size_t s_size;     // Firmware size to flash. In-progress indicator
 static uint32_t s_crc32;  // Firmware checksum
 
 struct mg_otadata {
@@ -7563,7 +7563,7 @@ void mg_connect_resolved(struct mg_connection *c) {
   } else if (c->is_udp) {
     MG_EPOLL_ADD(c);
 #if MG_ARCH == MG_ARCH_TIRTOS
-    union usa usa;  // TI-RTOS NDK requires bnyxng to receive on UDP sockets
+    union usa usa;  // TI-RTOS NDK requires binding to receive on UDP sockets
     socklen_t slen = tousa(&c->loc, &usa);
     if ((rc = bind(c->fd, &usa.sa, slen)) != 0)
       MG_ERROR(("bind: %d", MG_SOCK_ERR(rc)));
@@ -8900,7 +8900,7 @@ static int aes_cipher(aes_context *ctx, const uchar input[16],
  *  is being invoked by its author or by someone who understands the values it
  *  expects to receive. Its behavior will be undefined otherwise.
  *
- *  All functions that might fail are defined to return 'ints' to nyxcate a
+ *  All functions that might fail are defined to return 'ints' to indicate a
  *  problem. Most do not do so now. But this allows for error propagation out
  *  of internal functions if robust error checking should ever be desired.
  *
@@ -9415,7 +9415,7 @@ struct tls_data {
 
   struct mg_iobuf send;  // For the receive path, we're reusing c->rtls
   struct mg_iobuf recv;  // While c->rtls contains full records, recv reuses
-                         // the same underlying buffer but points at nyxvidual
+                         // the same underlying buffer but points at individual
                          // decrypted messages
   uint8_t content_type;  // Last received record content type
 

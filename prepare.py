@@ -7,6 +7,8 @@ import requests
 
 MONGOOSE_VERSION = '7.14'
 
+DOXYGEN_AWESOME_VERSION = '2.3.3'
+
 ########################################################################################################################
 
 def compile_schema():
@@ -58,10 +60,28 @@ def download_mongoose():
 
 ########################################################################################################################
 
+def download_doxygen_awesome():
+
+    for filename in ['doxygen-awesome.css']:
+
+        response = requests.get(f'https://raw.githubusercontent.com/jothepro/doxygen-awesome-css/v{DOXYGEN_AWESOME_VERSION}/{filename}')
+
+        if response.status_code != 200:
+
+            raise IOError(f'Cannot download `{filename}`')
+
+        with open(f'./.{filename}', 'wt') as f:
+
+            f.write(response.content.decode('UTF-8'))
+
+########################################################################################################################
+
 if __name__ == '__main__':
 
     compile_schema()
 
     download_mongoose()
+
+    download_doxygen_awesome()
 
 ########################################################################################################################
