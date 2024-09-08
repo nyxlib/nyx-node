@@ -46,6 +46,19 @@ int nyx_unicode_to_utf8(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define NYX_OBJECT(Type) \
+            ((struct nyx_object_s) {            \
+                .magic = NYX_OBJECT_MAGIC,      \
+                .flags = 0x00000000000000,      \
+                .type = Type,                   \
+                .node = NULL,                   \
+                .parent = NULL,                 \
+                .in_callback = NULL,            \
+                .out_callback = NULL            \
+            })
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_object_notify(
     __NULLABLE__ nyx_object_t *object,
     bool modified

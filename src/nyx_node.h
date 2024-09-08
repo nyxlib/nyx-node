@@ -52,8 +52,7 @@ typedef const char *STR_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
-/** @}
-  * @defgroup MEMORY Memory primitives
+/** @defgroup MEMORY Memory primitives
   * Memory primitives with leak detection.
   * @{
   */
@@ -190,19 +189,6 @@ typedef struct nyx_object_s
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
 } nyx_object_t;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define NYX_OBJECT(Type) \
-            ((struct nyx_object_s) {            \
-                .magic = NYX_OBJECT_MAGIC,      \
-                .flags = 0x00000000000000,      \
-                .type = Type,                   \
-                .node = NULL,                   \
-                .parent = NULL,                 \
-                .in_callback = NULL,            \
-                .out_callback = NULL            \
-            })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
