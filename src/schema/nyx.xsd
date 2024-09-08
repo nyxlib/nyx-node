@@ -38,7 +38,9 @@
   <!-- ************************************************************************************************************* -->
   <xs:element name="message">
     <xs:complexType>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="optional"/>
       <xs:attribute name="timestamp" type="xs:dateTime" use="optional"/>
       <xs:attribute name="message" type="xs:string" use="optional"/>
@@ -76,7 +78,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defNumber"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -103,7 +107,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneNumber"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -135,7 +141,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defText"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -158,7 +166,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneText"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -190,7 +200,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defLight"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -211,7 +223,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneLight"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -232,7 +246,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defSwitch"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -256,7 +272,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneSwitch"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
@@ -288,7 +306,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="defBLOB"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
@@ -304,6 +324,9 @@
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
+      <!-- NYX -->
+      <xs:attribute name="format" type="xs:string" use="optional"/>
+      <!-- NYX -->
     </xs:complexType>
   </xs:element>
   <xs:element name="setBLOBVector">
@@ -311,7 +334,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="oneBLOB"/>
       </xs:sequence>
+      <!-- NYX -->
       <xs:attribute name="client" type="xs:string" use="optional"/>
+      <!-- NYX -->
       <xs:attribute name="device" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="state" type="propertyState" use="optional"/>
