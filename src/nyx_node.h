@@ -147,52 +147,57 @@ buff_t nyx_base64_decode(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT_MAGIC 0x6565656565656565
+#define NYX_OBJECT_MAGIC 0x6565656565656565                                                     //!< Magic number for identifying JSON objects.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef enum nyx_type_e
+typedef enum
 {
-    NYX_TYPE_NULL = 100,
-    NYX_TYPE_BOOLEAN = 101,
-    NYX_TYPE_NUMBER = 102,
-    NYX_TYPE_STRING = 103,
-    NYX_TYPE_DICT = 104,
-    NYX_TYPE_LIST = 105,
+    NYX_TYPE_NULL = 100,                                                                        //!< Null object.
+    NYX_TYPE_BOOLEAN = 101,                                                                     //!< Boolean object.
+    NYX_TYPE_NUMBER = 102,                                                                      //!< Number object.
+    NYX_TYPE_STRING = 103,                                                                      //!< String object.
+    NYX_TYPE_DICT = 104,                                                                        //!< Dict object.
+    NYX_TYPE_LIST = 105,                                                                        //!< List object.
 
 } nyx_type_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_XXXX_DISABLED     ((uint32_t) (1 << 0))
-#define NYX_FLAGS_BLOB_DISABLED     ((uint32_t) (1 << 1))
-#define NYX_FLAGS_BOTH_DISABLED     (NYX_FLAGS_XXXX_DISABLED | NYX_FLAGS_BLOB_DISABLED)
+#define NYX_FLAGS_XXXX_DISABLED     ((uint32_t) (1 << 0))                                       //!< Flag specifying that the object is disabled.
+#define NYX_FLAGS_BLOB_DISABLED     ((uint32_t) (1 << 1))                                       //!< Flag specifying that the blob is disabled.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct nyx_object_s
 {
-    uint64_t magic;
-    uint32_t flags;
+    uint64_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
+    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_?_DISABLED.
 
-    enum nyx_type_e type;
+    nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
-    __NULLABLE__ struct nyx_node_s *node;
+    __NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
 
-    __NULLABLE__ struct nyx_object_s *parent;
+    __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
 
-    __NULLABLE__ void (* in_callback)(struct nyx_object_s *object, bool modified);
-    __NULLABLE__ void (* out_callback)(struct nyx_object_s *object, bool modified);
+    __NULLABLE__ void (* in_callback)(
+        struct nyx_object_s *object,                                                            //!< This object.
+        bool modified                                                                           //!< Indicate weather the value has been modified.
+    );                                                                                          //!< Callback triggered when the client modifies this object.
+    __NULLABLE__ void (* out_callback)(
+        struct nyx_object_s *object,                                                            //!< This object.
+        bool modified                                                                           //!< Indicate weather the value has been modified.
+    );                                                                                          //!< Callback triggered when the server modifies this object.
 
 } nyx_object_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT(kind) \
+#define NYX_OBJECT(Type) \
             ((struct nyx_object_s) {            \
                 .magic = NYX_OBJECT_MAGIC,      \
                 .flags = 0x00000000000000,      \
-                .type = kind,                   \
+                .type = Type,                   \
                 .node = NULL,                   \
                 .parent = NULL,                 \
                 .in_callback = NULL,            \
@@ -212,6 +217,12 @@ nyx_object_t *nyx_object_parse(
     __NULLABLE__ STR_t text
 );
 
+/**
+ * \brief Frees memory for this JSON document.
+ *
+ * @param object This JSON document.
+ */
+
 void nyx_object_free(
     __NULLABLE__ /*-*/ nyx_object_t *object
 );
@@ -221,9 +232,23 @@ bool nyx_object_equal(
     __NULLABLE__ const nyx_object_t *object2
 );
 
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
+
 str_t nyx_object_to_string(
     __NULLABLE__ const nyx_object_t *object
 );
+
+/**
+ * \brief Returns a C/C++ string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_object_to_cstring(
     __NULLABLE__ const nyx_object_t *object
@@ -241,11 +266,30 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new JSON null object.
+ *
+ * @return The new JSON null.
+ */
+
 nyx_null_t *nyx_null_new();
+
+/**
+ * \brief Frees memory for this JSON null object.
+ *
+ * @param object This JSON null object.
+ */
 
 void nyx_null_free(
     /*-*/ nyx_null_t *object
 );
+
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_null_to_string(
     const nyx_null_t *object
@@ -265,7 +309,19 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new JSON number object.
+ *
+ * @return The new JSON number.
+ */
+
 nyx_number_t *nyx_number_new();
+
+/**
+ * \brief Frees memory for this JSON number object.
+ *
+ * @param object This JSON number object.
+ */
 
 void nyx_number_free(
     /*-*/ nyx_number_t *object
@@ -275,11 +331,22 @@ double nyx_number_get(
     const nyx_number_t *object
 );
 
+/**
+ * @private
+ */
+
 bool nyx_number_set2(
     /*-*/ nyx_number_t *object,
     double value,
     bool notify
 );
+
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_number_to_string(
     const nyx_number_t *object
@@ -317,7 +384,19 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new JSON boolean object.
+ *
+ * @return The new JSON boolean.
+ */
+
 nyx_boolean_t *nyx_boolean_new();
+
+/**
+ * \brief Frees memory for this JSON boolean object.
+ *
+ * @param object This JSON boolean object.
+ */
 
 void nyx_boolean_free(
     /*-*/ nyx_boolean_t *object
@@ -327,11 +406,22 @@ bool nyx_boolean_get(
     const nyx_boolean_t *object
 );
 
+/**
+ * @private
+ */
+
 bool nyx_boolean_set2(
     /*-*/ nyx_boolean_t *object,
     bool value,
     bool notify
 );
+
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_boolean_to_string(
     const nyx_boolean_t *object
@@ -372,7 +462,19 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new JSON string object.
+ *
+ * @return The new JSON string.
+ */
+
 nyx_string_t *nyx_string_new();
+
+/**
+ * \brief Frees memory for this JSON string object.
+ *
+ * @param object This JSON string object.
+ */
 
 void nyx_string_free(
     /*-*/ nyx_string_t *object
@@ -382,17 +484,29 @@ STR_t nyx_string_get(
     const nyx_string_t *object
 );
 
+/**
+ * @private
+ */
+
 bool nyx_string_dynamic_set2(
     /*-*/ nyx_string_t *object,
     STR_t value,
     bool notify
 );
 
+/**
+ * @private
+ */
+
 bool nyx_string_static_set2(
     /*-*/ nyx_string_t *object,
     STR_t value,
     bool notify
 );
+
+/**
+ * @private
+ */
 
 bool nyx_string_buff_set2(
     /*-*/ nyx_string_t *object,
@@ -405,9 +519,23 @@ size_t nyx_string_length(
     const nyx_string_t *object
 );
 
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
+
 str_t nyx_string_to_string(
     const nyx_string_t *object
 );
+
+/**
+ * \brief Returns a C/C++ string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_string_to_cstring(
     const nyx_string_t *object
@@ -504,11 +632,29 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new JSON dict object.
+ *
+ * @return The new JSON dict.
+ */
+
 nyx_dict_t *nyx_dict_new();
+
+/**
+ * \brief Frees memory for this JSON dict object.
+ *
+ * @param object This JSON dict object.
+ */
 
 void nyx_dict_free(
     /*-*/ nyx_dict_t *object
 );
+
+/**
+ * \brief Clears the content of this JSON dict object.
+ *
+ * @param object This JSON dict object.
+ */
 
 void nyx_dict_clear(
     /*-*/ nyx_dict_t *object
@@ -530,6 +676,10 @@ nyx_object_t *nyx_dict_get(
     STR_t key
 );
 
+/**
+ * @private
+ */
+
 bool nyx_dict_set2(
     /*-*/ nyx_dict_t *object,
     STR_t key,
@@ -537,9 +687,23 @@ bool nyx_dict_set2(
     bool notify
 );
 
+/**
+ * \brief Gets the number of items in this JSON dict object.
+ *
+ * @param object This JSON dict object.
+ * @return The number of items in this JSON dict object.
+ */
+
 size_t nyx_dict_size(
     const nyx_dict_t *object
 );
+
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_dict_to_string(
     const nyx_dict_t *object
@@ -606,11 +770,29 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new JSON list.
+ *
+ * @return The new JSON list.
+ */
+
 nyx_list_t *nyx_list_new();
+
+/**
+ * \brief Frees memory for this JSON list object.
+ *
+ * @param object This JSON list object.
+ */
 
 void nyx_list_free(
     /*-*/ nyx_list_t *object
 );
+
+/**
+ * \brief Clears the content of this JSON list object.
+ *
+ * @param object This JSON dict object.
+ */
 
 void nyx_list_clear(
     /*-*/ nyx_list_t *object
@@ -632,6 +814,10 @@ nyx_object_t *nyx_list_get(
     int idx
 );
 
+/**
+ * @private
+ */
+
 nyx_list_t *nyx_list_set2(
     /*-*/ nyx_list_t *object,
     size_t idx,
@@ -639,9 +825,23 @@ nyx_list_t *nyx_list_set2(
     bool notify
 );
 
+/**
+ * \brief Gets the number of items in this JSON list object.
+ *
+ * @param object This JSON list object.
+ * @return The number of items in this JSON list object.
+ */
+
 size_t nyx_list_size(
     const nyx_list_t *object
 );
+
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param object This object.
+ * @return The string representing this object.
+ */
 
 str_t nyx_list_to_string(
     const nyx_list_t *object
@@ -694,7 +894,7 @@ typedef struct _xmlDoc nyx_xmldoc_t;
  *
  * \param buff ???
  * \param size ???
- * \return ???.
+ * \return The new XML document.
  */
 
 nyx_xmldoc_t *nyx_xmldoc_parse_buff(
@@ -706,16 +906,29 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
  * \brief Parses an XML document from a string.
  *
  * \param text ???
- * \return ???.
+ * \return The new XML document.
  */
 
 nyx_xmldoc_t *nyx_xmldoc_parse(
     __NULLABLE__ STR_t text
 );
 
+/**
+ * \brief Frees memory for this XML document.
+
+ * @param xmldoc This XML document.
+ */
+
 void nyx_xmldoc_free(
     __NULLABLE__ /*-*/ nyx_xmldoc_t *xmldoc
 );
+
+/**
+ * \brief Returns a string representing this object.
+ *
+ * @param xmldoc This XML document.
+ * @return The string representing this object.
+ */
 
 str_t nyx_xmldoc_to_string(
     __NULLABLE__ const nyx_xmldoc_t *xmldoc

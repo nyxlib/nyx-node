@@ -42,6 +42,10 @@ int nyx_unicode_to_utf8(
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define NYX_FLAGS_BOTH_DISABLED     (NYX_FLAGS_XXXX_DISABLED | NYX_FLAGS_BLOB_DISABLED)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_object_notify(
     __NULLABLE__ nyx_object_t *object,
     bool modified
