@@ -25,7 +25,7 @@ static const unsigned char BASE64_DECODE_TABLE[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, size_t size, BUFF_t buff)
+str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -114,7 +114,7 @@ str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, size_t size, BUFF_t buf
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_base64_decode(__NULLABLE__ size_t *result_size, size_t len, STR_t str)
+buff_t nyx_base64_decode(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
 {
     if(len == 0x00 || str == NULL)
     {

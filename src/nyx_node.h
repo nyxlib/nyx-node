@@ -119,8 +119,8 @@ buff_t nyx_memory_realloc(
 
 str_t nyx_base64_encode(
     __NULLABLE__ size_t *result_len,
-    size_t size,
-    BUFF_t buff
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
 );
 
 /**
@@ -134,8 +134,8 @@ str_t nyx_base64_encode(
 
 buff_t nyx_base64_decode(
     __NULLABLE__ size_t *result_size,
-    size_t len,
-    STR_t str
+    __ZEROABLE__ size_t len,
+    __NULLABLE__ STR_t str
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

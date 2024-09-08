@@ -13,4 +13,5 @@ build_project:
         - mkdir -p ./build/
         - cd ./build/
         - cmake ..
-        - make all docs
+        - make all
+        - make docs
