@@ -193,25 +193,33 @@ typedef struct nyx_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Parses a JSON document.
+ * \brief Parses a JSON object from a string.
  *
- * \param text ???
- * \return ???.
+ * \param text The string.
+ * \return The new JSON object.
  */
 
-nyx_object_t *nyx_object_parse(
+__NULLABLE__ nyx_object_t *nyx_object_parse(
     __NULLABLE__ STR_t text
 );
 
 /**
- * \brief Frees memory for this JSON document.
+ * \brief Frees memory for the provided JSON object.
  *
- * @param object This JSON document.
+ * @param object The provided JSON document.
  */
 
 void nyx_object_free(
     __NULLABLE__ /*-*/ nyx_object_t *object
 );
+
+/**
+ * \brief Compares two JSON objects.
+ *
+ * @param object1 The first JSON object.
+ * @param object2 The second JSON object.
+ * @return `true` if the objects are equal, and `false` if not.
+ */
 
 bool nyx_object_equal(
     __NULLABLE__ const nyx_object_t *object1,
@@ -219,10 +227,10 @@ bool nyx_object_equal(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_object_to_string(
@@ -230,10 +238,10 @@ str_t nyx_object_to_string(
 );
 
 /**
- * \brief Returns a C/C++ string representing this object.
+ * \brief Returns a C/C++ string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_object_to_cstring(
@@ -267,9 +275,9 @@ typedef struct
 nyx_null_t *nyx_null_new();
 
 /**
- * \brief Frees memory for this JSON null object.
+ * \brief Frees memory for the provided JSON null object.
  *
- * @param object This JSON null object.
+ * @param object The provided JSON null object.
  */
 
 void nyx_null_free(
@@ -277,10 +285,10 @@ void nyx_null_free(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_null_to_string(
@@ -316,9 +324,9 @@ typedef struct
 nyx_number_t *nyx_number_new();
 
 /**
- * \brief Frees memory for this JSON number object.
+ * \brief Frees memory for the provided JSON number object.
  *
- * @param object This JSON number object.
+ * @param object The provided JSON number object.
  */
 
 void nyx_number_free(
@@ -340,10 +348,10 @@ bool nyx_number_set2(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_number_to_string(
@@ -397,9 +405,9 @@ typedef struct
 nyx_boolean_t *nyx_boolean_new();
 
 /**
- * \brief Frees memory for this JSON boolean object.
+ * \brief Frees memory for the provided JSON boolean object.
  *
- * @param object This JSON boolean object.
+ * @param object The provided JSON boolean object.
  */
 
 void nyx_boolean_free(
@@ -421,10 +429,10 @@ bool nyx_boolean_set2(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_boolean_to_string(
@@ -481,9 +489,9 @@ typedef struct
 nyx_string_t *nyx_string_new();
 
 /**
- * \brief Frees memory for this JSON string object.
+ * \brief Frees memory for the provided JSON string object.
  *
- * @param object This JSON string object.
+ * @param object The provided JSON string object.
  */
 
 void nyx_string_free(
@@ -530,10 +538,10 @@ size_t nyx_string_length(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_string_to_string(
@@ -541,10 +549,10 @@ str_t nyx_string_to_string(
 );
 
 /**
- * \brief Returns a C/C++ string representing this object.
+ * \brief Returns a C/C++ string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_string_to_cstring(
@@ -665,9 +673,9 @@ typedef struct
 nyx_dict_t *nyx_dict_new();
 
 /**
- * \brief Frees memory for this JSON dict object.
+ * \brief Frees memory for the provided JSON dict object.
  *
- * @param object This JSON dict object.
+ * @param object The provided JSON dict object.
  */
 
 void nyx_dict_free(
@@ -675,9 +683,9 @@ void nyx_dict_free(
 );
 
 /**
- * \brief Clears the content of this JSON dict object.
+ * \brief Clears the content of the provided JSON dict object.
  *
- * @param object This JSON dict object.
+ * @param object The provided JSON dict object.
  */
 
 void nyx_dict_clear(
@@ -712,10 +720,10 @@ bool nyx_dict_set2(
 );
 
 /**
- * \brief Gets the number of items in this JSON dict object.
+ * \brief Gets the number of items in the provided JSON dict object.
  *
- * @param object This JSON dict object.
- * @return The number of items in this JSON dict object.
+ * @param object The provided JSON dict object.
+ * @return The number of items in the provided JSON dict object.
  */
 
 size_t nyx_dict_size(
@@ -723,10 +731,10 @@ size_t nyx_dict_size(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_dict_to_string(
@@ -809,9 +817,9 @@ typedef struct
 nyx_list_t *nyx_list_new();
 
 /**
- * \brief Frees memory for this JSON list object.
+ * \brief Frees memory for the provided JSON list object.
  *
- * @param object This JSON list object.
+ * @param object The provided JSON list object.
  */
 
 void nyx_list_free(
@@ -819,9 +827,9 @@ void nyx_list_free(
 );
 
 /**
- * \brief Clears the content of this JSON list object.
+ * \brief Clears the content of the provided JSON list object.
  *
- * @param object This JSON dict object.
+ * @param object The provided JSON dict object.
  */
 
 void nyx_list_clear(
@@ -856,10 +864,10 @@ nyx_list_t *nyx_list_set2(
 );
 
 /**
- * \brief Gets the number of items in this JSON list object.
+ * \brief Gets the number of items in the provided JSON list object.
  *
- * @param object This JSON list object.
- * @return The number of items in this JSON list object.
+ * @param object The provided JSON list object.
+ * @return The number of items in the provided JSON list object.
  */
 
 size_t nyx_list_size(
@@ -867,10 +875,10 @@ size_t nyx_list_size(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param object This object.
- * @return The string representing this object.
+ * @param object The provided object.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_list_to_string(
@@ -927,15 +935,15 @@ typedef struct _xmlDoc nyx_xmldoc_t;
  * \return The new XML document.
  */
 
-nyx_xmldoc_t *nyx_xmldoc_parse(
+__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
     __NULLABLE__ BUFF_t buff,
     __ZEROABLE__ size_t size
 );
 
 /**
- * \brief Frees memory for this XML document.
+ * \brief Frees memory for the provided XML document.
 
- * @param xmldoc This XML document.
+ * @param xmldoc The provided XML document.
  */
 
 void nyx_xmldoc_free(
@@ -943,10 +951,10 @@ void nyx_xmldoc_free(
 );
 
 /**
- * \brief Returns a string representing this object.
+ * \brief Returns a string representing the provided object.
  *
- * @param xmldoc This XML document.
- * @return The string representing this object.
+ * @param xmldoc The provided XML document.
+ * @return The string representing the provided object.
  */
 
 str_t nyx_xmldoc_to_string(
@@ -978,7 +986,7 @@ bool nyx_validation_finalize();
  * \brief Validate the provided XML document using the INDI XSD schema + Nyx additions.
  *
  * @param xmldoc The provided XML document.
- * @return `True` if the document is valid.
+ * @return `True` if the document is valid, and `false` if not.
  *
  * @include ./src/schema/nyx.xsd
  */
