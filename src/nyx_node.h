@@ -76,7 +76,7 @@ void nyx_memory_finalize();
  * \brief Similar to libc free.
  */
 
-size_t nyx_memory_free(
+__ZEROABLE__ size_t nyx_memory_free(
     __NULLABLE__ buff_t buff
 );
 
@@ -84,7 +84,7 @@ size_t nyx_memory_free(
  * \brief Similar to libc malloc.
  */
 
-buff_t nyx_memory_alloc(
+__NULLABLE__ buff_t nyx_memory_alloc(
     __ZEROABLE__ size_t size
 );
 
@@ -92,7 +92,7 @@ buff_t nyx_memory_alloc(
  * \brief Similar to libc realloc.
  */
 
-buff_t nyx_memory_realloc(
+__NULLABLE__ buff_t nyx_memory_realloc(
     __NULLABLE__ buff_t buff,
     __ZEROABLE__ size_t size
 );
@@ -116,7 +116,7 @@ buff_t nyx_memory_realloc(
  * \return Encoded string.
  */
 
-str_t nyx_base64_encode(
+__NULLABLE__ str_t nyx_base64_encode(
     __NULLABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
@@ -131,7 +131,7 @@ str_t nyx_base64_encode(
  * \return Decoded buffer.
  */
 
-buff_t nyx_base64_decode(
+__NULLABLE__ buff_t nyx_base64_decode(
     __NULLABLE__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str
