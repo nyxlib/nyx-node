@@ -985,8 +985,17 @@ bool nyx_validation_initialize();
 
 bool nyx_validation_finalize();
 
+/**
+ * \brief Validate the provided XML document using sur XSD schema bellow.
+ *
+ * @param xmldoc The provided XML document.
+ * @return `True` if the document is valid.
+ *
+ * @include ./src/schema/nyx.xsd
+ */
+
 bool nyx_validation_check(
-    __NULLABLE__ const nyx_xmldoc_t *doc
+    __NULLABLE__ const nyx_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1311,7 +1320,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_MESSAGE_PROPERTY Nyx Message and Property
+  * @defgroup NYX_MESSAGE Nyx Message
   * @ingroup NYX
   * @{
   */
@@ -1321,6 +1330,14 @@ nyx_dict_t *nyx_message_new(
     STR_t device,
     STR_t message
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup NYX_PROPERTY Nyx Property
+  * @ingroup NYX
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_del_property_new(
     STR_t device,
@@ -1337,13 +1354,28 @@ nyx_dict_t *nyx_del_property_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define INI_PING_MS 5000
+#define NYX_PING_MS 5000
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct nyx_node_s nyx_node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Initializes the Nyx node.
+ *
+ * @param tcp_url
+ * @param mqtt_url
+ * @param username
+ * @param password
+ * @param node_id
+ * @param def_vectors
+ * @param retry_ms
+ * @param enable_xml
+ * @param validate_xml
+ * @return
+ */
 
 nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t tcp_url,
@@ -1359,17 +1391,33 @@ nyx_node_t *nyx_node_initialize(
     bool validate_xml
 );
 
+/**
+ * \brief Finalizes the Nyx node.
+ *
+ * @param node
+ * @param free_vectors
+ */
+
+void nyx_node_finalize(
+    nyx_node_t *node,
+    bool free_vectors
+);
+
 void nyx_node_pool(
     nyx_node_t *node,
     int timeout_ms
 );
 
-void nyx_node_free(
-    nyx_node_t *node,
-    bool free_vectors
-);
-
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Enables a device.
+ *
+ * @param node
+ * @param device
+ * @param name
+ * @param message
+ */
 
 void nyx_node_enable(
     nyx_node_t *node,
@@ -1377,6 +1425,15 @@ void nyx_node_enable(
     __NULLABLE__ STR_t name,
     __NULLABLE__ STR_t message
 );
+
+/**
+ * \brief Disables a device.
+ *
+ * @param node
+ * @param device
+ * @param name
+ * @param message
+ */
 
 void nyx_node_disable(
     nyx_node_t *node,
@@ -1386,6 +1443,14 @@ void nyx_node_disable(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Sends a message to the clients.
+ *
+ * @param node
+ * @param device
+ * @param message
+ */
 
 void nyx_node_send_message(
     nyx_node_t *node,
