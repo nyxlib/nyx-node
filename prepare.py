@@ -7,7 +7,7 @@ import requests
 
 MONGOOSE_VERSION = '7.14'
 
-DOXYGEN_AWESOME_VERSION = '2.3.3'
+DOXYGEN_AWESOME_CSS_VERSION = '2.3.3'
 
 ########################################################################################################################
 
@@ -64,7 +64,11 @@ def download_doxygen_awesome():
 
     for filename in ['doxygen-awesome.css']:
 
-        response = requests.get(f'https://raw.githubusercontent.com/jothepro/doxygen-awesome-css/v{DOXYGEN_AWESOME_VERSION}/{filename}')
+        ################################################################################################################
+
+        response = requests.get(f'https://raw.githubusercontent.com/jothepro/doxygen-awesome-css/v{DOXYGEN_AWESOME_CSS_VERSION}/{filename}')
+
+        ################################################################################################################
 
         if response.status_code != 200:
 
