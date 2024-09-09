@@ -756,8 +756,8 @@ static void timer_handler(void *arg)
 nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t tcp_url,
     __NULLABLE__ STR_t mqtt_url,
-    __NULLABLE__ STR_t username,
-    __NULLABLE__ STR_t password,
+    __NULLABLE__ STR_t mqtt_username,
+    __NULLABLE__ STR_t mqtt_password,
     /**/
     STR_t node_id,
     nyx_dict_t *def_vectors[],
@@ -810,8 +810,8 @@ nyx_node_t *nyx_node_initialize(
     node->tcp_url = tcp_url;
     node->mqtt_url = mqtt_url;
 
-    node->mqtt_opts.user = mg_str(username);
-    node->mqtt_opts.pass = mg_str(password);
+    node->mqtt_opts.user = mg_str(mqtt_username);
+    node->mqtt_opts.pass = mg_str(mqtt_password);
 
     node->mqtt_opts.clean = true;
     node->mqtt_opts.version = 0x04;
@@ -876,7 +876,7 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_pool(nyx_node_t *node, int timeout_ms)
+void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -125,7 +125,7 @@ int main()
 
     while(s_signo == 0)
     {
-        nyx_node_pool(node, 1000);
+        nyx_node_poll(node, 1000);
     }
 
     nyx_node_finalize(node, true);
