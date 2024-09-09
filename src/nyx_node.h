@@ -64,6 +64,8 @@ typedef const char *STR_t;
 
 void nyx_memory_initialize();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Finalize the memory subsystem.
  */
@@ -80,6 +82,8 @@ __ZEROABLE__ size_t nyx_memory_free(
     __NULLABLE__ buff_t buff
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Similar to libc malloc.
  */
@@ -87,6 +91,8 @@ __ZEROABLE__ size_t nyx_memory_free(
 __NULLABLE__ buff_t nyx_memory_alloc(
     __ZEROABLE__ size_t size
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Similar to libc realloc.
@@ -121,6 +127,8 @@ __NULLABLE__ str_t nyx_base64_encode(
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Decodes a Base64-encoded string to a buffer.
@@ -203,6 +211,8 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
     __NULLABLE__ STR_t text
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Frees memory for the provided JSON object.
  *
@@ -212,6 +222,8 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
 void nyx_object_free(
     __NULLABLE__ /*-*/ nyx_object_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Compares two JSON objects.
@@ -226,6 +238,8 @@ bool nyx_object_equal(
     __NULLABLE__ const nyx_object_t *object2
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Returns a string representing the provided object.
  *
@@ -236,6 +250,8 @@ bool nyx_object_equal(
 str_t nyx_object_to_string(
     __NULLABLE__ const nyx_object_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Returns a C/C++ string representing the provided object.
@@ -1239,6 +1255,8 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
     __ZEROABLE__ size_t size
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Frees memory for the provided XML document.
 
@@ -1248,6 +1266,8 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
 void nyx_xmldoc_free(
     __NULLABLE__ /*-*/ nyx_xmldoc_t *xmldoc
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Returns a string representing the provided object.
@@ -1275,11 +1295,15 @@ str_t nyx_xmldoc_to_string(
 
 bool nyx_validation_initialize();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Initialize the XML validation subsystem.
  */
 
 bool nyx_validation_finalize();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Validate the provided XML document using the INDI + Nyx additions XSD schema.
@@ -1308,6 +1332,8 @@ nyx_object_t *nyx_xmldoc_to_object(
     bool validate
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 nyx_xmldoc_t *nyx_object_to_xmldoc(
     __NULLABLE__ const nyx_object_t *object,
     bool validate
@@ -1335,9 +1361,13 @@ typedef enum
 
 } nyx_state_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_state_to_str(
     nyx_state_t state
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_state_t nyx_str_to_state(
     STR_t state
@@ -1353,9 +1383,13 @@ typedef enum
 
 } nyx_perm_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_perm_to_str(
     nyx_perm_t perm
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_perm_t nyx_str_to_perm(
     STR_t perm
@@ -1371,9 +1405,13 @@ typedef enum
 
 } nyx_rule_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_rule_to_str(
     nyx_rule_t rule
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_rule_t nyx_str_to_rule(
     STR_t rule
@@ -1388,9 +1426,13 @@ typedef enum
 
 } nyx_onoff_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_onoff_to_str(
     nyx_onoff_t onoff
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_onoff_t nyx_str_to_onoff(
     STR_t onoff
@@ -1406,9 +1448,13 @@ typedef enum
 
 } nyx_blob_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_blob_to_str(
     nyx_blob_t blob
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_blob_t nyx_str_to_blob(
     STR_t blob
@@ -1443,15 +1489,21 @@ nyx_dict_t *nyx_number_def_new(
     double value
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
 {
     return nyx_dict_set(def, "$", nyx_number_from(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ double nyx_number_def_get(nyx_dict_t *def)
 {
     return ((nyx_number_t *) nyx_dict_get(def, "$"))->value;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_number_def_vector_new(
     STR_t device,
@@ -1461,6 +1513,8 @@ nyx_dict_t *nyx_number_def_vector_new(
     nyx_dict_t *defs[],
     nyx_opts_t *opts
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_number_set_vector_new(
     const nyx_dict_t *def_vector
@@ -1480,15 +1534,21 @@ nyx_dict_t *nyx_text_def_new(
     STR_t value
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
 {
     return  nyx_dict_set(def, "$", nyx_string_from(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ STR_t nyx_text_def_get(nyx_dict_t *def)
 {
     return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_text_def_vector_new(
     STR_t device,
@@ -1498,6 +1558,8 @@ nyx_dict_t *nyx_text_def_vector_new(
     nyx_dict_t *defs[],
     nyx_opts_t *opts
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_text_set_vector_new(
     const nyx_dict_t *def_vector
@@ -1517,15 +1579,21 @@ nyx_dict_t *nyx_light_def_new(
     nyx_state_t value
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ bool nyx_light_def_set(nyx_dict_t *def, nyx_state_t value)
 {
     return nyx_dict_set(def, "$", nyx_string_from(nyx_state_to_str(value)));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ nyx_state_t nyx_light_def_get(nyx_dict_t *def)
 {
     return nyx_str_to_state(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_light_def_vector_new(
     STR_t device,
@@ -1534,6 +1602,8 @@ nyx_dict_t *nyx_light_def_vector_new(
     nyx_dict_t *defs[],
     nyx_opts_t *opts
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_light_set_vector_new(
     const nyx_dict_t *def_vector
@@ -1553,15 +1623,21 @@ nyx_dict_t *nyx_switch_def_new(
     nyx_onoff_t value
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
 {
     return nyx_dict_set(def, "$", nyx_string_from(nyx_onoff_to_str(value)));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ nyx_onoff_t nyx_switch_def_get(nyx_dict_t *def)
 {
     return nyx_str_to_onoff(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_switch_def_vector_new(
     STR_t device,
@@ -1572,6 +1648,8 @@ nyx_dict_t *nyx_switch_def_vector_new(
     nyx_dict_t *defs[],
     nyx_opts_t *opts
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_switch_set_vector_new(
     const nyx_dict_t *def_vector
@@ -1591,15 +1669,21 @@ nyx_dict_t *nyx_blob_def_new(
     STR_t value
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, STR_t value)
 {
     return nyx_dict_set(def, "$", nyx_string_from(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __INLINE__ STR_t nyx_blob_def_get(nyx_dict_t *def)
 {
     return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_blob_def_vector_new(
     STR_t device,
@@ -1609,6 +1693,8 @@ nyx_dict_t *nyx_blob_def_vector_new(
     nyx_dict_t *defs[],
     nyx_opts_t *opts
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_blob_set_vector_new(
     const nyx_dict_t *def_vector
@@ -1687,6 +1773,8 @@ nyx_node_t *nyx_node_initialize(
     bool validate_xml
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Finalizes the Nyx node.
  *
@@ -1698,6 +1786,8 @@ void nyx_node_finalize(
     nyx_node_t *node,
     bool free_vectors
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Performs a single poll iteration.
@@ -1728,6 +1818,8 @@ void nyx_node_enable(
     __NULLABLE__ STR_t name,
     __NULLABLE__ STR_t message
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * \brief Disables a whole device or a definition vector.
