@@ -1608,8 +1608,8 @@ typedef struct nyx_node_s nyx_node_t;
  * @param node_id Unique node identifier.
  * @param def_vectors Array of definition vectors.
  * @param retry_ms Reconnect retry time [ms].
- * @param enable_xml Enables XML message support.
- * @param validate_xml Enables XML message validation.
+ * @param enable_xml Enables the XML compatibility layer.
+ * @param validate_xml Enables the XML message validation.
  * @return
  */
 
