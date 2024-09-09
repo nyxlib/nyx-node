@@ -62,7 +62,7 @@ def download_mongoose():
 
 def download_doxygen_awesome():
 
-    for filename in ['doxygen-awesome.css']:
+    for filename in ['doxygen-awesome.css', 'doxygen-awesome-darkmode-toggle.js']:
 
         ################################################################################################################
 
@@ -74,7 +74,7 @@ def download_doxygen_awesome():
 
             raise IOError(f'Cannot download `{filename}`')
 
-        with open(f'./.{filename}', 'wt') as f:
+        with open(f'.doxygen/{filename}', 'wt') as f:
 
             f.write(response.content.decode('UTF-8'))
 

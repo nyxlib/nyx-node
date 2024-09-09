@@ -190,7 +190,7 @@ typedef struct nyx_object_s
     __NULLABLE__ void (* in_callback)(
         struct nyx_object_s *object,                                                            //!< This object.
         bool modified                                                                           //!< Indicate weather the value has been modified.
-    );                                                                                          //!< Callback triggered when the client modifies this object.
+    );                                                                                          //!< Callback triggered when a client modifies this object.
     __NULLABLE__ void (* out_callback)(
         struct nyx_object_s *object,                                                            //!< This object.
         bool modified                                                                           //!< Indicate weather the value has been modified.
@@ -360,10 +360,10 @@ void nyx_number_free(
 
 /**
  * @memberof nyx_number_t
- * \brief ???
+ * \brief Get the value of the provided JSON number object.
  *
- * @param object
- * @return
+ * @param object The provided JSON number object.
+ * @return The value of the provided JSON number object.
  */
 
 double nyx_number_get(
@@ -384,10 +384,10 @@ bool nyx_number_set2(
 
 /**
  * @memberof nyx_number_t
- * \brief ???
+ * \brief Set the value of the provided JSON number object.
  *
- * @param object
- * @param value
+ * @param object The provided JSON number object.
+ * @param value The value for the provided JSON number object.
  * @return
  */
 
@@ -475,10 +475,10 @@ void nyx_boolean_free(
 
 /**
  * @memberof nyx_boolean_t
- * \brief ???
+ * \brief Get the value of the provided JSON boolean object.
  *
- * @param object
- * @return
+ * @param object The provided JSON boolean object.
+ * @return The value of the provided JSON boolean object.
  */
 
 bool nyx_boolean_get(
@@ -499,10 +499,10 @@ bool nyx_boolean_set2(
 
 /**
  * @memberof nyx_boolean_t
- * \brief ???
+ * \brief Set the value of the provided JSON boolean object.
  *
- * @param object
- * @param value
+ * @param object The provided JSON boolean object.
+ * @param value The value for the provided JSON boolean object.
  * @return
  */
 
@@ -591,10 +591,10 @@ void nyx_string_free(
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Get the value of the provided JSON string object.
  *
- * @param object
- * @return
+ * @param object The provided JSON string object.
+ * @return The value of the provided JSON string object.
  */
 
 STR_t nyx_string_get(
@@ -615,10 +615,10 @@ bool nyx_string_dynamic_set2(
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Set the value of the provided JSON string object.
  *
- * @param object
- * @param value
+ * @param object The provided JSON string object.
+ * @param value The value for the provided JSON string object.
  * @return
  */
 
@@ -641,10 +641,10 @@ bool nyx_string_static_set2(
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Set the value of the provided JSON string object.
  *
- * @param object
- * @param value
+ * @param object The provided JSON string object.
+ * @param value The value for the provided JSON string object.
  * @return
  */
 
@@ -668,11 +668,11 @@ bool nyx_string_buff_set2(
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Set the value of the provided JSON string object.
  *
- * @param object
- * @param size
- * @param buff
+ * @param object The provided JSON string object.
+ * @param size The value size for the provided JSON string object.
+ * @param buff The value buffer for the provided JSON string object.
  * @return
  */
 
@@ -1238,6 +1238,10 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Opaque alias of the LibXML 2 node struct (see <a href="https://gnome.pages.gitlab.gnome.org/libxml2/devhelp/libxml2-tree.html#xmlNode" target="_blank">libxml2-tree.html#xmlNode</a>).
+ */
+
 typedef struct _xmlDoc nyx_xmldoc_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1327,14 +1331,30 @@ bool nyx_validation_check(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_object_t *nyx_xmldoc_to_object(
+/**
+ * \brief Convert an XML Nyx / INDI command to the JSON one.
+ *
+ * @param xmldoc The provided XML Nyx / INDI command.
+ * @param validate If `true`, the input XML command is validated (see @ref nyx_validation_check).
+ * @return The generated JSON Nyx / INDI command.
+ */
+
+__NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
     __NULLABLE__ const nyx_xmldoc_t *xmldoc,
     bool validate
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_xmldoc_t *nyx_object_to_xmldoc(
+/**
+ * \brief Convert an JSON Nyx / INDI command to the XML one.
+ *
+ * @param object The provided JSON Nyx / INDI command.
+ * @param validate If `true`, the output XML command is validated (see @ref nyx_validation_check).
+ * @return The generated XML Nyx / INDI command.
+ */
+
+__NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
     __NULLABLE__ const nyx_object_t *object,
     bool validate
 );
@@ -1740,6 +1760,10 @@ nyx_dict_t *nyx_del_property_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Opaque struct describing a Nyx node.
+ */
+
 typedef struct nyx_node_s nyx_node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1779,7 +1803,7 @@ nyx_node_t *nyx_node_initialize(
  * \brief Finalizes the Nyx node.
  *
  * @param node The Nyx node.
- * @param free_vectors
+ * @param free_vectors If `true`, the definition vectors are released.
  */
 
 void nyx_node_finalize(
@@ -1807,8 +1831,8 @@ void nyx_node_poll(
  * \brief Enables a whole device or a definition vector.
  *
  * @param node The Nyx node.
- * @param device The Nyx device.
- * @param name Optional Nyx vector.
+ * @param device The Nyx device name.
+ * @param name Optional Nyx vector name.
  * @param message Optional message content.
  */
 
@@ -1825,8 +1849,8 @@ void nyx_node_enable(
  * \brief Disables a whole device or a definition vector.
  *
  * @param node The Nyx node.
- * @param device The Nyx device.
- * @param name Optional Nyx vector.
+ * @param device The Nyx device name.
+ * @param name Optional Nyx vector name.
  * @param message Optional message content.
  */
 
@@ -1843,7 +1867,7 @@ void nyx_node_disable(
  * \brief Sends a message to the clients.
  *
  * @param node The Nyx node.
- * @param device The Nyx device.
+ * @param device The Nyx device name.
  * @param message The message content.
  */
 
