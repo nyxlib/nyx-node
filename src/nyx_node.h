@@ -119,7 +119,7 @@ __NULLABLE__ buff_t nyx_memory_realloc(
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
  * \param buff Input buffer to encode.
- * \return Encoded string.
+ * \return The encoded string.
  */
 
 __NULLABLE__ str_t nyx_base64_encode(
@@ -136,7 +136,7 @@ __NULLABLE__ str_t nyx_base64_encode(
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
  * \param str Input string to decode.
- * \return Decoded buffer.
+ * \return The decoded buffer.
  */
 
 __NULLABLE__ buff_t nyx_base64_decode(
