@@ -327,6 +327,8 @@ typedef struct
 
 nyx_number_t *nyx_number_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_number_t
  * \brief Frees memory for the provided JSON number object.
@@ -337,6 +339,8 @@ nyx_number_t *nyx_number_new();
 void nyx_number_free(
     /*-*/ nyx_number_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_number_t
@@ -350,6 +354,8 @@ double nyx_number_get(
     const nyx_number_t *object
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -359,20 +365,6 @@ bool nyx_number_set2(
     double value,
     bool notify
 );
-
-/**
- * @memberof nyx_number_t
- * \brief Returns a string representing the provided object.
- *
- * @param object The provided object.
- * @return The string representing the provided object.
- */
-
-str_t nyx_number_to_string(
-    const nyx_number_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_number_t
@@ -387,6 +379,20 @@ __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
 {
     return nyx_number_set2(object, value, true);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_number_t
+ * \brief Returns a string representing the provided object.
+ *
+ * @param object The provided object.
+ * @return The string representing the provided object.
+ */
+
+str_t nyx_number_to_string(
+    const nyx_number_t *object
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -436,6 +442,8 @@ typedef struct
 
 nyx_boolean_t *nyx_boolean_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_boolean_t
  * \brief Frees memory for the provided JSON boolean object.
@@ -446,6 +454,8 @@ nyx_boolean_t *nyx_boolean_new();
 void nyx_boolean_free(
     /*-*/ nyx_boolean_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_boolean_t
@@ -459,6 +469,8 @@ bool nyx_boolean_get(
     const nyx_boolean_t *object
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -468,20 +480,6 @@ bool nyx_boolean_set2(
     bool value,
     bool notify
 );
-
-/**
- * @memberof nyx_boolean_t
- * \brief Returns a string representing the provided object.
- *
- * @param object The provided object.
- * @return The string representing the provided object.
- */
-
-str_t nyx_boolean_to_string(
-    const nyx_boolean_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_boolean_t
@@ -496,6 +494,20 @@ __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
 {
     return nyx_boolean_set2(object, value, true);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_boolean_t
+ * \brief Returns a string representing the provided object.
+ *
+ * @param object The provided object.
+ * @return The string representing the provided object.
+ */
+
+str_t nyx_boolean_to_string(
+    const nyx_boolean_t *object
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -547,6 +559,8 @@ typedef struct
 
 nyx_string_t *nyx_string_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Frees memory for the provided JSON string object.
  *
@@ -556,6 +570,8 @@ nyx_string_t *nyx_string_new();
 void nyx_string_free(
     /*-*/ nyx_string_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_string_t
@@ -569,6 +585,8 @@ STR_t nyx_string_get(
     const nyx_string_t *object
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -578,55 +596,6 @@ bool nyx_string_dynamic_set2(
     STR_t value,
     bool notify
 );
-
-/**
- * @private
- */
-
-bool nyx_string_static_set2(
-    /*-*/ nyx_string_t *object,
-    STR_t value,
-    bool notify
-);
-
-/**
- * @private
- */
-
-bool nyx_string_buff_set2(
-    /*-*/ nyx_string_t *object,
-    size_t size,
-    BUFF_t buff,
-    bool notify
-);
-
-size_t nyx_string_length(
-    const nyx_string_t *object
-);
-
-/**
- * \brief Returns a string representing the provided object.
- *
- * @param object The provided object.
- * @return The string representing the provided object.
- */
-
-str_t nyx_string_to_string(
-    const nyx_string_t *object
-);
-
-/**
- * \brief Returns a C/C++ string representing the provided object.
- *
- * @param object The provided object.
- * @return The string representing the provided object.
- */
-
-str_t nyx_string_to_cstring(
-    const nyx_string_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_string_t
@@ -645,6 +614,16 @@ __INLINE__ bool nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @private
+ */
+
+bool nyx_string_static_set2(
+    /*-*/ nyx_string_t *object,
+    STR_t value,
+    bool notify
+);
+
+/**
  * @memberof nyx_string_t
  * \brief ???
  *
@@ -661,6 +640,17 @@ __INLINE__ bool nyx_string_static_set(nyx_string_t *object, STR_t value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @private
+ */
+
+bool nyx_string_buff_set2(
+    /*-*/ nyx_string_t *object,
+    size_t size,
+    BUFF_t buff,
+    bool notify
+);
+
+/**
  * @memberof nyx_string_t
  * \brief ???
  *
@@ -674,6 +664,48 @@ __INLINE__ bool nyx_string_buff_set(nyx_string_t *object, size_t size, BUFF_t bu
 {
     return nyx_string_buff_set2(object, size, buff, true);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
+ * \brief ???
+ *
+ * @param object
+ * @return
+ */
+
+size_t nyx_string_length(
+    const nyx_string_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
+ * \brief Returns a string representing the provided object.
+ *
+ * @param object The provided object.
+ * @return The string representing the provided object.
+ */
+
+str_t nyx_string_to_string(
+    const nyx_string_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
+ * \brief Returns a C/C++ string representing the provided object.
+ *
+ * @param object The provided object.
+ * @return The string representing the provided object.
+ */
+
+str_t nyx_string_to_cstring(
+    const nyx_string_t *object
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -794,6 +826,8 @@ typedef struct
 
 nyx_dict_t *nyx_dict_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_dict_t
  * \brief Frees memory for the provided JSON dict object.
@@ -805,6 +839,8 @@ void nyx_dict_free(
     /*-*/ nyx_dict_t *object
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_dict_t
  * \brief Clears the content of the provided JSON dict object.
@@ -815,6 +851,8 @@ void nyx_dict_free(
 void nyx_dict_clear(
     /*-*/ nyx_dict_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_dict_t
@@ -828,6 +866,8 @@ void nyx_dict_del(
     /*-*/ nyx_dict_t *object,
     STR_t key
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_dict_t
@@ -845,6 +885,8 @@ bool nyx_dict_iterate(
     nyx_object_t **object
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_dict_t
  * \brief
@@ -859,6 +901,8 @@ nyx_object_t *nyx_dict_get(
     STR_t key
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -872,6 +916,23 @@ bool nyx_dict_set2(
 
 /**
  * @memberof nyx_dict_t
+ * \brief
+ *
+ * @param object
+ * @param key
+ * @param value
+ * @return
+ */
+
+__INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
+{
+    return nyx_dict_set2(object, key, value, true);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
  * \brief Gets the number of items in the provided JSON dict object.
  *
  * @param object The provided JSON dict object.
@@ -881,6 +942,8 @@ bool nyx_dict_set2(
 size_t nyx_dict_size(
     const nyx_dict_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_dict_t
@@ -935,23 +998,6 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_dict_t
- * \brief
- *
- * @param object
- * @param key
- * @param value
- * @return
- */
-
-__INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
-{
-    return nyx_dict_set2(object, key, value, true);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* LIST                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
@@ -998,6 +1044,8 @@ typedef struct
 
 nyx_list_t *nyx_list_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief Frees memory for the provided JSON list object.
  *
@@ -1007,6 +1055,8 @@ nyx_list_t *nyx_list_new();
 void nyx_list_free(
     /*-*/ nyx_list_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_list_t
@@ -1018,6 +1068,8 @@ void nyx_list_free(
 void nyx_list_clear(
     /*-*/ nyx_list_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_list_t
@@ -1031,6 +1083,8 @@ void nyx_list_del(
     /*-*/ nyx_list_t *object,
     int idx
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_list_t
@@ -1048,6 +1102,8 @@ bool nyx_list_iterate(
     nyx_object_t **object
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_list_t
  * \brief
@@ -1062,6 +1118,8 @@ nyx_object_t *nyx_list_get(
     int idx
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -1075,6 +1133,22 @@ nyx_list_t *nyx_list_set2(
 
 /**
  * @memberof nyx_list_t
+ * \brief
+ *
+ * @param object
+ * @param value
+ * @return
+ */
+
+__INLINE__ bool nyx_list_push(nyx_list_t *object, buff_t value)
+{
+    return nyx_list_set2(object, -1, value, true);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_list_t
  * \brief Gets the number of items in the provided JSON list object.
  *
  * @param object The provided JSON list object.
@@ -1084,6 +1158,8 @@ nyx_list_t *nyx_list_set2(
 size_t nyx_list_size(
     const nyx_list_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_list_t
@@ -1135,22 +1211,6 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
     return (string != NULL && string->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) string)
                                                                : NULL
     ;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_list_t
- * \brief
- *
- * @param object
- * @param value
- * @return
- */
-
-__INLINE__ bool nyx_list_push(nyx_list_t *object, buff_t value)
-{
-    return nyx_list_set2(object, -1, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1607,7 +1667,7 @@ typedef struct nyx_node_s nyx_node_t;
  * @param mqtt_password Optional MQTT password.
  * @param node_id Unique node identifier.
  * @param def_vectors Array of definition vectors.
- * @param retry_ms Reconnect retry time [ms].
+ * @param retry_ms Connect retry time [milliseconds].
  * @param enable_xml Enables the XML compatibility layer.
  * @param validate_xml Enables the XML message validation.
  * @return
