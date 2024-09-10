@@ -107,8 +107,8 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 /* BASE64                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup BASE64 Base64 encoding/decoding
-  * Fast Base64 encoding/decoding.
+  * @defgroup BASE64 Base64 encoding / decoding
+  * Fast Base64 encoding / decoding.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -149,7 +149,8 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup OBJECT JSON serialization/deserialization
+  * @defgroup OBJECT JSON serialization / deserialization
+  * JSON serialization / deserialization.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1233,7 +1234,8 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
 /* XMLDOC                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup XMLDOC XML serialization/deserialization
+  * @defgroup XMLDOC XML serialization / deserialization
+  * XML serialization / deserialization.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1274,10 +1276,10 @@ void nyx_xmldoc_free(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided XML document.
  *
  * @param xmldoc The provided XML document.
- * @return The string representing the provided object.
+ * @return The string representing the provided XML document.
  */
 
 str_t nyx_xmldoc_to_string(
@@ -1289,6 +1291,7 @@ str_t nyx_xmldoc_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
   * @defgroup VALIDATION XML validation
+  * XML validation for Nyx / INDI commands.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1310,7 +1313,7 @@ bool nyx_validation_finalize();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Validate the provided XML document using the INDI + Nyx additions XSD schema.
+ * \brief Validate the provided XML command using the INDI + Nyx additions XSD schema.
  *
  * @param xmldoc The provided XML document.
  * @return `True` if the document is valid, and `false` if not.
@@ -1327,6 +1330,7 @@ bool nyx_validation_check(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
   * @defgroup TRANSFORM JSON <-> XML
+  * JSON <-> XML Nyx / INDI commands.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1364,6 +1368,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
   * @defgroup NYX Nyx protocol
+  * Nyx protocol.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1752,12 +1757,9 @@ nyx_dict_t *nyx_del_property_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
   * @defgroup NODE Nyx node
+  * Nyx node.
   * @{
   */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define NYX_PING_MS 5000
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -1817,7 +1819,7 @@ void nyx_node_finalize(
  * \brief Performs a single poll iteration.
  *
  * @param node The Nyx node.
- * @param timeout_ms
+ * @param timeout_ms Timeout [milliseconds].
  */
 
 void nyx_node_poll(
