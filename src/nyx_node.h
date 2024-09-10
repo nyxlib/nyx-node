@@ -329,7 +329,7 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
 
-    double value;
+    double value;                                                                               //!< ???
 
 } nyx_number_t;
 
@@ -444,7 +444,7 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
 
-    bool value;
+    bool value;                                                                                 //!< ???
 
 } nyx_boolean_t;
 
@@ -559,10 +559,10 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
 
-    size_t length;
-    str_t value;
+    size_t length;                                                                              //!< ???
+    str_t value;                                                                                //!< ???
 
-    bool dyn;
+    bool dyn;                                                                                   //!< ???
 
 } nyx_string_t;
 
@@ -810,8 +810,8 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
 
-    struct nyx_dict_node_s *head;
-    struct nyx_dict_node_s *tail;
+    struct nyx_dict_node_s *head;                                                               //!< ???
+    struct nyx_dict_node_s *tail;                                                               //!< ???
 
 } nyx_dict_t;
 
@@ -819,11 +819,11 @@ typedef struct
 
 typedef struct
 {
-    int idx;
+    int idx;                                                                                    //!< ???
 
-    nyx_type_t type;
+    nyx_type_t type;                                                                            //!< ???
 
-    struct nyx_dict_node_s *head;
+    struct nyx_dict_node_s *head;                                                               //!< ???
 
 } nyx_dict_iter_t;
 
@@ -1028,8 +1028,8 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
 
-    struct nyx_list_node_s *head;
-    struct nyx_list_node_s *tail;
+    struct nyx_list_node_s *head;                                                               //!< ???
+    struct nyx_list_node_s *tail;                                                               //!< ???
 
 } nyx_list_t;
 
@@ -1037,11 +1037,11 @@ typedef struct
 
 typedef struct
 {
-    int idx;
+    int idx;                                                                                    //!< ???
 
-    nyx_type_t type;
+    nyx_type_t type;                                                                            //!< ???
 
-    struct nyx_list_node_s *head;
+    struct nyx_list_node_s *head;                                                               //!< ???
 
 } nyx_list_iter_t;
 
