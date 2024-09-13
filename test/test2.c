@@ -72,8 +72,8 @@ int main()
         &opt
     );
 
-    def1->base.out_callback = on_callback;
-    def2->base.out_callback = off_callback;
+    def1->base.in_callback = on_callback;
+    def2->base.in_callback = off_callback;
 
     nyx_dict_t *def3 = nyx_switch_def_new("foo_on", "Foo ON", NYX_ONOFF_ON);
     nyx_dict_t *def4 = nyx_switch_def_new("foo_off", "Foo OFF", NYX_ONOFF_OFF);

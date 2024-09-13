@@ -415,10 +415,10 @@ str_t nyx_number_to_string(
 
 /**
  * @memberof nyx_number_t
- * \brief ???
+ * \brief Returns a JSON number object holding the value of the argument passed.
  *
  * @param value
- * @return
+ * @return A new JSON number object.
  */
 
 __INLINE__ nyx_number_t *nyx_number_from(double value)
@@ -530,10 +530,10 @@ str_t nyx_boolean_to_string(
 
 /**
  * @memberof nyx_boolean_t
- * \brief ???
+ * \brief Returns a JSON boolean object holding the value of the argument passed.
  *
  * @param value
- * @return
+ * @return A new JSON boolean object.
  */
 
 __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
@@ -728,10 +728,10 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Returns a JSON string object holding the value of the argument passed (dynamic allocation).
  *
  * @param value
- * @return
+ * @return A new JSON string object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_dynamic_from(STR_t value)
@@ -747,10 +747,10 @@ __INLINE__ nyx_string_t *nyx_string_dynamic_from(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Returns a JSON number object holding the value of the argument passed (static allocation).
  *
  * @param value
- * @return
+ * @return A new JSON string object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_static_from(STR_t value)
@@ -766,11 +766,11 @@ __INLINE__ nyx_string_t *nyx_string_static_from(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Returns a JSON number object holding the value of the buffer passed (base64 encoded).
  *
  * @param size
  * @param buff
- * @return
+ * @return A new JSON string object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
