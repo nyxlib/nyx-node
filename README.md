@@ -47,5 +47,5 @@ Developer
 [Build Status]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/-/commits/main
 [Build Status img]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/badges/main/pipeline.svg
 
-[License]:http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.txt
-[License img]:https://img.shields.io/badge/license-CeCILL_C-blue.svg
+[License]:https://www.gnu.org/licenses/lgpl-3.0.txt
+[License img]:https://img.shields.io/badge/license-LGPL-blue.svg
