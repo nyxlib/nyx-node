@@ -706,7 +706,7 @@ nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
     {
         nyx_object_free(result);
 
-        return NULL;
+        result = NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
