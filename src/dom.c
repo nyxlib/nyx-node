@@ -83,14 +83,14 @@ void nyx_xmldoc_free(__NULLABLE__ nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc)
+__NULLABLE__ str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc)
 {
     return xmldoc->name;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, STR_t name)
+void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name)
 {
     if(xmldoc->name != NULL)
     {
@@ -102,7 +102,7 @@ void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, STR_t name)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
+__NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
 {
     for(nyx_xmldoc_t *curr_child = xmldoc->children, *next_child; curr_child; curr_child = next_child)
     {
@@ -121,16 +121,19 @@ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, STR_t data)
+void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t data)
 {
     nyx_xmldoc_delete_all(xmldoc, false, true, false);
 
-    nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_TEXT_NODE);
+    if(data != NULL)
+    {
+        nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_TEXT_NODE);
 
-    node->name = nyx_string_dup("@@");
-    node->data = nyx_string_dup(data);
+        node->name = nyx_string_dup("@@");
+        node->data = nyx_string_dup(data);
 
-    nyx_xmldoc_add_child(xmldoc, node);
+        nyx_xmldoc_add_child(xmldoc, node);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -202,28 +205,25 @@ void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data)
+void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLABLE__ STR_t data)
 {
-    nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ATTR_NODE);
+    if(name != NULL
+       &&
+       data != NULL
+    ) {
+        nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ATTR_NODE);
 
-    node->name = nyx_string_dup(name);
-    node->data = nyx_string_dup(data);
+        node->name = nyx_string_dup(name);
+        node->data = nyx_string_dup(data);
 
-    nyx_xmldoc_add_child(xmldoc, node);
+        nyx_xmldoc_add_child(xmldoc, node);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_xmldoc_to_string(__NULLABLE__ const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
+__INLINE__ void attribute_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc)
 {
-    nyx_string_builder_t *sb = nyx_string_builder_new();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_string_builder_append(sb, "<", xmldoc->name);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     for(nyx_xmldoc_t *curr_child = xmldoc->attributes, *next_child; curr_child; curr_child = next_child)
     {
         next_child = curr_child->next;
@@ -232,50 +232,66 @@ str_t nyx_xmldoc_to_string(__NULLABLE__ const nyx_xmldoc_t *xmldoc) // NOLINT(*-
         nyx_string_builder_append_xml(sb, curr_child->data);
         nyx_string_builder_append(sb, "\"");
     }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void content_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc)
+{
+    for(nyx_xmldoc_t *curr_child = xmldoc->children, *next_child; curr_child; curr_child = next_child)
+    {
+        next_child = curr_child->next;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        /**/ if(curr_child->type == NYX_XML_ELEM_NODE)
+        {
+            str_t node = nyx_xmldoc_to_string(curr_child);
+
+            nyx_string_builder_append(sb, node);
+
+            nyx_memory_free(node);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        else if(curr_child->type == NYX_XML_TEXT_NODE)
+        {
+            nyx_string_builder_append_xml(sb, curr_child->data);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        else if(curr_child->type == NYX_XML_CDATA_NODE)
+        {
+            nyx_string_builder_append(sb, "<![CDATA[", curr_child->data, "]]>");
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+str_t nyx_xmldoc_to_string(const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
+{
+    nyx_string_builder_t *sb = nyx_string_builder_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(xmldoc->self_closing == false)
+    if(xmldoc->self_closing)
     {
-        nyx_string_builder_append(sb, ">");
-
-        for(nyx_xmldoc_t *curr_child = xmldoc->children, *next_child; curr_child; curr_child = next_child)
-        {
-            next_child = curr_child->next;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            /**/ if(curr_child->type == NYX_XML_ELEM_NODE)
-            {
-                str_t node = nyx_xmldoc_to_string(curr_child);
-
-                nyx_string_builder_append(sb, node);
-
-                nyx_memory_free(node);
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            else if(curr_child->type == NYX_XML_CDATA_NODE)
-            {
-                nyx_string_builder_append(sb, "<![CDATA[", curr_child->data, "]]>");
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            else if(curr_child->type == NYX_XML_TEXT_NODE)
-            {
-                nyx_string_builder_append_xml(sb, curr_child->data);
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-
-        nyx_string_builder_append(sb, "</", xmldoc->name, ">");
+        nyx_string_builder_append(sb, "<", xmldoc->name);
+        attribute_to_string(sb, xmldoc);
+        nyx_string_builder_append(sb, "/>");
     }
     else
     {
-        nyx_string_builder_append(sb, "/>");
+        nyx_string_builder_append(sb, "<", xmldoc->name);
+        attribute_to_string(sb, xmldoc);
+        nyx_string_builder_append(sb, ">");
+        content_to_string(sb, xmldoc);
+        nyx_string_builder_append(sb, "</", xmldoc->name, ">");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -285,6 +301,8 @@ str_t nyx_xmldoc_to_string(__NULLABLE__ const nyx_xmldoc_t *xmldoc) // NOLINT(*-
     nyx_string_builder_free(sb);
 
     return result;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

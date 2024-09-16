@@ -1327,17 +1327,17 @@ void nyx_xmldoc_free(
 
 nyx_xmldoc_t *nyx_xmldoc_new(nyx_xml_type_t type);
 
-str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc);
+__NULLABLE__ str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc);
 
-void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, STR_t name);
+void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name);
 
-str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc);
+__NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc);
 
-void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, STR_t data);
+void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t data);
 
 void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child);
 
-void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data);
+void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLABLE__ STR_t data);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1349,7 +1349,7 @@ void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data);
  */
 
 str_t nyx_xmldoc_to_string(
-    __NULLABLE__ const nyx_xmldoc_t *xmldoc
+    const nyx_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

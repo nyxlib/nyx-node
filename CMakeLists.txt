@@ -51,6 +51,7 @@ set(SOURCE_FILES
     #
     src/base.c
     src/base64.c
+    src/utf8.c
     src/string_builder.c
     src/json.c
     src/xml.c
