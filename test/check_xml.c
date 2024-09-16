@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse("<xml foo=\"bar\">\"Hello World!\"<qux><![CDATA[The World was round]]></qux>Bye!</xml>");
+    nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse("<xml foo=\"bar\">\"Hello World!\"<qux><![CDATA[The World was round]]></qux>Bye&!</xml>");
 
     if(xmldoc == NULL)
     {

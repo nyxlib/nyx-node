@@ -236,6 +236,9 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
                         case '>':
                             *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
 
+                        case '&':
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
+
                         case '\"':
                             *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
 
