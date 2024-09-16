@@ -202,10 +202,10 @@ typedef struct nyx_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Parses a JSON object from a text buffer.
+ * \brief Parses a JSON object from a string buffer.
  *
- * \param buff The text buffer pointer.
- * \param size The text buffer size.
+ * \param buff The string pointer.
+ * \param size The string size.
  * \return The new JSON object.
  */
 
@@ -1288,10 +1288,10 @@ typedef struct nyx_xmldoc_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Parses an XML document from a text buffer.
+ * \brief Parses an XML document from a string buffer.
  *
- * \param buff The text buffer pointer.
- * \param size The text buffer size.
+ * \param buff The string pointer.
+ * \param size The string size.
  * \return The new XML document.
  */
 
