@@ -42,7 +42,8 @@ typedef struct json_token_s
 
 typedef struct json_parser_s
 {
-    STR_t pos;
+    STR_t buff;
+    size_t size;
 
     json_token_t curr_token;
 
@@ -136,16 +137,29 @@ static void tokenizer_next(json_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(; isspace(*parser->pos); parser->pos++);
+    while(parser->size > 0 && isspace(*parser->buff))
+    {
+        parser->buff++;
+        parser->size--;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t start = parser->pos;
-    STR_t end = parser->pos;
+    if(parser->size == 0)
+    {
+        parser->curr_token.token_type = JSON_TOKEN_EOF;
+
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t start = parser->buff;
+    STR_t end = parser->buff;
 
     json_token_type_t type;
 
-    switch(*parser->pos)
+    switch(*parser->buff)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -156,51 +170,57 @@ static void tokenizer_next(json_parser_t *parser)
         /*------------------------------------------------------------------------------------------------------------*/
 
         case '{':
-            type = JSON_TOKEN_CURLY_OPEN;
             end++;
+            parser->size--;
+            type = JSON_TOKEN_CURLY_OPEN;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         case '}':
-            type = JSON_TOKEN_CURLY_CLOSE;
             end++;
+            parser->size--;
+            type = JSON_TOKEN_CURLY_CLOSE;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         case '[':
-            type = JSON_TOKEN_SQUARE_OPEN;
             end++;
+            parser->size--;
+            type = JSON_TOKEN_SQUARE_OPEN;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         case ']':
-            type = JSON_TOKEN_SQUARE_CLOSE;
             end++;
+            parser->size--;
+            type = JSON_TOKEN_SQUARE_CLOSE;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         case ':':
-            type = JSON_TOKEN_COLON;
             end++;
+            parser->size--;
+            type = JSON_TOKEN_COLON;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         case ',':
-            type = JSON_TOKEN_COMMA;
             end++;
+            parser->size--;
+            type = JSON_TOKEN_COMMA;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         case '"':
-            type = JSON_TOKEN_STRING;
             end++;
-            while(*end != '"')
+            parser->size--;
+            while(parser->size >= 1 && *end != '"')
             {
                 if(*end == '\0')
                 {
@@ -208,16 +228,26 @@ static void tokenizer_next(json_parser_t *parser)
                     goto _bye;
                 }
 
-                if(*(end + 0) == '\\'
+                if(parser->size >= 2 && (
+                   *(end + 0) == '\\'
                    &&
                    *(end + 1) != '\0'
-                ) {
+                )) {
                     end++;
+                    parser->size--;
                 }
 
                 end++;
+                parser->size--;
+            }
+            if(parser->size < 1)
+            {
+                type = JSON_TOKEN_ERROR;
+                goto _bye;
             }
             end++;
+            parser->size--;
+            type = JSON_TOKEN_STRING;
             break;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -225,27 +255,32 @@ static void tokenizer_next(json_parser_t *parser)
         default:
             /**/ if(*end == '-' || isdigit(*end))
             {
-                type = JSON_TOKEN_NUMBER;
                 end++;
-                while(*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end))
+                parser->size--;
+                while(parser->size >= 1 && (*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end)))
                 {
                     end++;
+                    parser->size--;
                 }
+                type = JSON_TOKEN_NUMBER;
             }
-            else if(strncmp(end, "null", 4) == 0)
+            else if(parser->size >= 4 && strncmp(end, "null", 4) == 0)
             {
+                end += 4;
+                parser->size -= 4;
                 type = JSON_TOKEN_NULL;
-                end += 4;
             }
-            else if(strncmp(end, "true", 4) == 0)
+            else if(parser->size >= 4 && strncmp(end, "true", 4) == 0)
             {
+                end += 4;
+                parser->size -= 4;
                 type = JSON_TOKEN_TRUE;
-                end += 4;
             }
-            else if(strncmp(end, "false", 5) == 0)
+            else if(parser->size >= 5 && strncmp(end, "false", 5) == 0)
             {
-                type = JSON_TOKEN_FALSE;
                 end += 5;
+                parser->size -= 5;
+                type = JSON_TOKEN_FALSE;
             }
             else
             {
@@ -356,7 +391,7 @@ static void tokenizer_next(json_parser_t *parser)
 _bye:
     parser->curr_token.token_type = type;
 
-    parser->pos = end;
+    parser->buff = end;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -673,17 +708,20 @@ _err:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
+nyx_object_t *nyx_object_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size)
 {
-    if(text == NULL)
-    {
+    if(buff == NULL
+       ||
+       size == 0x00
+    ) {
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     json_parser_t *parser = &((json_parser_t) {
-        .pos = text,
+        .buff = buff,
+        .size = size,
         .curr_token = {
             .value = NULL,
             .token_type = JSON_TOKEN_ERROR,
@@ -732,6 +770,13 @@ nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
+{
+    return nyx_object_parse_buff(text, strlen(text));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

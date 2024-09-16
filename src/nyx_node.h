@@ -70,7 +70,7 @@ void nyx_memory_initialize();
  * \brief Finalize the memory subsystem.
  */
 
-void nyx_memory_finalize();
+bool nyx_memory_finalize();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -200,6 +200,19 @@ typedef struct nyx_object_s
 } nyx_object_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Parses a JSON object from a text buffer.
+ *
+ * \param buff The text buffer pointer.
+ * \param size The text buffer size.
+ * \return The new JSON object.
+ */
+
+nyx_object_t *nyx_object_parse_buff(
+    __NULLABLE__ BUFF_t buff,
+    __ZEROABLE__ size_t size
+);
 
 /**
  * \brief Parses a JSON object from a string.
@@ -1240,11 +1253,37 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+typedef enum nyx_xml_type_e
+{
+    NYX_XML_ELEM_NODE,
+    NYX_XML_ATTR_NODE,
+    NYX_XML_TEXT_NODE,
+    NYX_XML_CDATA_NODE,
+    NYX_XML_ERROR_NODE,
+
+} nyx_xml_type_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
- * \brief Opaque alias of the LibXML 2 node struct (see <a href="https://gnome.pages.gitlab.gnome.org/libxml2/devhelp/libxml2-tree.html#xmlNode" target="_blank">libxml2-tree.html#xmlNode</a>).
+ * \brief Opaque alias of the LibXML 2 doc struct (see <a href="https://gnome.pages.gitlab.gnome.org/libxml2/devhelp/libxml2-tree.html#xmlDoc" target="_blank">libxml2-tree.html#xmlDoc</a>).
  */
 
-typedef struct _xmlDoc nyx_xmldoc_t;
+typedef struct nyx_xmldoc_s
+{
+    str_t name;
+    nyx_xml_type_t type;
+    str_t data;
+
+    struct nyx_xmldoc_s *next;
+    struct nyx_xmldoc_s *parent;
+
+    struct nyx_xmldoc_s *children;
+    struct nyx_xmldoc_s *attributes;
+
+    bool self_closing;
+
+} nyx_xmldoc_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1256,9 +1295,20 @@ typedef struct _xmlDoc nyx_xmldoc_t;
  * \return The new XML document.
  */
 
-__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
+nyx_xmldoc_t *nyx_xmldoc_parse_buff(
     __NULLABLE__ BUFF_t buff,
     __ZEROABLE__ size_t size
+);
+
+/**
+ * \brief Parses an XML document from a string.
+ *
+ * \param text The string.
+ * \return The new XML document.
+ */
+
+nyx_xmldoc_t *nyx_xmldoc_parse(
+    __NULLABLE__ STR_t text
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1272,6 +1322,22 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
 void nyx_xmldoc_free(
     __NULLABLE__ /*-*/ nyx_xmldoc_t *xmldoc
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_xmldoc_t *nyx_xmldoc_new(nyx_xml_type_t type);
+
+str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc);
+
+void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, STR_t name);
+
+str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc);
+
+void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, STR_t data);
+
+void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child);
+
+void nyx_xmldoc_new_attr(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

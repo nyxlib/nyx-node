@@ -12,8 +12,6 @@ add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -
 
 ########################################################################################################################
 
-find_package(LibXml2 REQUIRED)
-
 find_package(Doxygen)
 
 ########################################################################################################################
@@ -56,6 +54,7 @@ set(SOURCE_FILES
     src/string_builder.c
     src/json.c
     src/xml.c
+    src/dom.c
     src/validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
@@ -75,10 +74,6 @@ if(HAVE_MALLOC_USABLE_SIZE)
     target_compile_definitions(nyx-node-static PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
 
-target_include_directories(nyx-node-static PRIVATE ${LIBXML2_INCLUDE_DIR})
-
-######_link_libraries(nyx-node-static ${LIBXML2_LIBRARIES})
-
 set_target_properties(nyx-node-static PROPERTIES
     OUTPUT_NAME "nyx-node"
 )
@@ -94,10 +89,6 @@ endif()
 if(HAVE_MALLOC_USABLE_SIZE)
     target_compile_definitions(nyx-node-shared PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
-
-target_include_directories(nyx-node-shared PRIVATE ${LIBXML2_INCLUDE_DIR})
-
-target_link_libraries(nyx-node-shared ${LIBXML2_LIBRARIES})
 
 set_target_properties(nyx-node-shared PROPERTIES
     OUTPUT_NAME "nyx-node"
@@ -129,13 +120,16 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/LibNyxNodeConfig.cmake" DESTINATION l
 ########################################################################################################################
 
 add_executable(check_json test/check_json.c)
-target_link_libraries(check_json nyx-node-static ${LIBXML2_LIBRARIES})
+target_link_libraries(check_json nyx-node-static)
+
+add_executable(check_xml test/check_xml.c)
+target_link_libraries(check_xml nyx-node-static)
 
 add_executable(test1 test/test1.c)
-target_link_libraries(test1 nyx-node-static ${LIBXML2_LIBRARIES})
+target_link_libraries(test1 nyx-node-static)
 
 add_executable(test2 test/test2.c)
-target_link_libraries(test2 nyx-node-static ${LIBXML2_LIBRARIES})
+target_link_libraries(test2 nyx-node-static)
 
 ########################################################################################################################
 # DOCS                                                                                                                 #

@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <libxml/parser.h>
-
 #include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -33,15 +31,6 @@ void nyx_memory_initialize()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlMemSetup(
-        (buff_t) nyx_memory_free,
-        (buff_t) nyx_memory_alloc,
-        (buff_t) nyx_memory_realloc,
-        (buff_t) nyx_string_dup
-    );
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
     used_mem = 0;
     #endif
@@ -51,19 +40,22 @@ void nyx_memory_initialize()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_memory_finalize()
+bool nyx_memory_finalize()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlCleanupParser();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-    if(__atomic_load_n(&used_mem, __ATOMIC_SEQ_CST) > 0) fprintf(stderr, "Memory leak: %ld bytes!\n", used_mem);
+    if(__atomic_load_n(&used_mem, __ATOMIC_SEQ_CST) > 0)
+    {
+        fprintf(stderr, "Memory leak: %ld bytes!\n", used_mem);
+
+        return false;
+    }
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

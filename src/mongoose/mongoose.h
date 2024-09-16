@@ -2038,7 +2038,7 @@ struct mg_connection {
   unsigned is_websocket : 1;   // WebSocket connection
   unsigned is_mqtt5 : 1;       // For MQTT connection, v5 indicator
   unsigned is_hexdumping : 1;  // Hexdump in/out traffic
-  unsigned is_draining : 1;    // Send remaining data, then close and free
+  unsigned is_draining : 1;    // Send size data, then close and free
   unsigned is_closing : 1;     // Close and free the connection immediately
   unsigned is_full : 1;        // Stop reads, until cleared
   unsigned is_resp : 1;        // Response is still being generated

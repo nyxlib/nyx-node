@@ -200,17 +200,6 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* CHECK PROTOCOL VERSION                                                                                         */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    STR_t version1 = nyx_dict_get_string(dict, "@version");
-
-    if(version1 != NULL && strcmp(version1, NYX_INDI_VERSION) != 0)
-    {
-        return;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -580,7 +569,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse(stream.s_ptr, stream.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
 
                 if(xmldoc != NULL)
                 {
@@ -692,7 +681,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_object_t *object = nyx_object_parse(message->data.buf);
+                nyx_object_t *object = nyx_object_parse_buff(message->data.buf, message->data.len);
 
                 if(object != NULL)
                 {
@@ -709,7 +698,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse(message->data.buf, message->data.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(message->data.buf, message->data.len);
 
                 if(xmldoc != NULL)
                 {

@@ -3582,7 +3582,7 @@ int mg_json_get(struct mg_str json, const char *path, int *toklen) {
     if (c == ' ' || c == '\t' || c == '\n' || c == '\r') continue;
     switch (expecting) {
       case S_VALUE:
-        // p("V %s [%.*s] %d %d %d %d\n", path, pos, path, depth, ed, ci, ei);
+        // p("V %s [%.*s] %d %d %d %d\n", path, buff, path, depth, ed, ci, ei);
         if (depth == ed) j = i;
         if (c == '{') {
           if (depth >= (int) sizeof(nesting)) return MG_JSON_TOO_DEEP;
@@ -3636,10 +3636,10 @@ int mg_json_get(struct mg_str json, const char *path, int *toklen) {
           if (i + 1 + n >= len) return MG_JSON_NOT_FOUND;
           if (depth < ed) return MG_JSON_NOT_FOUND;
           if (depth == ed && path[pos - 1] != '.') return MG_JSON_NOT_FOUND;
-          // printf("K %s [%.*s] [%.*s] %d %d %d %d %d\n", path, pos, path, n,
+          // printf("K %s [%.*s] [%.*s] %d %d %d %d %d\n", path, buff, path, n,
           //        &s[i + 1], n, depth, ed, ci, ei);
           //  NOTE(cpq): in the check sequence below is important.
-          //  strncmp() must go first: it fails fast if the remaining length
+          //  strncmp() must go first: it fails fast if the size length
           //  of the path is smaller than `n`.
           if (depth == ed && path[pos - 1] == '.' &&
               strncmp(&s[i + 1], &path[pos], (size_t) n) == 0 &&
@@ -9224,7 +9224,7 @@ int gcm_update(gcm_context *ctx,    // pointer to user-provided GCM context
     }
     gcm_mult(ctx, ctx->buf, ctx->buf);  // perform a GHASH operation
 
-    length -= use_len;  // drop the remaining byte count to process
+    length -= use_len;  // drop the size byte count to process
     input += use_len;   // bump our input pointer forward
     output += use_len;  // bump our output pointer forward
   }

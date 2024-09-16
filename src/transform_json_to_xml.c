@@ -2,17 +2,15 @@
 
 #include <string.h>
 
-#include <libxml/tree.h>
-
 #include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static xmlNode *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
+static nyx_xmldoc_t *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlNode *node = xmlNewNode(NULL, BAD_CAST "");
+    nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ELEM_NODE);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -28,7 +26,7 @@ static xmlNode *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
         {
             str_t value = nyx_object_to_cstring(obj1);
 
-            xmlNodeSetName(node, /*--------*/ BAD_CAST value);
+            nyx_xmldoc_set_name(node, value);
 
             nyx_memory_free(value);
         }
@@ -39,7 +37,7 @@ static xmlNode *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
         {
             str_t value = nyx_object_to_cstring(obj1);
 
-            xmlNodeSetContent(node, /*--------*/ BAD_CAST value);
+            nyx_xmldoc_set_content(node, value);
 
             nyx_memory_free(value);
         }
@@ -50,7 +48,7 @@ static xmlNode *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
         {
             str_t value = nyx_object_to_cstring(obj1);
 
-            xmlNewProp(node, BAD_CAST (key + 1), BAD_CAST value);
+            nyx_xmldoc_new_attr(node, (key + 1), value);
 
             nyx_memory_free(value);
         }
@@ -65,7 +63,7 @@ static xmlNode *transform(const nyx_object_t *dict) // NOLINT(misc-no-recursion)
 
             for(nyx_list_iter_t iter2 = NYX_LIST_ITER(obj1); nyx_list_iterate(&iter2, &idx, &obj2);)
             {
-                xmlAddChild(node, transform(obj2));
+                nyx_xmldoc_add_child(node, transform(obj2));
             }
         }
 
@@ -88,31 +86,16 @@ nyx_xmldoc_t *nyx_object_to_xmldoc(__NULLABLE__ const nyx_object_t *object, bool
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlNode *root = transform(object);
+    nyx_xmldoc_t *xmldoc = transform(object);
 
-    if(root == NULL)
+    if(validate)
     {
-        return NULL;
+        /* TODO */
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *xml = xmlNewDoc(BAD_CAST "1.0");
-
-    xmlDocSetRootElement(xml, root);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(validate == true && nyx_validation_check(xml) == false)
-    {
-        xmlFreeDoc(xml);
-
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return xml;
+    return xmldoc;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -8,6 +8,8 @@
 
 typedef struct nyx_string_builder_node_s
 {
+    bool xml;
+
     struct nyx_string_builder_node_s *next;
 
 } node_t;
@@ -70,7 +72,7 @@ void nyx_string_builder_clear(nyx_string_builder_t *sb)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_builder_append_n(nyx_string_builder_t *sb, STR_t args[], size_t n)
+void nyx_string_builder_append_n(nyx_string_builder_t *sb, STR_t args[], size_t n, bool xml)
 {
     for(size_t i = 0; i < n; i++)
     {
@@ -95,6 +97,7 @@ void nyx_string_builder_append_n(nyx_string_builder_t *sb, STR_t args[], size_t 
             strcpy((str_t) (node + 1), data);
         }
 
+        node->xml = xml;
         node->next = NULL;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -143,8 +146,8 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t result = nyx_memory_alloc(
-        json_string ? 2 * length + 3
-                    : 1 * length + 1
+        json_string ? 6 * length + 3
+                    : 6 * length + 1
     ), p = result;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -167,14 +170,36 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
             {
                 switch(*q)
                 {
-                    case '\"': *p++ = '\\'; *p++ = '\"'; break;
+                    case '<':
+                        if(node->xml) {
+                            *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
+                        } else {
+                            goto _default;
+                        }
+
+                    case '>':
+                        if(node->xml) {
+                            *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
+                        } else {
+                            goto _default;
+                        }
+
+                    case '\"':
+                        if(node->xml) {
+                            *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
+                        } else {
+                            *p++ = '\\'; *p++ = '\"'; break;
+                        }
+
                     case '\\': *p++ = '\\'; *p++ = '\\'; break;
                     case '\b': *p++ = '\\'; *p++ = 'b'; break;
                     case '\f': *p++ = '\\'; *p++ = 'f'; break;
                     case '\n': *p++ = '\\'; *p++ = 'n'; break;
                     case '\r': *p++ = '\\'; *p++ = 'r'; break;
                     case '\t': *p++ = '\\'; *p++ = 't'; break;
+
                     default:
+                    _default:
                         *p++ = *q;
                         break;
                 }
@@ -197,11 +222,39 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
 
         for(node_t *node = sb->head; node != NULL; node = node->next)
         {
-            size_t size = strlen((str_t) (node + 1));
+            str_t q = (str_t) (node + 1);
 
-            memcpy(p, (str_t) (node + 1), size);
+            if(node->xml)
+            {
+                for(size_t size = strlen(q); size > 0; size--)
+                {
+                    switch(*q)
+                    {
+                        case '<':
+                            *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
 
-            p += size;
+                        case '>':
+                            *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
+
+                        case '\"':
+                            *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
+
+                        default:
+                            *p++ = *q;
+                            break;
+                    }
+
+                    q++;
+                }
+            }
+            else
+            {
+                size_t size = strlen(q);
+
+                memcpy(p, q, size);
+
+                p += size;
+            }
         }
 
         /*------------------------------------------------------------------------------------------------------------*/

@@ -3,13 +3,11 @@
 #include <ctype.h>
 #include <string.h>
 
-#include <libxml/tree.h>
-
 #include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static nyx_object_t *transform(const xmlNode *curr_node) // NOLINT(misc-no-recursion)
+static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-recursion)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -21,13 +19,13 @@ static nyx_object_t *transform(const xmlNode *curr_node) // NOLINT(misc-no-recur
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(xmlNode *new_node = curr_node->children; new_node != NULL; new_node = new_node->next)
+    for(nyx_xmldoc_t *new_node = curr_node->children; new_node != NULL; new_node = new_node->next)
     {
-        if(new_node->type == XML_TEXT_NODE)
+        if(new_node->type == NYX_XML_TEXT_NODE)
         {
-            xmlChar *content_s = new_node->content - 0x0000;
+            STR_t content_s = (STR_t) new_node->data - 0x0000;
             size_t length = strlen((str_t) content_s);
-            xmlChar *content_e = new_node->content + length;
+            str_t content_e = (str_t) new_node->data + length;
 
             while((isspace(*(content_s + 0)) || *(content_s + 0) == '"') && length > 0) {
                 content_s++;
@@ -52,17 +50,15 @@ static nyx_object_t *transform(const xmlNode *curr_node) // NOLINT(misc-no-recur
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(xmlAttr *attribute = curr_node->properties; attribute != NULL; attribute = attribute->next)
+    for(nyx_xmldoc_t *attribute = curr_node->attributes; attribute != NULL; attribute = attribute->next)
     {
         nyx_string_builder_t *sb = nyx_string_builder_from("@", (str_t) attribute->name);
 
         /**/    str_t attribute_name = nyx_string_builder_to_cstring(sb);
         /**/
-        /**/    /**/    xmlChar *attribute_val = xmlNodeListGetString(curr_node->doc, attribute->children, 1);
         /**/    /**/
-        /**/    /**/    /**/    nyx_dict_set(result, (str_t) attribute_name, nyx_string_from((str_t) attribute_val));
+        /**/    /**/    nyx_dict_set(result, (str_t) attribute_name, nyx_string_from(attribute->data));
         /**/    /**/
-        /**/    /**/    xmlFree(attribute_val);
         /**/
         /**/    nyx_memory_free(attribute_name);
 
@@ -75,9 +71,9 @@ static nyx_object_t *transform(const xmlNode *curr_node) // NOLINT(misc-no-recur
     {
         nyx_list_t *list = NULL;
 
-        for(xmlNode *new_node = curr_node->children; new_node != NULL; new_node = new_node->next)
+        for(nyx_xmldoc_t *new_node = curr_node->children; new_node != NULL; new_node = new_node->next)
         {
-            if(new_node->type == XML_ELEMENT_NODE)
+            if(new_node->type == NYX_XML_ELEM_NODE)
             {
                 if(list == NULL)
                 {
@@ -105,23 +101,16 @@ nyx_object_t *nyx_xmldoc_to_object(__NULLABLE__ const nyx_xmldoc_t *xmldoc, bool
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xmlNode *root = xmlDocGetRootElement(xmldoc);
-
-    if(root == NULL)
+    if(validate)
     {
-        return NULL;
+        /* TODO */
     }
+
+    nyx_object_t *object = transform(xmldoc);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(validate == false || nyx_validation_check(xmldoc) == true)
-    {
-        return transform(root);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return NULL;
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
