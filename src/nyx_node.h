@@ -1315,7 +1315,7 @@ nyx_xmldoc_t *nyx_xmldoc_parse(
 
 /**
  * \brief Frees memory for the provided XML document.
-
+ *
  * @param xmldoc The provided XML document.
  */
 
@@ -1325,17 +1325,79 @@ void nyx_xmldoc_free(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief ???.
+ *
+ * @param type
+ * @return
+ */
+
 nyx_xmldoc_t *nyx_xmldoc_new(nyx_xml_type_t type);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param xmldoc
+ * @return
+ */
 
 __NULLABLE__ str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc);
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param xmldoc
+ * @param name
+ */
+
 void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param xmldoc
+ * @return
+ */
 
 __NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc);
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param xmldoc
+ * @param data
+ */
+
 void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t data);
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param xmldoc
+ * @param child
+ */
+
 void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param xmldoc
+ * @param name
+ * @param data
+ */
 
 void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLABLE__ STR_t data);
 
