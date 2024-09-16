@@ -1260,7 +1260,6 @@ typedef enum nyx_xml_type_e
     NYX_XML_COMMENT_NODE,
     NYX_XML_CDATA_NODE,
     NYX_XML_TEXT_NODE,
-    NYX_XML_ERROR_NODE,
 
 } nyx_xml_type_t;
 
