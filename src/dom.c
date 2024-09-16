@@ -255,16 +255,17 @@ __INLINE__ void content_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        else if(curr_child->type == NYX_XML_TEXT_NODE)
+        else if(curr_child->type == NYX_XML_COMMENT_NODE)
         {
-            nyx_string_builder_append_xml(sb, curr_child->data);
+            nyx_string_builder_append(sb, "<!--", curr_child->data, "-->");
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         else if(curr_child->type == NYX_XML_CDATA_NODE)
         {
             nyx_string_builder_append(sb, "<![CDATA[", curr_child->data, "]]>");
+        }
+        else if(curr_child->type == NYX_XML_TEXT_NODE)
+        {
+            nyx_string_builder_append_xml(sb, curr_child->data);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -283,7 +284,7 @@ str_t nyx_xmldoc_to_string(const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
     {
         nyx_string_builder_append(sb, "<", xmldoc->name);
         attribute_to_string(sb, xmldoc);
-        nyx_string_builder_append(sb, "/>");
+        nyx_string_builder_append(sb, " />");
     }
     else
     {

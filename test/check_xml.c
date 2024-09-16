@@ -6,8 +6,6 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include <string.h>
-
 int main(int argc, char **argv)
 {
     if(argc != 2)
@@ -23,7 +21,7 @@ int main(int argc, char **argv)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse("<xml foo=\"bar\">\"Hello World!\"<qux><![CDATA[The World was round]]></qux>Bye&!</xml>");
+    nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse(argv[1]);
 
     if(xmldoc == NULL)
     {

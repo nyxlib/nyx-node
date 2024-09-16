@@ -19,6 +19,7 @@ typedef enum xml_token_type_e
     XML_TOKEN_EQUALS,
     XML_TOKEN_IDENT,
     XML_TOKEN_STRING,
+    XML_TOKEN_COMMENT,
     XML_TOKEN_CDATA,
     XML_TOKEN_TEXT,
     XML_TOKEN_ERROR,
@@ -119,7 +120,33 @@ static void tokenizer_next(xml_parser_t *parser)
         case '<':
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(parser->size >= 9 && strncmp(end, "<![CDATA[", 9) == 0)
+            /**/ if(parser->size >= 4 && strncmp(end, "<!--", 4) == 0)
+            {
+                end += 4;
+                parser->size -= 4;
+                while(parser->size >= 3 && strncmp(end, "-->", 3) != 0)
+                {
+                    if(*end == '\0')
+                    {
+                        type = XML_TOKEN_ERROR;
+                        goto _bye;
+                    }
+                    end++;
+                    parser->size--;
+                }
+                if(parser->size < 3)
+                {
+                    type = XML_TOKEN_ERROR;
+                    goto _bye;
+                }
+                end += 3;
+                parser->size -= 3;
+                type = XML_TOKEN_COMMENT;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            else if(parser->size >= 9 && strncmp(end, "<![CDATA[", 9) == 0)
             {
                 end += 9;
                 parser->size -= 9;
@@ -307,13 +334,13 @@ _text:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    /**/ if(type == XML_TOKEN_STRING)
+    /**/ if(type == XML_TOKEN_COMMENT)
     {
-        size_t length = (end - 1) - (start + 1);
+        size_t length = (end - 3) - (start + 4);
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        strncpy(p, start + 1, length)[length] = '\0';
+        strncpy(p, start + 4, length)[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -325,6 +352,17 @@ _text:
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
         strncpy(p, start + 9, length)[length] = '\0';
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    else if(type == XML_TOKEN_STRING)
+    {
+        size_t length = (end - 1) - (start + 1);
+
+        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
+
+        strncpy(p, start + 1, length)[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -376,6 +414,30 @@ _bye:
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static nyx_xmldoc_t *xml_parse_content(xml_parser_t *parser, nyx_xmldoc_t *parent);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static nyx_xmldoc_t *xml_parse_comment_node(xml_parser_t *parser, nyx_xmldoc_t *parent)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(CHECK(XML_TOKEN_COMMENT) == false)
+    {
+        return NULL;
+    }
+
+    str_t data = PEEK().value;
+
+    NEXT();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_COMMENT_NODE);
+    result->data = data;
+    result->parent = parent;
+
+    return result;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -676,13 +738,17 @@ static nyx_xmldoc_t *xml_parse_content(xml_parser_t *parser, nyx_xmldoc_t *paren
         node = xml_parse_element(parser, parent);
         if(node == NULL)
         {
-            node = xml_parse_cdata_node(parser, parent);
+            node = xml_parse_comment_node(parser, parent);
             if(node == NULL)
             {
-                node = xml_parse_text_node(parser, parent);
+                node = xml_parse_cdata_node(parser, parent);
                 if(node == NULL)
                 {
-                    break;
+                    node = xml_parse_text_node(parser, parent);
+                    if(node == NULL)
+                    {
+                        break;
+                    }
                 }
             }
         }
