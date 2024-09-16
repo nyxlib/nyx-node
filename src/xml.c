@@ -532,6 +532,8 @@ static nyx_xmldoc_t *xml_parse_start_tag(xml_parser_t *parser, nyx_xmldoc_t *par
     if(CHECK(XML_TOKEN_SLASH) == false)
     {
         self_closing = false;
+
+        ////();
     }
     else
     {

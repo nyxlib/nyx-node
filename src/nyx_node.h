@@ -1337,7 +1337,7 @@ void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, STR_t data);
 
 void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child);
 
-void nyx_xmldoc_new_attr(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data);
+void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

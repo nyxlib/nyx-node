@@ -48,7 +48,7 @@ static nyx_xmldoc_t *transform(const nyx_object_t *dict) // NOLINT(misc-no-recur
         {
             str_t value = nyx_object_to_cstring(obj1);
 
-            nyx_xmldoc_new_attr(node, (key + 1), value);
+            nyx_xmldoc_add_attr(node, (key + 1), value);
 
             nyx_memory_free(value);
         }
