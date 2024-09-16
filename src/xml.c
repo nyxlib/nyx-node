@@ -81,6 +81,60 @@ static const int XML_IDENT_TAB[256] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static bool xmlcpy(str_t p, STR_t s, STR_t e)
+{
+    while(s < e)
+    {
+        if(*s == '&')
+        {
+            s++;
+
+            /**/ if(strncmp(s, "lt;", 3) == 0)
+            {
+                *p = '<';
+                s += 3 - 1;
+            }
+            else if(strncmp(s, "gt;", 3) == 0)
+            {
+                *p = '>';
+                s += 3 - 1;
+            }
+            else if(strncmp(s, "amp;", 4) == 0)
+            {
+                *p = '&';
+                s += 4 - 1;
+            }
+            else if(strncmp(s, "quot;", 5) == 0)
+            {
+                *p = '\"';
+                s += 5 - 1;
+            }
+            else if(strncmp(s, "apos;", 5) == 0)
+            {
+                *p = '\'';
+                s += 5 - 1;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            *p = *s;
+        }
+
+        s++;
+        p++;
+    }
+
+    *p = '\0';
+
+    return true;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static void tokenizer_next(xml_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -336,46 +390,50 @@ _text:
 
     /**/ if(type == XML_TOKEN_COMMENT)
     {
-        size_t length = (end - 3) - (start + 4);
+        STR_t s = start + 4;
+        STR_t e =  end  - 3;
+
+        size_t length = e - s;
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        strncpy(p, start + 4, length)[length] = '\0';
+        /* COPY VALUE */
+
+        strncpy(p, s, length)[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     else if(type == XML_TOKEN_CDATA)
     {
-        size_t length = (end - 3) - (start + 9);
+        STR_t s = start + 9;
+        STR_t e =  end  - 3;
+
+        size_t length = e - s;
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        strncpy(p, start + 9, length)[length] = '\0';
-    }
+        /* COPY VALUE */
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    else if(type == XML_TOKEN_STRING)
-    {
-        size_t length = (end - 1) - (start + 1);
-
-        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-        strncpy(p, start + 1, length)[length] = '\0';
+        strncpy(p, s, length)[length] = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     else if(type == XML_TOKEN_IDENT)
     {
-        size_t length = end - start;
+        STR_t s = start;
+        STR_t e =  end ;
+
+        size_t length = e - s;
 
         if(length > 0)
         {
             str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-            strncpy(p, start, length)[length] = '\0';
+            /* COPY VALUE */
+
+            strncpy(p, s, length)[length] = '\0';
         }
         else
         {
@@ -385,15 +443,48 @@ _text:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    else if(type == XML_TOKEN_STRING)
+    {
+        STR_t s = start + 1;
+        STR_t e =  end  - 1;
+
+        size_t length = e - s;
+
+        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
+
+        /* COPY VALUE */
+
+        if(xmlcpy(p, s, e) == false)
+        {
+            nyx_memory_free(parser->curr_token.value);
+            parser->curr_token.value = NULL;
+            type = XML_TOKEN_ERROR;
+            goto _bye;
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     else if(type == XML_TOKEN_TEXT)
     {
-        size_t length = end - start;
+        STR_t s = start;
+        STR_t e =  end ;
+
+        size_t length = e - s;
 
         if(length > 0)
         {
             str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-            strncpy(p, start, length)[length] = '\0';
+            /* COPY VALUE */
+
+            if(xmlcpy(p, s, e) == false)
+            {
+                nyx_memory_free(parser->curr_token.value);
+                parser->curr_token.value = NULL;
+                type = XML_TOKEN_ERROR;
+                goto _bye;
+            }
         }
         else
         {
@@ -536,7 +627,7 @@ static nyx_xmldoc_t *xml_parse_attribute_node(xml_parser_t *parser)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static nyx_xmldoc_t *xml_parse_start_tag(xml_parser_t *parser, nyx_xmldoc_t *parent)
+static nyx_xmldoc_t *xml_parse_openning_tag(xml_parser_t *parser, nyx_xmldoc_t *parent)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -638,7 +729,7 @@ _err:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool xml_parse_ending_tag(xml_parser_t *parser, nyx_xmldoc_t *current)
+static bool xml_parse_closing_tag(xml_parser_t *parser, nyx_xmldoc_t *current)
 {
     if(current->self_closing == false)
     {
@@ -686,11 +777,11 @@ static bool xml_parse_ending_tag(xml_parser_t *parser, nyx_xmldoc_t *current)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static nyx_xmldoc_t *xml_parse_element(xml_parser_t *parser, nyx_xmldoc_t *parent) // NOLINT(*-no-recursion)
+static nyx_xmldoc_t *xml_parse_element_node(xml_parser_t *parser, nyx_xmldoc_t *parent) // NOLINT(*-no-recursion)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = xml_parse_start_tag(parser, parent);
+    nyx_xmldoc_t *result = xml_parse_openning_tag(parser, parent);
 
     if(result == NULL)
     {
@@ -704,7 +795,7 @@ static nyx_xmldoc_t *xml_parse_element(xml_parser_t *parser, nyx_xmldoc_t *paren
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    bool okay = xml_parse_ending_tag(parser, result);
+    bool okay = xml_parse_closing_tag(parser, result);
 
     if(okay == false)
     {
@@ -735,7 +826,7 @@ static nyx_xmldoc_t *xml_parse_content(xml_parser_t *parser, nyx_xmldoc_t *paren
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        node = xml_parse_element(parser, parent);
+        node = xml_parse_element_node(parser, parent);
         if(node == NULL)
         {
             node = xml_parse_comment_node(parser, parent);
@@ -804,7 +895,7 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-	nyx_xmldoc_t *result = xml_parse_element(parser, NULL);
+	nyx_xmldoc_t *result = xml_parse_element_node(parser, NULL);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
