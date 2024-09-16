@@ -147,18 +147,18 @@ static void tokenizer_next(xml_parser_t *parser)
 
             else
             {
+                parser->tag = true;
+
                 if(parser->size >= 2 && *(end + 1) == '/')
                 {
                     end += 2;
                     parser->size -= 2;
-                    parser->tag = false;
                     type = XML_TOKEN_LT2;
                 }
                 else
                 {
                     end += 1;
                     parser->size -= 1;
-                    parser->tag = true;
                     type = XML_TOKEN_LT1;
                 }
             }
@@ -169,9 +169,10 @@ static void tokenizer_next(xml_parser_t *parser)
         /*------------------------------------------------------------------------------------------------------------*/
 
         case '>':
+            parser->tag = false;
+
             end++;
             parser->size--;
-            parser->tag = false;
             type = XML_TOKEN_GT;
             break;
 
