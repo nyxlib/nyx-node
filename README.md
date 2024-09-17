@@ -15,17 +15,9 @@
 
 # Nyx Node
 
-TODO
-
-# Dependencies
-
- * [LibXML2](https://gitlab.gnome.org/GNOME/libxml2)
-
-```bash
-sudo dnf install libxml2-devel
-# or
-sudo apt-get install libxml2-dev
-```
+The Nyx project introduces a protocol backward-compatible with INDI 1.7, for controlling astronomical hardware. It
+enhances INDI by supporting multiple independent nodes, each with its own embedded server. These nodes can  communicate
+directly over TCP or via an MQTT broker, providing greater flexibility and scalability for distributed systems.
 
 # Build instructions
 
@@ -48,4 +40,4 @@ Developer
 [Build Status img]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/badges/main/pipeline.svg
 
 [License]:https://www.gnu.org/licenses/lgpl-3.0.txt
-[License img]:https://img.shields.io/badge/license-LGPL-blue.svg
+[License img]:https://img.shields.io/badge/license-LGPL_3.0_or_later-blue.svg
