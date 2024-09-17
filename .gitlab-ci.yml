@@ -5,7 +5,7 @@ stages:
 
 before_script:
     - apk update
-    - apk add --no-cache gcc make cmake doxygen graphviz musl-dev libxml2-dev
+    - apk add --no-cache gcc make cmake doxygen graphviz musl-dev
 
 build_project:
     stage: build
