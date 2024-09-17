@@ -31,6 +31,14 @@ make docs
 sudo make install
 ```
 
+# Home page and documentation
+
+Home page:
+* https://nyxlib.org/
+
+Documentation:
+* https://nyxlib.org/node/
+
 Developer
 =========
 
