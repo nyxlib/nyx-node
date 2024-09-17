@@ -89,30 +89,32 @@ static bool xmlcpy(str_t p, STR_t s, STR_t e)
         {
             s++;
 
-            /**/ if(strncmp(s, "lt;", 3) == 0)
+            size_t size = e - s;
+
+            /**/ if(size >= 3 && strncmp(s, "lt;", 3) == 0)
             {
-                *p = '<';
-                s += 3 - 1;
+                *p++ = '<';
+                s += 3;
             }
-            else if(strncmp(s, "gt;", 3) == 0)
+            else if(size >= 3 && strncmp(s, "gt;", 3) == 0)
             {
-                *p = '>';
-                s += 3 - 1;
+                *p++ = '>';
+                s += 3;
             }
-            else if(strncmp(s, "amp;", 4) == 0)
+            else if(size >= 4 && strncmp(s, "amp;", 4) == 0)
             {
-                *p = '&';
-                s += 4 - 1;
+                *p++ = '&';
+                s += 4;
             }
-            else if(strncmp(s, "quot;", 5) == 0)
+            else if(size >= 5 && strncmp(s, "quot;", 5) == 0)
             {
-                *p = '\"';
-                s += 5 - 1;
+                *p++ = '\"';
+                s += 5;
             }
-            else if(strncmp(s, "apos;", 5) == 0)
+            else if(size >= 5 && strncmp(s, "apos;", 5) == 0)
             {
-                *p = '\'';
-                s += 5 - 1;
+                *p++ = '\'';
+                s += 5;
             }
             else
             {
@@ -121,11 +123,8 @@ static bool xmlcpy(str_t p, STR_t s, STR_t e)
         }
         else
         {
-            *p = *s;
+            *p++ = *s++;
         }
-
-        s++;
-        p++;
     }
 
     *p = '\0';
@@ -413,8 +412,6 @@ _text:
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        /* COPY VALUE */
-
         strncpy(p, s, length)[length] = '\0';
     }
 
@@ -430,8 +427,6 @@ _text:
         if(length > 0)
         {
             str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-            /* COPY VALUE */
 
             strncpy(p, s, length)[length] = '\0';
         }
@@ -451,8 +446,6 @@ _text:
         size_t length = e - s;
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-        /* COPY VALUE */
 
         if(xmlcpy(p, s, e) == false)
         {
@@ -475,8 +468,6 @@ _text:
         if(length > 0)
         {
             str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-            /* COPY VALUE */
 
             if(xmlcpy(p, s, e) == false)
             {

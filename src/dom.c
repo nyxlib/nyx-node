@@ -236,7 +236,7 @@ __INLINE__ void attribute_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void content_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc)
+__INLINE__ void content_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 {
     for(nyx_xmldoc_t *curr_child = xmldoc->children, *next_child; curr_child; curr_child = next_child)
     {

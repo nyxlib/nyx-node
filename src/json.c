@@ -99,6 +99,71 @@ typedef struct json_parser_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static bool jsoncpy(str_t p, STR_t s, STR_t e)
+{
+    while(s < e)
+    {
+        if(*s == '\\')
+        {
+            s++;
+
+            if(e - s >= 1)
+            {
+                switch(*s)
+                {
+                    case '\"': *p = '\"'; break;
+                    case '\\': *p = '\\'; break;
+                    case '/': *p = '/'; break;
+                    case 'b': *p = '\b'; break;
+                    case 'f': *p = '\f'; break;
+                    case 'n': *p = '\n'; break;
+                    case 'r': *p = '\r'; break;
+                    case 't': *p = '\t'; break;
+                    case 'u':
+                        s++;
+
+                        if(e - s >= 4)
+                        {
+                            char hex[5] = {
+                                s[0], s[1],
+                                s[2], s[3],
+                                '\0',
+                            };
+
+                            uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
+
+                            s += 0x0000000000000000000000000000000004;
+                            p += nyx_unicode_to_utf8(unicode_char, p);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    default:
+                        *p++ = *s++;
+                        break;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            *p++ = *s++;
+            /*--*/
+        }
+    }
+
+    *p = '\0';
+
+    return true;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static void tokenizer_next(json_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -268,8 +333,6 @@ static void tokenizer_next(json_parser_t *parser)
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        /* COPY VALUE */
-
         strncpy(p, s, length)[length] = '\0';
     }
 
@@ -284,72 +347,13 @@ static void tokenizer_next(json_parser_t *parser)
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        /* COPY VALUE */
-
-        while(s < e)
+        if(jsoncpy(p, s, e) == false)
         {
-            if(*s == '\\')
-            {
-                s++;
-                if(e - s < 1)
-                {
-                    nyx_memory_free(parser->curr_token.value);
-                    parser->curr_token.value = NULL;
-                    type = JSON_TOKEN_ERROR;
-                    goto _bye;
-                }
-                else
-                {
-                    switch(*s)
-                    {
-                        case '\"': *p = '\"'; break;
-                        case '\\': *p = '\\'; break;
-                        case '/': *p = '/'; break;
-                        case 'b': *p = '\b'; break;
-                        case 'f': *p = '\f'; break;
-                        case 'n': *p = '\n'; break;
-                        case 'r': *p = '\r'; break;
-                        case 't': *p = '\t'; break;
-                        case 'u':
-                            s++;
-                            if(e - s < 4)
-                            {
-                                nyx_memory_free(parser->curr_token.value);
-                                parser->curr_token.value = NULL;
-                                type = JSON_TOKEN_ERROR;
-                                goto _bye;
-                            }
-                            else
-                            {
-                                char hex[5] = {
-                                    s[0], s[1],
-                                    s[2], s[3],
-                                    '\0',
-                                };
-
-                                uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
-
-                                s += 0x0000000000000000000000000000000004 - 1;
-                                p += nyx_unicode_to_utf8(unicode_char, p) - 1;
-                            }
-                            break;
-                        default:
-                            *p = *s;
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                *p = *s;
-                /*--*/
-            }
-
-            s++;
-            p++;
+            nyx_memory_free(parser->curr_token.value);
+            parser->curr_token.value = NULL;
+            type = JSON_TOKEN_ERROR;
+            goto _bye;
         }
-
-        *p = '\0';
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
