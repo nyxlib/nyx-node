@@ -222,7 +222,7 @@ void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLAB
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void attribute_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc)
+__INLINE__ void append_attribute(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc)
 {
     for(nyx_xmldoc_t *curr_child = xmldoc->attributes, *next_child; curr_child; curr_child = next_child)
     {
@@ -236,7 +236,7 @@ __INLINE__ void attribute_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void content_to_string(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
+__INLINE__ void append_content(nyx_string_builder_t *sb, const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 {
     for(nyx_xmldoc_t *curr_child = xmldoc->children, *next_child; curr_child; curr_child = next_child)
     {
@@ -282,16 +282,14 @@ str_t nyx_xmldoc_to_string(const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 
     if(xmldoc->self_closing)
     {
-        nyx_string_builder_append(sb, "<", xmldoc->name);
-        attribute_to_string(sb, xmldoc);
-        nyx_string_builder_append(sb, " />");
+        nyx_string_builder_append(sb, "<", xmldoc->name); append_attribute(sb, xmldoc); nyx_string_builder_append(sb, " />");
     }
     else
     {
-        nyx_string_builder_append(sb, "<", xmldoc->name);
-        attribute_to_string(sb, xmldoc);
-        nyx_string_builder_append(sb, ">");
-        content_to_string(sb, xmldoc);
+        nyx_string_builder_append(sb, "<", xmldoc->name); append_attribute(sb, xmldoc); nyx_string_builder_append(sb, ">");
+
+        append_content(sb, xmldoc);
+
         nyx_string_builder_append(sb, "</", xmldoc->name, ">");
     }
 
