@@ -184,11 +184,25 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
                             goto _default;
                         }
 
+                    case '&':
+                        if(node->xml) {
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
+                        } else {
+                            goto _default;
+                        }
+
                     case '\"':
                         if(node->xml) {
                             *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
                         } else {
                             *p++ = '\\'; *p++ = '\"'; break;
+                        }
+
+                    case '\'':
+                        if(node->xml) {
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
+                        } else {
+                            goto _default;
                         }
 
                     case '\\': *p++ = '\\'; *p++ = '\\'; break;
