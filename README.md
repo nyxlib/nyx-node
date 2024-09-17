@@ -27,7 +27,6 @@ cd build
 
 cmake ..
 make
-make docs
 sudo make install
 ```
 
