@@ -52,10 +52,11 @@ set(SOURCE_FILES
     src/utils/base64.c
     src/utils/utf8.c
     #
-    src/object.c
+    src/parsers/json.c
+    src/parsers/xml.c
+    #
     src/string_builder.c
-    src/json.c
-    src/xml.c
+    src/object.c
     src/dom.c
     src/validation.c
     src/transform_json_to_xml.c

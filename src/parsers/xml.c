@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "nyx_node_internal.h"
+#include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* DEFINITIONS                                                                                                        */
