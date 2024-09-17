@@ -396,8 +396,6 @@ _text:
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
-        /* COPY VALUE */
-
         strncpy(p, s, length)[length] = '\0';
     }
 
