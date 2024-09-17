@@ -108,9 +108,9 @@ __NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
     {
         next_child = curr_child->next;
 
-        if(curr_child->type == NYX_XML_TEXT_NODE
+        if(curr_child->type == NYX_XML_TEXT
            ||
-           curr_child->type == NYX_XML_CDATA_NODE
+           curr_child->type == NYX_XML_CDATA
         ) {
             return curr_child->data;
         }
@@ -127,7 +127,7 @@ void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t data)
 
     if(data != NULL)
     {
-        nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_TEXT_NODE);
+        nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_TEXT);
 
         node->name = nyx_string_dup("@@");
         node->data = nyx_string_dup(data);
@@ -147,7 +147,7 @@ void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(child->type == NYX_XML_ATTR_NODE)
+    if(child->type == NYX_XML_ATTR)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* ADD ATTRIBUTE                                                                                              */
@@ -211,7 +211,7 @@ void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLAB
        &&
        data != NULL
     ) {
-        nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ATTR_NODE);
+        nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ATTR);
 
         node->name = nyx_string_dup(name);
         node->data = nyx_string_dup(data);
@@ -244,7 +244,7 @@ __INLINE__ void append_content(nyx_string_builder_t *sb, const nyx_xmldoc_t *xml
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(curr_child->type == NYX_XML_ELEM_NODE)
+        /**/ if(curr_child->type == NYX_XML_ELEM)
         {
             str_t node = nyx_xmldoc_to_string(curr_child);
 
@@ -255,15 +255,15 @@ __INLINE__ void append_content(nyx_string_builder_t *sb, const nyx_xmldoc_t *xml
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        else if(curr_child->type == NYX_XML_COMMENT_NODE)
+        else if(curr_child->type == NYX_XML_COMMENT)
         {
             nyx_string_builder_append(sb, "<!--", curr_child->data, "-->");
         }
-        else if(curr_child->type == NYX_XML_CDATA_NODE)
+        else if(curr_child->type == NYX_XML_CDATA)
         {
             nyx_string_builder_append(sb, "<![CDATA[", curr_child->data, "]]>");
         }
-        else if(curr_child->type == NYX_XML_TEXT_NODE)
+        else if(curr_child->type == NYX_XML_TEXT)
         {
             nyx_string_builder_append_xml(sb, curr_child->data);
         }

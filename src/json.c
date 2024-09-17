@@ -10,7 +10,7 @@
 /* DEFINITIONS                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef enum json_token_type_e
+typedef enum
 {
     JSON_TOKEN_EOF,
     JSON_TOKEN_NULL,
@@ -30,7 +30,7 @@ typedef enum json_token_type_e
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct json_token_s
+typedef struct
 {
     str_t value;
 
@@ -40,7 +40,7 @@ typedef struct json_token_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct json_parser_s
+typedef struct
 {
     STR_t buff;
     size_t size;

@@ -21,7 +21,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
 
     for(nyx_xmldoc_t *new_node = curr_node->children; new_node != NULL; new_node = new_node->next)
     {
-        if(new_node->type == NYX_XML_TEXT_NODE)
+        if(new_node->type == NYX_XML_TEXT)
         {
             STR_t content_s = (STR_t) new_node->data - 0x0000;
             size_t length = strlen((str_t) content_s);
@@ -73,7 +73,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
 
         for(nyx_xmldoc_t *new_node = curr_node->children; new_node != NULL; new_node = new_node->next)
         {
-            if(new_node->type == NYX_XML_ELEM_NODE)
+            if(new_node->type == NYX_XML_ELEM)
             {
                 if(list == NULL)
                 {

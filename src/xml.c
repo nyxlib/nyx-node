@@ -9,7 +9,7 @@
 /* DEFINITIONS                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef enum xml_token_type_e
+typedef enum
 {
     XML_TOKEN_EOF,
     XML_TOKEN_LT1,
@@ -28,7 +28,7 @@ typedef enum xml_token_type_e
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct xml_token_s
+typedef struct
 {
     str_t value;
 
@@ -38,7 +38,7 @@ typedef struct xml_token_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct xml_parser_s
+typedef struct
 {
     bool tag;
 
@@ -512,7 +512,7 @@ static nyx_xmldoc_t *xml_parse_comment_node(xml_parser_t *parser, nyx_xmldoc_t *
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_COMMENT_NODE);
+    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_COMMENT);
     result->data = data;
     result->parent = parent;
 
@@ -536,7 +536,7 @@ static nyx_xmldoc_t *xml_parse_cdata_node(xml_parser_t *parser, nyx_xmldoc_t *pa
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_CDATA_NODE);
+    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_CDATA);
     result->data = data;
     result->parent = parent;
 
@@ -560,7 +560,7 @@ static nyx_xmldoc_t *xml_parse_text_node(xml_parser_t *parser, nyx_xmldoc_t *par
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_TEXT_NODE);
+    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_TEXT);
     result->data = data;
     result->parent = parent;
 
@@ -607,7 +607,7 @@ static nyx_xmldoc_t *xml_parse_attribute_node(xml_parser_t *parser)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_ATTR_NODE);
+    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_ATTR);
     result->name = name;
     result->data = data;
 
@@ -695,7 +695,7 @@ static nyx_xmldoc_t *xml_parse_openning_tag(xml_parser_t *parser, nyx_xmldoc_t *
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_ELEM_NODE);
+    nyx_xmldoc_t *result = nyx_xmldoc_new(NYX_XML_ELEM);
     result->name = name;
     result->parent = parent;
     result->attributes = first_attr;

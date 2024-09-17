@@ -10,7 +10,7 @@ static nyx_xmldoc_t *transform(const nyx_object_t *dict) // NOLINT(misc-no-recur
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ELEM_NODE);
+    nyx_xmldoc_t *node = nyx_xmldoc_new(NYX_XML_ELEM);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

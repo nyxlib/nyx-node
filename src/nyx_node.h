@@ -1253,21 +1253,17 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef enum nyx_xml_type_e
+typedef enum
 {
-    NYX_XML_ELEM_NODE,
-    NYX_XML_ATTR_NODE,
-    NYX_XML_COMMENT_NODE,
-    NYX_XML_CDATA_NODE,
-    NYX_XML_TEXT_NODE,
+    NYX_XML_ELEM,
+    NYX_XML_ATTR,
+    NYX_XML_COMMENT,
+    NYX_XML_CDATA,
+    NYX_XML_TEXT,
 
 } nyx_xml_type_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Opaque alias of the LibXML 2 doc struct (see <a href="https://gnome.pages.gitlab.gnome.org/libxml2/devhelp/libxml2-tree.html#xmlDoc" target="_blank">libxml2-tree.html#xmlDoc</a>).
- */
 
 typedef struct nyx_xmldoc_s
 {
@@ -1322,84 +1318,6 @@ nyx_xmldoc_t *nyx_xmldoc_parse(
 void nyx_xmldoc_free(
     __NULLABLE__ /*-*/ nyx_xmldoc_t *xmldoc
 );
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param type
- * @return
- */
-
-nyx_xmldoc_t *nyx_xmldoc_new(nyx_xml_type_t type);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param xmldoc
- * @return
- */
-
-__NULLABLE__ str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param xmldoc
- * @param name
- */
-
-void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param xmldoc
- * @return
- */
-
-__NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param xmldoc
- * @param data
- */
-
-void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t data);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param xmldoc
- * @param child
- */
-
-void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief ???.
- *
- * @param xmldoc
- * @param name
- * @param data
- */
-
-void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLABLE__ STR_t data);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
