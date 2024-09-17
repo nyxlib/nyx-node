@@ -101,9 +101,9 @@ nyx_object_t *nyx_xmldoc_to_object(__NULLABLE__ const nyx_xmldoc_t *xmldoc, bool
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(validate)
+    if(validate && nyx_validation_check(xmldoc) == false)
     {
-        /* TODO */
+        return NULL;
     }
 
     nyx_object_t *object = transform(xmldoc);
