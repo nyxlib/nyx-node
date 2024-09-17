@@ -28,6 +28,7 @@ test_xml()
 ########################################################################################################################
 
 test_xml '<foo></foo>'
+test_xml '<foo:bar></foo:bar>'
 test_xml '<foo bar="baz"></foo>'
 test_xml '<foo bar="baz" qux="quux"></foo>'
 test_xml '<foo />'
