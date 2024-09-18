@@ -166,59 +166,63 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
         {
             str_t q = (str_t) (node + 1);
 
-            for(size_t size = strlen(q); size > 0; size--)
+            if(node->xml)
             {
-                switch(*q)
+                for(size_t size = strlen(q); size > 0; size--)
                 {
-                    case '<':
-                        if(node->xml) {
+                    switch(*q)
+                    {
+                        case '<':
                             *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
-                        } else {
-                            goto _default;
-                        }
 
-                    case '>':
-                        if(node->xml) {
+                        case '>':
                             *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
-                        } else {
-                            goto _default;
-                        }
 
-                    case '&':
-                        if(node->xml) {
+                        case '&':
                             *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
-                        } else {
-                            goto _default;
-                        }
 
-                    case '\"':
-                        if(node->xml) {
+                        case '\"':
                             *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
-                        } else {
-                            *p++ = '\\'; *p++ = '\"'; break;
-                        }
 
-                    case '\'':
-                        if(node->xml) {
+                        case '\'':
                             *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
-                        } else {
-                            goto _default;
-                        }
 
-                    case '\\': *p++ = '\\'; *p++ = '\\'; break;
-                    case '\b': *p++ = '\\'; *p++ = 'b'; break;
-                    case '\f': *p++ = '\\'; *p++ = 'f'; break;
-                    case '\n': *p++ = '\\'; *p++ = 'n'; break;
-                    case '\r': *p++ = '\\'; *p++ = 'r'; break;
-                    case '\t': *p++ = '\\'; *p++ = 't'; break;
+                        case '\\': *p++ = '\\'; *p++ = '\\'; break;
+                        case '\b': *p++ = '\\'; *p++ = 'b'; break;
+                        case '\f': *p++ = '\\'; *p++ = 'f'; break;
+                        case '\n': *p++ = '\\'; *p++ = 'n'; break;
+                        case '\r': *p++ = '\\'; *p++ = 'r'; break;
+                        case '\t': *p++ = '\\'; *p++ = 't'; break;
 
-                    default:
-                    _default:
-                        *p++ = *q;
-                        break;
+                        default:
+                            *p++ = *q;
+                            break;
+                    }
+
+                    q++;
                 }
+            }
+            else
+            {
+                for(size_t size = strlen(q); size > 0; size--)
+                {
+                    switch(*q)
+                    {
+                        case '\"': *p++ = '\\'; *p++ = '\"'; break;
+                        case '\\': *p++ = '\\'; *p++ = '\\'; break;
+                        case '\b': *p++ = '\\'; *p++ = 'b'; break;
+                        case '\f': *p++ = '\\'; *p++ = 'f'; break;
+                        case '\n': *p++ = '\\'; *p++ = 'n'; break;
+                        case '\r': *p++ = '\\'; *p++ = 'r'; break;
+                        case '\t': *p++ = '\\'; *p++ = 't'; break;
 
-                q++;
+                        default:
+                            *p++ = *q;
+                            break;
+                    }
+
+                    q++;
+                }
             }
         }
 
