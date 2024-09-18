@@ -401,9 +401,7 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
             }
             else
             {
-                memcpy(p, q, size);
-
-                p += size;
+                p = memcpy(p, q, size) + size;
             }
         }
 
