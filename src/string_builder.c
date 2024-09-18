@@ -119,20 +119,153 @@ void nyx_string_builder_append_n(nyx_string_builder_t *sb, STR_t args[], size_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
+size_t string_builder_length(const nyx_string_builder_t *sb, bool json_string)
 {
-    size_t length = 0;
+    size_t result;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = sb->head; node != NULL; node = node->next)
+    if(json_string)
     {
-        length += strlen((str_t) (node + 1));
+        /*--------------------------------------------------------------------------------------------------------*/
+        /* JSON STRING                                                                                            */
+        /*--------------------------------------------------------------------------------------------------------*/
+
+        result = 2;
+
+        for(node_t *node = sb->head; node != NULL; node = node->next)
+        {
+            str_t q = (str_t) (node + 1);
+
+            size_t size = strlen(q);
+
+            if(node->xml)
+            {
+                for(; size > 0; size--)
+                {
+                    switch(*q++)
+                    {
+                        case '<':
+                        case '>':
+                            result += 4;
+                            break;
+
+                        case '&':
+                            result += 5;
+                            break;
+
+                        case '\"':
+                        case '\'':
+                            result += 6;
+                            break;
+
+                        case '\\':
+                        case '\b':
+                        case '\f':
+                        case '\n':
+                        case '\r':
+                        case '\t':
+                            result += 2;
+                            break;
+
+                        default:
+                            result += 1;
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                for(; size > 0; size--)
+                {
+                    switch(*q++)
+                    {
+                        case '\"':
+                        case '\\':
+                        case '\b':
+                        case '\f':
+                        case '\n':
+                        case '\r':
+                        case '\t':
+                            result += 2;
+                            break;
+
+                        default:
+                            result += 1;
+                            break;
+                    }
+                }
+            }
+        }
+
+        /*--------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        /*--------------------------------------------------------------------------------------------------------*/
+        /* RAW STRING                                                                                             */
+        /*--------------------------------------------------------------------------------------------------------*/
+
+        result = 0;
+
+        for(node_t *node = sb->head; node != NULL; node = node->next)
+        {
+            str_t q = (str_t) (node + 1);
+
+            size_t size = strlen(q);
+
+            if(node->xml)
+            {
+                for(; size > 0; size--)
+                {
+                    switch(*q++)
+                    {
+                        case '<':
+                        case '>':
+                            result += 4;
+                            break;
+
+                        case '&':
+                            result += 5;
+                            break;
+
+                        case '\"':
+                        case '\'':
+                            result += 6;
+                            break;
+
+                        default:
+                            result += 1;
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                result += size;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return length;
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
+{
+    return string_builder_length(sb, true);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+size_t nyx_string_builder_clength(const nyx_string_builder_t *sb)
+{
+    return string_builder_length(sb, false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -141,14 +274,11 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t length = nyx_string_builder_length(sb);
+    str_t result = nyx_memory_alloc( string_builder_length(sb, json_string) + 1), p = result;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t result = nyx_memory_alloc(
-        json_string ? 6 * length + 3
-                    : 6 * length + 1
-    ), p = result;
+    char c;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -166,11 +296,13 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
         {
             str_t q = (str_t) (node + 1);
 
+            size_t size = strlen(q);
+
             if(node->xml)
             {
-                for(size_t size = strlen(q); size > 0; size--)
+                for(; size > 0; size--)
                 {
-                    switch(*q)
+                    switch((c = *q++))
                     {
                         case '<':
                             *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
@@ -195,18 +327,16 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
                         case '\t': *p++ = '\\'; *p++ = 't'; break;
 
                         default:
-                            *p++ = *q;
+                            *p++ = c;
                             break;
                     }
-
-                    q++;
                 }
             }
             else
             {
-                for(size_t size = strlen(q); size > 0; size--)
+                for(; size > 0; size--)
                 {
-                    switch(*q)
+                    switch((c = *q++))
                     {
                         case '\"': *p++ = '\\'; *p++ = '\"'; break;
                         case '\\': *p++ = '\\'; *p++ = '\\'; break;
@@ -217,11 +347,9 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
                         case '\t': *p++ = '\\'; *p++ = 't'; break;
 
                         default:
-                            *p++ = *q;
+                            *p++ = c;
                             break;
                     }
-
-                    q++;
                 }
             }
         }
@@ -242,11 +370,13 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
         {
             str_t q = (str_t) (node + 1);
 
+            size_t size = strlen(q);
+
             if(node->xml)
             {
-                for(size_t size = strlen(q); size > 0; size--)
+                for(; size > 0; size--)
                 {
-                    switch(*q)
+                    switch((c = *q++))
                     {
                         case '<':
                             *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
@@ -264,17 +394,13 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
                             *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
 
                         default:
-                            *p++ = *q;
+                            *p++ = c;
                             break;
                     }
-
-                    q++;
                 }
             }
             else
             {
-                size_t size = strlen(q);
-
                 memcpy(p, q, size);
 
                 p += size;

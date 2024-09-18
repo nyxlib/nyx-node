@@ -94,8 +94,11 @@ void nyx_string_builder_append_n(
     bool xml
 );
 
-
 size_t nyx_string_builder_length(
+    const nyx_string_builder_t *sb
+);
+
+size_t nyx_string_builder_clength(
     const nyx_string_builder_t *sb
 );
 
