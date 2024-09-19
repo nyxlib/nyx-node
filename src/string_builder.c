@@ -256,25 +256,11 @@ static size_t string_builder_length(const nyx_string_builder_t *sb, bool json_st
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
-{
-    return string_builder_length(sb, true);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-size_t nyx_string_builder_clength(const nyx_string_builder_t *sb)
-{
-    return string_builder_length(sb, false);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
+static str_t string_builder_to_string(const nyx_string_builder_t *sb, bool json_string)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t result = nyx_memory_alloc( string_builder_length(sb, json_string) + 1), p = result;
+    str_t result = nyx_memory_alloc(string_builder_length(sb, json_string) + 1), p = result;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -419,16 +405,30 @@ static str_t to_string(const nyx_string_builder_t *sb, bool json_string)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
+{
+    return string_builder_length(sb, true);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+size_t nyx_string_builder_clength(const nyx_string_builder_t *sb)
+{
+    return string_builder_length(sb, false);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 {
-    return to_string(sb, true);
+    return string_builder_to_string(sb, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 str_t nyx_string_builder_to_cstring(const nyx_string_builder_t *sb)
 {
-    return to_string(sb, false);
+    return string_builder_to_string(sb, false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
