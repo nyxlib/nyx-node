@@ -20,7 +20,7 @@
 #ifndef MONGOOSE_H
 #define MONGOOSE_H
 
-#define MG_VERSION "7.14"
+#define MG_VERSION "7.16"
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,10 +38,11 @@ extern "C" {
 #define MG_ARCH_NEWLIB 8        // Bare metal ARM
 #define MG_ARCH_CMSIS_RTOS1 9   // CMSIS-RTOS API v1 (Keil RTX)
 #define MG_ARCH_TIRTOS 10       // Texas Semi TI-RTOS
-#define MG_ARCH_RP2040 11       // Raspberry Pi RP2040
+#define MG_ARCH_PICOSDK 11      // Raspberry Pi Pico-SDK (RP2040, RP2350)
 #define MG_ARCH_ARMCC 12        // Keil MDK-Core with Configuration Wizard
 #define MG_ARCH_CMSIS_RTOS2 13  // CMSIS-RTOS API v2 (Keil RTX5, FreeRTOS)
 #define MG_ARCH_RTTHREAD 14     // RT-Thread RTOS
+#define MG_ARCH_ARMCGT 15       // Texas Semi ARM-CGT
 
 #if !defined(MG_ARCH)
 #if defined(__unix__) || defined(__APPLE__)
@@ -74,6 +75,25 @@ extern "C" {
 
 
 
+
+
+#if MG_ARCH == MG_ARCH_ARMCGT
+
+#include <ctype.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <time.h>
+
+#define MG_PATH_MAX 100
+#define MG_ENABLE_SOCKET 0
+#define MG_ENABLE_DIRLIST 0
+
+#endif
 
 
 #if MG_ARCH == MG_ARCH_AZURERTOS
@@ -179,14 +199,10 @@ extern "C" {
 #include <FreeRTOS.h>
 #include <task.h>
 
-#ifndef MG_IO_SIZE
-#define MG_IO_SIZE 512
-#endif
-
 #define calloc(a, b) mg_calloc(a, b)
 #define free(a) vPortFree(a)
 #define malloc(a) pvPortMalloc(a)
-#define strdup(s) mg_mprintf("%s", s)
+#define strdup(s) ((char *) mg_strdup(mg_str(s)).buf)
 
 // Re-route calloc/free to the FreeRTOS's functions, don't use stdlib
 static inline void *mg_calloc(size_t cnt, size_t size) {
@@ -227,7 +243,7 @@ static inline int mg_mkdir(const char *path, mode_t mode) {
 #endif
 
 
-#if MG_ARCH == MG_ARCH_RP2040
+#if MG_ARCH == MG_ARCH_PICOSDK
 #include <errno.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -238,7 +254,16 @@ static inline int mg_mkdir(const char *path, mode_t mode) {
 #include <time.h>
 
 #include <pico/stdlib.h>
+#include <pico/rand.h>
 int mkdir(const char *, mode_t);
+
+#if MG_OTA == MG_OTA_PICOSDK
+#include <hardware/flash.h>
+#if PICO_RP2040
+#include <pico/bootrom.h>
+#endif
+#endif
+
 #endif
 
 
@@ -288,7 +313,7 @@ extern uint32_t rt_time_get(void);
 #include "cmsis_os2.h"  // keep this include
 #endif
 
-#define strdup(s) mg_mprintf("%s", s)
+#define strdup(s) ((char *) mg_strdup(mg_str(s)).buf)
 
 #if defined(__ARMCC_VERSION)
 #define mode_t size_t
@@ -386,10 +411,22 @@ static inline int mg_mkdir(const char *path, mode_t mode) {
 #define MG_PATH_MAX FILENAME_MAX
 #endif
 
+#ifndef MG_ENABLE_POSIX_FS
+#define MG_ENABLE_POSIX_FS 1
+#endif
+
+#ifndef MG_IO_SIZE
+#define MG_IO_SIZE 16384
+#endif
+
 #endif
 
 
 #if MG_ARCH == MG_ARCH_WIN32
+
+#ifndef _CRT_RAND_S
+#define _CRT_RAND_S
+#endif
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -439,6 +476,15 @@ typedef enum { false = 0, true = 1 } bool;
 #include <winerror.h>
 #include <winsock2.h>
 
+// For mg_random()
+#if defined(_MSC_VER) && _MSC_VER < 1700
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x400  // Let vc98 pick up wincrypt.h
+#endif
+#include <wincrypt.h>
+#pragma comment(lib, "advapi32.lib")
+#endif
+
 // Protect from calls like std::snprintf in app code
 // See https://github.com/cesanta/mongoose/issues/1047
 #ifndef __cplusplus
@@ -483,12 +529,12 @@ typedef int socklen_t;
   (((errcode) < 0) && (WSAGetLastError() == WSAECONNRESET))
 
 #define realpath(a, b) _fullpath((b), (a), MG_PATH_MAX)
-#define sleep(x) Sleep((x) *1000)
+#define sleep(x) Sleep((x) * 1000)
 #define mkdir(a, b) _mkdir(a)
 #define timegm(x) _mkgmtime(x)
 
 #ifndef S_ISDIR
-#define S_ISDIR(x) (((x) &_S_IFMT) == _S_IFDIR)
+#define S_ISDIR(x) (((x) & _S_IFMT) == _S_IFDIR)
 #endif
 
 #ifndef MG_ENABLE_DIRLIST
@@ -497,6 +543,14 @@ typedef int socklen_t;
 
 #ifndef SIGPIPE
 #define SIGPIPE 0
+#endif
+
+#ifndef MG_ENABLE_POSIX_FS
+#define MG_ENABLE_POSIX_FS 1
+#endif
+
+#ifndef MG_IO_SIZE
+#define MG_IO_SIZE 16384
 #endif
 
 #endif
@@ -549,7 +603,6 @@ int sscanf(const char *, const char *, ...);
 
 #include <FreeRTOS_IP.h>
 #include <FreeRTOS_Sockets.h>
-#include <FreeRTOS_errno_TCP.h>  // contents to be moved and file removed, some day
 
 #define MG_SOCKET_TYPE Socket_t
 #define MG_INVALID_SOCKET FREERTOS_INVALID_SOCKET
@@ -581,6 +634,9 @@ int sscanf(const char *, const char *, ...);
 
 #define sockaddr_in freertos_sockaddr
 #define sockaddr freertos_sockaddr
+#if ipFR_TCP_VERSION_MAJOR >= 4
+#define sin_addr sin_address.ulIP_IPv4
+#endif
 #define accept(a, b, c) FreeRTOS_accept((a), (b), (c))
 #define connect(a, b, c) FreeRTOS_connect((a), (b), (c))
 #define bind(a, b, c) FreeRTOS_bind((a), (b), (c))
@@ -744,7 +800,7 @@ struct timeval {
 #endif
 
 #ifndef MG_IO_SIZE
-#define MG_IO_SIZE 2048  // Granularity of the send/recv IO buffer growth
+#define MG_IO_SIZE 256  // Granularity of the send/recv IO buffer growth
 #endif
 
 #ifndef MG_MAX_RECV_SIZE
@@ -780,11 +836,7 @@ struct timeval {
 #endif
 
 #ifndef MG_ENABLE_POSIX_FS
-#if defined(FOPEN_MAX)
-#define MG_ENABLE_POSIX_FS 1
-#else
 #define MG_ENABLE_POSIX_FS 0
-#endif
 #endif
 
 #ifndef MG_INVALID_SOCKET
@@ -861,6 +913,7 @@ struct mg_str mg_str_n(const char *s, size_t n);
 int mg_casecmp(const char *s1, const char *s2);
 int mg_strcmp(const struct mg_str str1, const struct mg_str str2);
 int mg_strcasecmp(const struct mg_str str1, const struct mg_str str2);
+struct mg_str mg_strdup(const struct mg_str s);
 bool mg_match(struct mg_str str, struct mg_str pattern, struct mg_str *caps);
 bool mg_span(struct mg_str s, struct mg_str *a, struct mg_str *b, char delim);
 
@@ -1045,13 +1098,12 @@ struct mg_str mg_unpacked(const char *path);  // Packed file as mg_str
 #endif
 
 void mg_bzero(volatile unsigned char *buf, size_t len);
-void mg_random(void *buf, size_t len);
+bool mg_random(void *buf, size_t len);
 char *mg_random_str(char *buf, size_t len);
 uint16_t mg_ntohs(uint16_t net);
 uint32_t mg_ntohl(uint32_t net);
 uint32_t mg_crc32(uint32_t crc, const char *buf, size_t len);
 uint64_t mg_millis(void);  // Return milliseconds since boot
-uint64_t mg_now(void);     // Return milliseconds since Epoch
 bool mg_path_is_sane(const struct mg_str path);
 
 #define mg_htons(x) mg_ntohs(x)
@@ -1067,6 +1119,15 @@ bool mg_path_is_sane(const struct mg_str path);
 #define MG_U8P(ADDR) ((uint8_t *) (ADDR))
 #define MG_IPADDR_PARTS(ADDR) \
   MG_U8P(ADDR)[0], MG_U8P(ADDR)[1], MG_U8P(ADDR)[2], MG_U8P(ADDR)[3]
+
+#define MG_LOAD_BE16(p) ((uint16_t) ((MG_U8P(p)[0] << 8U) | MG_U8P(p)[1]))
+#define MG_LOAD_BE24(p) \
+  ((uint32_t) ((MG_U8P(p)[0] << 16U) | (MG_U8P(p)[1] << 8U) | MG_U8P(p)[2]))
+#define MG_STORE_BE16(p, n)           \
+  do {                                \
+    MG_U8P(p)[0] = ((n) >> 8U) & 255; \
+    MG_U8P(p)[1] = (n) &255;          \
+  } while (0)
 
 #define MG_REG(x) ((volatile uint32_t *) (x))[0]
 #define MG_BIT(x) (((uint32_t) 1U) << (x))
@@ -1238,9 +1299,6 @@ int mg_tls_x25519(uint8_t out[X25519_BYTES], const uint8_t scalar[X25519_BYTES],
  *******************************************************************************/
 #ifndef TLS_AES128_H
 #define TLS_AES128_H
-
-typedef unsigned char uchar;  // add some convienent shorter types
-typedef unsigned int uint;
 
 /******************************************************************************
  *  AES_CONTEXT : cipher context / holds inter-call data
@@ -1664,6 +1722,111 @@ int mg_uecc_verify(const uint8_t *public_key, const uint8_t *message_hash,
 
 /* Copyright 2015, Kenneth MacKay. Licensed under the BSD 2-clause license. */
 
+#ifndef _UECC_TYPES_H_
+#define _UECC_TYPES_H_
+
+#ifndef MG_UECC_PLATFORM
+#if defined(__AVR__) && __AVR__
+#define MG_UECC_PLATFORM mg_uecc_avr
+#elif defined(__thumb2__) || \
+    defined(_M_ARMT) /* I think MSVC only supports Thumb-2 targets */
+#define MG_UECC_PLATFORM mg_uecc_arm_thumb2
+#elif defined(__thumb__)
+#define MG_UECC_PLATFORM mg_uecc_arm_thumb
+#elif defined(__arm__) || defined(_M_ARM)
+#define MG_UECC_PLATFORM mg_uecc_arm
+#elif defined(__aarch64__)
+#define MG_UECC_PLATFORM mg_uecc_arm64
+#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_) || \
+    defined(__I86__)
+#define MG_UECC_PLATFORM mg_uecc_x86
+#elif defined(__amd64__) || defined(_M_X64)
+#define MG_UECC_PLATFORM mg_uecc_x86_64
+#else
+#define MG_UECC_PLATFORM mg_uecc_arch_other
+#endif
+#endif
+
+#ifndef MG_UECC_ARM_USE_UMAAL
+#if (MG_UECC_PLATFORM == mg_uecc_arm) && (__ARM_ARCH >= 6)
+#define MG_UECC_ARM_USE_UMAAL 1
+#elif (MG_UECC_PLATFORM == mg_uecc_arm_thumb2) && (__ARM_ARCH >= 6) && \
+    (!defined(__ARM_ARCH_7M__) || !__ARM_ARCH_7M__)
+#define MG_UECC_ARM_USE_UMAAL 1
+#else
+#define MG_UECC_ARM_USE_UMAAL 0
+#endif
+#endif
+
+#ifndef MG_UECC_WORD_SIZE
+#if MG_UECC_PLATFORM == mg_uecc_avr
+#define MG_UECC_WORD_SIZE 1
+#elif (MG_UECC_PLATFORM == mg_uecc_x86_64 || MG_UECC_PLATFORM == mg_uecc_arm64)
+#define MG_UECC_WORD_SIZE 8
+#else
+#define MG_UECC_WORD_SIZE 4
+#endif
+#endif
+
+#if (MG_UECC_WORD_SIZE != 1) && (MG_UECC_WORD_SIZE != 4) && \
+    (MG_UECC_WORD_SIZE != 8)
+#error "Unsupported value for MG_UECC_WORD_SIZE"
+#endif
+
+#if ((MG_UECC_PLATFORM == mg_uecc_avr) && (MG_UECC_WORD_SIZE != 1))
+#pragma message("MG_UECC_WORD_SIZE must be 1 for AVR")
+#undef MG_UECC_WORD_SIZE
+#define MG_UECC_WORD_SIZE 1
+#endif
+
+#if ((MG_UECC_PLATFORM == mg_uecc_arm ||         \
+      MG_UECC_PLATFORM == mg_uecc_arm_thumb ||   \
+      MG_UECC_PLATFORM == mg_uecc_arm_thumb2) && \
+     (MG_UECC_WORD_SIZE != 4))
+#pragma message("MG_UECC_WORD_SIZE must be 4 for ARM")
+#undef MG_UECC_WORD_SIZE
+#define MG_UECC_WORD_SIZE 4
+#endif
+
+typedef int8_t wordcount_t;
+typedef int16_t bitcount_t;
+typedef int8_t cmpresult_t;
+
+#if (MG_UECC_WORD_SIZE == 1)
+
+typedef uint8_t mg_uecc_word_t;
+typedef uint16_t mg_uecc_dword_t;
+
+#define HIGH_BIT_SET 0x80
+#define MG_UECC_WORD_BITS 8
+#define MG_UECC_WORD_BITS_SHIFT 3
+#define MG_UECC_WORD_BITS_MASK 0x07
+
+#elif (MG_UECC_WORD_SIZE == 4)
+
+typedef uint32_t mg_uecc_word_t;
+typedef uint64_t mg_uecc_dword_t;
+
+#define HIGH_BIT_SET 0x80000000
+#define MG_UECC_WORD_BITS 32
+#define MG_UECC_WORD_BITS_SHIFT 5
+#define MG_UECC_WORD_BITS_MASK 0x01F
+
+#elif (MG_UECC_WORD_SIZE == 8)
+
+typedef uint64_t mg_uecc_word_t;
+
+#define HIGH_BIT_SET 0x8000000000000000U
+#define MG_UECC_WORD_BITS 64
+#define MG_UECC_WORD_BITS_SHIFT 6
+#define MG_UECC_WORD_BITS_MASK 0x03F
+
+#endif /* MG_UECC_WORD_SIZE */
+
+#endif /* _UECC_TYPES_H_ */
+
+/* Copyright 2015, Kenneth MacKay. Licensed under the BSD 2-clause license. */
+
 #ifndef _UECC_VLI_H_
 #define _UECC_VLI_H_
 
@@ -1830,111 +1993,117 @@ int mg_uecc_generate_random_int(mg_uecc_word_t *random,
 
 #endif /* _UECC_VLI_H_ */
 
-/* Copyright 2015, Kenneth MacKay. Licensed under the BSD 2-clause license. */
-
-#ifndef _UECC_TYPES_H_
-#define _UECC_TYPES_H_
-
-#ifndef MG_UECC_PLATFORM
-#if defined(__AVR__) && __AVR__
-#define MG_UECC_PLATFORM mg_uecc_avr
-#elif defined(__thumb2__) || \
-    defined(_M_ARMT) /* I think MSVC only supports Thumb-2 targets */
-#define MG_UECC_PLATFORM mg_uecc_arm_thumb2
-#elif defined(__thumb__)
-#define MG_UECC_PLATFORM mg_uecc_arm_thumb
-#elif defined(__arm__) || defined(_M_ARM)
-#define MG_UECC_PLATFORM mg_uecc_arm
-#elif defined(__aarch64__)
-#define MG_UECC_PLATFORM mg_uecc_arm64
-#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_) || \
-    defined(__I86__)
-#define MG_UECC_PLATFORM mg_uecc_x86
-#elif defined(__amd64__) || defined(_M_X64)
-#define MG_UECC_PLATFORM mg_uecc_x86_64
-#else
-#define MG_UECC_PLATFORM mg_uecc_arch_other
-#endif
-#endif
-
-#ifndef MG_UECC_ARM_USE_UMAAL
-#if (MG_UECC_PLATFORM == mg_uecc_arm) && (__ARM_ARCH >= 6)
-#define MG_UECC_ARM_USE_UMAAL 1
-#elif (MG_UECC_PLATFORM == mg_uecc_arm_thumb2) && (__ARM_ARCH >= 6) && \
-    (!defined(__ARM_ARCH_7M__) || !__ARM_ARCH_7M__)
-#define MG_UECC_ARM_USE_UMAAL 1
-#else
-#define MG_UECC_ARM_USE_UMAAL 0
-#endif
-#endif
-
-#ifndef MG_UECC_WORD_SIZE
-#if MG_UECC_PLATFORM == mg_uecc_avr
-#define MG_UECC_WORD_SIZE 1
-#elif (MG_UECC_PLATFORM == mg_uecc_x86_64 || MG_UECC_PLATFORM == mg_uecc_arm64)
-#define MG_UECC_WORD_SIZE 8
-#else
-#define MG_UECC_WORD_SIZE 4
-#endif
-#endif
-
-#if (MG_UECC_WORD_SIZE != 1) && (MG_UECC_WORD_SIZE != 4) && \
-    (MG_UECC_WORD_SIZE != 8)
-#error "Unsupported value for MG_UECC_WORD_SIZE"
-#endif
-
-#if ((MG_UECC_PLATFORM == mg_uecc_avr) && (MG_UECC_WORD_SIZE != 1))
-#pragma message("MG_UECC_WORD_SIZE must be 1 for AVR")
-#undef MG_UECC_WORD_SIZE
-#define MG_UECC_WORD_SIZE 1
-#endif
-
-#if ((MG_UECC_PLATFORM == mg_uecc_arm ||         \
-      MG_UECC_PLATFORM == mg_uecc_arm_thumb ||   \
-      MG_UECC_PLATFORM == mg_uecc_arm_thumb2) && \
-     (MG_UECC_WORD_SIZE != 4))
-#pragma message("MG_UECC_WORD_SIZE must be 4 for ARM")
-#undef MG_UECC_WORD_SIZE
-#define MG_UECC_WORD_SIZE 4
-#endif
-
-typedef int8_t wordcount_t;
-typedef int16_t bitcount_t;
-typedef int8_t cmpresult_t;
-
-#if (MG_UECC_WORD_SIZE == 1)
-
-typedef uint8_t mg_uecc_word_t;
-typedef uint16_t mg_uecc_dword_t;
-
-#define HIGH_BIT_SET 0x80
-#define MG_UECC_WORD_BITS 8
-#define MG_UECC_WORD_BITS_SHIFT 3
-#define MG_UECC_WORD_BITS_MASK 0x07
-
-#elif (MG_UECC_WORD_SIZE == 4)
-
-typedef uint32_t mg_uecc_word_t;
-typedef uint64_t mg_uecc_dword_t;
-
-#define HIGH_BIT_SET 0x80000000
-#define MG_UECC_WORD_BITS 32
-#define MG_UECC_WORD_BITS_SHIFT 5
-#define MG_UECC_WORD_BITS_MASK 0x01F
-
-#elif (MG_UECC_WORD_SIZE == 8)
-
-typedef uint64_t mg_uecc_word_t;
-
-#define HIGH_BIT_SET 0x8000000000000000U
-#define MG_UECC_WORD_BITS 64
-#define MG_UECC_WORD_BITS_SHIFT 6
-#define MG_UECC_WORD_BITS_MASK 0x03F
-
-#endif /* MG_UECC_WORD_SIZE */
-
-#endif /* _UECC_TYPES_H_ */
 // End of uecc BSD-2
+// portable8439 v1.0.1
+// Source: https://github.com/DavyLandman/portable8439
+// Licensed under CC0-1.0
+// Contains poly1305-donna e6ad6e091d30d7f4ec2d4f978be1fcfcbce72781 (Public
+// Domain)
+
+
+
+
+#ifndef __PORTABLE_8439_H
+#define __PORTABLE_8439_H
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+// provide your own decl specificier like -DPORTABLE_8439_DECL=ICACHE_RAM_ATTR
+#ifndef PORTABLE_8439_DECL
+#define PORTABLE_8439_DECL
+#endif
+
+/*
+ This library implements RFC 8439 a.k.a. ChaCha20-Poly1305 AEAD
+
+ You can use this library to avoid attackers mutating or reusing your
+ encrypted messages. This does assume you never reuse a nonce+key pair and,
+ if possible, carefully pick your associated data.
+*/
+
+/* Make sure we are either nested in C++ or running in a C99+ compiler
+#if !defined(__cplusplus) && !defined(_MSC_VER) && \
+    (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L)
+#error "C99 or newer required"
+#endif */
+
+// #if CHAR_BIT > 8
+// #    error "Systems without native octals not suppoted"
+// #endif
+
+#if defined(_MSC_VER) || defined(__cplusplus)
+// add restrict support is possible
+#if (defined(_MSC_VER) && _MSC_VER >= 1900) || defined(__clang__) || \
+    defined(__GNUC__)
+#define restrict __restrict
+#else
+#define restrict
+#endif
+#endif
+
+#define RFC_8439_TAG_SIZE (16)
+#define RFC_8439_KEY_SIZE (32)
+#define RFC_8439_NONCE_SIZE (12)
+
+/*
+    Encrypt/Seal plain text bytes into a cipher text that can only be
+    decrypted by knowing the key, nonce and associated data.
+
+    input:
+        - key: RFC_8439_KEY_SIZE bytes that all parties have agreed
+            upon beforehand
+        - nonce: RFC_8439_NONCE_SIZE bytes that should never be repeated
+            for the same key. A counter or a pseudo-random value are fine.
+        - ad: associated data to include with calculating the tag of the
+            cipher text. Can be null for empty.
+        - plain_text: data to be encrypted, pointer + size should not overlap
+            with cipher_text pointer
+
+    output:
+        - cipher_text: encrypted plain_text with a tag appended. Make sure to
+            allocate at least plain_text_size + RFC_8439_TAG_SIZE
+
+    returns:
+        - size of bytes written to cipher_text, can be -1 if overlapping
+            pointers are passed for plain_text and cipher_text
+*/
+PORTABLE_8439_DECL size_t mg_chacha20_poly1305_encrypt(
+    uint8_t *restrict cipher_text, const uint8_t key[RFC_8439_KEY_SIZE],
+    const uint8_t nonce[RFC_8439_NONCE_SIZE], const uint8_t *restrict ad,
+    size_t ad_size, const uint8_t *restrict plain_text, size_t plain_text_size);
+
+/*
+    Decrypt/unseal cipher text given the right key, nonce, and additional data.
+
+    input:
+        - key: RFC_8439_KEY_SIZE bytes that all parties have agreed
+            upon beforehand
+        - nonce: RFC_8439_NONCE_SIZE bytes that should never be repeated for
+            the same key. A counter or a pseudo-random value are fine.
+        - ad: associated data to include with calculating the tag of the
+            cipher text. Can be null for empty.
+        - cipher_text: encrypted message.
+
+    output:
+        - plain_text: data to be encrypted, pointer + size should not overlap
+            with cipher_text pointer, leave at least enough room for
+            cipher_text_size - RFC_8439_TAG_SIZE
+
+    returns:
+        - size of bytes written to plain_text, -1 signals either:
+            - incorrect key/nonce/ad
+            - corrupted cipher_text
+            - overlapping pointers are passed for plain_text and cipher_text
+*/
+PORTABLE_8439_DECL size_t mg_chacha20_poly1305_decrypt(
+    uint8_t *restrict plain_text, const uint8_t key[RFC_8439_KEY_SIZE],
+    const uint8_t nonce[RFC_8439_NONCE_SIZE],
+    const uint8_t *restrict cipher_text, size_t cipher_text_size);
+#if defined(__cplusplus)
+}
+#endif
+#endif
 
 
 struct mg_connection;
@@ -2038,12 +2207,13 @@ struct mg_connection {
   unsigned is_websocket : 1;   // WebSocket connection
   unsigned is_mqtt5 : 1;       // For MQTT connection, v5 indicator
   unsigned is_hexdumping : 1;  // Hexdump in/out traffic
-  unsigned is_draining : 1;    // Send size data, then close and free
+  unsigned is_draining : 1;    // Send remaining data, then close and free
   unsigned is_closing : 1;     // Close and free the connection immediately
   unsigned is_full : 1;        // Stop reads, until cleared
   unsigned is_resp : 1;        // Response is still being generated
   unsigned is_readable : 1;    // Connection is ready to read
   unsigned is_writable : 1;    // Connection is ready to write
+  unsigned is_io_err : 1;      // Remember IO_ERR condition for later use
 };
 
 void mg_mgr_poll(struct mg_mgr *, int ms);
@@ -2261,6 +2431,8 @@ struct mg_connection *mg_sntp_connect(struct mg_mgr *mgr, const char *url,
 void mg_sntp_request(struct mg_connection *c);
 int64_t mg_sntp_parse(const unsigned char *buf, size_t len);
 
+uint64_t mg_now(void);     // Return milliseconds since Epoch
+
 
 
 
@@ -2476,81 +2648,58 @@ void mg_rpc_list(struct mg_rpc_req *r);
 
 
 
-#define MG_OTA_NONE 0      // No OTA support
-#define MG_OTA_FLASH 1     // OTA via an internal flash
-#define MG_OTA_ESP32 2     // ESP32 OTA implementation
-#define MG_OTA_CUSTOM 100  // Custom implementation
+#define MG_OTA_NONE 0       // No OTA support
+#define MG_OTA_STM32H5 1    // STM32 H5
+#define MG_OTA_STM32H7 2    // STM32 H7
+#define MG_OTA_STM32H7_DUAL_CORE 3 // STM32 H7 dual core
+#define MG_OTA_STM32F  4    // STM32 F7/F4/F2
+#define MG_OTA_CH32V307 100 // WCH CH32V307
+#define MG_OTA_U2A 200      // Renesas U2A16, U2A8, U2A6
+#define MG_OTA_RT1020 300   // IMXRT1020
+#define MG_OTA_RT1060 301   // IMXRT1060
+#define MG_OTA_RT1064 302   // IMXRT1064
+#define MG_OTA_RT1170 303   // IMXRT1170
+#define MG_OTA_MCXN 310 	  // MCXN947
+#define MG_OTA_FLASH 900    // OTA via an internal flash
+#define MG_OTA_ESP32 910    // ESP32 OTA implementation
+#define MG_OTA_PICOSDK 920  // RP2040/2350 using Pico-SDK hardware_flash
+#define MG_OTA_CUSTOM 1000  // Custom implementation
 
 #ifndef MG_OTA
 #define MG_OTA MG_OTA_NONE
-#endif
-
-#if defined(__GNUC__) && !defined(__APPLE__)
-#define MG_IRAM __attribute__((section(".iram")))
+#else
+#ifndef MG_IRAM
+#if defined(__GNUC__)
+#define MG_IRAM __attribute__((noinline, section(".iram")))
 #else
 #define MG_IRAM
-#endif
+#endif // compiler
+#endif // IRAM
+#endif // OTA
 
 // Firmware update API
 bool mg_ota_begin(size_t new_firmware_size);     // Start writing
 bool mg_ota_write(const void *buf, size_t len);  // Write chunk, aligned to 1k
 bool mg_ota_end(void);                           // Stop writing
 
-enum {
-  MG_OTA_UNAVAILABLE = 0,  // No OTA information is present
-  MG_OTA_FIRST_BOOT = 1,   // Device booting the first time after the OTA
-  MG_OTA_UNCOMMITTED = 2,  // Ditto, but marking us for the rollback
-  MG_OTA_COMMITTED = 3     // The firmware is good
+
+
+#if MG_OTA != MG_OTA_NONE && MG_OTA != MG_OTA_CUSTOM
+
+struct mg_flash {
+  void *start;    // Address at which flash starts
+  size_t size;    // Flash size
+  size_t secsz;   // Sector size
+  size_t align;   // Write alignment
+  bool (*write_fn)(void *, const void *, size_t);  // Write function
+  bool (*swap_fn)(void);                           // Swap partitions
 };
-enum { MG_FIRMWARE_CURRENT = 0, MG_FIRMWARE_PREVIOUS = 1 };
 
-int mg_ota_status(int firmware);          // Return firmware status MG_OTA_*
-uint32_t mg_ota_crc32(int firmware);      // Return firmware checksum
-uint32_t mg_ota_timestamp(int firmware);  // Firmware timestamp, UNIX UTC epoch
-size_t mg_ota_size(int firmware);         // Firmware size
+bool mg_ota_flash_begin(size_t new_firmware_size, struct mg_flash *flash);
+bool mg_ota_flash_write(const void *buf, size_t len, struct mg_flash *flash);
+bool mg_ota_flash_end(struct mg_flash *flash);
 
-bool mg_ota_commit(void);        // Commit current firmware
-bool mg_ota_rollback(void);      // Rollback to the previous firmware
-MG_IRAM void mg_ota_boot(void);  // Bootloader function
-// Copyright (c) 2023 Cesanta Software Limited
-// All rights reserved
-
-
-
-
-
-#define MG_DEVICE_NONE 0  // Dummy system
-
-#define MG_DEVICE_STM32H5 1     // STM32 H5
-#define MG_DEVICE_STM32H7 2     // STM32 H7
-#define MG_DEVICE_CH32V307 100  // WCH CH32V307
-#define MG_DEVICE_U2A 200       // Renesas U2A16, U2A8, U2A6
-#define MG_DEVICE_RT1020 300    // IMXRT1020
-#define MG_DEVICE_RT1060 301    // IMXRT1060
-#define MG_DEVICE_CUSTOM 1000   // Custom implementation
-
-#ifndef MG_DEVICE
-#define MG_DEVICE MG_DEVICE_NONE
 #endif
-
-// Flash information
-void *mg_flash_start(void);         // Return flash start address
-size_t mg_flash_size(void);         // Return flash size
-size_t mg_flash_sector_size(void);  // Return flash sector size
-size_t mg_flash_write_align(void);  // Return flash write align, minimum 4
-int mg_flash_bank(void);            // 0: not dual bank, 1: bank1, 2: bank2
-
-// Write, erase, swap bank
-bool mg_flash_write(void *addr, const void *buf, size_t len);
-bool mg_flash_erase(void *sector);
-bool mg_flash_swap_bank(void);
-
-// Convenience functions to store data on a flash sector with wear levelling
-// If `sector` is NULL, then the last sector of flash is used
-bool mg_flash_load(void *sector, uint32_t key, void *buf, size_t len);
-bool mg_flash_save(void *sector, uint32_t key, const void *buf, size_t len);
-
-void mg_device_reset(void);  // Reboot device immediately
 
 
 
@@ -2559,12 +2708,25 @@ void mg_device_reset(void);  // Reboot device immediately
 
 #if defined(MG_ENABLE_TCPIP) && MG_ENABLE_TCPIP
 struct mg_tcpip_if;  // Mongoose TCP/IP network interface
+#define MG_TCPIP_IFACE(mgr_) ((struct mg_tcpip_if *) (mgr_)->priv)
 
 struct mg_tcpip_driver {
   bool (*init)(struct mg_tcpip_if *);                         // Init driver
   size_t (*tx)(const void *, size_t, struct mg_tcpip_if *);   // Transmit frame
   size_t (*rx)(void *buf, size_t len, struct mg_tcpip_if *);  // Receive frame
   bool (*up)(struct mg_tcpip_if *);                           // Up/down status
+};
+
+typedef void (*mg_tcpip_event_handler_t)(struct mg_tcpip_if *ifp, int ev,
+                                         void *ev_data);
+
+enum {
+  MG_TCPIP_EV_ST_CHG,     // state change             uint8_t * (&ifp->state)
+  MG_TCPIP_EV_DHCP_DNS,   // DHCP DNS assignment      uint32_t *ipaddr
+  MG_TCPIP_EV_DHCP_SNTP,  // DHCP SNTP assignment     uint32_t *ipaddr
+  MG_TCPIP_EV_ARP,        // Got ARP packet           struct mg_str *
+  MG_TCPIP_EV_TIMER_1S,   // 1 second timer           NULL
+  MG_TCPIP_EV_USER        // Starting ID for user events
 };
 
 // Network interface
@@ -2575,10 +2737,13 @@ struct mg_tcpip_if {
   bool enable_dhcp_client;         // Enable DCHP client
   bool enable_dhcp_server;         // Enable DCHP server
   bool enable_get_gateway;         // DCHP server sets client as gateway
+  bool enable_req_dns;             // DCHP client requests DNS server
+  bool enable_req_sntp;            // DCHP client requests SNTP server
   bool enable_crc32_check;         // Do a CRC check on RX frames and strip it
   bool enable_mac_check;           // Do a MAC check on RX frames
   struct mg_tcpip_driver *driver;  // Low level driver
   void *driver_data;               // Driver-specific data
+  mg_tcpip_event_handler_t fn;     // User-specified event handler function
   struct mg_mgr *mgr;              // Mongoose event manager
   struct mg_queue recv_queue;      // Receive queue
   uint16_t mtu;                    // Interface MTU
@@ -2597,17 +2762,20 @@ struct mg_tcpip_if {
   uint8_t state;                // Current state
 #define MG_TCPIP_STATE_DOWN 0   // Interface is down
 #define MG_TCPIP_STATE_UP 1     // Interface is up
-#define MG_TCPIP_STATE_REQ 2    // Interface is up and has requested an IP
-#define MG_TCPIP_STATE_READY 3  // Interface is up and has an IP assigned
+#define MG_TCPIP_STATE_REQ 2    // Interface is up, DHCP REQUESTING state
+#define MG_TCPIP_STATE_IP 3     // Interface is up and has an IP assigned
+#define MG_TCPIP_STATE_READY 4  // Interface has fully come up, ready to work
 };
 
 void mg_tcpip_init(struct mg_mgr *, struct mg_tcpip_if *);
 void mg_tcpip_free(struct mg_tcpip_if *);
 void mg_tcpip_qwrite(void *buf, size_t len, struct mg_tcpip_if *ifp);
+void mg_tcpip_arp_request(struct mg_tcpip_if *ifp, uint32_t ip, uint8_t *mac);
 
 extern struct mg_tcpip_driver mg_tcpip_driver_stm32f;
 extern struct mg_tcpip_driver mg_tcpip_driver_w5500;
 extern struct mg_tcpip_driver mg_tcpip_driver_tm4c;
+extern struct mg_tcpip_driver mg_tcpip_driver_tms570;
 extern struct mg_tcpip_driver mg_tcpip_driver_stm32h;
 extern struct mg_tcpip_driver mg_tcpip_driver_imxrt;
 extern struct mg_tcpip_driver mg_tcpip_driver_same54;
@@ -2763,10 +2931,10 @@ struct mg_phy {
 
 // PHY configuration settings, bitmask
 enum {
-  MG_PHY_LEDS_ACTIVE_HIGH =
-      (1 << 0),  // Set if PHY LEDs are connected to ground
-  MG_PHY_CLOCKS_MAC =
-      (1 << 1)   // Set when PHY clocks MAC. Otherwise, MAC clocks PHY
+  // Set if PHY LEDs are connected to ground
+  MG_PHY_LEDS_ACTIVE_HIGH = (1 << 0),
+  // Set when PHY clocks MAC. Otherwise, MAC clocks PHY
+  MG_PHY_CLOCKS_MAC = (1 << 1),
 };
 
 enum { MG_PHY_SPEED_10M, MG_PHY_SPEED_100M, MG_PHY_SPEED_1000M };
@@ -2848,8 +3016,14 @@ struct mg_tcpip_driver_stm32f_data {
 #endif
 
 
-#if MG_ENABLE_TCPIP && defined(MG_ENABLE_DRIVER_STM32H) && \
-    MG_ENABLE_DRIVER_STM32H
+#if MG_ENABLE_TCPIP
+#if !defined(MG_ENABLE_DRIVER_STM32H)
+#define MG_ENABLE_DRIVER_STM32H 0
+#endif
+#if !defined(MG_ENABLE_DRIVER_MCXN)
+#define MG_ENABLE_DRIVER_MCXN 0
+#endif
+#if MG_ENABLE_DRIVER_STM32H || MG_ENABLE_DRIVER_MCXN
 
 struct mg_tcpip_driver_stm32h_data {
   // MDC clock divider. MDC clock is derived from HCLK, must not exceed 2.5MHz
@@ -2862,12 +3036,17 @@ struct mg_tcpip_driver_stm32h_data {
   //    35-60 MHz     HCLK/26        3
   //    150-250 MHz   HCLK/102       4  <-- value for max speed HSI
   //    250-300 MHz   HCLK/124       5  <-- value for Nucleo-H* on CSI
-  //    110, 111 Reserved
+  //    300-500 MHz   HCLK/204       6
+  //    500-800 MHz   HCLK/324       7
   int mdc_cr;  // Valid values: -1, 0, 1, 2, 3, 4, 5
 
   uint8_t phy_addr;  // PHY address
   uint8_t phy_conf;  // PHY config
 };
+
+#ifndef MG_TCPIP_PHY_CONF
+#define MG_TCPIP_PHY_CONF MG_PHY_CLOCKS_MAC
+#endif
 
 #ifndef MG_TCPIP_PHY_ADDR
 #define MG_TCPIP_PHY_ADDR 0
@@ -2883,6 +3062,7 @@ struct mg_tcpip_driver_stm32h_data {
     static struct mg_tcpip_if mif_;                               \
     driver_data_.mdc_cr = MG_DRIVER_MDC_CR;                       \
     driver_data_.phy_addr = MG_TCPIP_PHY_ADDR;                    \
+    driver_data_.phy_conf = MG_TCPIP_PHY_CONF;                    \
     mif_.ip = MG_TCPIP_IP;                                        \
     mif_.mask = MG_TCPIP_MASK;                                    \
     mif_.gw = MG_TCPIP_GW;                                        \
@@ -2893,6 +3073,7 @@ struct mg_tcpip_driver_stm32h_data {
     MG_INFO(("Driver: stm32h, MAC: %M", mg_print_mac, mif_.mac)); \
   } while (0)
 
+#endif
 #endif
 
 
@@ -2915,13 +3096,58 @@ struct mg_tcpip_driver_tm4c_data {
 #define MG_DRIVER_MDC_CR 1
 #endif
 
+#define MG_TCPIP_DRIVER_INIT(mgr)                               \
+  do {                                                          \
+    static struct mg_tcpip_driver_tm4c_data driver_data_;       \
+    static struct mg_tcpip_if mif_;                             \
+    driver_data_.mdc_cr = MG_DRIVER_MDC_CR;                     \
+    mif_.ip = MG_TCPIP_IP;                                      \
+    mif_.mask = MG_TCPIP_MASK;                                  \
+    mif_.gw = MG_TCPIP_GW;                                      \
+    mif_.driver = &mg_tcpip_driver_tm4c;                        \
+    mif_.driver_data = &driver_data_;                           \
+    MG_SET_MAC_ADDRESS(mif_.mac);                               \
+    mg_tcpip_init(mgr, &mif_);                                  \
+    MG_INFO(("Driver: tm4c, MAC: %M", mg_print_mac, mif_.mac)); \
+  } while (0)
+
 #endif
 
 
-#if MG_ENABLE_TCPIP && defined(MG_ENABLE_DRIVER_W5500) && MG_ENABLE_DRIVER_W5500
+#if MG_ENABLE_TCPIP && defined(MG_ENABLE_DRIVER_TMS570) && MG_ENABLE_DRIVER_TMS570
+struct mg_tcpip_driver_tms570_data {
+  int mdc_cr;
+  int phy_addr;
+};
 
-#undef MG_ENABLE_TCPIP_DRIVER_INIT
-#define MG_ENABLE_TCPIP_DRIVER_INIT 0
+#ifndef MG_TCPIP_PHY_ADDR
+#define MG_TCPIP_PHY_ADDR 0
+#endif
+
+#ifndef MG_DRIVER_MDC_CR
+#define MG_DRIVER_MDC_CR 1
+#endif
+
+#define MG_TCPIP_DRIVER_INIT(mgr)                               \
+  do {                                                          \
+    static struct mg_tcpip_driver_tms570_data driver_data_;     \
+    static struct mg_tcpip_if mif_;                             \
+    driver_data_.mdc_cr = MG_DRIVER_MDC_CR;                     \
+    driver_data_.phy_addr = MG_TCPIP_PHY_ADDR;                  \
+    mif_.ip = MG_TCPIP_IP;                                      \
+    mif_.mask = MG_TCPIP_MASK;                                  \
+    mif_.gw = MG_TCPIP_GW;                                      \
+    mif_.driver = &mg_tcpip_driver_tms570;                      \
+    mif_.driver_data = &driver_data_;                           \
+    MG_SET_MAC_ADDRESS(mif_.mac);                               \
+    mg_tcpip_init(mgr, &mif_);                                  \
+    MG_INFO(("Driver: tms570, MAC: %M", mg_print_mac, mif_.mac));\
+  } while (0)
+#endif
+
+
+
+#if MG_ENABLE_TCPIP && defined(MG_ENABLE_DRIVER_W5500) && MG_ENABLE_DRIVER_W5500
 
 #endif
 
