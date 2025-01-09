@@ -54,7 +54,7 @@ def download_mongoose():
 
             raise IOError(f'Cannot download `{filename}`')
 
-        with open(f'src/mongoose/{filename}', 'wt') as f:
+        with open(f'src/stack/{filename}', 'wt') as f:
 
             f.write(response.content.decode('UTF-8'))
 
