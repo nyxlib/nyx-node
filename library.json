@@ -1,0 +1,25 @@
+{
+    "name": "NyxNode",
+    "version": "1.0.0",
+    "description": "Standalone Nyx / Indi node",
+    "authors": [
+        {
+            "name": "Jérôme Odier",
+            "email": "jerome.odier@lpsc.in2p3.fr"
+        }
+    ],
+    "license": "GPL 2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://gitlab.in2p3.fr/lpsc-kid/nyx-node"
+    },
+    "frameworks": [
+        "arduino",
+        "stm32cube"
+    ],
+    "platforms": [
+        "espressif8266",
+        "espressif32",
+        "stm32"
+    ]
+}
