@@ -616,7 +616,7 @@ static nyx_xmldoc_t *xml_parse_attribute_node(xml_parser_t *parser)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static nyx_xmldoc_t *xml_parse_openning_tag(xml_parser_t *parser, nyx_xmldoc_t *parent)
+static nyx_xmldoc_t *xml_parse_opening_tag(xml_parser_t *parser, nyx_xmldoc_t *parent)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -770,7 +770,7 @@ static nyx_xmldoc_t *xml_parse_element_node(xml_parser_t *parser, nyx_xmldoc_t *
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_xmldoc_t *result = xml_parse_openning_tag(parser, parent);
+    nyx_xmldoc_t *result = xml_parse_opening_tag(parser, parent);
 
     if(result == NULL)
     {

@@ -1,10 +1,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ARDUINO
-#  include "stack/arduino.h"
-#else
-#  include "stack/mongoose.h"
-#endif
+#include "stack/mongoose.h"
 
 #include "nyx_node_internal.h"
 
