@@ -1,6 +1,5 @@
 [![][Build Status img]][Build Status]
-[![][License_mongoose img]][License_mongoose]
-[![][License_arduino img]][License_arduino]
+[![][License img]][License]
 
 <a href="http://lpsc.in2p3.fr/" target="_blank">
 	<img src="./images/logo_lpsc.svg" alt="LPSC" height="72" />
@@ -51,8 +50,5 @@ Developer
 [Build Status]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/-/commits/main
 [Build Status img]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/badges/main/pipeline.svg
 
-[License_mongoose]:https://www.gnu.org/licenses/gpl-2.0.txt
-[License_mongoose img]:https://img.shields.io/badge/license-GPL_2.0_only_(mongoose_layer)-blue.svg
-
-[License_arduino]:https://www.gnu.org/licenses/lgpl-3.0.txt
-[License_arduino img]:https://img.shields.io/badge/license-LGPL_3.0_or_later_(arduino_layer)-blue.svg
+[License]:https://www.gnu.org/licenses/gpl-2.0.txt
+[License img]:https://img.shields.io/badge/license-GPL_2.0_only-blue.svg
