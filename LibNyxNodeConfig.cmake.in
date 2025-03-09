@@ -1,14 +1,6 @@
 @PACKAGE_INIT@
 ########################################################################################################################
 
-include(CMakeFindDependencyMacro)
-
-########################################################################################################################
-
-find_dependency(LibXml2 REQUIRED)
-
-########################################################################################################################
-
 include("${CMAKE_CURRENT_LIST_DIR}/LibNyxNodeTargets.cmake")
 
 ########################################################################################################################
@@ -17,9 +9,6 @@ get_target_property(NYXNODE_STATIC_LIB_PATH LibNyxNode::nyx-node-static LOCATION
 get_target_property(NYXNODE_SHARED_LIB_PATH LibNyxNode::nyx-node-shared LOCATION)
 
 ########################################################################################################################
-
-set(LIBNYXNODE_STATIC_LIBRARIES ${NYXNODE_STATIC_LIB_PATH} ${LIBXML2_LIBRARIES})
-set(LIBNYXNODE_SHARED_LIBRARIES ${NYXNODE_SHARED_LIB_PATH} ${XXXXXXX_XXXXXXXXX})
 
 set(LIBNYXNODE_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 
