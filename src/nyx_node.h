@@ -3,7 +3,6 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedMacroInspection"
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
-#pragma ide diagnostic ignored "bugprone-reserved-identifier"
 #pragma ide diagnostic ignored "UnreachableCallsOfFunction"
 
 /*--------------------------------------------------------------------------------------------------------------------*/

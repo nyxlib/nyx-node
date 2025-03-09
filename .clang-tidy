@@ -1,1 +1,1 @@
-Checks: '-readability-misleading-indentation'
+Checks: '-bugprone-reserved-identifier,-readability-misleading-indentation'
