@@ -14,12 +14,12 @@
         "url": "https://gitlab.in2p3.fr/lpsc-kid/nyx-node"
     },
     "frameworks": [
-        "arduino",
-        "stm32cube"
+        "arduino"
     ],
     "platforms": [
         "espressif8266",
         "espressif32",
-        "stm32"
+        "atmelmegaavr",
+        "atmelsam"
     ]
 }

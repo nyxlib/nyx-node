@@ -1834,7 +1834,7 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t tcp_url,
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t mqtt_username,
-    __NULLABLE__ STR_t ,
+    __NULLABLE__ STR_t mqtt_password,
     /**/
     STR_t node_id,
     nyx_dict_t *def_vectors[],

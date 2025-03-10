@@ -50,6 +50,7 @@ set(SOURCE_FILES
     src/indi/indi_text.c
     #
     src/utils/base64.c
+    src/utils/hash32.c
     src/utils/utf8.c
     #
     src/parsers/json.c
