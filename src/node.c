@@ -827,12 +827,18 @@ nyx_node_t *nyx_node_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    #if defined(ARDUINO) && defined(MG_ENABLE_TCPIP) && defined(MG_ENABLE_DRIVER_W5500)
+    #if defined(ARDUINO)
 
-        if(nyx_w5500_spi_cs_pin >= 0)
-        {
-            nyx_arduino_init_w5500(&node->mgr, node_id);
-        }
+        mg_log_set_fn(nyx_arduino_console, NULL);
+
+        #if defined(MG_ENABLE_TCPIP) && defined(MG_ENABLE_DRIVER_W5500)
+
+            if(nyx_w5500_spi_cs_pin >= 0)
+            {
+                nyx_arduino_init_w5500(&node->mgr, node_id);
+            }
+
+        #endif
 
     #endif
 
@@ -847,16 +853,6 @@ nyx_node_t *nyx_node_initialize(
     {
         mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_handler, node);
     }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* ARDUINO CONSOLE                                                                                                */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    #if defined(ARDUINO)
-
-        mg_log_set_fn(nyx_arduino_console, NULL);
-
-    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
