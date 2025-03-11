@@ -852,7 +852,7 @@ nyx_node_t *nyx_node_initialize(
     /* ARDUINO CONSOLE                                                                                                */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    #ifdef ARDUINO
+    #if defined(ARDUINO)
 
         mg_log_set_fn(nyx_arduino_console, NULL);
 
