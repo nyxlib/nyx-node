@@ -1815,7 +1815,7 @@ typedef struct nyx_node_s nyx_node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ARDUINO
+#if defined(ARDUINO)
 
     /**
      * \brief W5500 chip select pin, set > 0 the enable the controller.
