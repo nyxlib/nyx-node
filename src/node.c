@@ -827,6 +827,21 @@ nyx_node_t *nyx_node_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    #ifdef ARDUINO
+
+    #if(defined(ESP8266) || defined(ESP32)
+        nyx_arduino_init_esp(&node->mgr, node_id);
+    #endif
+
+    if(nyx_w5500_spi_cs_pin >= 0)
+    {
+        nyx_arduino_init_w5500(&node->mgr, node_id);
+    }
+
+    #endif
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(tcp_url != NULL)
     {
         mg_listen(&node->mgr, node->tcp_url, tcp_handler, node);

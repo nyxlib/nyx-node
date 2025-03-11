@@ -1816,6 +1816,14 @@ typedef struct nyx_node_s nyx_node_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief W5500 chip select pin, set > 0 the enable the controller.
+ */
+
+extern int nyx_w5500_spi_cs_pin;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * \brief Initializes the Nyx node.
  *
  * @param tcp_url Optional TCP URL (e.g. tcp://0.0.0.0:7625).

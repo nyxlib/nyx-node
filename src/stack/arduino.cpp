@@ -1,26 +1,51 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <SPI.h>
+#include <string.h>
 #include <Arduino.h>
 
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#endif
+
+#ifdef ESP32
+#include <esp_wifi.h>
+#endif
+
 #include "arduino.h"
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* NETWORK - UTILITIES                                                                                                */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void get_mac_addr(uint8_t mac[6], uint8_t mac0, uint8_t mac1, STR_t node_id)
+{
+    uint32_t hash = nyx_hash32(node_id, strlen(node_id), 0xAABBCCDD)
+
+    mac[0] = mac0;
+    mac[1] = mac1;
+    mac[2] = (hash >> 24) & 0xFF;
+    mac[3] = (hash >> 16) & 0xFF;
+    mac[4] = (hash >> 8) & 0xFF;
+    mac[5] = (hash >> 0) & 0xFF;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* NETWORK - W5500                                                                                                    */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int w5500_spi_ss_pin = 0;
+int nyx_w5500_spi_cs_pin = -1;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void w5500_spi_beg(__UNUSED__ void *spi)
 {
-    digitalWrite(w5500_spi_ss_pin, LOW);
+    digitalWrite(nyx_w5500_spi_cs_pin, LOW);
 }
 
 static void w5500_spi_end(__UNUSED__ void *spi)
 {
-    digitalWrite(w5500_spi_ss_pin, HIGH);
+    digitalWrite(nyx_w5500_spi_cs_pin, HIGH);
 }
 
 static uint8_t w5500_spi_txn(__UNUSED__ void *spi, uint8_t c)
@@ -46,20 +71,15 @@ static struct mg_tcpip_if w5500_if = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_arduino_init_w5500(struct mg_mgr *mgr, int spi_ss_pin, uint8_t mac[6])
+void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    pinMode(w5500_spi_ss_pin = spi_ss_pin, OUTPUT);
+    pinMode(nyx_w5500_spi_cs_pin, OUTPUT);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    w5500_if.mac[0] = mac[0];
-    w5500_if.mac[1] = mac[1];
-    w5500_if.mac[2] = mac[2];
-    w5500_if.mac[3] = mac[3];
-    w5500_if.mac[4] = mac[4];
-    w5500_if.mac[5] = mac[5];
+    get_mac_addr(w5500_if.mac, 0xEF, 0x02, node_id);
 
     mg_tcpip_init(mgr, &w5500_if);
 
@@ -71,6 +91,39 @@ void nyx_arduino_init_w5500(struct mg_mgr *mgr, int spi_ss_pin, uint8_t mac[6])
     {
         mg_mgr_poll(mgr, 0);
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* NETWORK - ESP                                                                                                      */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_arduino_init_esp(__UNUSED__ struct mg_mgr *mgr, __UNUSED__ STR_t node_id)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+#ifdef ESP8266
+
+    uint8_t mac[6];
+
+    get_mac_addr(w5500_if.mac, 0xEF, 0x04, node_id);
+
+    wifi_set_macaddr(STATION_IF, mac);
+    
+#endif
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+#ifdef ESP32
+
+    uint8_t mac[6];
+
+    get_mac_addr(w5500_if.mac, 0xEF, 0x06, node_id);
+
+    esp_wifi_set_mac(WIFI_IF_STA, mac);
+    
+#endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
