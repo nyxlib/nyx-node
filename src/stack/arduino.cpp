@@ -103,27 +103,27 @@ void nyx_arduino_init_esp(__UNUSED__ struct mg_mgr *mgr, __UNUSED__ STR_t node_i
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ESP8266
+    #ifdef ESP8266
 
-    uint8_t mac[6];
+        uint8_t mac[6];
 
-    get_mac_addr(w5500_if.mac, 0xEF, 0x04, node_id);
+        get_mac_addr(w5500_if.mac, 0xEF, 0x04, node_id);
 
-    wifi_set_macaddr(STATION_IF, mac);
-    
-#endif
+        wifi_set_macaddr(STATION_IF, mac);
+
+    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ESP32
+    #ifdef ESP32
 
-    uint8_t mac[6];
+        uint8_t mac[6];
 
-    get_mac_addr(w5500_if.mac, 0xEF, 0x06, node_id);
+        get_mac_addr(w5500_if.mac, 0xEF, 0x06, node_id);
 
-    esp_wifi_set_mac(WIFI_IF_STA, mac);
-    
-#endif
+        esp_wifi_set_mac(WIFI_IF_STA, mac);
+
+    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
