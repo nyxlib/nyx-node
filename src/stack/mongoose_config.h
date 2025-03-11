@@ -2,6 +2,9 @@
 
 #if defined(PICO_BOARD)
 #  define MG_ARCH MG_ARCH_PICOSDK
+#  define MG_ENABLE_DRIVER_W5500 1
+#  define MG_ENABLE_SOCKET 0
+#  define MG_ENABLE_TCPIP 1
 #endif
 
 #if defined(ARDUINO)

@@ -1,9 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ARDUINO
+#include "stack/rpi.h"
 #include "stack/arduino.h"
-#endif
-
 #include "stack/mongoose.h"
 
 #include "nyx_node_internal.h"
@@ -824,6 +822,23 @@ nyx_node_t *nyx_node_initialize(
     /*----------------------------------------------------------------------------------------------------------------*/
 
     mg_mgr_init(&node->mgr);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    #if defined(PICO_BOARD)
+
+        mg_log_set_fn(nyx_rpi_console, NULL);
+
+        #if defined(MG_ENABLE_TCPIP) && defined(MG_ENABLE_DRIVER_W5500)
+
+            if(nyx_w5500_spi_cs_pin >= 0)
+            {
+                nyx_rpi_init_w5500(&node->mgr, node_id);
+            }
+
+        #endif
+
+    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

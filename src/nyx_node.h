@@ -1815,7 +1815,29 @@ typedef struct nyx_node_s nyx_node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#if defined(ARDUINO)
+#if defined(PICO_BOARD) || defined(ARDUINO)
+
+    #if defined(PICO_BOARD)
+
+        /**
+         * \brief W5500 MOSI pin. Raspberry Pi Pico mode only.
+         */
+
+        extern int nyx_w5500_spi_miso_pin;
+
+        /**
+         * \brief W5500 MISO pin. Raspberry Pi Pico mode only.
+         */
+
+        extern int nyx_w5500_spi_mosi_pin;
+
+        /**
+         * \brief W5500 CLK pin. Raspberry Pi Pico mode only.
+         */
+
+        extern int nyx_w5500_spi_clk_pin;
+
+    #endif
 
     /**
      * \brief W5500 chip select pin, set this value to enable the controller. Raspberry Pi Pico and Arduino modes only.

@@ -1,12 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
-#if defined(ARDUINO)
+#if defined(PICO_BOARD)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include <SPI.h>
+#include <stdio.h>
 #include <string.h>
-#include <Arduino.h>
+#include <hardware/spi.h>
 
-#include "arduino.h"
+#include "rpi.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* NETWORK - UTILITIES                                                                                                */
@@ -30,23 +30,30 @@ static void get_mac_addr(uint8_t mac[6], uint8_t mac0, uint8_t mac1, STR_t node_
 #if defined(MG_ENABLE_TCPIP) && defined(MG_ENABLE_DRIVER_W5500)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+int nyx_w5500_spi_miso_pin = -1;
+int nyx_w5500_spi_mosi_pin = -1;
+int nyx_w5500_spi_clk_pin = -1;
 int nyx_w5500_spi_cs_pin = -1;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void w5500_spi_beg(__UNUSED__ void *spi)
+static void wspi_cs5500_spi_beg(__UNUSED__ void *spi)
 {
-    digitalWrite(nyx_w5500_spi_cs_pin, LOW);
+    gpio_put(nyx_w5500_spi_cs_pin, 0);
 }
 
 static void w5500_spi_end(__UNUSED__ void *spi)
 {
-    digitalWrite(nyx_w5500_spi_cs_pin, HIGH);
+    gpio_put(nyx_w5500_spi_cs_pin, 1);
 }
 
 static uint8_t w5500_spi_txn(__UNUSED__ void *spi, uint8_t c)
 {
-    return SPI.transfer(c);
+    uint8_t result = 0;
+
+    spi_write_read_blocking(spi0, &byte, &result, 1);
+
+    return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -67,13 +74,23 @@ static struct mg_tcpip_if w5500_if = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
+void nyx_rpi_init_w5500(struct mg_mgr *mgr, STR_t node_id)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    pinMode(nyx_w5500_spi_cs_pin, OUTPUT);
+    spi_init(spi0, 500 * 1000);
 
-    digitalWrite(nyx_w5500_spi_cs_pin, HIGH);
+    gpio_set_function(nyx_w5500_spi_miso_pin, GPIO_FUNC_SPI);
+    gpio_set_function(nyx_w5500_spi_mosi_pin, GPIO_FUNC_SPI);
+    gpio_set_function(nyx_w5500_spi_clk_pin, GPIO_FUNC_SPI);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    gpio_init(nyx_w5500_spi_cs_pin);
+
+    gpio_set_dir(nyx_w5500_spi_cs_pin, GPIO_OUT);
+
+    gpio_put(nyx_w5500_spi_cs_pin, 1);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -99,12 +116,9 @@ void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
 /* CONSOLE                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_arduino_console(char c, __UNUSED__ buff_t params)
+void nyx_rpi_console(char c, __UNUSED__ buff_t params)
 {
-    if(Serial)
-    {
-        Serial.print(c);
-    }
+    putchar(c);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
