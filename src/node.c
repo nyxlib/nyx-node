@@ -827,7 +827,7 @@ nyx_node_t *nyx_node_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    #ifdef ARDUINO
+    #if defined(ARDUINO) && defined(MG_ENABLE_TCPIP) && defined(MG_ENABLE_DRIVER_W5500)
 
         if(nyx_w5500_spi_cs_pin >= 0)
         {
