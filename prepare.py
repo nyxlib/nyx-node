@@ -63,7 +63,11 @@ MONGOOSE_CONFIG = '''
 #       define MG_IO_SIZE 128
 #     endif
 #   endif
-'''.strip()
+'''
+
+def patch(s):
+
+    return re.sub(r'#include\s+"mongoose_config\.h".*', MONGOOSE_CONFIG.strip(), s)
 
 ########################################################################################################################
 
@@ -81,11 +85,9 @@ def download_mongoose():
 
             raise IOError(f'Cannot download `{filename}`')
 
-        ################################################################################################################
-
         with open(f'src/stack/{filename}', 'wt') as f:
 
-            f.write(re.sub(r'#include\s+"mongoose_config\.h".*', MONGOOSE_CONFIG, response.content.decode('UTF-8')))
+            f.write(patch(response.content.decode('UTF-8')))
 
 ########################################################################################################################
 
