@@ -72,9 +72,10 @@ extern "C" {
 #     define MG_ENABLE_TCPIP 1
 #     define mkdir(a, b) (-1)
 #     define MG_IO_SIZE 128
-#   else
-#     error("Only the Arduino platform is supported!")
 #   endif
+# else
+#   error("Only the Arduino platform is supported!")
+# endif
 #endif
 
 #if !defined(MG_ARCH)
