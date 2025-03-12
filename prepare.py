@@ -62,7 +62,7 @@ MONGOOSE_CONFIG = '''
 #     define mkdir(a, b) (-1)
 #     define MG_IO_SIZE 128
 #   else
-#     error("Only ARDUINO platform is supported")
+#     error("Only the Arduino platform is supported!")
 #   endif
 '''
 
