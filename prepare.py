@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 ########################################################################################################################
 
+import re
 import requests
 
 ########################################################################################################################
@@ -40,6 +41,32 @@ def compile_schema():
 
 ########################################################################################################################
 
+MONGOOSE_CONFIG = '''
+#   if defined(PICO_BOARD)
+#     define MG_ARCH MG_ARCH_PICOSDK
+#     define MG_ENABLE_DRIVER_W5500 1
+#     define MG_ENABLE_SOCKET 0
+#     define MG_ENABLE_TCPIP 1
+#   endif
+
+#   if defined(ARDUINO)
+#     if defined(ESP8266)
+#       define MG_ARCH MG_ARCH_ESP8266
+#     elif defined(ESP32)
+#       define MG_ARCH MG_ARCH_ESP32
+#     else
+#       define MG_ARCH MG_ARCH_CUSTOM
+#       define MG_ENABLE_DRIVER_W5500 1
+#       define MG_ENABLE_SOCKET 0
+#       define MG_ENABLE_TCPIP 1
+#       define mkdir(a, b) (-1)
+#       define MG_IO_SIZE 128
+#     endif
+#   endif
+'''.strip()
+
+########################################################################################################################
+
 def download_mongoose():
 
     for filename in ['mongoose.c', 'mongoose.h']:
@@ -54,9 +81,11 @@ def download_mongoose():
 
             raise IOError(f'Cannot download `{filename}`')
 
+        ################################################################################################################
+
         with open(f'src/stack/{filename}', 'wt') as f:
 
-            f.write(response.content.decode('UTF-8'))
+            f.write(re.sub(r'#include\s+"mongoose_config\.h".*', MONGOOSE_CONFIG, response.content.decode('UTF-8')))
 
 ########################################################################################################################
 
