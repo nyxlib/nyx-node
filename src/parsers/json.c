@@ -69,32 +69,32 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define RELEASE(t) \
-            if(CHECK(JSON_TOKEN_NUMBER) || CHECK(JSON_TOKEN_STRING))        \
-            {                                                               \
-                nyx_memory_free(PEEK().value);                              \
-                                                                            \
-                PEEK().value = NULL;                                        \
-            }                                                               \
-                                                                            \
-            PEEK().token_type = (t)                                         \
+            if(CHECK(JSON_TOKEN_NUMBER) || CHECK(JSON_TOKEN_STRING))                        \
+            {                                                                               \
+                nyx_memory_free(PEEK().value);                                              \
+                                                                                            \
+                PEEK().value = NULL;                                                        \
+            }                                                                               \
+                                                                                            \
+            PEEK().token_type = (t)                                                         \
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define TRIM(s, e) \
-    ({                                                                      \
-        size_t result = (size_t) (e) - (size_t) (s);                        \
-                                                                            \
-        while((isspace(*((s) + 0)) || *((s) + 0) == '"') && result > 0) {   \
-            (s)++;                                                          \
-            result--;                                                       \
-        }                                                                   \
-                                                                            \
-        while((isspace(*((e) - 1)) || *((e) - 1) == '"') && result > 0) {   \
-            (e)--;                                                          \
-            result--;                                                       \
-        }                                                                   \
-                                                                            \
-        result;                                                             \
+    ({                                                                                      \
+        size_t result = (size_t) (e) - (size_t) (s);                                        \
+                                                                                            \
+        while((isspace((unsigned char) *((s) + 0)) || *((s) + 0) == '"') && result > 0) {   \
+            (s)++;                                                                          \
+            result--;                                                                       \
+        }                                                                                   \
+                                                                                            \
+        while((isspace((unsigned char) *((e) - 1)) || *((e) - 1) == '"') && result > 0) {   \
+            (e)--;                                                                          \
+            result--;                                                                       \
+        }                                                                                   \
+                                                                                            \
+        result;                                                                             \
     })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -168,7 +168,7 @@ static void tokenizer_next(json_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    while(parser->size > 0 && isspace(*parser->buff))
+    while(parser->size > 0 && isspace((unsigned char) *parser->buff))
     {
         parser->buff++;
         parser->size--;
@@ -284,11 +284,11 @@ static void tokenizer_next(json_parser_t *parser)
         /*------------------------------------------------------------------------------------------------------------*/
 
         default:
-            /**/ if(*end == '-' || isdigit(*end))
+            /**/ if(*end == '-' || isdigit((unsigned char) *end))
             {
                 end++;
                 parser->size--;
-                while(parser->size >= 1 && (*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit(*end)))
+                while(parser->size >= 1 && (*end == '-' || *end == '+' || *end == '.' || *end == 'e' || *end == 'E' || isdigit((unsigned char) *end)))
                 {
                     end++;
                     parser->size--;

@@ -138,7 +138,7 @@ static void tokenizer_next(xml_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    while(parser->size > 0 && isspace(*parser->buff))
+    while(parser->size > 0 && isspace((unsigned char) *parser->buff))
     {
         parser->buff++;
         parser->size--;
