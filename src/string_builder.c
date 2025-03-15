@@ -387,7 +387,7 @@ static str_t string_builder_to_string(const nyx_string_builder_t *sb, bool json_
             }
             else
             {
-                p = memcpy(p, q, size) + size;
+                p = (str_t) memcpy(p, q, size) + size;
             }
         }
 
