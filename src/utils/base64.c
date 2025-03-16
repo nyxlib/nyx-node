@@ -59,11 +59,11 @@ str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
     for(size_t i = 0; i < div; i++)
     {
         uint32_t triple = (
-            (p[0] << 16)
+            ((uint32_t) p[0] << 16)
             |
-            (p[1] << 8)
+            ((uint32_t) p[1] << 8)
             |
-            (p[2] << 0)
+            ((uint32_t) p[2] << 0)
         );
 
         *q++ = BASE64_ENCODE_TABLE[(triple >> 18) & 0x3F];
@@ -79,9 +79,9 @@ str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
     /**/ if(mod == 2)
     {
         uint32_t triple = (
-            (p[0] << 16)
+            ((uint32_t) p[0] << 16)
             |
-            (p[1] << 8)
+            ((uint32_t) p[1] << 8)
         );
 
         *q++ = BASE64_ENCODE_TABLE[(triple >> 18) & 0x3F];
@@ -92,7 +92,7 @@ str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
     else if(mod == 1)
     {
         uint32_t triple = (
-            (p[0] << 16)
+            ((uint32_t) p[0] << 16)
         );
 
         *q++ = BASE64_ENCODE_TABLE[(triple >> 18) & 0x3F];
@@ -156,13 +156,13 @@ buff_t nyx_base64_decode(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t l
     for(size_t i = 0; i < blocks; i++)
     {
         uint32_t triple = (
-            (BASE64_DECODE_TABLE[(int) p[0]] << 18)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[0]] << 18)
             |
-            (BASE64_DECODE_TABLE[(int) p[1]] << 12)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[1]] << 12)
             |
-            (BASE64_DECODE_TABLE[(int) p[2]] << 6)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[2]] << 6)
             |
-            (BASE64_DECODE_TABLE[(int) p[3]] << 0)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[3]] << 0)
         );
 
         *q++ = (triple >> 16) & 0xFF;
@@ -177,11 +177,11 @@ buff_t nyx_base64_decode(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t l
     /**/ if(pad == 1)
     {
         uint32_t triple = (
-            (BASE64_DECODE_TABLE[(int) p[0]] << 18)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[0]] << 18)
             |
-            (BASE64_DECODE_TABLE[(int) p[1]] << 12)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[1]] << 12)
             |
-            (BASE64_DECODE_TABLE[(int) p[2]] << 6)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[2]] << 6)
         );
 
         *q++ = (triple >> 16) & 0xFF;
@@ -190,9 +190,9 @@ buff_t nyx_base64_decode(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t l
     else if(pad == 2)
     {
         uint32_t triple = (
-            (BASE64_DECODE_TABLE[(int) p[0]] << 18)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[0]] << 18)
             |
-            (BASE64_DECODE_TABLE[(int) p[1]] << 12)
+            ((uint32_t) BASE64_DECODE_TABLE[(int) p[1]] << 12)
         );
 
         *q++ = (triple >> 16) & 0xFF;
