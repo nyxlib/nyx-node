@@ -63,13 +63,13 @@ extern "C" {
 #      include <stddef.h>
 #      include <stdint.h>
 #      include <stdbool.h>
-#      include <sys/types.h>
-#      include <lwip/sockets.h>
 #      include <time.h>
 #      include <fcntl.h>
 #      include <stdio.h>
 #      include <stdlib.h>
 #      include <string.h>
+#      include <sys/types.h>
+#      include <lwip/sockets.h>
 #      define MG_ARCH MG_ARCH_CUSTOM
 #      define MG_ENABLE_SOCKET 1
 #      define MG_ENABLE_TCPIP 0
