@@ -85,12 +85,23 @@ extern "C" {
 #      define MG_ENABLE_SSI 0
 #      define MG_IO_SIZE 512
 #    else
+#      include <errno.h>
+#      include <stdarg.h>
+#      include <stddef.h>
+#      include <stdint.h>
+#      include <stdbool.h>
+#      include <time.h>
+#      include <stdio.h>
+#      include <stdlib.h>
+#      include <string.h>
 #      define MG_ARCH MG_ARCH_CUSTOM
 #      define MG_ENABLE_DRIVER_W5500 1
 #      define MG_ENABLE_SOCKET 0
 #      define MG_ENABLE_TCPIP 1
 #      define MG_ENABLE_SSI 0
 #      define MG_IO_SIZE 128
+
+       unsigned long millis(void);
 #    endif
 #  else
 #    error("Only the Arduino platform is supported!")

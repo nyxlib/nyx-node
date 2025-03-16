@@ -34,7 +34,7 @@ int nyx_w5500_spi_cs_pin = -1;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void w5500_spi_beg(__UNUSED__ void *spi)
+static void w5500_spi_begin(__UNUSED__ void *spi)
 {
     digitalWrite(nyx_w5500_spi_cs_pin, LOW);
 }
@@ -51,24 +51,29 @@ static uint8_t w5500_spi_txn(__UNUSED__ void *spi, uint8_t c)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static struct mg_tcpip_spi w5500_spi = {
-    nullptr,
-    w5500_spi_beg,
-    w5500_spi_end,
-    w5500_spi_txn,
-};
+static struct mg_tcpip_spi w5500_spi = {};
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static struct mg_tcpip_if w5500_if = {
-    .driver = &mg_tcpip_driver_w5500,
-    .driver_data = &w5500_spi,
-};
+static struct mg_tcpip_if w5500_if = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    memset(&w5500_spi, 0x00, sizeof(struct mg_tcpip_spi));
+
+    w5500_spi.begin = w5500_spi_begin;
+    w5500_spi.end = w5500_spi_end;
+    w5500_spi.txn = w5500_spi_txn;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    memset(&w5500_if, 0x00, sizeof(struct mg_tcpip_if));
+
+    w5500_if.driver = &mg_tcpip_driver_w5500;
+    w5500_if.driver_data = &w5500_spi;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     pinMode(nyx_w5500_spi_cs_pin, OUTPUT);
