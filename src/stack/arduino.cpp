@@ -60,6 +60,8 @@ static struct mg_tcpip_if w5500_if = {};
 void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* INITIALIZE STRUCTURES                                                                                          */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     memset(&w5500_spi, 0x00, sizeof(struct mg_tcpip_spi));
 
@@ -71,9 +73,13 @@ void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
 
     memset(&w5500_if, 0x00, sizeof(struct mg_tcpip_if));
 
+    get_mac_addr(w5500_if.mac, 0xEF, 0x02, node_id);
+
     w5500_if.driver = &mg_tcpip_driver_w5500;
     w5500_if.driver_data = &w5500_spi;
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* INITIALIZE DEVICE                                                                                              */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     pinMode(nyx_w5500_spi_cs_pin, OUTPUT);
@@ -81,8 +87,6 @@ void nyx_arduino_init_w5500(struct mg_mgr *mgr, STR_t node_id)
     digitalWrite(nyx_w5500_spi_cs_pin, HIGH);
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    get_mac_addr(w5500_if.mac, 0xEF, 0x02, node_id);
 
     mg_tcpip_init(mgr, &w5500_if);
 
