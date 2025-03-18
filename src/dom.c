@@ -205,7 +205,7 @@ void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NULLABLE__ nyx_xmldoc_t *child
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_add_attr(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLABLE__ STR_t data)
+void nyx_xmldoc_add_attribute(nyx_xmldoc_t *xmldoc, __NULLABLE__ STR_t name, __NULLABLE__ STR_t data)
 {
     if(name != NULL
        &&
