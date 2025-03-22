@@ -316,7 +316,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t initial_available = (stack->recv_head + RECV_BUFF_SIZE - stack->recv_tail) % RECV_BUFF_SIZE;
+            size_t initial_available = (stack->recv_head - stack->recv_tail + RECV_BUFF_SIZE) % RECV_BUFF_SIZE;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
