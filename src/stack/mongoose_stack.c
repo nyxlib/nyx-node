@@ -44,7 +44,7 @@ void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_xprintf(nyx_log_function, nyx_log_params, "%s: %d (%s) - ", file, line, func);
+    mg_xprintf(nyx_log_func, nyx_log_args, "%s: %d %s() - ", file, line, func);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -57,13 +57,13 @@ void nyx_log(const char *fmt, ...)
 
     va_list ap;
     va_start(ap, fmt);
-    mg_vxprintf(nyx_log_function, nyx_log_params, fmt, &ap);
+    mg_vxprintf(nyx_log_func, nyx_log_args, fmt, &ap);
     va_end(ap);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_log_function('\r', nyx_log_params);
-    nyx_log_function('\n', nyx_log_params);
+    nyx_log_func('\r', nyx_log_args);
+    nyx_log_func('\n', nyx_log_args);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -245,7 +245,7 @@ void nyx_node_stack_initialize(
     /* LOGGER                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_log_function = mg_pfn_stdout;
+    nyx_log_func = mg_pfn_stdout;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SET STACK OPTIONS                                                                                              */

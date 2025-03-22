@@ -498,11 +498,7 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
         /*------------------------------------------------------------------------------------------------------------*/
         /* MG_EV_MQTT_OPEN                                                                                            */
         /*------------------------------------------------------------------------------------------------------------*/
-
-        NYX_INFO(("%lu MQTT OPEN", node->node_id));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
+        
         for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(nyx_str_t); i++)
         {
             str_t topic = nyx_memory_alloc(SPECIAL_TOPICS[i].len + node->node_id.len + 2);
