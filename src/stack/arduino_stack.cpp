@@ -198,6 +198,15 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    auto callback = [node](STR_t topic, byte *buff, unsigned int size)
+    {
+        nyx_str_t message = {(str_t) buff, (size_t) size};
+
+        node->mqtt_handler(node, NYX_EVENT_MSG, nyx_str_s(topic), message);
+    };
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(node->tcp_url != NULL)
     {
         IPAddress ip;
@@ -227,12 +236,7 @@ void nyx_node_stack_initialize(
             );
 
             stack->mqtt_client->setCallback(
-                [node](STR_t topic, byte *buff, unsigned int size)
-                {
-                    nyx_str_t message = {(str_t) buff, (size_t) size};
-
-                    node->mqtt_handler(node, NYX_EVENT_MSG, nyx_str_s(topic), message);
-                }
+                callback
             );
         }
     }
@@ -316,14 +320,14 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t initial_available = (stack->recv_head - stack->recv_tail + RECV_BUFF_SIZE) % RECV_BUFF_SIZE;
+            size_t initial_available = (stack->recv_head + RECV_BUFF_SIZE - stack->recv_tail) % RECV_BUFF_SIZE;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             if(initial_available > 0)
             {
                 size_t pos = stack->recv_tail;
-                size_t consumed = 0x0000000000000;
+                size_t consumed = 0x000000000000000;
                 size_t available = initial_available;
 
                 while(available > 0)
