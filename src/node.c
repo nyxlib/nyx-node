@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include "stack/arduino.h"
-#include "stack/mongoose.h"
+#include <stdio.h>
+#include <string.h>
 
 #include "nyx_node_internal.h"
 
@@ -9,107 +9,22 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mg_startswith(struct mg_str topic, struct mg_str prefix)
+static bool nyx_startswith(nyx_str_t topic, nyx_str_t prefix)
 {
     return topic.len >= prefix.len && memcmp(topic.buf, prefix.buf, prefix.len) == 0;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "ConstantParameter"
-static void mqtt_pub(struct mg_connection *connection, struct mg_str topic, struct mg_str message, int qos, bool retain)
-#pragma clang diagnostic pop
-{
-    if(connection != NULL)
-    {
-        struct mg_mqtt_opts opts;
-
-        memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
-
-        opts.topic = topic;
-        opts.message = message;
-        opts.qos = qos;
-        opts.retain = retain;
-
-        mg_mqtt_pub(connection, &opts);
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "ConstantParameter"
-static void mqtt_sub(struct mg_connection *connection, struct mg_str topic, int qos)
-#pragma clang diagnostic pop
-{
-    if(connection != NULL)
-    {
-        struct mg_mqtt_opts opts;
-
-        memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
-
-        opts.topic = topic;
-        ////.message = message;
-        opts.qos = qos;
-        ////.retain = retain;
-
-        mg_mqtt_sub(connection, &opts);
-    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* NODE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-struct nyx_node_s
-{
-    STR_t tcp_url;
-    STR_t mqtt_url;
+#define NYX_C_STR(a) {(char *) (a), sizeof(a) - 1}
 
-    struct mg_mgr mgr;
-    struct mg_mqtt_opts mqtt_opts;
-    struct mg_connection *tcp_connection;
-    struct mg_connection *mqtt_connection;
-
-    /**/
-
-    nyx_dict_t **def_vectors;
-
-    /**/
-
-    bool enable_xml;
-    bool validate_xml;
-
-    /**/
-
-    int last_ping_ms;
+static nyx_str_t SPECIAL_TOPICS[] = {
+    NYX_C_STR("nyx/cmd/get_clients"),
+    NYX_C_STR("nyx/cmd/json"),
+    NYX_C_STR("nyx/cmd/xml"),
 };
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define MG_C_STR(a) {(char *) (a), sizeof(a) - 1}
-
-static struct mg_str SPECIAL_TOPICS[] = {
-    MG_C_STR("nyx/cmd/get_clients"),
-    MG_C_STR("nyx/cmd/json"),
-    MG_C_STR("nyx/cmd/xml"),
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static void tcp_sub(struct nyx_node_s *node, STR_t message)
-{
-    for(struct mg_connection *connection = node->mgr.conns; connection != NULL; connection = connection->next)
-    {
-        if(connection != node->tcp_connection
-           &&
-           connection != node->mqtt_connection
-        ) {
-            mg_send(connection, message, strlen(message));
-        }
-    }
-}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -126,8 +41,8 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
             /*--------------------------------------------------------------------------------------------------------*/
 
             str_t xml = nyx_xmldoc_to_string(xmldoc);
-            mqtt_pub(node->mqtt_connection, mg_str("nyx/xml"), mg_str(xml), 1, false);
-            tcp_sub(node, xml);
+            nyx_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml), 1, false);
+            nyx_tcp_pub(node, xml);
             nyx_memory_free(xml);
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -141,8 +56,8 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t json = nyx_object_to_string(object);
-    mqtt_pub(node->mqtt_connection, mg_str("nyx/json"), mg_str(json), 1, false);
-    ////_sub(node, json);
+    nyx_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json), 1, false);
+    ///_tcp_pub(node, json);
     nyx_memory_free(json);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -457,7 +372,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                 /*--------------------------------------------------------------------*/
 
                                                 str_t str = nyx_object_to_string(object2);
-                                                MG_DEBUG(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
+                                                NYX_DEBUG(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
                                                 nyx_memory_free(str);
 
                                                 /*--------------------------------------------------------------------*/
@@ -534,39 +449,15 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
+static size_t tcp_handler(nyx_node_t *node, int event_type, size_t size, BUFF_t buff)
 {
-    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
-
-    /**/ if(ev == MG_EV_OPEN)
+    if(event_type == NYX_EVENT_MSG)
     {
-        MG_INFO(("%lu OPEN", connection->id));
-    }
-    else if(ev == MG_EV_ACCEPT)
-    {
-        MG_INFO(("%lu ACCEPT", connection->id));
-    }
-    else if(ev == MG_EV_CLOSE)
-    {
-        MG_INFO(("%lu CLOSE", connection->id));
-    }
-    else if(ev == MG_EV_ERROR)
-    {
-        MG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
-    }
-    else if(ev == MG_EV_READ)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* MG_EV_READ                                                                                                 */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         nyx_stream_t stream = NYX_STREAM();
 
-        struct mg_iobuf *iobuf = &connection->recv;
-
-        if(nyx_stream_detect_opening_tag(&stream, iobuf->len, iobuf->buf))
+        if(nyx_stream_detect_opening_tag(&stream, size, buff))
         {
-            if(nyx_stream_detect_closing_tag(&stream, iobuf->len, iobuf->buf))
+            if(nyx_stream_detect_closing_tag(&stream, size, buff))
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -588,101 +479,78 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                mg_iobuf_del(iobuf, 0, stream.pos + stream.len);
+                return stream.pos + stream.len;
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data)
+static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic, nyx_str_t event_message)
 {
-    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
-
-    /**/ if(ev == MG_EV_OPEN)
-    {
-        MG_INFO(("%lu OPEN", connection->id));
-    }
-    else if(ev == MG_EV_CONNECT)
-    {
-        MG_INFO(("%lu CONNECT", connection->id));
-    }
-    else if(ev == MG_EV_CLOSE)
-    {
-        MG_INFO(("%lu CLOSE", connection->id));
-
-        ((nyx_node_t *) connection->fn_data)->mqtt_connection = NULL;
-    }
-    else if(ev == MG_EV_ERROR)
-    {
-        MG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
-    }
-    else if(ev == MG_EV_MQTT_OPEN)
+    if(event_type == NYX_EVENT_OPEN)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* MG_EV_MQTT_OPEN                                                                                            */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        MG_INFO(("%lu MQTT OPEN", connection->id));
+        NYX_INFO(("%lu MQTT OPEN", node->node_id));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(struct mg_str); i++)
+        for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(nyx_str_t); i++)
         {
-            str_t topic = nyx_memory_alloc(SPECIAL_TOPICS[i].len + node->mqtt_opts.client_id.len + 2);
+            str_t topic = nyx_memory_alloc(SPECIAL_TOPICS[i].len + node->node_id.len + 2);
 
-            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].buf, node->mqtt_opts.client_id.buf) > 0)
+            if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].buf, node->node_id.buf) > 0)
             {
-                MG_INFO(("%lu Subscribing to `%s` and `%s` topics",
-                    connection->id,
+                NYX_INFO(("Subscribing to `%s` and `%s` topics",
                     SPECIAL_TOPICS[i].buf,
-                    /*-----*/ topic /*-----*/
+                    /*---*/ topic /*---*/
                 ));
 
-                mqtt_sub(connection, SPECIAL_TOPICS[i], 1);
+            nyx_mqtt_sub(node, SPECIAL_TOPICS[i], 1);
 
-                mqtt_sub(connection, mg_str(topic), 1);
-            }
-
-            nyx_memory_free(topic);
+            nyx_mqtt_sub(node, nyx_str_s(topic), 1);
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
+        nyx_memory_free(topic);
     }
-    else if(ev == MG_EV_MQTT_MSG)
+
+    /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else if(event_type == NYX_EVENT_MSG)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* MG_EV_MQTT_MSG                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        struct mg_mqtt_message *message = (struct mg_mqtt_message *) ev_data;
-
-        if(message->topic.len > 0 && message->topic.buf != NULL
+        if(event_topic.len > 0 && event_topic.buf != NULL
            &&
-           message->data.len > 0 && message->data.buf != NULL
+           event_message.len > 0 && event_message.buf != NULL
         ) {
-            /**/ if(mg_startswith(message->topic, SPECIAL_TOPICS[0]))
+            /**/ if(nyx_startswith(event_message, SPECIAL_TOPICS[0]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* GET_CLIENTS                                                                                        */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                mqtt_pub(connection, mg_str("nyx/clients"), node->mqtt_opts.client_id, 1, false);
+                nyx_mqtt_pub(node, nyx_str_s("nyx/clients"), node->node_id, 1, false);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[1]))
+            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_object_t *object = nyx_object_parse_buff(message->data.buf, message->data.len);
+                nyx_object_t *object = nyx_object_parse_buff(event_message.buf, event_message.len);
 
                 if(object != NULL)
                 {
@@ -693,13 +561,13 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(mg_startswith(message->topic, SPECIAL_TOPICS[2]))
+            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[2]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(message->data.buf, message->data.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.buf, event_message.len);
 
                 if(xmldoc != NULL)
                 {
@@ -720,24 +588,6 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static void timer_handler(void *arg)
-{
-    nyx_node_t *node = (nyx_node_t *) arg;
-
-    if(node->mqtt_connection == NULL)
-    {
-        node->mqtt_connection = mg_mqtt_connect(
-            &node->mgr,
-            node->mqtt_url,
-            &node->mqtt_opts,
-            mqtt_handler,
-            node
-        );
     }
 }
 
@@ -797,59 +647,24 @@ nyx_node_t *nyx_node_initialize(
     /* SET NODE OPTIONS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    node->node_id = nyx_str_s(node_id);
+
     node->tcp_url = tcp_url;
     node->mqtt_url = mqtt_url;
 
-    node->mqtt_opts.user = mg_str(mqtt_username);
-    node->mqtt_opts.pass = mg_str(mqtt_password);
-
-    node->mqtt_opts.clean = true;
-    node->mqtt_opts.version = 0x04;
-
-    node->mqtt_opts.client_id = mg_str(node_id);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     node->def_vectors = def_vectors;
 
-    node->enable_xml = enable_xml;
+    node->tcp_handler = tcp_handler;
+    node->mqtt_handler = mqtt_handler;
 
+    node->enable_xml = enable_xml;
     node->validate_xml = validate_xml;
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* INITIALIZE TCP & MQTT CLIENTS                                                                                  */
+    /* INITIALIZE STACK                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_mgr_init(&node->mgr);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    #if defined(ARDUINO)
-
-        mg_log_set_fn(nyx_arduino_console, NULL);
-
-        #if defined(MG_ENABLE_TCPIP) && defined(MG_ENABLE_DRIVER_W5500)
-
-            if(nyx_w5500_spi_cs_pin >= 0)
-            {
-                nyx_arduino_init_w5500(&node->mgr, node_id);
-            }
-
-        #endif
-
-    #endif
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(tcp_url != NULL)
-    {
-        mg_listen(&node->mgr, node->tcp_url, tcp_handler, node);
-    }
-
-    if(mqtt_url != NULL)
-    {
-        mg_timer_add(&node->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_handler, node);
-    }
+    nyx_node_stack_initialize(node, mqtt_username, mqtt_password, retry_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -861,9 +676,13 @@ nyx_node_t *nyx_node_initialize(
 void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* FINALIZE STACK                                                                                                 */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_mgr_free(&node->mgr);
+    nyx_node_stack_finalize(node);
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* FREE VECTORS & NODE                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(free_vectors)
@@ -887,7 +706,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_mgr_poll(&node->mgr, timeout_ms);
+    nyx_stack_poll(node, timeout_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -897,7 +716,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     {
         node->last_ping_ms = 0x00000000000000;
 
-        mqtt_pub(node->mqtt_connection, mg_str("nyx/ping/node"), node->mqtt_opts.client_id, 1, false);
+        nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id, 1, false);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

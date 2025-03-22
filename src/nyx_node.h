@@ -103,6 +103,52 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* LOGGER                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+/** @}
+  * @defgroup LOG Node log
+  * Node log.
+  * @{
+  */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef enum { NYX_LL_NONE, NYX_LL_ERROR, NYX_LL_INFO, NYX_LL_DEBUG, NYX_LL_VERBOSE } nyx_log_level_t;
+
+typedef void (* nyx_pfn_t)(char, void *);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+extern nyx_log_level_t nyx_log_level;
+
+extern nyx_pfn_t nyx_log_function;
+
+extern buff_t nyx_log_params;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line);
+
+void nyx_log(const char *fmt, ...);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define NYX_LOG(level, args)                                                        \
+    do                                                                              \
+    {                                                                               \
+        if((level) <= nyx_log_level)                                                \
+        {                                                                           \
+            nyx_log_prefix(level, __FILE__, __func__, __LINE__);                    \
+                                                                                    \
+            nyx_log args;                                                           \
+        }                                                                           \
+    } while(0)
+
+#define NYX_ERROR(args) NYX_LOG(NYX_LL_ERROR, args)
+#define NYX_INFO(args) NYX_LOG(NYX_LL_INFO, args)
+#define NYX_DEBUG(args) NYX_LOG(NYX_LL_DEBUG, args)
+#define NYX_VERBOSE(args) NYX_LOG(NYX_LL_VERBOSE, args)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* BASE64                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}

@@ -30,6 +30,23 @@ str_t nyx_string_dup(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* STRING                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#ifndef MG_VERSION
+typedef struct mg_str {
+    str_t buf;
+    size_t len;
+} nyx_str_t;
+#else
+typedef struct mg_str nyx_str_t;
+#endif
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_str_t nyx_str_s(STR_t s);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* HASH-32                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -271,7 +288,74 @@ bool nyx_stream_detect_closing_tag(
 /* NODE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+void nyx_mqtt_sub(
+    nyx_node_t *node,
+    nyx_str_t topic,
+    int qos
+);
+
+void nyx_mqtt_pub(
+    nyx_node_t *node,
+    nyx_str_t topic,
+    nyx_str_t message,
+    int qos,
+    bool retain
+);
+
+void nyx_tcp_pub(
+    nyx_node_t *node,
+    STR_t message
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #define NYX_PING_MS 5000
+
+#define NYX_EVENT_OPEN  0
+#define NYX_EVENT_MSG   1
+
+typedef struct nyx_stack_s nyx_stack_t;
+
+struct nyx_node_s
+{
+    nyx_str_t node_id;
+
+    STR_t tcp_url;
+    STR_t mqtt_url;
+
+    nyx_stack_t *stack;
+
+    nyx_dict_t **def_vectors;
+
+    /**/
+
+    size_t (* tcp_handler)(struct nyx_node_s *node, int event_type, size_t size, BUFF_t buff);
+
+    void (* mqtt_handler)(struct nyx_node_s *node, int event_type, nyx_str_t event_topic, nyx_str_t event_message);
+
+    /**/
+
+    bool enable_xml;
+    bool validate_xml;
+
+    int last_ping_ms;
+};
+
+void nyx_node_stack_initialize(
+    nyx_node_t *node,
+    __NULLABLE__ STR_t mqtt_username,
+    __NULLABLE__ STR_t mqtt_password,
+    int retry_ms
+);
+
+void nyx_node_stack_finalize(
+    nyx_node_t *node
+);
+
+void nyx_stack_poll(
+    nyx_node_t *node,
+    int timeout_ms
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

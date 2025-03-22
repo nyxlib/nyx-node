@@ -8,7 +8,7 @@ project(nyx_node LANGUAGES C VERSION 1.0.0)
 
 set(CMAKE_C_STANDARD 99)
 
-add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -Wno-unused-function -O3)
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -Wno-unused-function -O3)
 
 ########################################################################################################################
 
@@ -32,6 +32,7 @@ set(SOURCE_FILES
     src/nyx_node_internal.h
     #
     src/stack/mongoose.c
+    src/stack/mongoose_stack.c
     #
     src/json/json_boolean.c
     src/json/json_dict.c
@@ -56,6 +57,7 @@ set(SOURCE_FILES
     src/parsers/json.c
     src/parsers/xml.c
     #
+    src/log.c
     src/string_builder.c
     src/object.c
     src/dom.c
