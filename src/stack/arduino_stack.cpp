@@ -238,7 +238,6 @@ void nyx_node_stack_initialize(
             stack->mqtt_client->setServer(
                 ip, port
             );
-
         }
     }
 
