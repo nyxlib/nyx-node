@@ -198,7 +198,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    auto callback = [node](STR_t topic, byte *buff, unsigned int size)
+    auto mqtt_callback = [node](STR_t topic, byte *buff, unsigned int size)
     {
         nyx_str_t message = {(str_t) buff, (size_t) size};
 
@@ -231,13 +231,14 @@ void nyx_node_stack_initialize(
         {
             stack->mqtt_client = new PubSubClient();
 
+            stack->mqtt_client->setCallback(
+                mqtt_callback
+            );
+
             stack->mqtt_client->setServer(
                 ip, port
             );
 
-            stack->mqtt_client->setCallback(
-                callback
-            );
         }
     }
 
