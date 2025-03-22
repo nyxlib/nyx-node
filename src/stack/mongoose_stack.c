@@ -155,9 +155,13 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
         /* MG_EV_READ                                                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        size_t pos = node->tcp_handler(node, NYX_EVENT_MSG, connection->recv.len, connection->recv.buf);
+        size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, connection->recv.len, connection->recv.buf);
 
-        mg_iobuf_del(&connection->recv, 0, pos);
+        mg_iobuf_del(
+            &connection->recv,
+            0x00000000,
+            consumed
+        );
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

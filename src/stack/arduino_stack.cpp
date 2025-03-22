@@ -17,15 +17,39 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define RECV_BUFF_SIZE 512
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 struct nyx_stack_s
 {
-    WiFiServer *tcp_server;
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    PubSubClient *mqtt_client;
+    __NULLABLE__ WiFiServer *tcp_server;
+
+    char recv_buff[RECV_BUFF_SIZE];
+
+    size_t recv_head = 0;
+    size_t recv_tail = 0;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    __NULLABLE__ PubSubClient *mqtt_client;
 
     __NULLABLE__ STR_t mqtt_username;
     __NULLABLE__ STR_t mqtt_password;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* UTILITY                                                                                                            */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static size_t recv_size(nyx_stack_t* stack)
+{
+    return (stack->recv_head + RECV_BUFF_SIZE - stack->recv_tail) % RECV_BUFF_SIZE;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* LOGGER                                                                                                             */
@@ -115,17 +139,6 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos,
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static nyx_node_t *current_node = NULL;
-
-static void mqtt_handler(char *topic, byte *payload, unsigned int length)
-{
-    nyx_str_t message = {(str_t) payload, (size_t) length};
-
-    current_node->mqtt_handler(current_node, NYX_EVENT_MSG, nyx_str_s(topic), message);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 static bool parse_host_port(const std::string &url, IPAddress &ip, int &port, int default_port)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -185,16 +198,12 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    current_node = node;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     if(node->tcp_url != NULL)
     {
         IPAddress ip;
         int port;
 
-        if(parse_host_port(node->tcp_url, ip, port, 999))
+        if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
             stack->tcp_server = new WiFiServer(ip, port);
 
@@ -209,19 +218,23 @@ void nyx_node_stack_initialize(
         IPAddress ip;
         int port;
 
-        if(parse_host_port(node->mqtt_url, ip, port, 999))
+        if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
             stack->mqtt_client = new PubSubClient();
-
-            stack->mqtt_client->setCallback(
-                mqtt_handler
-            );
 
             stack->mqtt_client->setServer(
                 ip, port
             );
-        }
 
+            stack->mqtt_client->setCallback(
+                [node](STR_t topic, byte *buff, unsigned int size)
+                {
+                    nyx_str_t message = {(str_t) buff, (size_t) size};
+
+                    node->mqtt_handler(node, NYX_EVENT_MSG, nyx_str_s(topic), message);
+                }
+            );
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -274,9 +287,68 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
     if(stack->tcp_server != NULL)
     {
-        if(!stack->tcp_server->available())
-        {
+        WiFiClient client = stack->tcp_server->available();
 
+        if(client && client.connected())
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            while(client.available() > 0)
+            {
+                int c = client.read();
+
+                if(c >= 0)
+                {
+                    size_t next = (stack->recv_head + 1) % RECV_BUFF_SIZE;
+
+                    if(stack->recv_tail != next)
+                    {
+                        stack->recv_buff[stack->recv_head] = (char) c;
+
+                        stack->recv_head = next;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            size_t available = recv_size(stack);
+
+            if(available > 0)
+            {
+                size_t consumed = 0;
+                size_t pos = stack->recv_tail;
+
+                while(available > 0)
+                {
+                    size_t len = (stack->recv_head > pos)
+                        ? stack->recv_head - pos
+                        : RECV_BUFF_SIZE - pos
+                    ;
+
+                    if(len > available)
+                    {
+                        len = available;
+                    }
+
+                    size_t c = node->tcp_handler(node, NYX_EVENT_MSG, len, stack->recv_buff + pos);
+
+                    consumed += c;
+                    if (c < len) break; pos = (pos + c) % RECV_BUFF_SIZE;
+                    available -= c;
+                }
+
+                stack->recv_tail = (consumed <= recv_size(stack))
+                    ? (stack->recv_tail + consumed) % RECV_BUFF_SIZE
+                    : stack->recv_head
+                ;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
     }
 
