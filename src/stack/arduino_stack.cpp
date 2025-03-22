@@ -316,12 +316,13 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t available = recv_size(stack);
+            size_t initial_available = recv_size(stack);
 
-            if(available > 0)
+            if(initial_available > 0)
             {
-                size_t consumed = 0;
                 size_t pos = stack->recv_tail;
+                size_t consumed = 0x000000000000000;
+                size_t available = initial_available;
 
                 while(available > 0)
                 {
@@ -342,7 +343,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
                     available -= c;
                 }
 
-                stack->recv_tail = (consumed <= recv_size(stack))
+                stack->recv_tail = (consumed <= initial_available)
                     ? (stack->recv_tail + consumed) % RECV_BUFF_SIZE
                     : stack->recv_head
                 ;
