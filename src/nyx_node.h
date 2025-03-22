@@ -136,9 +136,17 @@ extern buff_t nyx_log_args;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line);
+void nyx_log_prefix(
+    nyx_log_level_t level,
+    STR_t file,
+    STR_t func,
+    int line
+);
 
-void nyx_log(const char *fmt, ...);
+void nyx_log(
+    const char *fmt,
+    ...
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
