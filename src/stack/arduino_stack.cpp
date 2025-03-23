@@ -19,7 +19,7 @@
 
 #define MAX_TCP_CLIENTS 10
 
-#define RECV_BUFF_SIZE 512
+#define RECV_BUFF_SIZE 512U
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -341,13 +341,23 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::tcp_client_s &client)
             /* MOVE DATA                                                                                              */
             /*--------------------------------------------------------------------------------------------------------*/
 
-            client.recv_size = client.recv_size - consumed;
-
-            memmove(client.recv_buff, static_cast<uint8_t *>(client.recv_buff) + consumed, client.recv_size);
+            memmove(client.recv_buff, static_cast<uint8_t *>(client.recv_buff) + consumed, client.recv_size = client.recv_size - consumed);
 
             /*--------------------------------------------------------------------------------------------------------*/
-            /* ADJUST BUFFER                                                                                          */
+            /* SHRINK BUFFER                                                                                          */
             /*--------------------------------------------------------------------------------------------------------*/
+
+            const size_t shrink_threshold = client.recv_capa / 2;
+
+            if (client.recv_capa > RECV_BUFF_SIZE && client.recv_size < shrink_threshold)
+            {
+                size_t new_capa = max(RECV_BUFF_SIZE, client.recv_size + (client.recv_size / 4));
+
+                str_t smaller = static_cast<str_t>(nyx_memory_realloc(client.recv_buff, new_capa));
+
+                client.recv_buff = smaller;
+                client.recv_capa = new_capa;
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
