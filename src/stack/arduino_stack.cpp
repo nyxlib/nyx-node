@@ -2,7 +2,8 @@
 #if defined(ARDUINO)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include <string.h>
+#include <string>
+#include <stdlib.h>
 
 #ifndef ESP8266
 #  include <WiFi.h>
@@ -17,6 +18,8 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define MAX_TCP_CLIENTS 10
+
 #define RECV_BUFF_SIZE 512
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -25,19 +28,27 @@ struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NULLABLE__ WiFiServer *tcp_server;
-
-    char recv_buff[RECV_BUFF_SIZE];
-
-    size_t recv_head = 0;
-    size_t recv_tail = 0;
+    WiFiServer tcp_server;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NULLABLE__ PubSubClient *mqtt_client;
+    struct tcp_client_s
+    {
+        WiFiClient tcp_client;
 
-    __NULLABLE__ STR_t mqtt_username;
-    __NULLABLE__ STR_t mqtt_password;
+        char recv_buff[RECV_BUFF_SIZE];
+
+        size_t recv_head = 0;
+        size_t recv_tail = 0;
+
+    } clients[MAX_TCP_CLIENTS];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    PubSubClient mqtt_client;
+
+    __NULLABLE__ STR_t mqtt_username = NULL;
+    __NULLABLE__ STR_t mqtt_password = NULL;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -45,14 +56,14 @@ struct nyx_stack_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+/*
 extern "C" int putchar(int c)
 {
     Serial.write((char) c);
 
     return c;
 }
-
+*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
@@ -109,9 +120,16 @@ void nyx_log(const char *fmt, ...)
 
 void nyx_tcp_pub(nyx_node_t *node, STR_t message)
 {
-    if(node->stack->tcp_server != NULL)
+    auto clients = node->stack->clients;
+
+    for(int i = 0; i < MAX_TCP_CLIENTS; i++)
     {
-        node->stack->tcp_server->write(message);
+        WiFiClient tcp_client = clients[i].tcp_client;
+
+        if(tcp_client && tcp_client.connected())
+        {
+            tcp_client.write(message, strlen(message));
+        }
     }
 }
 
@@ -119,9 +137,9 @@ void nyx_tcp_pub(nyx_node_t *node, STR_t message)
 
 void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 {
-    if(node->stack->mqtt_client != NULL)
+    if(node->mqtt_url != NULL && node->stack->mqtt_client.connected())
     {
-        node->stack->mqtt_client->subscribe(topic.buf, qos);
+        node->stack->mqtt_client.subscribe(topic.buf, qos);
     }
 }
 
@@ -129,9 +147,9 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 
 void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos, bool retain)
 {
-    if(node->stack->mqtt_client != NULL)
+    if(node->mqtt_url != NULL && node->stack->mqtt_client.connected())
     {
-        node->stack->mqtt_client->publish(topic.buf, (const uint8_t *) message.buf, (unsigned int) message.len, retain);
+        node->stack->mqtt_client.publish(topic.buf, (const uint8_t *) message.buf, (unsigned int) message.len, retain);
     }
 }
 
@@ -155,7 +173,7 @@ static bool parse_host_port(const std::string &url, IPAddress &ip, int &port, in
     else
     {
         host = url.substr(0, colon);
-        port = std::stoi(url.substr(colon + 1));
+        port = atoi(url.substr(colon + 1).c_str());
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -189,8 +207,6 @@ void nyx_node_stack_initialize(
 
     nyx_stack_t *stack = node->stack = (nyx_stack_t *) nyx_memory_alloc(sizeof(nyx_stack_t));
 
-    memset(stack, 0, sizeof(nyx_stack_t));
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     stack->mqtt_username = mqtt_username;
@@ -214,9 +230,9 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
-            stack->tcp_server = new WiFiServer(ip, port);
+            stack->tcp_server = WiFiServer(ip, port);
 
-            stack->tcp_server->begin();
+            stack->tcp_server.begin();
         }
     }
 
@@ -229,13 +245,11 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            stack->mqtt_client = new PubSubClient();
-
-            stack->mqtt_client->setCallback(
+            stack->mqtt_client.setCallback(
                 mqtt_callback
             );
 
-            stack->mqtt_client->setServer(
+            stack->mqtt_client.setServer(
                 ip, port
             );
         }
@@ -249,29 +263,26 @@ void nyx_node_stack_initialize(
 void nyx_node_stack_finalize(nyx_node_t *node)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* TCP                                                                                                            */
+    /* FINALIZE TCP                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->stack->tcp_server != NULL)
-    {
-        node->stack->tcp_server->/**/close/**/();
+    auto clients = node->stack->clients;
 
-        delete node->stack->tcp_server;
+    for(int i = 0; i < MAX_TCP_CLIENTS; i++)
+    {
+        clients[i].tcp_client.stop();
     }
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* MQTT                                                                                                           */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(node->stack->mqtt_client != NULL)
-    {
-        node->stack->mqtt_client->disconnect();
-
-        delete node->stack->mqtt_client;
-    }
+    node->stack->tcp_server.stop();
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* STACK                                                                                                          */
+    /* FINALIZE MQTT                                                                                                  */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    node->stack->mqtt_client.disconnect();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* FINALIZE STACK                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_memory_free(node->stack);
@@ -283,93 +294,130 @@ void nyx_node_stack_finalize(nyx_node_t *node)
 
 void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 {
-    nyx_stack_t *stack = node->stack;
+    auto stack = node->stack;
+
+    auto clients = stack->clients;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(stack->tcp_server != NULL)
+    if(node->tcp_url != NULL)
     {
-        WiFiClient client = stack->tcp_server->available();
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* REGISTER CLIENTS                                                                                           */
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(client && client.connected())
+        WiFiClient new_client = stack->tcp_server.accept();
+
+        if(new_client && new_client.connected())
         {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            while(client.available() > 0)
+            for(int i = 0; i < MAX_TCP_CLIENTS; ++i)
             {
-                int c = client.read();
+                auto &client = clients[i];
 
-                if(c >= 0)
+                if(!client.tcp_client || !client.tcp_client.connected())
                 {
-                    size_t next = (stack->recv_head + 1) % RECV_BUFF_SIZE;
+                    client.tcp_client = new_client;
 
-                    if(stack->recv_tail != next)
-                    {
-                        stack->recv_buff[stack->recv_head] = (char) c;
+                    client.recv_head = 0;
+                    client.recv_tail = 0;
 
-                        stack->recv_head = next;
-                    }
-                }
-                else
-                {
-                    break;
+                    goto __ok;
                 }
             }
 
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            size_t initial_available = (stack->recv_head + RECV_BUFF_SIZE - stack->recv_tail) % RECV_BUFF_SIZE;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if(initial_available > 0)
-            {
-                size_t pos = stack->recv_tail;
-                size_t consumed = 0x000000000000000;
-                size_t available = initial_available;
-
-                while(available > 0)
-                {
-                    size_t len = (stack->recv_head > pos)
-                        ? stack->recv_head - pos
-                        : RECV_BUFF_SIZE - pos
-                    ;
-
-                    if(len > available)
-                    {
-                        len = available;
-                    }
-
-                    size_t c = node->tcp_handler(node, NYX_EVENT_MSG, len, stack->recv_buff + pos);
-
-                    consumed += c;
-                    if (c < len) break; pos = (pos + c) % RECV_BUFF_SIZE;
-                    available -= c;
-                }
-
-                stack->recv_tail = (consumed <= initial_available)
-                    ? (stack->recv_tail + consumed) % RECV_BUFF_SIZE
-                    : stack->recv_head
-                ;
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
+            new_client.stop();
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* RECIEVE DATA                                                                                               */
+        /*------------------------------------------------------------------------------------------------------------*/
+__ok:
+        for(int i = 0; i < MAX_TCP_CLIENTS; i++)
+        {
+            auto &client = clients[i];
+
+            if(client.tcp_client && client.tcp_client.connected())
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                while(client.tcp_client.available() > 0)
+                {
+                    int c = client.tcp_client.read();
+
+                    if(c >= 0)
+                    {
+                        size_t next = (client.recv_head + 1) % RECV_BUFF_SIZE;
+
+                        if(client.recv_tail != next)
+                        {
+                            client.recv_buff[client.recv_head] = (char) c;
+
+                            client.recv_head = next;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                size_t initial_available = (client.recv_head + RECV_BUFF_SIZE - client.recv_tail) % RECV_BUFF_SIZE;
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(initial_available > 0)
+                {
+                    size_t pos = client.recv_tail;
+                    size_t consumed = 0x0000000000000;
+                    size_t available = initial_available;
+
+                    while(available > 0)
+                    {
+                        size_t len = (client.recv_head > pos)
+                            ? client.recv_head - pos
+                            : RECV_BUFF_SIZE - pos
+                        ;
+
+                        if(len > available)
+                        {
+                            len = available;
+                        }
+
+                        size_t c = node->tcp_handler(node, NYX_EVENT_MSG, len, client.recv_buff + pos);
+
+                        consumed += c;
+                        if(c < len) { break; } pos = (pos + c) % RECV_BUFF_SIZE;
+                        available -= c;
+                    }
+
+                    client.recv_tail = (consumed <= initial_available)
+                        ? (client.recv_tail + consumed) % RECV_BUFF_SIZE
+                        : (client.recv_head)
+                    ;
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* MQTT                                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(stack->mqtt_client)
+    if(node->mqtt_url != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!stack->mqtt_client->connected())
+        if(!stack->mqtt_client.connected())
         {
-            if (stack->mqtt_client->connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
+            if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
                 node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
             }
@@ -383,7 +431,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        stack->mqtt_client->loop();
+        stack->mqtt_client.loop();
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
