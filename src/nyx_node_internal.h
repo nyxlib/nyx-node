@@ -298,33 +298,16 @@ bool nyx_stream_detect_closing_tag(
 /* NODE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_sub(
-    nyx_node_t *node,
-    nyx_str_t topic,
-    int qos
-);
-
-void nyx_mqtt_pub(
-    nyx_node_t *node,
-    nyx_str_t topic,
-    nyx_str_t message,
-    int qos,
-    bool retain
-);
-
-void nyx_tcp_pub(
-    nyx_node_t *node,
-    STR_t message
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define NYX_PING_MS 5000
-
 #define NYX_EVENT_OPEN  0
 #define NYX_EVENT_MSG   1
 
+#define NYX_PING_MS 5000
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 typedef struct nyx_stack_s nyx_stack_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 struct nyx_node_s
 {
@@ -350,6 +333,29 @@ struct nyx_node_s
 
     int last_ping_ms;
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_tcp_pub(
+    nyx_node_t *node,
+    STR_t message
+);
+
+void nyx_mqtt_sub(
+    nyx_node_t *node,
+    nyx_str_t topic,
+    int qos
+);
+
+void nyx_mqtt_pub(
+    nyx_node_t *node,
+    nyx_str_t topic,
+    nyx_str_t message,
+    int qos,
+    bool retain
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_node_stack_initialize(
     nyx_node_t *node,

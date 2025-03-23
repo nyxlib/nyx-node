@@ -33,7 +33,6 @@ set(SOURCE_FILES
     #
     src/stack/mongoose.c
     src/stack/mongoose_stack.c
-    src/stack/arduino_stack.cpp
     #
     src/json/json_boolean.c
     src/json/json_dict.c
