@@ -23,12 +23,16 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+WiFiClient wifi_client;
+
+WiFiServer tcp_server;
+
+PubSubClient mqtt_client(wifi_client);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 struct nyx_stack_s
 {
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    WiFiServer tcp_server;
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     struct tcp_client_s
@@ -42,8 +46,6 @@ struct nyx_stack_s
     } clients[MAX_TCP_CLIENTS];
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    PubSubClient mqtt_client;
 
     __NULLABLE__ STR_t mqtt_username = nullptr;
     __NULLABLE__ STR_t mqtt_password = nullptr;
@@ -130,9 +132,9 @@ void nyx_tcp_pub(nyx_node_t *node, STR_t message)
 
 void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 {
-    if(node->mqtt_url != NULL && node->stack->mqtt_client.connected())
+    if(node->mqtt_url != NULL && mqtt_client.connected())
     {
-        node->stack->mqtt_client.subscribe(topic.buf, qos);
+        mqtt_client.subscribe(topic.buf, qos);
     }
 }
 
@@ -140,9 +142,9 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 
 void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos, bool retain)
 {
-    if(node->mqtt_url != NULL && node->stack->mqtt_client.connected())
+    if(node->mqtt_url != NULL && mqtt_client.connected())
     {
-        node->stack->mqtt_client.publish(topic.buf, reinterpret_cast<uint8_t *>(message.buf), reinterpret_cast<unsigned int>(message.len), retain);
+        mqtt_client.publish(topic.buf, reinterpret_cast<uint8_t *>(message.buf), reinterpret_cast<unsigned int>(message.len), retain);
     }
 }
 
@@ -215,7 +217,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL && node->tcp_url[0] != '\0')
+    if(node->tcp_url != NULL)
     {
         IPAddress ip;
         int port;
@@ -224,15 +226,15 @@ void nyx_node_stack_initialize(
         {
             NYX_INFO(("TCP ip: %s, port: %d", ip.toString(), port));
 
-            stack->tcp_server = WiFiServer(ip, port);
+            tcp_server = WiFiServer(ip, port);
 
-            stack->tcp_server.begin();
+            tcp_server.begin();
         }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
+    if(node->mqtt_url != NULL)
     {
         IPAddress ip;
         int port;
@@ -241,11 +243,11 @@ void nyx_node_stack_initialize(
         {
             NYX_INFO(("MQTT ip: %s, port: %d", ip.toString(), port));
 
-            stack->mqtt_client.setCallback(
+            mqtt_client.setCallback(
                 mqtt_callback
             );
 
-            stack->mqtt_client.setServer(
+            mqtt_client.setServer(
                 ip, port
             );
         }
@@ -273,13 +275,13 @@ void nyx_node_stack_finalize(nyx_node_t *node)
         );
     }
 
-    node->stack->tcp_server.stop();
+    tcp_server.stop();
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* FINALIZE MQTT                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->stack->mqtt_client.disconnect();
+    mqtt_client.disconnect();
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* FINALIZE STACK                                                                                                 */
@@ -388,13 +390,13 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL && node->tcp_url[0] != '\0')
+    if(node->tcp_url != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* REGISTER CLIENTS                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        WiFiClient new_client = stack->tcp_server.accept();
+        WiFiClient new_client = tcp_server.accept();
 
         if(new_client && new_client.connected())
         {
@@ -439,13 +441,13 @@ __ok:
     /* MQTT                                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
+    if(node->mqtt_url != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!stack->mqtt_client.connected())
+        if(!mqtt_client.connected())
         {
-            if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
+            if(mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
                 node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
             }
@@ -459,7 +461,7 @@ __ok:
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        stack->mqtt_client.loop();
+        mqtt_client.loop();
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
