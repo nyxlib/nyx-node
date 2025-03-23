@@ -4,14 +4,14 @@
 
 #include <string>
 
+#include <Arduino.h>
+#include <PubSubClient.h>
+
 #ifndef ESP8266
 #  include <WiFi.h>
 #else
 #  include <ESP8266WiFi.h>
 #endif
-
-#include <Arduino.h>
-#include <PubSubClient.h>
 
 #include "../nyx_node_internal.h"
 
