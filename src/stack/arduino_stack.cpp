@@ -155,15 +155,17 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos,
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool parse_host_port(const std::string &url, IPAddress &ip, int &port, int default_port)
+static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, int default_port)
 {
+    std::string url = _url;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t proto_sep = hostport.find("://");
+    size_t proto_sep = url.find("://");
 
     if(proto_sep != std::string::npos)
     {
-        hostport = hostport.substr(proto_sep + 3);
+        url = url.substr(proto_sep + 3);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -225,7 +227,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
-            NYX_INFO(("TCP - %s:%d", ip.toString(), port));
+            NYX_INFO(("TCP ip: %s, port: %d", ip.toString(), port));
 
             stack->tcp_server = WiFiServer(ip, port);
 
@@ -242,7 +244,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            NYX_INFO(("MQTT - %s:%d", ip.toString(), port));
+            NYX_INFO(("MQTT ip: %s, port: %d", ip.toString(), port));
 
             stack->mqtt_client.setCallback(
                 mqtt_callback
