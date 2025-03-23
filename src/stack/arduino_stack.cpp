@@ -159,6 +159,15 @@ static bool parse_host_port(const std::string &url, IPAddress &ip, int &port, in
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    size_t proto_sep = hostport.find("://");
+
+    if(proto_sep != std::string::npos)
+    {
+        hostport = hostport.substr(proto_sep + 3);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     std::string host;
 
     size_t colon = url.find(':');
