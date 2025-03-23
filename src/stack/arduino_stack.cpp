@@ -3,7 +3,6 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <string>
-#include <stdlib.h>
 
 #ifndef ESP8266
 #  include <WiFi.h>
@@ -36,10 +35,9 @@ struct nyx_stack_s
     {
         WiFiClient tcp_client;
 
-        char recv_buff[RECV_BUFF_SIZE];
-
-        size_t recv_head = 0;
-        size_t recv_tail = 0;
+        size_t recv_size = 0x00000;
+        buff_t recv_buff = nullptr;
+        size_t recv_capa = 0x00000;
 
     } clients[MAX_TCP_CLIENTS];
 
@@ -47,8 +45,8 @@ struct nyx_stack_s
 
     PubSubClient mqtt_client;
 
-    __NULLABLE__ STR_t mqtt_username = NULL;
-    __NULLABLE__ STR_t mqtt_password = NULL;
+    __NULLABLE__ STR_t mqtt_username = nullptr;
+    __NULLABLE__ STR_t mqtt_password = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -149,7 +147,7 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos,
 {
     if(node->mqtt_url != NULL && node->stack->mqtt_client.connected())
     {
-        node->stack->mqtt_client.publish(topic.buf, (const uint8_t *) message.buf, (unsigned int) message.len, retain);
+        node->stack->mqtt_client.publish(topic.buf, reinterpret_cast<uint8_t *>(message.buf), reinterpret_cast<unsigned int>(message.len), retain);
     }
 }
 
@@ -178,21 +176,9 @@ static bool parse_host_port(const std::string &url, IPAddress &ip, int &port, in
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(ip.fromString(host.c_str()))
-    {
-        return true;
-    }
+    return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(WiFi.hostByName(host.c_str(), ip) == 1)
-    {
-        return true;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -205,7 +191,7 @@ void nyx_node_stack_initialize(
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_stack_t *stack = node->stack = (nyx_stack_t *) nyx_memory_alloc(sizeof(nyx_stack_t));
+    nyx_stack_t *stack = node->stack = static_cast<nyx_stack_t *>(nyx_memory_alloc(sizeof(nyx_stack_t)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -216,7 +202,7 @@ void nyx_node_stack_initialize(
 
     auto mqtt_callback = [node](STR_t topic, byte *buff, unsigned int size)
     {
-        nyx_str_t message = {(str_t) buff, (size_t) size};
+        nyx_str_t message = {reinterpret_cast<str_t>(buff), reinterpret_cast<size_t>(size)};
 
         node->mqtt_handler(node, NYX_EVENT_MSG, nyx_str_s(topic), message);
     };
@@ -271,6 +257,10 @@ void nyx_node_stack_finalize(nyx_node_t *node)
     for(int i = 0; i < MAX_TCP_CLIENTS; i++)
     {
         clients[i].tcp_client.stop();
+
+        nyx_memory_free(
+            clients[i].recv_buff
+        );
     }
 
     node->stack->tcp_server.stop();
@@ -288,6 +278,82 @@ void nyx_node_stack_finalize(nyx_node_t *node)
     nyx_memory_free(node->stack);
 
     /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void read_data(nyx_stack_s::tcp_client_s &client)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    size_t available = client.tcp_client.available();
+
+    if(available == 0)
+    {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    size_t required = client.recv_size + available;
+
+    if(required > client.recv_capa)
+    {
+        size_t new_capa = max(required, client.recv_capa + RECV_BUFF_SIZE);
+
+        str_t new_buff = static_cast<str_t>(nyx_memory_realloc(client.recv_buff, new_capa));
+
+        client.recv_buff = new_buff;
+        client.recv_capa = new_capa;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    client.recv_size += static_cast<size_t>(client.tcp_client.read(static_cast<uint8_t *>(client.recv_buff) + client.recv_size, available));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void consume_data(nyx_node_t *node, nyx_stack_s::tcp_client_s &client)
+{
+    if(client.recv_size > 0)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* COMSUME DATA                                                                                               */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, client.recv_size, client.recv_buff);
+
+        if(consumed > client.recv_size)
+        {
+            NYX_ERROR(("Internal error"));
+
+            return;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(consumed > 0)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* MOVE DATA                                                                                              */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            client.recv_size = client.recv_size - consumed;
+
+            memmove(client.recv_buff, static_cast<uint8_t *>(client.recv_buff) + consumed, client.recv_size);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* ADJUST BUFFER                                                                                          */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -320,8 +386,8 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
                 {
                     client.tcp_client = new_client;
 
-                    client.recv_head = 0;
-                    client.recv_tail = 0;
+                    client.recv_size = 0;
+                    client.recv_capa = 0;
 
                     goto __ok;
                 }
@@ -340,67 +406,9 @@ __ok:
 
             if(client.tcp_client && client.tcp_client.connected())
             {
-                /*----------------------------------------------------------------------------------------------------*/
+                read_data(client);
 
-                while(client.tcp_client.available() > 0)
-                {
-                    int c = client.tcp_client.read();
-
-                    if(c >= 0)
-                    {
-                        size_t next = (client.recv_head + 1) % RECV_BUFF_SIZE;
-
-                        if(client.recv_tail != next)
-                        {
-                            client.recv_buff[client.recv_head] = (char) c;
-
-                            client.recv_head = next;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                size_t initial_available = (client.recv_head + RECV_BUFF_SIZE - client.recv_tail) % RECV_BUFF_SIZE;
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                if(initial_available > 0)
-                {
-                    size_t pos = client.recv_tail;
-                    size_t consumed = 0x0000000000000;
-                    size_t available = initial_available;
-
-                    while(available > 0)
-                    {
-                        size_t len = (client.recv_head > pos)
-                            ? client.recv_head - pos
-                            : RECV_BUFF_SIZE - pos
-                        ;
-
-                        if(len > available)
-                        {
-                            len = available;
-                        }
-
-                        size_t c = node->tcp_handler(node, NYX_EVENT_MSG, len, client.recv_buff + pos);
-
-                        consumed += c;
-                        if(c < len) { break; } pos = (pos + c) % RECV_BUFF_SIZE;
-                        available -= c;
-                    }
-
-                    client.recv_tail = (consumed <= initial_available)
-                        ? (client.recv_tail + consumed) % RECV_BUFF_SIZE
-                        : (client.recv_head)
-                    ;
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
+                consume_data(node, client);
             }
         }
 
