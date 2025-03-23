@@ -216,6 +216,8 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
+            NYX_INFO(("TCP - %s:%d", ip.toString(), port));
+
             stack->tcp_server = WiFiServer(ip, port);
 
             stack->tcp_server.begin();
@@ -231,6 +233,8 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
+            NYX_INFO(("MQTT - %s:%d", ip.toString(), port));
+
             stack->mqtt_client.setCallback(
                 mqtt_callback
             );
