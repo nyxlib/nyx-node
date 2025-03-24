@@ -6,12 +6,12 @@
 #include <PubSubClient.h>
 
 #if defined(ARDUINO_ARCH_ESP32)
+#  define HAVE_WIFI
 #  include <WiFi.h>
 #elif defined(ARDUINO_ARCH_ESP8266)
+#  define HAVE_WIFI
 #  include <ESP8266WiFi.h>
 #else
-#  define ETHERNET
-
 #  include <Dns.h>
 #  include <Ethernet.h>
 
@@ -28,7 +28,7 @@ static DNSClient ethDNS;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef ETHERNET
+#ifdef HAVE_WIFI
 static WiFiClient tcpClient;
 
 static WiFiServer tcpServer(0);
@@ -48,7 +48,7 @@ struct nyx_stack_s
 
     struct TCPClient
     {
-        #ifndef ETHERNET
+        #ifdef HAVE_WIFI
         WiFiClient tcp_client;
         #else
         EthernetClient tcp_client;
@@ -208,7 +208,7 @@ static bool parse_host_port(const String &_url, IPAddress &ip, int &port, int de
     /* RESOLVE DNS DOMAIN                                                                                             */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    #ifndef ETHERNET
+    #ifdef HAVE_WIFI
     return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
     #else
     return ip.fromString(host.c_str()) || ethDNS.getHostByName(host.c_str(), ip) == 1;
@@ -254,7 +254,7 @@ void nyx_node_stack_initialize(
         {
             NYX_INFO(("TCP ip: %s, port: %d:%d:%d:%d", ip[0], ip[1], ip[2], ip[3], port));
 
-            #ifndef ETHERNET
+            #ifdef HAVE_WIFI
             tcpServer = WiFiServer(ip, port);
             #else
             tcpServer = EthernetServer(/**/ port);
@@ -410,7 +410,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
         /* CLEANUP OLD CLIENTS & REGISTER NEW CLIENTS                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        #ifndef ETHERNET
+        #ifdef HAVE_WIFI
         WiFiClient new_client = tcpServer.accept();
         #else
         EthernetClient new_client = tcpServer.accept();
