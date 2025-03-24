@@ -15,7 +15,7 @@
 #  include <Dns.h>
 #  include <Ethernet.h>
 
-static DNSClient ethDNS;
+static DNSClient EthDNS;
 #endif
 
 #include "../nyx_node_internal.h"
@@ -211,7 +211,7 @@ static bool parse_host_port(const String &_url, IPAddress &ip, int &port, int de
     #ifdef HAVE_WIFI
     return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
     #else
-    return ip.fromString(host.c_str()) || ethDNS.getHostByName(host.c_str(), ip) == 1;
+    return ip.fromString(host.c_str()) || EthDNS.getHostByName(host.c_str(), ip) == 1;
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -252,7 +252,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
-            NYX_INFO(("TCP ip: %s, port: %d:%d:%d:%d", ip[0], ip[1], ip[2], ip[3], port));
+            NYX_INFO(("TCP ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port));
 
             #ifdef HAVE_WIFI
             tcpServer = WiFiServer(ip, port);
@@ -277,12 +277,12 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            NYX_INFO(("MQTT ip: %s, port: %d:%d:%d:%d", ip[0], ip[1], ip[2], ip[3], port));
-
+            NYX_INFO(("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port));
+/*
             mqttClient.setCallback(
                 mqtt_callback
             );
-
+*/
             mqttClient.setServer(
                 ip, port
             );
