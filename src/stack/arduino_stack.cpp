@@ -17,17 +17,17 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define MAX_TCP_CLIENTS 10
+#define TCP_MAX_CLIENTS 10
 
-#define RECV_BUFF_SIZE 512U
+#define TCP_RECV_BUFF_SIZE 512U
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-WiFiClient wifi_client;
+static WiFiClient tcpClient;
 
-WiFiServer tcp_server;
+static WiFiServer tcpServer;
 
-PubSubClient mqtt_client(wifi_client);
+static PubSubClient mqttClient(tcpClient);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -35,15 +35,15 @@ struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    struct tcp_client_s
+    struct TCPClient
     {
         WiFiClient tcp_client;
 
-        size_t recv_size = 0x00000;
-        buff_t recv_buff = nullptr;
-        size_t recv_capa = 0x00000;
+        __ZEROABLE__ size_t recv_size = 0x00000;
+        __NULLABLE__ buff_t recv_buff = nullptr;
+        __ZEROABLE__ size_t recv_capa = 0x00000;
 
-    } clients[MAX_TCP_CLIENTS];
+    } clients[TCP_MAX_CLIENTS];
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -115,15 +115,18 @@ void nyx_log(const char *fmt, ...)
 
 void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
-    auto clients = node->stack->clients;
-
-    for(int i = 0; i < MAX_TCP_CLIENTS; i++)
+    if(node->tcp_url != NULL)
     {
-        WiFiClient tcp_client = clients[i].tcp_client;
+        auto clients = node->stack->clients;
 
-        if(tcp_client && tcp_client.connected())
+        for(int i = 0; i < TCP_MAX_CLIENTS; i++)
         {
-            tcp_client.write(message.buf, message.len);
+            auto &tcp_client = clients[i].tcp_client;
+
+            if(tcp_client)
+            {
+                tcp_client.write(message.buf, message.len);
+            }
         }
     }
 }
@@ -132,9 +135,9 @@ void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 
 void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 {
-    if(node->mqtt_url != NULL && mqtt_client.connected())
+    if(node->mqtt_url != NULL && mqttClient.connected())
     {
-        mqtt_client.subscribe(topic.buf, qos);
+        mqttClient.subscribe(topic.buf, qos);
     }
 }
 
@@ -142,9 +145,9 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 
 void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos, bool retain)
 {
-    if(node->mqtt_url != NULL && mqtt_client.connected())
+    if(node->mqtt_url != NULL && mqttClient.connected())
     {
-        mqtt_client.publish(topic.buf, reinterpret_cast<uint8_t *>(message.buf), reinterpret_cast<unsigned int>(message.len), retain);
+        mqttClient.publish(topic.buf, reinterpret_cast<uint8_t *>(message.buf), reinterpret_cast<unsigned int>(message.len), retain);
     }
 }
 
@@ -171,15 +174,15 @@ static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, i
 
     size_t colon = url.find(':');
 
-    if(colon == std::string::npos)
-    {
-        host = url;
-        port = default_port;
-    }
-    else
+    if(colon != std::string::npos)
     {
         host = url.substr(0, colon);
         port = atoi(url.substr(colon + 1).c_str());
+    }
+    else
+    {
+        host = url;
+        port = default_port;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -226,9 +229,13 @@ void nyx_node_stack_initialize(
         {
             NYX_INFO(("TCP ip: %s, port: %d", ip.toString(), port));
 
-            tcp_server = WiFiServer(ip, port);
+            tcpServer = WiFiServer(ip, port);
 
-            tcp_server.begin();
+            tcpServer.begin();
+        }
+        else
+        {
+            node->tcp_url = nullptr;
         }
     }
 
@@ -243,13 +250,17 @@ void nyx_node_stack_initialize(
         {
             NYX_INFO(("MQTT ip: %s, port: %d", ip.toString(), port));
 
-            mqtt_client.setCallback(
+            mqttClient.setCallback(
                 mqtt_callback
             );
 
-            mqtt_client.setServer(
+            mqttClient.setServer(
                 ip, port
             );
+        }
+        else
+        {
+            node->mqtt_url = nullptr;
         }
     }
 
@@ -268,7 +279,7 @@ void nyx_node_stack_finalize(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void read_data(nyx_stack_s::tcp_client_s &client)
+static void read_data(nyx_stack_s::TCPClient &client)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -285,7 +296,7 @@ static void read_data(nyx_stack_s::tcp_client_s &client)
 
     if(required > client.recv_capa)
     {
-        size_t new_capa = max(required, client.recv_capa + RECV_BUFF_SIZE);
+        size_t new_capa = max(required, client.recv_capa + TCP_RECV_BUFF_SIZE);
 
         buff_t new_buff = nyx_memory_realloc(client.recv_buff, new_capa);
 
@@ -302,7 +313,7 @@ static void read_data(nyx_stack_s::tcp_client_s &client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void consume_data(nyx_node_t *node, nyx_stack_s::tcp_client_s &client)
+static void consume_data(nyx_node_t *node, nyx_stack_s::TCPClient &client)
 {
     if(client.recv_size > 0)
     {
@@ -335,9 +346,9 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::tcp_client_s &client)
 
             const size_t shrink_threshold = client.recv_capa / 2;
 
-            if (client.recv_capa > RECV_BUFF_SIZE && client.recv_size < shrink_threshold)
+            if(client.recv_capa > TCP_RECV_BUFF_SIZE && client.recv_size < shrink_threshold)
             {
-                size_t new_capa = max(RECV_BUFF_SIZE, (client.recv_size * 5) / 4);
+                size_t new_capa = max(TCP_RECV_BUFF_SIZE, (client.recv_size * 5) / 4);
 
                 buff_t new_buff = nyx_memory_realloc(client.recv_buff, new_capa);
 
@@ -367,43 +378,60 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
     if(node->tcp_url != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        /* REGISTER CLIENTS                                                                                           */
+        /* CLEANUP OLD CLIENTS & REGISTER NEW CLIENTS                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        WiFiClient new_client = tcp_server.accept();
+        WiFiClient new_client = tcpServer.accept();
 
-        if(new_client && new_client.connected())
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        bool accepted = false;
+
+        for(int i = 0; i < TCP_MAX_CLIENTS; ++i)
         {
-            for(int i = 0; i < MAX_TCP_CLIENTS; ++i)
+            auto &client = clients[i];
+
+            if(!client.tcp_client)
             {
-                auto &client = clients[i];
+                /*----------------------------------------------------------------------------------------------------*/
 
-                if(!client.tcp_client || !client.tcp_client.connected())
+                client.tcp_client.stop();
+
+                nyx_memory_free(client.recv_buff);
+
+                client.recv_size = 0x00000;
+                client.recv_buff = nullptr;
+                client.recv_capa = 0x00000;
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(!accepted && new_client)
                 {
-                    nyx_memory_free(client.recv_buff);
-
                     client.tcp_client = new_client;
 
-                    client.recv_size = 0x00000;
-                    client.recv_buff = nullptr;
-                    client.recv_capa = 0x00000;
-
-                    goto __ok;
+                    accepted = true;
                 }
-            }
 
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(!accepted && new_client)
+        {
             new_client.stop();
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* RECIEVE DATA                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
-__ok:
-        for(int i = 0; i < MAX_TCP_CLIENTS; i++)
+
+        for(int i = 0; i < TCP_MAX_CLIENTS; i++)
         {
             auto &client = clients[i];
 
-            if(client.tcp_client && client.tcp_client.connected())
+            if(client.tcp_client)
             {
                 read_data(client);
 
@@ -422,9 +450,9 @@ __ok:
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!mqtt_client.connected())
+        if(!mqttClient.connected())
         {
-            if(mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
+            if(mqttClient.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
                 node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
             }
@@ -438,7 +466,7 @@ __ok:
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        mqtt_client.loop();
+        mqttClient.loop();
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
