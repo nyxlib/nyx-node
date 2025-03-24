@@ -300,7 +300,7 @@ void nyx_node_stack_finalize(nyx_node_t *node)
 {
     for(;;)
     {
-        exit(0);
+        delay(1);
     }
 }
 
