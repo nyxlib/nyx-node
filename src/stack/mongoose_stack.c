@@ -74,7 +74,7 @@ void nyx_log(const char *fmt, ...)
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_tcp_pub(nyx_node_t *node, STR_t message)
+void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
     for(struct mg_connection *connection = node->stack->mgr.conns; connection != NULL; connection = connection->next)
     {
@@ -82,7 +82,7 @@ void nyx_tcp_pub(nyx_node_t *node, STR_t message)
            &&
            connection != node->stack->mqtt_connection
         ) {
-            mg_send(connection, message, strlen(message));
+            mg_send(connection, message.buf, message.len);
         }
     }
 }

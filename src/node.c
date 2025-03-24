@@ -42,7 +42,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
             str_t xml = nyx_xmldoc_to_string(xmldoc);
             nyx_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml), 1, false);
-            nyx_tcp_pub(node, xml);
+            nyx_tcp_pub(node, nyx_str_s(xml));
             nyx_memory_free(xml);
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -57,7 +57,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
     str_t json = nyx_object_to_string(object);
     nyx_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json), 1, false);
-    ///_tcp_pub(node, json);
+    ///_tcp_pub(node, nyx_str_s(json));
     nyx_memory_free(json);
 
     /*----------------------------------------------------------------------------------------------------------------*/

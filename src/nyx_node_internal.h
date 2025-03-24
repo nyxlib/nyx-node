@@ -338,7 +338,7 @@ struct nyx_node_s
 
 void nyx_tcp_pub(
     nyx_node_t *node,
-    STR_t message
+    nyx_str_t message
 );
 
 void nyx_mqtt_sub(

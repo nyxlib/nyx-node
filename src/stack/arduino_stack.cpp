@@ -113,7 +113,7 @@ void nyx_log(const char *fmt, ...)
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_tcp_pub(nyx_node_t *node, STR_t message)
+void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
     auto clients = node->stack->clients;
 
@@ -123,7 +123,7 @@ void nyx_tcp_pub(nyx_node_t *node, STR_t message)
 
         if(tcp_client && tcp_client.connected())
         {
-            tcp_client.write(message, strlen(message));
+            tcp_client.write(message.buf, message.len);
         }
     }
 }
