@@ -2,15 +2,20 @@
 #if defined(ARDUINO)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include <string>
-
 #include <Arduino.h>
 #include <PubSubClient.h>
 
-#ifndef ESP8266
+#if defined(ARDUINO_ARCH_ESP32)
 #  include <WiFi.h>
-#else
+#elif defined(ARDUINO_ARCH_ESP8266)
 #  include <ESP8266WiFi.h>
+#else
+#  define ETHERNET
+
+#  include <Dns.h>
+#  include <Ethernet.h>
+
+static DNSClient ethDNS;
 #endif
 
 #include "../nyx_node_internal.h"
@@ -23,9 +28,15 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#ifndef ETHERNET
 static WiFiClient tcpClient;
 
-static WiFiServer tcpServer;
+static WiFiServer tcpServer(0);
+#else
+static EthernetClient tcpClient;
+
+static EthernetServer tcpServer(0);
+#endif
 
 static PubSubClient mqttClient(tcpClient);
 
@@ -37,7 +48,11 @@ struct nyx_stack_s
 
     struct TCPClient
     {
+        #ifndef ETHERNET
         WiFiClient tcp_client;
+        #else
+        EthernetClient tcp_client;
+        #endif
 
         __ZEROABLE__ size_t recv_capa = 0x00000;
         __ZEROABLE__ size_t recv_size = 0x00000;
@@ -81,7 +96,7 @@ void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Serial.printf("%s - %s: %d %s() - ", nyx_log_level_to_str(level), file, line, func);
+    printf("%s - %s: %d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -155,33 +170,33 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos,
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, int default_port)
+static bool parse_host_port(const String &_url, IPAddress &ip, int &port, int default_port)
 {
-    std::string url = _url;
+    String url = _url;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SKIP PROTOCOL                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t proto_sep = url.find("://");
+    size_t proto_sep = url.indexOf("://");
 
-    if(proto_sep != std::string::npos)
+    if(proto_sep >= 0)
     {
-        url = url.substr(proto_sep + 3);
+        url = url.substring(proto_sep + 3);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET HOST AND PORT                                                                                              */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    std::string host;
+    String host;
 
-    size_t colon = url.find(':');
+    size_t colon = url.indexOf(':');
 
-    if(colon != std::string::npos)
+    if(colon >= 0)
     {
-        host = url.substr(0, colon);
-        port = atoi(url.substr(colon + 1).c_str());
+        host = url.substring(0, colon);
+        port = atoi(url.substring(colon + 1).c_str());
     }
     else
     {
@@ -193,7 +208,11 @@ static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, i
     /* RESOLVE DNS DOMAIN                                                                                             */
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    #ifndef ETHERNET
     return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
+    #else
+    return ip.fromString(host.c_str()) || ethDNS.getHostByName(host.c_str(), ip) == 1;
+    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -217,7 +236,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    auto mqtt_callback = [node](STR_t topic, byte *buff, unsigned int size)
+    auto mqtt_callback = [node](char *topic, uint8_t *buff, unsigned int size)
     {
         nyx_str_t message = {reinterpret_cast<str_t>(buff), reinterpret_cast<size_t>(size)};
 
@@ -233,9 +252,13 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
-            NYX_INFO(("TCP ip: %s, port: %d", ip.toString(), port));
+            NYX_INFO(("TCP ip: %s, port: %d:%d:%d:%d", ip[0], ip[1], ip[2], ip[3], port));
 
+            #ifndef ETHERNET
             tcpServer = WiFiServer(ip, port);
+            #else
+            tcpServer = EthernetServer(/**/ port);
+            #endif
 
             tcpServer.begin();
         }
@@ -254,7 +277,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            NYX_INFO(("MQTT ip: %s, port: %d", ip.toString(), port));
+            NYX_INFO(("MQTT ip: %s, port: %d:%d:%d:%d", ip[0], ip[1], ip[2], ip[3], port));
 
             mqttClient.setCallback(
                 mqtt_callback
@@ -387,7 +410,11 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
         /* CLEANUP OLD CLIENTS & REGISTER NEW CLIENTS                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
+        #ifndef ETHERNET
         WiFiClient new_client = tcpServer.accept();
+        #else
+        EthernetClient new_client = tcpServer.accept();
+        #endif
 
         /*------------------------------------------------------------------------------------------------------------*/
 
