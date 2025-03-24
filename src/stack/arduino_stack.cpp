@@ -170,10 +170,8 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos,
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool parse_host_port(const String &_url, IPAddress &ip, int &port, int default_port)
+static bool parse_host_port(String url, IPAddress &ip, int &port, int default_port)
 {
-    String url = _url;
-
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SKIP PROTOCOL                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -257,7 +255,7 @@ void nyx_node_stack_initialize(
             #ifdef HAVE_WIFI
             tcpServer = WiFiServer(ip, port);
             #else
-            tcpServer = EthernetServer(/**/ port);
+            tcpServer = EthernetServer(/**/port/**/);
             #endif
 
             tcpServer.begin();
@@ -482,6 +480,8 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
     if(node->mqtt_url != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
+        /* RECONNECT CLIENT                                                                                           */
+        /*------------------------------------------------------------------------------------------------------------*/
 
         if(!mqttClient.connected())
         {
@@ -497,6 +497,8 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
             }
         }
 
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* LOOP                                                                                                       */
         /*------------------------------------------------------------------------------------------------------------*/
 
         mqttClient.loop();
