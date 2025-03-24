@@ -313,7 +313,7 @@ static void read_data(nyx_stack_s::tcp_client_s &client)
     {
         size_t new_capa = max(required, client.recv_capa + RECV_BUFF_SIZE);
 
-        str_t new_buff = static_cast<str_t>(nyx_memory_realloc(client.recv_buff, new_capa));
+        buff_t new_buff = nyx_memory_realloc(client.recv_buff, new_capa);
 
         client.recv_buff = new_buff;
         client.recv_capa = new_capa;
@@ -363,11 +363,11 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::tcp_client_s &client)
 
             if (client.recv_capa > RECV_BUFF_SIZE && client.recv_size < shrink_threshold)
             {
-                size_t new_capa = max(RECV_BUFF_SIZE, client.recv_size + (client.recv_size / 4));
+                size_t new_capa = max(RECV_BUFF_SIZE, (client.recv_size * 5) / 4);
 
-                str_t smaller = static_cast<str_t>(nyx_memory_realloc(client.recv_buff, new_capa));
+                buff_t new_buff = nyx_memory_realloc(client.recv_buff, new_capa);
 
-                client.recv_buff = smaller;
+                client.recv_buff = new_buff;
                 client.recv_capa = new_capa;
             }
 
