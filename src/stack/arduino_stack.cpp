@@ -39,9 +39,9 @@ struct nyx_stack_s
     {
         WiFiClient tcp_client;
 
+        __ZEROABLE__ size_t recv_capa = 0x00000;
         __ZEROABLE__ size_t recv_size = 0x00000;
         __NULLABLE__ buff_t recv_buff = nullptr;
-        __ZEROABLE__ size_t recv_capa = 0x00000;
 
     } clients[TCP_MAX_CLIENTS];
 
@@ -306,8 +306,8 @@ static void read_data(nyx_stack_s::TCPClient &client)
 
         buff_t new_buff = nyx_memory_realloc(client.recv_buff, new_capa);
 
-        client.recv_buff = new_buff;
         client.recv_capa = new_capa;
+        client.recv_buff = new_buff;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -358,8 +358,8 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::TCPClient &client)
 
                 buff_t new_buff = nyx_memory_realloc(client.recv_buff, new_capa);
 
-                client.recv_buff = new_buff;
                 client.recv_capa = new_capa;
+                client.recv_buff = new_buff;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -405,9 +405,9 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
                 nyx_memory_free(client.recv_buff);
 
+                client.recv_capa = 0x00000;
                 client.recv_size = 0x00000;
                 client.recv_buff = nullptr;
-                client.recv_capa = 0x00000;
 
                 /*----------------------------------------------------------------------------------------------------*/
 
