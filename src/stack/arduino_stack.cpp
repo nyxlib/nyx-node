@@ -123,7 +123,7 @@ void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
         {
             auto &tcp_client = clients[i].tcp_client;
 
-            if(tcp_client)
+            if(tcp_client.connected())
             {
                 tcp_client.write(message.buf, message.len);
             }
@@ -160,6 +160,8 @@ static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, i
     std::string url = _url;
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* SKIP PROTOCOL                                                                                                  */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     size_t proto_sep = url.find("://");
 
@@ -168,6 +170,8 @@ static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, i
         url = url.substr(proto_sep + 3);
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* GET HOST AND PORT                                                                                              */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     std::string host;
@@ -185,6 +189,8 @@ static bool parse_host_port(const std::string &_url, IPAddress &ip, int &port, i
         port = default_port;
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* RESOLVE DNS DOMAIN                                                                                             */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
@@ -391,7 +397,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
         {
             auto &client = clients[i];
 
-            if(!client.tcp_client)
+            if(!client.tcp_client.connected())
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -405,7 +411,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(!accepted && new_client)
+                if(!accepted && new_client.connected())
                 {
                     client.tcp_client = new_client;
 
@@ -418,7 +424,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!accepted && new_client)
+        if(!accepted && new_client.connected())
         {
             new_client.stop();
         }
@@ -431,7 +437,7 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
         {
             auto &client = clients[i];
 
-            if(client.tcp_client)
+            if(client.tcp_client.connected())
             {
                 read_data(client);
 
