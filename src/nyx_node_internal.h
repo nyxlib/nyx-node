@@ -343,16 +343,13 @@ void nyx_tcp_pub(
 
 void nyx_mqtt_sub(
     nyx_node_t *node,
-    nyx_str_t topic,
-    int qos
+    nyx_str_t topic
 );
 
 void nyx_mqtt_pub(
     nyx_node_t *node,
     nyx_str_t topic,
-    nyx_str_t message,
-    int qos,
-    bool retain
+    nyx_str_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -41,7 +41,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
             /*--------------------------------------------------------------------------------------------------------*/
 
             str_t xml = nyx_xmldoc_to_string(xmldoc);
-            nyx_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml), 1, false);
+            nyx_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml));
             nyx_tcp_pub(node, nyx_str_s(xml));
             nyx_memory_free(xml);
 
@@ -56,7 +56,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t json = nyx_object_to_string(object);
-    nyx_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json), 1, false);
+    nyx_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json));
     ///_tcp_pub(node, nyx_str_s(json));
     nyx_memory_free(json);
 
@@ -510,9 +510,9 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
                     /*---*/ topic /*---*/
                 ));
 
-            nyx_mqtt_sub(node, SPECIAL_TOPICS[i], 1);
+            nyx_mqtt_sub(node, SPECIAL_TOPICS[i]);
 
-            nyx_mqtt_sub(node, nyx_str_s(topic), 1);
+            nyx_mqtt_sub(node, nyx_str_s(topic));
         }
 
         nyx_memory_free(topic);
@@ -536,7 +536,7 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
                 /* GET_CLIENTS                                                                                        */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_mqtt_pub(node, nyx_str_s("nyx/clients"), node->node_id, 1, false);
+                nyx_mqtt_pub(node, nyx_str_s("nyx/clients"), node->node_id);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -712,7 +712,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     {
         node->last_ping_ms = 0x00000000000000;
 
-        nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id, 1, false);
+        nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
