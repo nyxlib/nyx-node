@@ -406,10 +406,13 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
                 if(!client.tcp_client || !client.tcp_client.connected())
                 {
+                    nyx_memory_free(client.recv_buff);
+
                     client.tcp_client = new_client;
 
-                    client.recv_size = 0;
-                    client.recv_capa = 0;
+                    client.recv_size = 0x00000;
+                    client.recv_buff = nullptr;
+                    client.recv_capa = 0x00000;
 
                     goto __ok;
                 }
