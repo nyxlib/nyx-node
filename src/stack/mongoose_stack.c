@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "mongoose.h"
+#include "gen/mongoose.h"
 
 #include "../nyx_node_internal.h"
 

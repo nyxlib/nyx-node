@@ -51,7 +51,7 @@ typedef const char *STR_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
-/** @defgroup MEMORY Memory primitives
+/** @defgroup MEMORY Memory
   * Memory primitives with leak detection.
   * @{
   */
@@ -106,8 +106,8 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup LOG Node log
-  * Node log.
+  * @defgroup LOGGER Logger
+  * Logger.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -124,7 +124,7 @@ typedef enum nyx_log_level_e
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef void (* nyx_log_func_t)(char, void *);
+typedef void (* nyx_log_func_t)(char c, void *args);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -132,9 +132,11 @@ extern nyx_log_level_t nyx_log_level;
 
 extern nyx_log_func_t nyx_log_func;
 
-extern buff_t nyx_log_args;
+extern void *nyx_log_args;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/// @cond DOXYGEN_IGNORE_THIS
 
 void nyx_log_prefix(
     nyx_log_level_t level,
@@ -148,7 +150,11 @@ void nyx_log(
     ...
 );
 
+/// @endcond
+
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/// @cond DOXYGEN_IGNORE_THIS
 
 #define NYX_LOG(level, args)                                                        \
     do                                                                              \
@@ -161,6 +167,10 @@ void nyx_log(
         }                                                                           \
                                                                                     \
     } while(0)
+
+/// @endcond
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 #define NYX_ERROR(args) \
             NYX_LOG(NYX_LOGGER_ERROR, args)
@@ -175,13 +185,31 @@ void nyx_log(
             NYX_LOG(NYX_LOGGER_VERBOSE, args)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* BASE64                                                                                                             */
+/* UTILITIES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup BASE64 Base64 encoding / decoding
-  * Fast Base64 encoding / decoding.
+  * @defgroup Utilities
+  * Utilities.
   * @{
   */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Generates a MAC address based on a node identifier.
+ *
+ * @param mac Output array to store the generated MAC address.
+ * @param mac0 First fixed byte of the MAC address.
+ * @param mac1 Second fixed byte of the MAC address.
+ * @param node_id Unique node identifier used to hash the remaining bytes.
+ */
+
+void nyx_generate_mac_addr(
+    uint8_t mac[6],
+    uint8_t mac0,
+    uint8_t mac1,
+    STR_t node_id
+);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -214,6 +242,23 @@ __NULLABLE__ buff_t nyx_base64_decode(
     __NULLABLE__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Hashes a buffer using the MurmurHash2 algorithm.
+ *
+ * \param buff Length of the buffer to hash.
+ * \param size Input buffer to hash.
+ * \param seed Seed.
+ * \return The 32-bit hash.
+ */
+
+uint32_t nyx_hash32(
+    BUFF_t buff,
+    size_t size,
+    uint32_t seed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1884,15 +1929,6 @@ nyx_dict_t *nyx_del_property_new(
  */
 
 typedef struct nyx_node_s nyx_node_t;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_generate_mac_addr(
-    uint8_t mac[6],
-    uint8_t mac0,
-    uint8_t mac1,
-    STR_t node_id
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

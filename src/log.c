@@ -8,7 +8,7 @@ nyx_log_level_t nyx_log_level = NYX_LOGGER_INFO;
 
 nyx_log_func_t nyx_log_func = NULL;
 
-buff_t nyx_log_args = NULL;
+void *nyx_log_args = NULL;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
