@@ -100,7 +100,6 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
         opts.topic = topic;
         ////.message = message;
         opts.qos = 1;
-        ////.retain = retain;
 
         mg_mqtt_sub(node->stack->mqtt_connection, &opts);
     }
@@ -119,7 +118,6 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
         opts.topic = topic;
         opts.message = message;
         opts.qos = 1;
-        ////.retain = retain;
 
         mg_mqtt_pub(node->stack->mqtt_connection, &opts);
     }
