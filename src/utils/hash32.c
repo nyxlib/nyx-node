@@ -10,10 +10,14 @@ static const uint32_t MURMUR2_MAGIC = 0x5BD1E995UL;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-uint32_t nyx_hash32(BUFF_t buff, size_t size, uint32_t seed)
+uint32_t nyx_hash32(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size, uint32_t seed)
 {
     uint32_t h = seed ^ (uint32_t) size;
 
+    if(buff == NULL || size == 0x00)
+    {
+        return h;
+    }
     /*----------------------------------------------------------------------------------------------------------------*/
 
     const uint8_t *data = (uint8_t *) buff;

@@ -74,7 +74,7 @@ bool nyx_memory_finalize();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc free.
+ * \brief Similar to libc free except that it returns the amount of memory freed.
  */
 
 __ZEROABLE__ size_t nyx_memory_free(
@@ -84,7 +84,7 @@ __ZEROABLE__ size_t nyx_memory_free(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc malloc.
+ * \brief Similar to libc malloc except that a memory overflow causes the node to stop.
  */
 
 __NULLABLE__ buff_t nyx_memory_alloc(
@@ -94,7 +94,7 @@ __NULLABLE__ buff_t nyx_memory_alloc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc realloc.
+ * \brief Similar to libc realloc except that a memory overflow causes the node to stop.
  */
 
 __NULLABLE__ buff_t nyx_memory_realloc(
@@ -256,8 +256,8 @@ __NULLABLE__ buff_t nyx_base64_decode(
  */
 
 uint32_t nyx_hash32(
-    BUFF_t buff,
-    size_t size,
+    __NULLABLE__ BUFF_t buff,
+    __ZEROABLE__ size_t size,
     uint32_t seed
 );
 
