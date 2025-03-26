@@ -80,6 +80,10 @@ struct nyx_stack_s
     __NULLABLE__ STR_t mqtt_password = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    unsigned long last_ping_ms;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -534,9 +538,9 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
 
         unsigned long curr_ping_ms = millis();
 
-        if(node->last_ping_ms <= curr_ping_ms - NYX_PING_MS)
+        if(stack->last_ping_ms <= curr_ping_ms - NYX_PING_MS)
         {
-            node->last_ping_ms = curr_ping_ms - 0x0000000UL;
+            stack->last_ping_ms = curr_ping_ms - 0x0000000UL;
 
             nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
         }
