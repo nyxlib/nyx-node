@@ -237,7 +237,7 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 {
     nyx_str_t message = {reinterpret_cast<str_t>(buff), reinterpret_cast<size_t>(size)};
 
-    node->mqtt_handler(nyx_node, NYX_EVENT_MSG, nyx_str_s(topic), message);
+    nyx_node->mqtt_handler(nyx_node, NYX_EVENT_MSG, nyx_str_s(topic), message);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -298,11 +298,11 @@ void nyx_node_stack_initialize(
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
             NYX_INFO(("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port));
-/*
+
             mqttClient.setCallback(
                 mqtt_callback
             );
-*/
+
             mqttClient.setServer(
                 ip, port
             );
