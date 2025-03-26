@@ -291,7 +291,7 @@ bool nyx_stream_detect_closing_tag(
 #define NYX_EVENT_OPEN  0
 #define NYX_EVENT_MSG   1
 
-#define NYX_PING_MS 5000
+#define NYX_PING_MS 5000UL
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
