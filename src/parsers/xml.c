@@ -908,3 +908,10 @@ nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t text)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+_t *node, bool free_vectors)
+ 	Finalizes the Nyx node.
+
+void 	nyx_node_poll (nyx_node_t *node, int timeout_ms)
+ 	Performs a single poll iteration.
+
+void

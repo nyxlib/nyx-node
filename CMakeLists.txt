@@ -32,7 +32,7 @@ set(SOURCE_FILES
     src/nyx_node_internal.h
     #
     src/stack/gen/mongoose.c
-    src/stack/mongoose_stack.c
+    src/stack/mongoose.c
     #
     src/json/json_boolean.c
     src/json/json_dict.c
