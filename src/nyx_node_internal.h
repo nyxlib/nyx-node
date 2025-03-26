@@ -323,7 +323,7 @@ struct nyx_node_s
 
     /**/
 
-    #ifndef ARDUINO
+    #ifdef ARDUINO
     unsigned long last_ping_ms;
     #endif
 };
