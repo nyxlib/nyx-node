@@ -321,7 +321,11 @@ struct nyx_node_s
     bool enable_xml;
     bool validate_xml;
 
+    /**/
+
+    #ifndef ARDUINO
     unsigned long last_ping_ms;
+    #endif
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
