@@ -321,7 +321,7 @@ struct nyx_node_s
     bool enable_xml;
     bool validate_xml;
 
-    int last_ping_ms;
+    unsigned long last_ping_ms;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

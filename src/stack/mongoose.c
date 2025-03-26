@@ -219,7 +219,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void timer_handler(void *arg)
+static void retry_timer_handler(void *arg)
 {
     nyx_node_t *node = (nyx_node_t *) arg;
 
@@ -235,6 +235,15 @@ static void timer_handler(void *arg)
             node
         );
     }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void ping_timer_handler(void *arg)
+{
+    nyx_node_t *node = (nyx_node_t *) arg;
+
+    nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -278,9 +287,13 @@ void nyx_node_stack_initialize(
         mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node);
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(node->mqtt_url != NULL)
     {
-        mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, timer_handler, node);
+        mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, retry_timer_handler, node);
+
+        mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, ping_timer_handler, node);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
