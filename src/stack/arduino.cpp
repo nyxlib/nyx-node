@@ -50,6 +50,10 @@ static DNSClient EthDNS;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static nyx_node_t *nyx_node;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -229,6 +233,15 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
+{
+    nyx_str_t message = {reinterpret_cast<str_t>(buff), reinterpret_cast<size_t>(size)};
+
+    node->mqtt_handler(nyx_node, NYX_EVENT_MSG, nyx_str_s(topic), message);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
@@ -246,12 +259,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    auto mqtt_callback = [node](char *topic, uint8_t *buff, unsigned int size)
-    {
-        nyx_str_t message = {reinterpret_cast<str_t>(buff), reinterpret_cast<size_t>(size)};
-
-        node->mqtt_handler(node, NYX_EVENT_MSG, nyx_str_s(topic), message);
-    };
+    nyx_node = node;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
