@@ -235,7 +235,10 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
 
 static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 {
-    nyx_str_t message = {reinterpret_cast<str_t>(buff), reinterpret_cast<size_t>(size)};
+    nyx_str_t message = {
+        reinterpret_cast<str_t>(buff),
+        reinterpret_cast<size_t>(size),
+    };
 
     nyx_node->mqtt_handler(nyx_node, NYX_EVENT_MSG, nyx_str_s(topic), message);
 }
