@@ -114,11 +114,11 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 
 typedef enum nyx_log_level_e
 {
-    NYX_LOGGER_NONE    = 0,
-    NYX_LOGGER_ERROR   = 1,
-    NYX_LOGGER_INFO    = 2,
-    NYX_LOGGER_DEBUG   = 3,
-    NYX_LOGGER_VERBOSE = 4,
+    NYX_LOG_LEVEL_NONE    = 0,
+    NYX_LOG_LEVEL_ERROR   = 1,
+    NYX_LOG_LEVEL_INFO    = 2,
+    NYX_LOG_LEVEL_DEBUG   = 3,
+    NYX_LOG_LEVEL_VERBOSE = 4,
 
 } nyx_log_level_t;
 
@@ -172,17 +172,17 @@ void nyx_log(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_ERROR(args) \
-            NYX_LOG(NYX_LOGGER_ERROR, args)
+#define NYX_LOG_ERROR(args) \
+            NYX_LOG(NYX_LOG_LEVEL_ERROR, args)
 
-#define NYX_INFO(args) \
-            NYX_LOG(NYX_LOGGER_INFO, args)
+#define NYX_LOG_INFO(args) \
+            NYX_LOG(NYX_LOG_LEVEL_INFO, args)
 
-#define NYX_DEBUG(args) \
-            NYX_LOG(NYX_LOGGER_DEBUG, args)
+#define NYX_LOG_DEBUG(args) \
+            NYX_LOG(NYX_LOG_LEVEL_DEBUG, args)
 
-#define NYX_VERBOSE(args) \
-            NYX_LOG(NYX_LOGGER_VERBOSE, args)
+#define NYX_LOG_VERBOSE(args) \
+            NYX_LOG(NYX_LOG_LEVEL_VERBOSE, args)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* UTILITIES                                                                                                          */

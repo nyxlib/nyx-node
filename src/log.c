@@ -4,7 +4,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_log_level_t nyx_log_level = NYX_LOGGER_INFO;
+nyx_log_level_t nyx_log_level = NYX_LOG_LEVEL_INFO;
 
 nyx_log_func_t nyx_log_func = NULL;
 
@@ -16,15 +16,15 @@ STR_t nyx_log_level_to_str(nyx_log_level_t level)
 {
     switch(level)
     {
-        case NYX_LOGGER_NONE:
+        case NYX_LOG_LEVEL_NONE:
             return "NONE";
-        case NYX_LOGGER_ERROR:
+        case NYX_LOG_LEVEL_ERROR:
             return "ERROR";
-        case NYX_LOGGER_INFO:
+        case NYX_LOG_LEVEL_INFO:
             return "INFO";
-        case NYX_LOGGER_DEBUG:
+        case NYX_LOG_LEVEL_DEBUG:
             return "DEBUG";
-        case NYX_LOGGER_VERBOSE:
+        case NYX_LOG_LEVEL_VERBOSE:
             return "VERBOSE";
     }
 

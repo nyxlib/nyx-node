@@ -372,7 +372,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                 /*--------------------------------------------------------------------*/
 
                                                 str_t str = nyx_object_to_string(object2);
-                                                NYX_DEBUG(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
+                                                NYX_LOG_DEBUG(("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str));
                                                 nyx_memory_free(str);
 
                                                 /*--------------------------------------------------------------------*/
@@ -505,7 +505,7 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
             if(sprintf(topic, "%s/%s", SPECIAL_TOPICS[i].buf, node->node_id.buf) > 0)
             {
-                NYX_INFO(("Subscribing to `%s` and `%s` topics",
+                NYX_LOG_INFO(("Subscribing to `%s` and `%s` topics",
                     SPECIAL_TOPICS[i].buf,
                     /*---*/ topic /*---*/
                 ));

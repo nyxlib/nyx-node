@@ -133,19 +133,19 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_INFO(("%lu OPEN", connection->id));
+        NYX_LOG_INFO(("%lu OPEN", connection->id));
     }
     else if(ev == MG_EV_ACCEPT)
     {
-        NYX_INFO(("%lu ACCEPT", connection->id));
+        NYX_LOG_INFO(("%lu ACCEPT", connection->id));
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_INFO(("%lu CLOSE", connection->id));
+        NYX_LOG_INFO(("%lu CLOSE", connection->id));
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
+        NYX_LOG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
     }
     else if(ev == MG_EV_READ)
     {
@@ -173,21 +173,21 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_INFO(("%lu OPEN", connection->id));
+        NYX_LOG_INFO(("%lu OPEN", connection->id));
     }
     else if(ev == MG_EV_CONNECT)
     {
-        NYX_INFO(("%lu CONNECT", connection->id));
+        NYX_LOG_INFO(("%lu CONNECT", connection->id));
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_INFO(("%lu CLOSE", connection->id));
+        NYX_LOG_INFO(("%lu CLOSE", connection->id));
 
         node->stack->mqtt_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
+        NYX_LOG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
@@ -195,7 +195,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
         /* MG_EV_MQTT_OPEN                                                                                            */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        NYX_INFO(("%lu MQTT OPEN", connection->id));
+        NYX_LOG_INFO(("%lu MQTT OPEN", connection->id));
 
         /*------------------------------------------------------------------------------------------------------------*/
 

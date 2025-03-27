@@ -25,7 +25,7 @@ STR_t nyx_state_to_str(nyx_state_t state)
             return "Alert";
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -47,7 +47,7 @@ nyx_state_t nyx_str_to_state(STR_t state)
         return NYX_STATE_ALERT;
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -68,7 +68,7 @@ STR_t nyx_perm_to_str(nyx_perm_t perm)
             return "rw";
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -87,7 +87,7 @@ nyx_perm_t nyx_str_to_perm(STR_t perm)
         return NYX_PERM_RW;
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -108,7 +108,7 @@ STR_t nyx_rule_to_str(nyx_rule_t rule)
             return "AnyOfMany";
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -127,7 +127,7 @@ nyx_rule_t nyx_str_to_rule(STR_t rule)
         return NYX_RULE_ANY_OF_MANY;
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -146,7 +146,7 @@ STR_t nyx_onoff_to_str(nyx_onoff_t onoff)
             return "Off";
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -162,7 +162,7 @@ nyx_onoff_t nyx_str_to_onoff(STR_t onoff)
         return NYX_ONOFF_OFF;
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -183,7 +183,7 @@ STR_t nyx_blob_to_str(nyx_blob_t blob)
             return "Only";
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -202,7 +202,7 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
         return NYX_BLOB_ONLY;
     }
 
-    NYX_ERROR(("Internal error"));
+    NYX_LOG_ERROR(("Internal error"));
 
     exit(1);
 }
@@ -244,7 +244,7 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             default:
-                NYX_ERROR(("Invalid object"));
+                NYX_LOG_ERROR(("Invalid object"));
                 break;
 
             /*--------------------------------------------------------------------------------------------------------*/
