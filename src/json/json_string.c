@@ -54,8 +54,8 @@ bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `nyx_string_dynamic_set`\n");
-        fflush(stderr);
+        NYX_ERROR(("Null string not allowed"));
+
         return false;
     }
 
@@ -98,8 +98,8 @@ bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `nyx_string_static_set`\n");
-        fflush(stderr);
+        NYX_ERROR(("Null string not allowed"));
+
         return false;
     }
 
@@ -142,8 +142,8 @@ bool nyx_string_buff_set2(nyx_string_t *object, size_t size, BUFF_t buff, bool n
 {
     if(size == 0x00 || buff == NULL)
     {
-        fprintf(stderr, "Null string not allowed in `nyx_string_buff_set`\n");
-        fflush(stderr);
+        NYX_ERROR(("Null string not allowed"));
+
         return false;
     }
 

@@ -181,8 +181,8 @@ bool nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
 
     if(((nyx_object_t *) value)->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `nyx_dict_set`\n");
-        fflush(stderr);
+        NYX_ERROR(("Invalid object"));
+
         exit(1);
     }
 

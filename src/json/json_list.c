@@ -178,8 +178,8 @@ nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool not
 
     if(((nyx_object_t *) value)->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `nyx_list_set`\n");
-        fflush(stderr);
+        NYX_ERROR(("Invalid object"));
+
         exit(1);
     }
 

@@ -25,8 +25,8 @@ STR_t nyx_state_to_str(nyx_state_t state)
             return "Alert";
     }
 
-    fprintf(stderr, "Internal error in `nyx_state_to_str`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -47,8 +47,8 @@ nyx_state_t nyx_str_to_state(STR_t state)
         return NYX_STATE_ALERT;
     }
 
-    fprintf(stderr, "Internal error in `nyx_str_to_state`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -68,8 +68,8 @@ STR_t nyx_perm_to_str(nyx_perm_t perm)
             return "rw";
     }
 
-    fprintf(stderr, "Internal error in `nyx_perm_to_str`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -87,8 +87,8 @@ nyx_perm_t nyx_str_to_perm(STR_t perm)
         return NYX_PERM_RW;
     }
 
-    fprintf(stderr, "Internal error in `nyx_str_to_perm`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -108,8 +108,8 @@ STR_t nyx_rule_to_str(nyx_rule_t rule)
             return "AnyOfMany";
     }
 
-    fprintf(stderr, "Internal error in `nyx_rule_to_str`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -127,8 +127,8 @@ nyx_rule_t nyx_str_to_rule(STR_t rule)
         return NYX_RULE_ANY_OF_MANY;
     }
 
-    fprintf(stderr, "Internal error in `nyx_str_to_rule`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -146,8 +146,8 @@ STR_t nyx_onoff_to_str(nyx_onoff_t onoff)
             return "Off";
     }
 
-    fprintf(stderr, "Internal error in `nyx_onoff_to_str`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -162,8 +162,8 @@ nyx_onoff_t nyx_str_to_onoff(STR_t onoff)
         return NYX_ONOFF_OFF;
     }
 
-    fprintf(stderr, "Internal error in `nyx_str_to_onoff`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -183,8 +183,8 @@ STR_t nyx_blob_to_str(nyx_blob_t blob)
             return "Only";
     }
 
-    fprintf(stderr, "Internal error in `nyx_blob_to_str`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -202,8 +202,8 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
         return NYX_BLOB_ONLY;
     }
 
-    fprintf(stderr, "Internal error in `nyx_str_to_blob`\n");
-    fflush(stderr);
+    NYX_ERROR(("Internal error"));
+
     exit(1);
 }
 
@@ -244,8 +244,7 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             default:
-                fprintf(stderr, "Internal error in `internal_copy`\n");
-                fflush(stderr);
+                NYX_ERROR(("Invalid object"));
                 break;
 
             /*--------------------------------------------------------------------------------------------------------*/

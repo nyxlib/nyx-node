@@ -47,7 +47,7 @@ bool nyx_memory_finalize()
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
     if(__atomic_load_n(&used_mem, __ATOMIC_SEQ_CST) > 0)
     {
-        fprintf(stderr, "Memory leak: %ld bytes!\n", used_mem);
+        NYX_ERROR(("Memory leak: %ld bytes", used_mem));
 
         return false;
     }
@@ -110,8 +110,8 @@ buff_t nyx_memory_alloc(__ZEROABLE__ size_t size)
 
     if(result == NULL)
     {
-        fprintf(stderr, "Out of memory!\n");
-        fflush(stderr);
+        NYX_ERROR(("Out of memory"));
+
         exit(1);
     }
 
@@ -158,8 +158,8 @@ buff_t nyx_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
 
     if(result == NULL)
     {
-        fprintf(stderr, "Out of memory!\n");
-        fflush(stderr);
+        NYX_ERROR(("Out of memory"));
+
         exit(1);
     }
 
@@ -250,8 +250,8 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 
     if(object->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `nyx_object_free`\n");
-        fflush(stderr);
+        NYX_ERROR(("Invalid object"));
+
         exit(1);
     }
 
@@ -282,8 +282,8 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
             break;
 
         default:
-            fprintf(stderr, "Internal error in `nyx_object_free`\n");
-            fflush(stderr);
+            NYX_ERROR(("Internal error"));
+
             exit(1);
     }
 }
@@ -299,8 +299,8 @@ bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ con
 
     if(object1->magic != NYX_OBJECT_MAGIC || object2->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `nyx_object_compare`\n");
-        fflush(stderr);
+        NYX_ERROR(("Invalid object"));
+
         exit(1);
     }
 
@@ -328,8 +328,8 @@ bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ con
             return object1 == object2;
 
         default:
-            fprintf(stderr, "Internal error in `nyx_object_compare`\n");
-            fflush(stderr);
+            NYX_ERROR(("Internal error"));
+
             exit(1);
     }
 }
@@ -345,8 +345,8 @@ str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
 
     if(object->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `nyx_object_to_cstring`\n");
-        fflush(stderr);
+        NYX_ERROR(("Invalid object"));
+
         exit(1);
     }
 
@@ -371,8 +371,8 @@ str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
             return nyx_dict_to_string((nyx_dict_t *) object);
 
         default:
-            fprintf(stderr, "Internal error in `nyx_object_to_string`\n");
-            fflush(stderr);
+            NYX_ERROR(("Internal error"));
+
             exit(1);
     }
 }
@@ -388,8 +388,8 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
 
     if(object->magic != NYX_OBJECT_MAGIC)
     {
-        fprintf(stderr, "Invalid object in `nyx_object_to_cstring`\n");
-        fflush(stderr);
+        NYX_ERROR(("Invalid object"));
+
         exit(1);
     }
 
@@ -414,8 +414,8 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
             return nyx_dict_to_string((nyx_dict_t *) object);
 
         default:
-            fprintf(stderr, "Internal error in `nyx_object_to_cstring`\n");
-            fflush(stderr);
+            NYX_ERROR(("Internal error"));
+
             exit(1);
     }
 }
