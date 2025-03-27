@@ -46,7 +46,7 @@ void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_xprintf(nyx_log_func, nyx_log_args, "%s - %s: %d %s() - ", nyx_log_level_to_str(level), file, line, func);
+    mg_xprintf(nyx_log_func, nyx_log_args, "%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }

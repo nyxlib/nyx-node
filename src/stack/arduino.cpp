@@ -114,7 +114,7 @@ void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    printf("%s - %s: %d %s() - ", nyx_log_level_to_str(level), file, line, func);
+    printf("%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
