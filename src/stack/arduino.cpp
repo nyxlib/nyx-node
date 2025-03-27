@@ -259,6 +259,8 @@ void nyx_node_stack_initialize(
 
     nyx_stack_t *stack = node->stack = static_cast<nyx_stack_t *>(nyx_memory_alloc(sizeof(nyx_stack_t)));
 
+    memset(stack, 0x00, sizeof(struct nyx_stack_s));
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     stack->mqtt_username = mqtt_username;
