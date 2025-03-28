@@ -77,7 +77,7 @@ int nyx_unicode_to_utf8(
             ((struct nyx_object_s) {            \
                 .magic = NYX_OBJECT_MAGIC,      \
                 .flags = 0x00000000000000,      \
-                .type = Type,                   \
+                .type = (Type),                 \
                 .node = NULL,                   \
                 .parent = NULL,                 \
                 .in_callback = NULL,            \
