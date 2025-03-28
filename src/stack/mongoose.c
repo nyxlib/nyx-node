@@ -51,19 +51,19 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_xprintf(nyx_log_func, nyx_log_args, "%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
+    mg_xprintf(mg_pfn_stdout, NULL, "%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     va_list ap;
     va_start(ap, fmt);
-    mg_vxprintf(nyx_log_func, nyx_log_args, fmt, &ap);
+    mg_vxprintf(mg_pfn_stdout, NULL, fmt, &ap);
     va_end(ap);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_log_func('\r', nyx_log_args);
-    nyx_log_func('\n', nyx_log_args);
+    mg_pfn_stdout('\r', NULL);
+    mg_pfn_stdout('\n', NULL);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -252,14 +252,6 @@ void nyx_node_stack_initialize(
     __NULLABLE__ STR_t mqtt_password,
     int retry_ms
 ) {
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* INITIALIZE LOGGER                                                                                              */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_log_func = mg_pfn_stdout;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* INITIALIZE STACK                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     struct nyx_stack_s *stack = node->stack = nyx_memory_alloc(sizeof(struct nyx_stack_s));
