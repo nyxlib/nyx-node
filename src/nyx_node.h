@@ -157,7 +157,7 @@ void nyx_log(
             {                                                                                       \
                 nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__);     \
                                                                                                     \
-                [[noreturn]] void exit(int status);                                                 \
+                void exit(int status);                                                              \
                                                                                                     \
                 for(;;)                                                                             \
                 {                                                                                   \
