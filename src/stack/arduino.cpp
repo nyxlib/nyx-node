@@ -90,8 +90,13 @@ struct nyx_stack_s
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
+void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char *fmt, ...)
 {
+    if(level > nyx_log_level)
+    {
+        return;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     STR_t p;
@@ -116,13 +121,6 @@ void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
 
     printf("%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_log(const char *fmt, ...)
-{
     /*----------------------------------------------------------------------------------------------------------------*/
 
     va_list ap;
@@ -279,7 +277,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->tcp_url, ip, port, 7624))
         {
-            NYX_INFO(("TCP ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port));
+            NYX_LOG_INFO("TCP ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
             #ifdef HAS_WIFI
             tcpServer = WiFiServer(ip, port);
@@ -306,7 +304,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            NYX_INFO(("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port));
+            NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
             mqttClient.setCallback(
                 mqtt_callback
@@ -383,7 +381,7 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::TCPClient &client)
 
         if(consumed > client.recv_size)
         {
-            NYX_ERROR(("Internal error"));
+            NYX_LOG_ERROR("Internal error");
 
             return;
         }

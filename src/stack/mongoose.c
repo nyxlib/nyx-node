@@ -22,8 +22,13 @@ struct nyx_stack_s
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
+void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char *fmt, ...)
 {
+    if(level > nyx_log_level)
+    {
+        return;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     STR_t p;
@@ -48,13 +53,6 @@ void nyx_log_prefix(nyx_log_level_t level, STR_t file, STR_t func, int line)
 
     mg_xprintf(nyx_log_func, nyx_log_args, "%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_log(const char *fmt, ...)
-{
     /*----------------------------------------------------------------------------------------------------------------*/
 
     va_list ap;
@@ -133,19 +131,19 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO(("%lu OPEN", connection->id));
+        NYX_LOG_INFO("%lu OPEN", connection->id);
     }
     else if(ev == MG_EV_ACCEPT)
     {
-        NYX_LOG_INFO(("%lu ACCEPT", connection->id));
+        NYX_LOG_INFO("%lu ACCEPT", connection->id);
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_LOG_INFO(("%lu CLOSE", connection->id));
+        NYX_LOG_INFO("%lu CLOSE", connection->id);
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_LOG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
+        NYX_LOG_ERROR("%lu ERROR %s", connection->id, (STR_t) ev_data);
     }
     else if(ev == MG_EV_READ)
     {
@@ -173,21 +171,21 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO(("%lu OPEN", connection->id));
+        NYX_LOG_INFO("%lu OPEN", connection->id);
     }
     else if(ev == MG_EV_CONNECT)
     {
-        NYX_LOG_INFO(("%lu CONNECT", connection->id));
+        NYX_LOG_INFO("%lu CONNECT", connection->id);
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_LOG_INFO(("%lu CLOSE", connection->id));
+        NYX_LOG_INFO("%lu CLOSE", connection->id);
 
         node->stack->mqtt_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_LOG_ERROR(("%lu ERROR %s", connection->id, (STR_t) ev_data));
+        NYX_LOG_ERROR("%lu ERROR %s", connection->id, (STR_t) ev_data);
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
@@ -195,7 +193,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
         /* MG_EV_MQTT_OPEN                                                                                            */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        NYX_LOG_INFO(("%lu MQTT OPEN", connection->id));
+        NYX_LOG_INFO("%lu MQTT OPEN", connection->id);
 
         /*------------------------------------------------------------------------------------------------------------*/
 

@@ -54,7 +54,7 @@ bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
-        NYX_LOG_ERROR(("Null string not allowed"));
+        NYX_LOG_ERROR("Null string not allowed");
 
         return false;
     }
@@ -98,7 +98,7 @@ bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
-        NYX_LOG_ERROR(("Null string not allowed"));
+        NYX_LOG_ERROR("Null string not allowed");
 
         return false;
     }
@@ -142,7 +142,7 @@ bool nyx_string_buff_set2(nyx_string_t *object, size_t size, BUFF_t buff, bool n
 {
     if(size == 0x00 || buff == NULL)
     {
-        NYX_LOG_ERROR(("Null string not allowed"));
+        NYX_LOG_ERROR("Null string not allowed");
 
         return false;
     }

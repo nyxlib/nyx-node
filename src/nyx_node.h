@@ -115,10 +115,11 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 typedef enum nyx_log_level_e
 {
     NYX_LOG_LEVEL_NONE    = 0,
-    NYX_LOG_LEVEL_ERROR   = 1,
-    NYX_LOG_LEVEL_INFO    = 2,
-    NYX_LOG_LEVEL_DEBUG   = 3,
-    NYX_LOG_LEVEL_VERBOSE = 4,
+    NYX_LOG_LEVEL_FATAL   = 1,
+    NYX_LOG_LEVEL_ERROR   = 2,
+    NYX_LOG_LEVEL_INFO    = 3,
+    NYX_LOG_LEVEL_DEBUG   = 4,
+    NYX_LOG_LEVEL_VERBOSE = 5,
 
 } nyx_log_level_t;
 
@@ -138,15 +139,12 @@ extern void *nyx_log_args;
 
 /// @cond DOXYGEN_IGNORE_THIS
 
-void nyx_log_prefix(
+void nyx_log(
     nyx_log_level_t level,
     STR_t file,
     STR_t func,
-    int line
-);
-
-void nyx_log(
-    const char *fmt,
+    int line,
+    STR_t fmt,
     ...
 );
 
@@ -154,35 +152,20 @@ void nyx_log(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-/// @cond DOXYGEN_IGNORE_THIS
+#define NYX_LOG_FATAL(fmt, ...) \
+            nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
-#define NYX_LOG(level, args)                                                        \
-    do                                                                              \
-    {                                                                               \
-        if((level) <= nyx_log_level)                                                \
-        {                                                                           \
-            nyx_log_prefix(level, __FILE__, __func__, __LINE__);                    \
-                                                                                    \
-            nyx_log args;                                                           \
-        }                                                                           \
-                                                                                    \
-    } while(0)
+#define NYX_LOG_ERROR(fmt, ...) \
+            nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
-/// @endcond
+#define NYX_LOG_INFO(fmt, ...) \
+            nyx_log(NYX_LOG_LEVEL_INFO, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+#define NYX_LOG_DEBUG(fmt, ...) \
+            nyx_log(NYX_LOG_LEVEL_DEBUG, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
-#define NYX_LOG_ERROR(args) \
-            NYX_LOG(NYX_LOG_LEVEL_ERROR, args)
-
-#define NYX_LOG_INFO(args) \
-            NYX_LOG(NYX_LOG_LEVEL_INFO, args)
-
-#define NYX_LOG_DEBUG(args) \
-            NYX_LOG(NYX_LOG_LEVEL_DEBUG, args)
-
-#define NYX_LOG_VERBOSE(args) \
-            NYX_LOG(NYX_LOG_LEVEL_VERBOSE, args)
+#define NYX_LOG_VERBOSE(fmt, ...) \
+            nyx_log(NYX_LOG_LEVEL_VERBOSE, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* UTILITIES                                                                                                          */

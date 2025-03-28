@@ -18,6 +18,8 @@ STR_t nyx_log_level_to_str(nyx_log_level_t level)
     {
         case NYX_LOG_LEVEL_NONE:
             return "NONE";
+        case NYX_LOG_LEVEL_FATAL:
+            return "FATAL";
         case NYX_LOG_LEVEL_ERROR:
             return "ERROR";
         case NYX_LOG_LEVEL_INFO:
