@@ -133,7 +133,7 @@ static bool jsoncpy(str_t p, STR_t s, STR_t e)
                             uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
 
                             s += 0x0000000000000000000000000000000004;
-                            p += nyx_unicode_to_utf8(unicode_char, p);
+                            p += nyx_unicode_to_utf8(p, unicode_char);
                         }
                         else
                         {

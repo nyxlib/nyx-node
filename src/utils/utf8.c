@@ -4,9 +4,9 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int nyx_unicode_to_utf8(uint32_t unicode_char, str_t p)
+int nyx_unicode_to_utf8(str_t result, uint32_t unicode_char)
 {
-    uint8_t *up = (uint8_t *) p;
+    uint8_t *up = (uint8_t *) result;
 
     /**/ if(unicode_char <= 0x7F)
     {
