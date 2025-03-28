@@ -145,19 +145,19 @@ void nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define NYX_LOG_FATAL(fmt, ...) \
-            do { nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); for(;;) {} } while(0)
+            do { nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(1)
 
 #define NYX_LOG_ERROR(fmt, ...) \
-            nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
+            do { nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 #define NYX_LOG_INFO(fmt, ...) \
-            nyx_log(NYX_LOG_LEVEL_INFO, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
+            do { nyx_log(NYX_LOG_LEVEL_INFO, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 #define NYX_LOG_DEBUG(fmt, ...) \
-            nyx_log(NYX_LOG_LEVEL_DEBUG, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
+            do { nyx_log(NYX_LOG_LEVEL_DEBUG, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 #define NYX_LOG_VERBOSE(fmt, ...) \
-            nyx_log(NYX_LOG_LEVEL_VERBOSE, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
+            do { nyx_log(NYX_LOG_LEVEL_VERBOSE, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* UTILITIES                                                                                                          */
