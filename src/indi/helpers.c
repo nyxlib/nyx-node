@@ -2,7 +2,6 @@
 
 #include <time.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "../nyx_node_internal.h"

@@ -145,20 +145,7 @@ void nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define NYX_LOG_FATAL(fmt, ...) \
-            do                                                                                      \
-            {                                                                                       \
-                nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__);     \
-                                                                                                    \
-                void exit(int status);                                                              \
-                                                                                                    \
-                for(;;)                                                                             \
-                {                                                                                   \
-                    exit(1);                                                                        \
-                }                                                                                   \
-                                                                                                    \
-            } while(0)                                                                              \
-
-/*--------------------------------------------------------------------------------------------------------------------*/
+            nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); for(;;) {}
 
 #define NYX_LOG_ERROR(fmt, ...) \
             nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
