@@ -181,9 +181,7 @@ bool nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
 
     if(((nyx_object_t *) value)->magic != NYX_OBJECT_MAGIC)
     {
-        NYX_LOG_ERROR("Invalid object");
-
-        exit(1);
+        NYX_LOG_FATAL("Invalid object");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -110,9 +110,7 @@ buff_t nyx_memory_alloc(__ZEROABLE__ size_t size)
 
     if(result == NULL)
     {
-        NYX_LOG_ERROR("Out of memory");
-
-        exit(1);
+        NYX_LOG_FATAL("Out of memory");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -158,9 +156,7 @@ buff_t nyx_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
 
     if(result == NULL)
     {
-        NYX_LOG_ERROR("Out of memory");
-
-        exit(1);
+        NYX_LOG_FATAL("Out of memory");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -250,9 +246,7 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 
     if(object->magic != NYX_OBJECT_MAGIC)
     {
-        NYX_LOG_ERROR("Invalid object");
-
-        exit(1);
+        NYX_LOG_FATAL("Invalid object");
     }
 
     switch(object->type)
@@ -282,9 +276,7 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
             break;
 
         default:
-            NYX_LOG_ERROR("Internal error");
-
-            exit(1);
+            NYX_LOG_FATAL("Internal error");
     }
 }
 
@@ -299,9 +291,7 @@ bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ con
 
     if(object1->magic != NYX_OBJECT_MAGIC || object2->magic != NYX_OBJECT_MAGIC)
     {
-        NYX_LOG_ERROR("Invalid object");
-
-        exit(1);
+        NYX_LOG_FATAL("Invalid object");
     }
 
     if(object1->type != object2->type)
@@ -328,9 +318,7 @@ bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ con
             return object1 == object2;
 
         default:
-            NYX_LOG_ERROR("Internal error");
-
-            exit(1);
+            NYX_LOG_FATAL("Internal error");
     }
 }
 
@@ -345,9 +333,7 @@ str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
 
     if(object->magic != NYX_OBJECT_MAGIC)
     {
-        NYX_LOG_ERROR("Invalid object");
-
-        exit(1);
+        NYX_LOG_FATAL("Invalid object");
     }
 
     switch(object->type)
@@ -371,9 +357,7 @@ str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
             return nyx_dict_to_string((nyx_dict_t *) object);
 
         default:
-            NYX_LOG_ERROR("Internal error");
-
-            exit(1);
+            NYX_LOG_FATAL("Internal error");
     }
 }
 
@@ -388,9 +372,7 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
 
     if(object->magic != NYX_OBJECT_MAGIC)
     {
-        NYX_LOG_ERROR("Invalid object");
-
-        exit(1);
+        NYX_LOG_FATAL("Invalid object");
     }
 
     switch(object->type)
@@ -414,9 +396,7 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
             return nyx_dict_to_string((nyx_dict_t *) object);
 
         default:
-            NYX_LOG_ERROR("Internal error");
-
-            exit(1);
+            NYX_LOG_FATAL("Internal error");
     }
 }
 
