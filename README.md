@@ -21,7 +21,7 @@ astronomical hardware. It enhances INDI by supporting multiple independent nodes
 These nodes can communicate directly over TCP or via an MQTT broker, providing greater flexibility and scalability for
 distributed systems.
 
-The `Nyx Node` library is written in C99 and requires no dependencies. It compiles within any UNIX or arduino
+The `Nyx Node` library is written in C99 and requires no dependencies. It compiles within any UNIX or Arduino
 environment.
 
 # Build instructions
