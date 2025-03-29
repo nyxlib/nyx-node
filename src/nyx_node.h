@@ -1661,7 +1661,7 @@ __INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ double nyx_number_def_get(nyx_dict_t *def)
+__INLINE__ double nyx_number_def_get(const nyx_dict_t *def)
 {
     return ((nyx_number_t *) nyx_dict_get(def, "$"))->value;
 }
@@ -1706,7 +1706,7 @@ __INLINE__ bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ STR_t nyx_text_def_get(nyx_dict_t *def)
+__INLINE__ STR_t nyx_text_def_get(const nyx_dict_t *def)
 {
     return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
 }
@@ -1751,7 +1751,7 @@ __INLINE__ bool nyx_light_def_set(nyx_dict_t *def, nyx_state_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ nyx_state_t nyx_light_def_get(nyx_dict_t *def)
+__INLINE__ nyx_state_t nyx_light_def_get(const nyx_dict_t *def)
 {
     return nyx_str_to_state(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
 }
@@ -1795,7 +1795,7 @@ __INLINE__ bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ nyx_onoff_t nyx_switch_def_get(nyx_dict_t *def)
+__INLINE__ nyx_onoff_t nyx_switch_def_get(const nyx_dict_t *def)
 {
     return nyx_str_to_onoff(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
 }
@@ -1841,7 +1841,7 @@ __INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, STR_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ STR_t nyx_blob_def_get(nyx_dict_t *def)
+__INLINE__ STR_t nyx_blob_def_get(const nyx_dict_t *def)
 {
     return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
 }
