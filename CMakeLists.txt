@@ -102,6 +102,8 @@ set_target_properties(nyx-node-shared PROPERTIES
 )
 
 ########################################################################################################################
+# INSTALLATION                                                                                                         #
+########################################################################################################################
 
 install(TARGETS nyx-node-static EXPORT LibNyxNodeTargets ARCHIVE DESTINATION lib)
 install(TARGETS nyx-node-shared EXPORT LibNyxNodeTargets LIBRARY DESTINATION lib)
