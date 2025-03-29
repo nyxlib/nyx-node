@@ -50,6 +50,7 @@ set(SOURCE_FILES
     src/indi/indi_switch.c
     src/indi/indi_text.c
     #
+    src/utils/addr.c
     src/utils/base64.c
     src/utils/hash32.c
     src/utils/utf8.c
@@ -58,7 +59,6 @@ set(SOURCE_FILES
     src/parsers/xml.c
     #
     src/log.c
-    src/mac.c
     src/string_builder.c
     src/object.c
     src/dom.c
