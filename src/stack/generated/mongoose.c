@@ -1,4 +1,6 @@
 #if !defined(ARDUINO)
+// @generated
+
 // Copyright (c) 2004-2013 Sergey Lyubka
 // Copyright (c) 2013-2025 Cesanta Software Limited
 // All rights reserved

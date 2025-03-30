@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  NyxNode
+  Author: Jérôme ODIER <jerome.odier@lpsc.in2p3.fr>
+  SPDX-License-Identifier: GPL-2.0-only (Mongoose backend) or GPL-3.0+
+  -->
+
 <!--suppress XmlDefaultAttributeValue -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">

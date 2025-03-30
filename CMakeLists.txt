@@ -31,7 +31,7 @@ set(SOURCE_FILES
     src/nyx_node_schema.h
     src/nyx_node_internal.h
     #
-    src/stack/gen/mongoose.c
+    src/stack/generated/mongoose.c
     src/stack/mongoose.c
     #
     src/json/json_boolean.c

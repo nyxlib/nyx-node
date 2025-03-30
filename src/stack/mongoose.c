@@ -1,3 +1,8 @@
+/* NyxNode
+ * Author: Jérôme ODIER <jerome.odier@lpsc.in2p3.fr>
+ * SPDX-License-Identifier: GPL-2.0-only (Mongoose backend) or GPL-3.0+
+ */
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 #if !defined(ARDUINO)
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -5,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gen/mongoose.h"
+#include "generated/mongoose.h"
 
 #include "../nyx_node_internal.h"
 
