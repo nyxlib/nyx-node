@@ -491,7 +491,7 @@ static size_t tcp_handler(nyx_node_t *node, int event_type, size_t size, BUFF_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic, nyx_str_t event_message)
+static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t topic, nyx_str_t message)
 {
     if(event_type == NYX_EVENT_OPEN)
     {
@@ -526,11 +526,11 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
         /* MG_EV_MQTT_MSG                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(event_topic.len > 0 && event_topic.buf != NULL
+        if(topic.len > 0 && topic.buf != NULL
            &&
-           event_message.len > 0 && event_message.buf != NULL
+           message.len > 0 && message.buf != NULL
         ) {
-            /**/ if(nyx_startswith(event_message, SPECIAL_TOPICS[0]))
+            /**/ if(nyx_startswith(message, SPECIAL_TOPICS[0]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* GET_CLIENTS                                                                                        */
@@ -540,13 +540,13 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
+            else if(nyx_startswith(topic, SPECIAL_TOPICS[1]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_object_t *object = nyx_object_parse_buff(event_message.buf, event_message.len);
+                nyx_object_t *object = nyx_object_parse_buff(message.buf, message.len);
 
                 if(object != NULL)
                 {
@@ -557,13 +557,13 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[2]))
+            else if(nyx_startswith(topic, SPECIAL_TOPICS[2]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* XML NEW XXX VECTOR                                                                                 */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.buf, event_message.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(message.buf, message.len);
 
                 if(xmldoc != NULL)
                 {

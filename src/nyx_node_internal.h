@@ -320,9 +320,19 @@ struct nyx_node_s
 
     /**/
 
-    size_t (* tcp_handler)(struct nyx_node_s *node, int event_type, size_t size, BUFF_t buff);
+    size_t (* tcp_handler)(
+        struct nyx_node_s *node,
+        int event_type,
+        size_t size,
+        BUFF_t buff
+    );
 
-    void (* mqtt_handler)(struct nyx_node_s *node, int event_type, nyx_str_t event_topic, nyx_str_t event_message);
+    void (* mqtt_handler)(
+        struct nyx_node_s *node,
+        int event_type,
+        nyx_str_t topic,
+        nyx_str_t message
+    );
 
     /**/
 
