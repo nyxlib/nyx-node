@@ -2,10 +2,15 @@ image: alpine:latest
 
 stages:
     - build
+    - deploy
 
 before_script:
     - apk update
-    - apk add --no-cache gcc make cmake doxygen graphviz musl-dev
+    - apk add --no-cache gcc make cmake rsync doxygen graphviz musl-dev openssh-client
+    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh/
+    - chmod 700 ~/.ssh/
+    - ssh-keyscan -H ${DEPLOY_HOST} >> ~/.ssh/known_hosts
 
 build_project:
     stage: build
@@ -15,3 +20,8 @@ build_project:
         - cmake ..
         - make all
         - make docs
+
+deploy_project:
+    stage: deploy
+    script:
+        - rsync -avz --delete ../docs/ ${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/node/
