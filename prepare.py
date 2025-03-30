@@ -7,7 +7,7 @@ import requests
 
 MONGOOSE_VERSION = '7.17'
 
-DOXYGEN_AWESOME_CSS_VERSION = '2.3.3'
+DOXYGEN_AWESOME_CSS_VERSION = '2.3.4'
 
 ########################################################################################################################
 
