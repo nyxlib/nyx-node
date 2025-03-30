@@ -2,7 +2,6 @@ image: alpine:latest
 
 stages:
     - build
-    - deploy
 
 before_script:
     - apk update
@@ -25,7 +24,4 @@ build_project:
         - make all
         - make docs
 
-deploy_project:
-    stage: deploy
-    script:
         - rsync -avz --delete ../docs/ "${DEPLOY_USER}"@"${DEPLOY_HOST}":/var/www/nyxlib.org/node/
