@@ -23,7 +23,7 @@ static bool nyx_startswith(nyx_str_t topic, nyx_str_t prefix)
 /* NODE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_C_STR(a) {(char *) (a), sizeof(a) - 1}
+#define NYX_C_STR(a) {(str_t) (a), sizeof(a) - 1}
 
 static nyx_str_t SPECIAL_TOPICS[] = {
     NYX_C_STR("nyx/cmd/get_clients"),
