@@ -27,6 +27,8 @@ static bool nyx_startswith(nyx_str_t topic, nyx_str_t prefix)
 
 static nyx_str_t SPECIAL_TOPICS[] = {
     NYX_C_STR("nyx/cmd/get_clients"),
+    NYX_C_STR("nyx/cmd/get_master_client"),
+    NYX_C_STR("nyx/cmd/set_master_client"),
     NYX_C_STR("nyx/cmd/json"),
     NYX_C_STR("nyx/cmd/xml"),
 };
@@ -545,7 +547,31 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
+            else if(nyx_startswith(event_message, SPECIAL_TOPICS[1]))
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+                /* GET_MASTER_CLIENT                                                                                  */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                nyx_mqtt_pub(node, nyx_str_s("nyx/master_client"), node->master_client);
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            else if(nyx_startswith(event_message, SPECIAL_TOPICS[2]))
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+                /* SET_MASTER_CLIENT                                                                                  */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                nyx_memory_free(node->master_client.buf);
+
+                node->master_client.buf = nyx_memory_alloc(event_message.len + 1);
+
+                strncpy(node->master_client.buf, event_message.buf, node->master_client.len = event_message.len)[event_message.len] = '\0';
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[3]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* JSON NEW XXX VECTOR                                                                                */
@@ -562,7 +588,7 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[2]))
+            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[4]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* XML NEW XXX VECTOR                                                                                 */
@@ -648,18 +674,22 @@ nyx_node_t *nyx_node_initialize(
     /* SET NODE OPTIONS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->node_id = nyx_str_s(node_id);
+    node->node_id = nyx_str_s(nyx_string_dup(node_id));
+
+    node->master_client = nyx_str_s(nyx_string_dup("@ALL"));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     node->tcp_url = tcp_url;
     node->mqtt_url = mqtt_url;
+
+    node->enable_xml = enable_xml;
+    node->validate_xml = validate_xml;
 
     node->def_vectors = def_vectors;
 
     node->tcp_handler = tcp_handler;
     node->mqtt_handler = mqtt_handler;
-
-    node->enable_xml = enable_xml;
-    node->validate_xml = validate_xml;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE STACK                                                                                               */
@@ -683,7 +713,7 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
     nyx_node_stack_finalize(node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* FREE VECTORS & NODE                                                                                            */
+    /* FREE DEF VECTORS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(free_vectors)
@@ -695,6 +725,12 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* FREE NODE                                                                                                      */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_memory_free(node->master_client.buf);
+
+    nyx_memory_free(node->node_id.buf);
 
     nyx_memory_free(node);
 

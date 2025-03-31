@@ -34,12 +34,12 @@ str_t nyx_boolean_dup(
     bool b
 );
 
-str_t nyx_double_dup(
+__NULLABLE__ str_t nyx_double_dup(
     double d
 );
 
-str_t nyx_string_dup(
-    STR_t s
+__NULLABLE__ str_t nyx_string_dup(
+    __NULLABLE__ STR_t s
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -58,7 +58,7 @@ typedef struct mg_str nyx_str_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_str_t nyx_str_s(
-    STR_t s
+    __NULLABLE__ STR_t s
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -316,8 +316,17 @@ struct nyx_node_s
 {
     nyx_str_t node_id;
 
+    nyx_str_t master_client;
+
+    /**/
+
     STR_t tcp_url;
     STR_t mqtt_url;
+
+    bool enable_xml;
+    bool validate_xml;
+
+    /**/
 
     nyx_stack_t *stack;
 
@@ -338,11 +347,6 @@ struct nyx_node_s
         nyx_str_t topic,
         nyx_str_t message
     );
-
-    /**/
-
-    bool enable_xml;
-    bool validate_xml;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
