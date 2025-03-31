@@ -652,7 +652,7 @@ nyx_node_t *nyx_node_initialize(
     /* SET NODE OPTIONS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->node_id = nyx_str_s(nyx_string_dup(node_id));
+    node->node_id = nyx_str_s(node_id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -718,8 +718,6 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
     nyx_memory_free(node->master_client_message.buf);
 
     nyx_memory_free(node->master_client_topic.buf);
-
-    nyx_memory_free(node->node_id.buf);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
