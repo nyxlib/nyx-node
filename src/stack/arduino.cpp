@@ -558,6 +558,8 @@ void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
             stack->last_ping_ms = curr_ping_ms - 0x0000000UL;
 
             nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
+
+            nyx_mqtt_pub(node, node->master_client_topic, node->master_client_message);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/

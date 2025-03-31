@@ -316,7 +316,8 @@ struct nyx_node_s
 {
     nyx_str_t node_id;
 
-    nyx_str_t master_client;
+    nyx_str_t master_client_topic;
+    nyx_str_t master_client_message;
 
     /**/
 

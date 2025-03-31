@@ -251,6 +251,8 @@ static void ping_timer_handler(void *arg)
     nyx_node_t *node = (nyx_node_t *) arg;
 
     nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
+
+    nyx_mqtt_pub(node, node->master_client_topic, node->master_client_message);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
