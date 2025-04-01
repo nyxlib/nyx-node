@@ -321,11 +321,14 @@ void nyx_node_stack_initialize(
         {
             NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
-            if(!mqttClient.setBufferSize(1024))
+            if(!mqttClient.setBufferSize(4096))
             {
-                if(!mqttClient.setBufferSize(512))
+                if(!mqttClient.setBufferSize(1024))
                 {
-                    NYX_LOG_FATAL("Out of memory");
+                    if(!mqttClient.setBufferSize(512))
+                    {
+                        NYX_LOG_FATAL("Out of memory");
+                    }
                 }
             }
 
