@@ -321,11 +321,14 @@ void nyx_node_stack_initialize(
         {
             NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
+            if(!mqttClient.setBufferSize(1024))
+            {
+                NYX_LOG_FATAL("Out of memory");
+            }
+
             mqttClient.setCallback(
                 mqtt_callback
-            );
-
-            mqttClient.setServer(
+            ).setServer(
                 ip, port
             );
         }
@@ -501,7 +504,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* RECIEVE DATA                                                                                               */
+        /* RECEIVE DATA                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
         for(int i = 0; i < TCP_MAX_CLIENTS; i++)
