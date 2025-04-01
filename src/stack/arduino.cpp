@@ -392,7 +392,7 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::TCPClient &client)
     if(client.recv_size > 0)
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        /* COMSUME DATA                                                                                               */
+        /* CONSUME DATA                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
         size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, client.recv_size, client.recv_buff);
