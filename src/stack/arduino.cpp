@@ -323,7 +323,10 @@ void nyx_node_stack_initialize(
 
             if(!mqttClient.setBufferSize(1024))
             {
-                NYX_LOG_FATAL("Out of memory");
+                if(!mqttClient.setBufferSize(512))
+                {
+                    NYX_LOG_FATAL("Out of memory");
+                }
             }
 
             mqttClient.setCallback(
