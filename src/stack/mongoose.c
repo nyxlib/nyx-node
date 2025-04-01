@@ -309,7 +309,7 @@ void nyx_node_stack_finalize(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
+void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     mg_mgr_poll(&node->stack->mgr, timeout_ms);
 }

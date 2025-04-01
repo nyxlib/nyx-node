@@ -387,11 +387,6 @@ void nyx_node_stack_finalize(
     nyx_node_t *node
 );
 
-void nyx_stack_poll(
-    nyx_node_t *node,
-    int timeout_ms
-);
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #ifndef ARDUINO

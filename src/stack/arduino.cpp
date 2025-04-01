@@ -436,7 +436,7 @@ static void consume_data(nyx_node_t *node, nyx_stack_s::TCPClient &client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_stack_poll(nyx_node_t *node, int timeout_ms)
+void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     auto stack = node->stack;
 

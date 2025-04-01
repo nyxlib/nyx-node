@@ -743,13 +743,6 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_poll(nyx_node_t *node, int timeout_ms)
-{
-    nyx_stack_poll(node, timeout_ms);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 void nyx_node_ping(nyx_node_t *node)
 {
     nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
