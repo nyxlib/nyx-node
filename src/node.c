@@ -26,6 +26,7 @@ static bool nyx_startswith(nyx_str_t topic, nyx_str_t prefix)
 #define NYX_C_STR(a) {(str_t) (a), sizeof(a) - 1}
 
 static nyx_str_t SPECIAL_TOPICS[] = {
+    NYX_C_STR("nyx/cmd/trigger_ping"),
     NYX_C_STR("nyx/cmd/set_master_client"),
     NYX_C_STR("nyx/cmd/json"),
     NYX_C_STR("nyx/cmd/xml"),
@@ -531,64 +532,78 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
         /* MG_EV_MQTT_MSG                                                                                             */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(event_topic.len > 0 && event_topic.buf != NULL
-           &&
-           event_message.len > 0 && event_message.buf != NULL
-        ) {
+        if(event_topic.len > 0 && event_topic.buf != NULL)
+        {
             /**/ if(nyx_startswith(event_topic, SPECIAL_TOPICS[0]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
-                /* SET_MASTER_CLIENT                                                                                  */
+                /* TRIGGER PING                                                                                       */
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_memory_free(node->master_client_message.buf);
-
-                node->master_client_message.buf = nyx_memory_alloc(event_message.len + 1);
-
-                strncpy(node->master_client_message.buf, event_message.buf, event_message.len)[node->master_client_message.len = event_message.len] = '\0';
+                nyx_node_ping(node);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
+            else
             {
-                /*----------------------------------------------------------------------------------------------------*/
-                /* JSON NEW XXX VECTOR                                                                                */
-                /*----------------------------------------------------------------------------------------------------*/
-
-                nyx_object_t *object = nyx_object_parse_buff(event_message.buf, event_message.len);
-
-                if(object != NULL)
+                if(event_message.len > 0 && event_message.buf != NULL)
                 {
-                    process_message(node, object);
-
-                    nyx_object_free(object);
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-            else if(nyx_startswith(event_topic, SPECIAL_TOPICS[2]))
-            {
-                /*----------------------------------------------------------------------------------------------------*/
-                /* XML NEW XXX VECTOR                                                                                 */
-                /*----------------------------------------------------------------------------------------------------*/
-
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.buf, event_message.len);
-
-                if(xmldoc != NULL)
-                {
-                    nyx_object_t *object = nyx_xmldoc_to_object(xmldoc, node->validate_xml);
-
-                    if(object != NULL)
+                    /**/ if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
                     {
-                        process_message(node, object);
+                        /*--------------------------------------------------------------------------------------------*/
+                        /* SET_MASTER_CLIENT                                                                          */
+                        /*--------------------------------------------------------------------------------------------*/
 
-                        nyx_object_free(object);
+                        nyx_memory_free(node->master_client_message.buf);
+
+                        node->master_client_message.buf = nyx_memory_alloc(event_message.len + 1);
+
+                        strncpy(node->master_client_message.buf, event_message.buf, event_message.len)[node->master_client_message.len = event_message.len] = '\0';
+
+                        /*--------------------------------------------------------------------------------------------*/
                     }
+                    else if(nyx_startswith(event_topic, SPECIAL_TOPICS[2]))
+                    {
+                        /*--------------------------------------------------------------------------------------------*/
+                        /* JSON NEW XXX VECTOR                                                                        */
+                        /*--------------------------------------------------------------------------------------------*/
 
-                    nyx_xmldoc_free(xmldoc);
+                        nyx_object_t *object = nyx_object_parse_buff(event_message.buf, event_message.len);
+
+                        if(object != NULL)
+                        {
+                            process_message(node, object);
+
+                            nyx_object_free(object);
+                        }
+
+                        /*--------------------------------------------------------------------------------------------*/
+                    }
+                    else if(nyx_startswith(event_topic, SPECIAL_TOPICS[3]))
+                    {
+                        /*--------------------------------------------------------------------------------------------*/
+                        /* XML NEW XXX VECTOR                                                                         */
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.buf, event_message.len);
+
+                        if(xmldoc != NULL)
+                        {
+                            nyx_object_t *object = nyx_xmldoc_to_object(xmldoc, node->validate_xml);
+
+                            if(object != NULL)
+                            {
+                                process_message(node, object);
+
+                                nyx_object_free(object);
+                            }
+
+                            nyx_xmldoc_free(xmldoc);
+                        }
+
+                        /*--------------------------------------------------------------------------------------------*/
+                    }
                 }
-
-                /*----------------------------------------------------------------------------------------------------*/
             }
         }
 
@@ -731,6 +746,15 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     nyx_stack_poll(node, timeout_ms);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_ping(nyx_node_t *node)
+{
+    nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
+
+    nyx_mqtt_pub(node, node->master_client_topic, node->master_client_message);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
