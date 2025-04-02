@@ -63,6 +63,11 @@ struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    __NULLABLE__ STR_t mqtt_username = nullptr;
+    __NULLABLE__ STR_t mqtt_password = nullptr;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     struct TCPClient
     {
         #ifdef HAS_WIFI
@@ -78,11 +83,6 @@ struct nyx_stack_s
         __NULLABLE__ buff_t recv_buff = nullptr;
 
     } clients[TCP_MAX_CLIENTS];
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    __NULLABLE__ STR_t mqtt_username = nullptr;
-    __NULLABLE__ STR_t mqtt_password = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -314,31 +314,32 @@ static uint16_t mqtt_estimate_buffer_size(void)
     #endif
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint16_t result;
+    uint16_t buff_size;
 
     /**/ if(free_heap > 2 * 8192) {
-        result = 8192;
+        buff_size = 8192;
     }
     else if(free_heap > 2 * 4096) {
-        result = 4096;
+        buff_size = 4096;
     }
     else if(free_heap > 2 * 2048) {
-        result = 2048;
+        buff_size = 2048;
     }
     else if(free_heap > 2 * 1024) {
-        result = 1024;
+        buff_size = 1024;
     }
     else {
-        result = 512;
+        buff_size = 512;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    NYX_LOG_INFO("MQTT buffer size: %u bytes", (uint32_t) result);
+    NYX_LOG_INFO("Free heap size: %u bytes", (uint32_t) free_heap);
+    NYX_LOG_INFO("MQTT buffer size: %u bytes", (uint32_t) buff_size);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return result;
+    return buff_size;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -402,7 +403,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            if(mqttClient.setBufferSize(mqtt_estimate_buffer_size()))
+            if(mqttClient.setBufferSize(mqtt_estimate_buffer_size(stack->free_heap)))
             {
                 NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
