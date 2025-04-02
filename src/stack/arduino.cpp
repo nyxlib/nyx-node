@@ -271,6 +271,9 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define MIN_SIZE 0x0004U
+#define MAX_SIZE 0x8000U
+
 static uint16_t mqtt_estimate_buffer_size(void)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -278,7 +281,29 @@ static uint16_t mqtt_estimate_buffer_size(void)
     #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
     uint32_t free_heap = ESP.getFreeHeap();
     #else
-    uint32_t free_heap = 2048;
+    buff_t ptr;
+    uint32_t mid;
+
+    uint32_t free_heap = 0x000000;
+    uint32_t high_heap = MAX_SIZE;
+
+    while(high_heap - free_heap > MIN_SIZE)
+    {
+        mid = (free_heap + high_heap) / 2;
+
+        ptr = malloc(mid);
+
+        if(ptr != NULL)
+        {
+            free(ptr);
+            free_heap = mid;
+        }
+        else
+        {
+            ////(ptr);
+            high_heap = mid;
+        }
+    }
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
