@@ -271,6 +271,37 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static uint32_t mqtt_estimate_buffer_size(void)
+{
+    uint16_t result;
+
+#if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+    uint32_t free_heap = ESP.getFreeHeap();
+
+    /**/ if(free_heap > 2 * 8192) {
+        result = 8192;
+    }
+    else if(free_heap > 2 * 4096) {
+        result = 4096;
+    }
+    else if(free_heap > 2 * 2048) {
+        result = 2048;
+    }
+    else if(free_heap > 2 * 1024) {
+        result = 1024;
+    }
+    else {
+        result = 512;
+    }
+#else
+    result = 1024;
+#endif
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
@@ -330,39 +361,14 @@ void nyx_node_stack_initialize(
         {
             NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
-            #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
-            uint32_t free_heap = ESP.getFreeHeap();
-
-            /**/ if(free_heap > 2 * 8192) {
-                mqttClient.setBufferSize(8192);
-            }
-            else if(free_heap > 2 * 4096) {
-                mqttClient.setBufferSize(4096);
-            }
-            else if(free_heap > 2 * 2048) {
-                mqttClient.setBufferSize(2048);
-            }
-            else if(free_heap > 2 * 1024) {
-                mqttClient.setBufferSize(1024);
-            }
-            #else
-            if(!mqttClient.setBufferSize(4096))
+            if(mqttClient.setBufferSize(mqtt_estimate_buffer_size()))
             {
-                if(!mqttClient.setBufferSize(1024))
-                {
-                    if(!mqttClient.setBufferSize(512))
-                    {
-                        NYX_LOG_FATAL("Out of memory");
-                    }
-                }
+                mqttClient.setCallback(
+                    mqtt_callback
+                ).setServer(
+                    ip, port
+                );
             }
-            #endif
-
-            mqttClient.setCallback(
-                mqtt_callback
-            ).setServer(
-                ip, port
-            );
         }
         else
         {
