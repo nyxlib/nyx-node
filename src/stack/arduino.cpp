@@ -183,7 +183,10 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 {
     if(node->mqtt_url != NULL && mqttClient.connected())
     {
-        mqttClient.subscribe(topic.buf, 1);
+        if(!mqttClient.subscribe(topic.buf, 1))
+        {
+            NYX_LOG_ERROR("Cannot subscribe to %s", topic.buf);
+        }
     }
 }
 
@@ -193,7 +196,13 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 {
     if(node->mqtt_url != NULL && mqttClient.connected())
     {
-        mqttClient.publish(topic.buf, reinterpret_cast<uint8_t *>(message.buf), reinterpret_cast<unsigned int>(message.len));
+        if(mqttClient.publish(
+            topic.buf,
+            reinterpret_cast<uint8_t *>(message.buf),
+            reinterpret_cast<unsigned int>(message.len)
+        )) {
+            NYX_LOG_ERROR("Cannot publish to %s", topic.buf);
+        }
     }
 }
 
