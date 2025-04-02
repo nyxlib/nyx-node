@@ -196,7 +196,7 @@ void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 {
     if(node->mqtt_url != NULL && mqttClient.connected())
     {
-        if(mqttClient.publish(
+        if(!mqttClient.publish(
             topic.buf,
             reinterpret_cast<uint8_t *>(message.buf),
             reinterpret_cast<unsigned int>(message.len)
