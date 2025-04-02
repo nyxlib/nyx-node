@@ -271,33 +271,29 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static uint32_t mqtt_estimate_buffer_size(void)
+static uin16_t mqtt_estimate_buffer_size(void)
 {
-    uint16_t result;
-
-#if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+    #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
     uint32_t free_heap = ESP.getFreeHeap();
+    #else
+    uint32_t free_heap = 2048;
+    #endif
 
     /**/ if(free_heap > 2 * 8192) {
-        result = 8192;
+        return 8192;
     }
     else if(free_heap > 2 * 4096) {
-        result = 4096;
+        return 4096;
     }
     else if(free_heap > 2 * 2048) {
-        result = 2048;
+        return 2048;
     }
     else if(free_heap > 2 * 1024) {
-        result = 1024;
+        return 1024;
     }
     else {
-        result = 512;
+        return 512;
     }
-#else
-    result = 1024;
-#endif
-
-    return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -346,6 +342,8 @@ void nyx_node_stack_initialize(
         }
         else
         {
+            NYX_LOG_ERROR("Cannot initialize TCP server: bad address");
+
             node->tcp_url = nullptr;
         }
     }
@@ -359,19 +357,27 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
-
             if(mqttClient.setBufferSize(mqtt_estimate_buffer_size()))
             {
+                NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
+
                 mqttClient.setCallback(
                     mqtt_callback
                 ).setServer(
                     ip, port
                 );
             }
+            else
+            {
+                NYX_LOG_ERROR("Cannot initialize MQTT client: out of memory");
+
+                node->mqtt_url = nullptr;
+            }
         }
         else
         {
+            NYX_LOG_ERROR("Cannot initialize MQTT client: bad address");
+
             node->mqtt_url = nullptr;
         }
     }
