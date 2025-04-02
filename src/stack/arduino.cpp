@@ -382,7 +382,7 @@ void nyx_node_stack_initialize(
             #endif
 
             #ifdef HAS_ETHERNET
-            tcpServer = EthernetServer(/**/port/**/);
+            tcpServer = EthernetServer(/*ip*/ port);
             tcpServer.begin();
             #endif
         }
