@@ -271,7 +271,7 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static uin16_t mqtt_estimate_buffer_size(void)
+static uint16_t mqtt_estimate_buffer_size(void)
 {
     #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
     uint32_t free_heap = ESP.getFreeHeap();
