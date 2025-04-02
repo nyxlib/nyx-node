@@ -321,6 +321,22 @@ void nyx_node_stack_initialize(
         {
             NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
+            #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+            uint32_t free_heap = ESP.getFreeHeap();
+
+            /**/ if(free_heap > 2 * 8192) {
+                mqttClient.setBufferSize(8192);
+            }
+            else if(free_heap > 2 * 4096) {
+                mqttClient.setBufferSize(4096);
+            }
+            else if(free_heap > 2 * 2048) {
+                mqttClient.setBufferSize(2048);
+            }
+            else if(free_heap > 2 * 1024) {
+                mqttClient.setBufferSize(1024);
+            }
+            #else
             if(!mqttClient.setBufferSize(4096))
             {
                 if(!mqttClient.setBufferSize(1024))
@@ -331,6 +347,7 @@ void nyx_node_stack_initialize(
                     }
                 }
             }
+            #endif
 
             mqttClient.setCallback(
                 mqtt_callback
