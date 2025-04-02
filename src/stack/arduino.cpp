@@ -144,7 +144,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
     if(level == NYX_LOG_LEVEL_FATAL)
     {
-        #if defined(ESP32) || defined(ESP8266)
+        #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
         ESP.restart();
         #endif
 
@@ -271,16 +271,21 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define MIN_SIZE 0x0004U
-#define MAX_SIZE 0x8000U
+#define MIN_SIZE 0x0004
+#define MAX_SIZE 0x8000
 
 static uint16_t mqtt_estimate_buffer_size(void)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
-
     #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     uint32_t free_heap = ESP.getFreeHeap();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
     #else
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     buff_t ptr;
     uint32_t mid;
 
@@ -304,8 +309,9 @@ static uint16_t mqtt_estimate_buffer_size(void)
             high_heap = mid;
         }
     }
-    #endif
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    #endif
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uint16_t result;
