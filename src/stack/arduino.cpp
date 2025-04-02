@@ -273,27 +273,41 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 static uint16_t mqtt_estimate_buffer_size(void)
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
     uint32_t free_heap = ESP.getFreeHeap();
     #else
     uint32_t free_heap = 2048;
     #endif
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uint16_t result;
+
     /**/ if(free_heap > 2 * 8192) {
-        return 8192;
+        result = 8192;
     }
     else if(free_heap > 2 * 4096) {
-        return 4096;
+        result = 4096;
     }
     else if(free_heap > 2 * 2048) {
-        return 2048;
+        result = 2048;
     }
     else if(free_heap > 2 * 1024) {
-        return 1024;
+        result = 1024;
     }
     else {
-        return 512;
+        result = 512;
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    NYX_LOG_INFO("MQTT buffer size: %u bytes", (uint32_t) result);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
