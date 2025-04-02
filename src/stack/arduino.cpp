@@ -378,13 +378,13 @@ void nyx_node_stack_initialize(
 
             #ifdef HAS_WIFI
             tcpServer = WiFiServer(ip, port);
+            tcpServer.begin();
             #endif
 
             #ifdef HAS_ETHERNET
             tcpServer = EthernetServer(/**/port/**/);
-            #endif
-
             tcpServer.begin();
+            #endif
         }
         else
         {
