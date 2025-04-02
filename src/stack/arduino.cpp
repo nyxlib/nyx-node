@@ -403,7 +403,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            if(mqttClient.setBufferSize(mqtt_estimate_buffer_size(stack->free_heap)))
+            if(mqttClient.setBufferSize(mqtt_estimate_buffer_size()))
             {
                 NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
