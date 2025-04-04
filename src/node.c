@@ -134,7 +134,7 @@ static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
     {
         nyx_dict_t *def_vector = *def_vector_ptr;
 
-        if((def_vector->base.flags & NYX_FLAGS_BOTH_DISABLED) == 0)
+        if((def_vector->base.flags & NYX_FLAGS_XXXX_DISABLED) == 0)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
