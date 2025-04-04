@@ -269,6 +269,18 @@ typedef enum
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+typedef struct nyx_per_client_flags_s
+{
+    str_t client;                                                                               //!< Client identifier or '@INDI' for backward compatibility.
+
+    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_???_DISABLED.
+
+    struct nyx_per_client_flags_s *next;                                                        //!< Chaining.
+
+} nyx_per_client_flags_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #define NYX_FLAGS_XXXX_DISABLED     ((uint32_t) (1 << 0))                                       //!< Flag specifying that the object is disabled.
 #define NYX_FLAGS_BLOB_DISABLED     ((uint32_t) (1 << 1))                                       //!< Flag specifying that the blob is disabled.
 
@@ -277,13 +289,15 @@ typedef enum
 typedef struct nyx_object_s
 {
     uint64_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
-    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_?_DISABLED.
+    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_???_DISABLED.
 
     nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
     __NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
 
     __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
+
+    __NULLABLE__ struct nyx_per_client_flags_s *per_client_flags;                               //!< Per client mask of flags.
 
     __NULLABLE__ void (* in_callback)(
         struct nyx_object_s *object,                                                            //!< This object.

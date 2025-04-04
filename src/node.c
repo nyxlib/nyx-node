@@ -183,9 +183,15 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    STR_t client1 = nyx_dict_get_string(dict, "@client");
     STR_t device1 = nyx_dict_get_string(dict, "@device");
     STR_t name1 = nyx_dict_get_string(dict, "@name");
     STR_t value1 = nyx_dict_get_string(dict, "$");
+
+    if(client1 == NULL)
+    {
+        client1 = "@INDI";
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
