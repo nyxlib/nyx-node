@@ -306,6 +306,8 @@ bool nyx_stream_detect_closing_tag(
 
 #define NYX_PING_MS 5000UL
 
+#define NYX_ALL "@ALL"
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct nyx_stack_s nyx_stack_t;

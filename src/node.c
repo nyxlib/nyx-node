@@ -272,7 +272,7 @@ static bool is_allowed(nyx_node_t *node, nyx_dict_t *dict)
 
     STR_t client1 = node->master_client_message.buf;
 
-    if((client1 != NULL) && (strcmp("@ALL", client1) == 0))
+    if((client1 != NULL) && (strcmp(NYX_ALL, client1) == 0))
     {
         return true;
     }
@@ -707,7 +707,7 @@ nyx_node_t *nyx_node_initialize(
 
     if(sprintf(master_client_topic, "nyx/master_client/%s", node->node_id.buf) > 0)
     {
-        node->master_client_message = nyx_str_s(nyx_string_dup("@ALL"));
+        node->master_client_message = nyx_str_s(nyx_string_dup(NYX_ALL));
 
         node->master_client_topic = nyx_str_s(master_client_topic);
     }
