@@ -187,7 +187,7 @@ static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t hash = nyx_hash32(client, strlen(client), 0xABABABAB);
+    uint32_t hash = nyx_hash32(client, strlen(client), NYX_OBJECT_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
