@@ -277,7 +277,6 @@ typedef struct nyx_object_s
 {
     uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
     uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX.
-    uint32_t bitmap;                                                                            //!< For internal purposes.
 
     nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 

@@ -333,7 +333,7 @@ struct nyx_node_s
 
     /**/
 
-    __ZEROABLE__ uint32_t client_hashes[32];
+    __ZEROABLE__ uint32_t client_hashes[31];
 
     /**/
 

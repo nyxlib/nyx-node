@@ -100,7 +100,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
             else if(strcmp("defBLOBVector", tag) == 0) {
                 set_vector = nyx_blob_set_vector_new(def_vector);
 
-                if(set_vector->base.bitmap == 0) {
+                if((set_vector->base.flags & 0xFFFFFFFE) == 0) {
                     return;
                 }
             }
@@ -270,13 +270,13 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
                 case NYX_BLOB_ALSO:
                 case NYX_BLOB_ONLY:
-                    def_vector->base.bitmap |= (1U << index);
+                    def_vector->base.flags |= (1U << index);
                     break;
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_BLOB_NEVER:
-                    def_vector->base.bitmap &= ~(1U << index);
+                    def_vector->base.flags &= ~(1U << index);
                     break;
 
                 /*----------------------------------------------------------------------------------------------------*/
