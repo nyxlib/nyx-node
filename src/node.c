@@ -269,14 +269,14 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
-                        def_vector->base.flags &= ~(1U << index);
+                        def_vector->base.flags &= ~(1U << (index + 1));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_ALSO:
                     case NYX_BLOB_ONLY:
-                        def_vector->base.flags |= (1U << index);
+                        def_vector->base.flags |= (1U << (index + 1));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
