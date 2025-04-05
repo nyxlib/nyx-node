@@ -82,10 +82,6 @@ int nyx_unicode_to_utf8(
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_BOTH_DISABLED     (NYX_FLAGS_XXXX_DISABLED | NYX_FLAGS_BLOB_DISABLED)
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 #define NYX_OBJECT(Type) \
             ((struct nyx_object_s) {            \
                 .magic = NYX_OBJECT_MAGIC,      \
@@ -334,6 +330,10 @@ struct nyx_node_s
     nyx_stack_t *stack;
 
     nyx_dict_t **def_vectors;
+
+    /**/
+
+    __ZEROABLE__ uint32_t client_hashes[32];
 
     /**/
 

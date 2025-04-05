@@ -75,7 +75,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 {
     nyx_dict_t *def_vector = (nyx_dict_t *) object;
 
-    if((def_vector->base.flags & NYX_FLAGS_BOTH_DISABLED) == 0)
+    if((def_vector->base.flags & NYX_FLAGS_DISABLED) == 0)
     {
         STR_t tag = nyx_dict_get_string(def_vector, "<>");
 
@@ -99,6 +99,10 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
             }
             else if(strcmp("defBLOBVector", tag) == 0) {
                 set_vector = nyx_blob_set_vector_new(def_vector);
+
+                if(set_vector->base.bitmap == 0) {
+                    return;
+                }
             }
             else {
                 return;
@@ -134,7 +138,7 @@ static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
     {
         nyx_dict_t *def_vector = *def_vector_ptr;
 
-        if((def_vector->base.flags & NYX_FLAGS_XXXX_DISABLED) == 0)
+        if((def_vector->base.flags & NYX_FLAGS_DISABLED) == 0)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -179,36 +183,40 @@ static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool is_allowed(nyx_node_t *node, nyx_dict_t *dict)
+static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t client1 = node->master_client_message.buf;
-
-    if((client1 != NULL) && (strcmp(NYX_ALL, client1) == 0))
-    {
-        return true;
-    }
+    uint32_t hash = nyx_hash32(client, strlen(client), 0xABABABAB);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t client2 = nyx_dict_get_string(dict, "@client");
-
-    if((client1 != NULL) && (client2 != NULL) && (strcmp(client1, client2) == 0))
+    for(int i = 0; i < sizeof(node->client_hashes) / sizeof(uint32_t); i++)
     {
-        return true;
+        if(node->client_hashes[i] == 0x00
+           ||
+           node->client_hashes[i] == hash
+        ) {
+            node->client_hashes[i] = hash;
+
+            return i;
+        }
     }
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    return -1;
 
-    return false;
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 {
-    if(!is_allowed(node, dict))
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    int index = get_client_index(node, nyx_dict_get_string(dict, "@client"));
+
+    if(index < 0)
     {
         return;
     }
@@ -239,8 +247,10 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(device2 == NULL || strcmp(device1, device2) != 0)
-            {
+            if(device2 == NULL || strcmp(device1, /**/device2/**/) != 0
+               ||
+               tag2 == NULL || strcmp(tag2, "defBLOBVector") != 0
+            ) {
                 continue;
             }
 
@@ -259,29 +269,14 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_BLOB_ALSO:
-                    def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
+                case NYX_BLOB_ONLY:
+                    def_vector->base.bitmap |= (1U << index);
                     break;
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_BLOB_NEVER:
-                    if(tag2 != NULL && strcmp(tag2, "defBLOBVector") == 0) {
-                        def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
-                    }
-                    else {
-                        def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
-                    }
-                    break;
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                case NYX_BLOB_ONLY:
-                    if(tag2 != NULL && strcmp(tag2, "defBLOBVector") == 0) {
-                        def_vector->base.flags &= ~NYX_FLAGS_BLOB_DISABLED;
-                    }
-                    else {
-                        def_vector->base.flags |= NYX_FLAGS_BLOB_DISABLED;
-                    }
+                    def_vector->base.bitmap &= ~(1U << index);
                     break;
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -294,6 +289,33 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static bool is_allowed(nyx_node_t *node, nyx_dict_t *dict)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t client1 = node->master_client_message.buf;
+
+    if((client1 != NULL) && (strcmp(NYX_ALL, client1) == 0))
+    {
+        return true;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t client2 = nyx_dict_get_string(dict, "@client");
+
+    if((client1 != NULL) && (client2 != NULL) && (strcmp(client1, client2) == 0))
+    {
+        return true;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -826,11 +848,11 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
             switch(onoff)
             {
                 case NYX_ONOFF_OFF:
-                    def_vector->base.flags |= NYX_FLAGS_XXXX_DISABLED;
+                    def_vector->base.flags |= NYX_FLAGS_DISABLED;
                     break;
 
                 case NYX_ONOFF_ON:
-                    def_vector->base.flags &= ~NYX_FLAGS_XXXX_DISABLED;
+                    def_vector->base.flags &= ~NYX_FLAGS_DISABLED;
 
                     sub_object(node, (nyx_object_t *) def_vector);
                     break;

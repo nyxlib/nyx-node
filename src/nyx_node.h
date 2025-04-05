@@ -252,7 +252,11 @@ uint32_t nyx_hash32(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT_MAGIC 0x6565656565656565                                                     //!< Magic number for identifying JSON objects.
+#define NYX_OBJECT_MAGIC 0x65656565                                                             //!< Magic number for identifying JSON objects.
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+#define NYX_FLAGS_DISABLED ((uint32_t) (1U << 0))                                               //!< Flag specifying that the object is disabled.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -269,15 +273,11 @@ typedef enum
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_XXXX_DISABLED     ((uint32_t) (1 << 0))                                       //!< Flag specifying that the object is disabled.
-#define NYX_FLAGS_BLOB_DISABLED     ((uint32_t) (1 << 1))                                       //!< Flag specifying that the blob is disabled.
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 typedef struct nyx_object_s
 {
-    uint64_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
-    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_???_DISABLED.
+    uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
+    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX.
+    uint32_t bitmap;                                                                            //!< For internal purposes.
 
     nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
