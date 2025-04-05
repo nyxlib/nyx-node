@@ -11,28 +11,39 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static struct tag_def_s
+#define TAG(s_tag, e_tag) {                     \
+            .s_tag_size = sizeof(s_tag) - 1,    \
+            .s_tag_buff = s_tag,                \
+            .e_tag_size = sizeof(e_tag) - 1,    \
+            .e_tag_buff = e_tag,                \
+        }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static struct tag_s
 {
-    STR_t s_tag;
-    STR_t e_tag;
+    size_t s_tag_size;
+    STR_t s_tag_buff;
+    size_t e_tag_size;
+    STR_t e_tag_buff;
 
 } TAGS[] = {
-    {.s_tag = "<getProperties", .e_tag = "/>"},
-    {.s_tag = "<delProperty", .e_tag = "/>"},
-    {.s_tag = "<message", .e_tag = "/>"},
+    TAG("<getProperties", "/>"),
+    TAG("<delProperty", "/>"),
+    TAG("<message", "/>"),
     /**/
-    {.s_tag = "<enableBLOB", .e_tag = "</enableBLOB>"},
+    TAG("<enableBLOB", "</enableBLOB>"),
     /**/
-    {.s_tag = "<newTextVector", .e_tag = "</newTextVector>"},
-    {.s_tag = "<newNumberVector", .e_tag = "</newNumberVector>"},
-    {.s_tag = "<newSwitchVector", .e_tag = "</newSwitchVector>"},
-    {.s_tag = "<newLightVector", .e_tag = "</newLightVector>"},
-    {.s_tag = "<newBLOBVector", .e_tag = "</newBLOBVector>"},
+    TAG("<newTextVector", "</newTextVector>"),
+    TAG("<newNumberVector", "</newNumberVector>"),
+    TAG("<newSwitchVector", "</newSwitchVector>"),
+    TAG("<newLightVector", "</newLightVector>"),
+    TAG("<newBLOBVector", "</newBLOBVector>"),
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define TAG_DEF_NB (sizeof(TAGS) / sizeof(struct tag_def_s))
+#define TAG_DEF_NB (sizeof(TAGS) / sizeof(struct tag_s))
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -40,18 +51,19 @@ bool nyx_stream_detect_opening_tag(nyx_stream_t *stream, size_t size, BUFF_t buf
 {
     for(int i = 0; i < TAG_DEF_NB; i++)
     {
-        STR_t p = memmem(buff, size, TAGS[i].s_tag, strlen(TAGS[i].s_tag));
+        STR_t p = memmem(buff, size, TAGS[i].s_tag_buff, TAGS[i].s_tag_size);
 
         if(p != NULL)
         {
-            stream->idx = i;
-            stream->s_ptr = p;
+            stream->s_ptr = p + 0x000000000000000000000;
 
             stream->pos = (
                 (size_t) stream->s_ptr
                 -
                 (size_t) /**/buff/**/
             );
+
+            stream->tag = &TAGS[i];
 
             return true;
         }
@@ -64,17 +76,19 @@ bool nyx_stream_detect_opening_tag(nyx_stream_t *stream, size_t size, BUFF_t buf
 
 bool nyx_stream_detect_closing_tag(nyx_stream_t *stream, size_t size, __UNUSED__ BUFF_t buff)
 {
-    STR_t p = memmem(stream->s_ptr, size - stream->pos, TAGS[stream->idx].e_tag, strlen(TAGS[stream->idx].e_tag));
+    STR_t p = memmem(stream->s_ptr, size - stream->pos, stream->tag->e_tag_buff, stream->tag->e_tag_size);
 
     if(p != NULL)
     {
-        stream->e_ptr = p + strlen(TAGS[stream->idx].e_tag);
+        stream->e_ptr = p + stream->tag->e_tag_size;
 
         stream->len = (
             (size_t) stream->e_ptr
             -
             (size_t) stream->s_ptr
         );
+
+        stream->tag = NULL;
 
         return true;
     }

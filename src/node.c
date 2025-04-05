@@ -185,6 +185,11 @@ static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
 
 static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 {
+    if(client == NULL)
+    {
+        client = "@INDI";
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uint32_t hash = nyx_hash32(client, strlen(client), NYX_OBJECT_MAGIC);

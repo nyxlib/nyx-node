@@ -264,7 +264,7 @@ nyx_dict_t *internal_xxxx_set_vector_new(
 
 typedef struct
 {
-    int idx;
+    struct tag_s *tag;
 
     STR_t s_ptr;
     STR_t e_ptr;
@@ -277,7 +277,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #define NYX_STREAM() \
-            ((nyx_stream_t) {.idx = 0x00, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
+            ((nyx_stream_t) {.tag = NULL, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
