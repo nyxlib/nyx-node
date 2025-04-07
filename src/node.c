@@ -100,7 +100,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
             else if(strcmp("defBLOBVector", tag) == 0) {
                 set_vector = nyx_blob_set_vector_new(def_vector);
 
-                if((set_vector->base.flags & 0xFFFFFFFE) == 0) {
+                if((set_vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
                     return;
                 }
             }

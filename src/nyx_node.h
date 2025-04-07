@@ -252,11 +252,12 @@ uint32_t nyx_hash32(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT_MAGIC 0x65656565                                                             //!< Magic number for identifying JSON objects.
+#define NYX_OBJECT_MAGIC 0x65656565U                                                            //!< Magic number for identifying JSON objects.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_DISABLED ((uint32_t) (1U << 0))                                               //!< Flag specifying that the object is disabled.
+#define NYX_FLAGS_DISABLED ((uint32_t) 0x00000001U)                                             //!< Flag indicating that the object is disabled.
+#define NYX_FLAGS_BLOB_MASK ((uint32_t) 0xFFFFFFFEU)                                            //!< Mask indicating Nyx blob emission per client.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
