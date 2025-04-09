@@ -196,15 +196,24 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
 /* NUMBER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-float nyx_formated_atof(STR_t format, STR_t s)
+double nyx_formated_atof(STR_t format, STR_t s)
 {
-    char buffer[64];
+    char buffer[256];
 
-    float value = strtof(s, NULL);
+    /**/ if(strchr(s, 'd') != NULL)
+    {
+        int value = strtod(s, NULL);
+        snprintf(buffer, sizeof(buffer), format, value);
+        return strtof(buffer, NULL);
+    }
+    else if(strchr(s, 'f') != NULL)
+    {
+        double value = strtof(s, NULL);
+        snprintf(buffer, sizeof(buffer), format, value);
+        return strtof(buffer, NULL);
+    }
 
-    snprintf(buffer, sizeof(buffer), format, value);
-
-    return strtof(buffer, NULL);
+    return 0.0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

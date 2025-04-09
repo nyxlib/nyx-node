@@ -1630,7 +1630,7 @@ nyx_blob_t nyx_str_to_blob(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-float nyx_formated_atof(
+double nyx_formated_atof(
     STR_t format,
     STR_t s
 );
