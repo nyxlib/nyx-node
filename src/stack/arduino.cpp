@@ -377,12 +377,12 @@ void nyx_node_stack_initialize(
             NYX_LOG_INFO("TCP ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
             #ifdef HAS_WIFI
-            tcpServer = WiFiServer(ip, port);
+            tcpServer = WiFiServer(port);
             tcpServer.begin();
             #endif
 
             #ifdef HAS_ETHERNET
-            tcpServer = EthernetServer(/*ip*/ port);
+            tcpServer = EthernetServer(port);
             tcpServer.begin();
             #endif
         }
