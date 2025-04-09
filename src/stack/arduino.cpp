@@ -105,7 +105,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
         p = strrchr(file, '/');
 
-        if(p != NULL)
+        if(p != nullptr)
         {
             file = p + 1;
         }
@@ -113,7 +113,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
         {
             p = strrchr(file, '\\');
 
-            if(p != NULL)
+            if(p != nullptr)
             {
                 file = p + 1;
             }
@@ -161,7 +161,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
 void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node->tcp_url != NULL)
+    if(node->tcp_url != nullptr)
     {
         auto clients = node->stack->clients;
 
@@ -181,7 +181,7 @@ void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 
 void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 {
-    if(node->mqtt_url != NULL && mqttClient.connected())
+    if(node->mqtt_url != nullptr && mqttClient.connected())
     {
         if(!mqttClient.subscribe(topic.buf, 1))
         {
@@ -194,7 +194,7 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 
 void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 {
-    if(node->mqtt_url != NULL && mqttClient.connected())
+    if(node->mqtt_url != nullptr && mqttClient.connected())
     {
         if(!mqttClient.publish(
             topic.buf,
@@ -298,7 +298,7 @@ static uint16_t mqtt_estimate_buffer_size(void)
 
         ptr = malloc(mid);
 
-        if(ptr != NULL)
+        if(ptr != nullptr)
         {
             free(ptr);
             free_heap = mid;
@@ -367,7 +367,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL)
+    if(node->tcp_url != nullptr)
     {
         IPAddress ip;
         int port;
@@ -396,7 +396,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != NULL)
+    if(node->mqtt_url != nullptr)
     {
         IPAddress ip;
         int port;
@@ -539,7 +539,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL)
+    if(node->tcp_url != nullptr)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* CLEANUP OLD CLIENTS & REGISTER NEW CLIENTS                                                                 */
@@ -616,7 +616,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     /* MQTT                                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != NULL)
+    if(node->mqtt_url != nullptr)
     {
         /*------------------------------------------------------------------------------------------------------------*/
         /* RECONNECT CLIENT                                                                                           */
