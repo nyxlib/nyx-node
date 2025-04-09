@@ -196,7 +196,7 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
 /* NUMBER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_string_t *nyx_formated_double_to_str(nyx_string_t *format, double value)
+nyx_string_t *nyx_formated_double_to_string(nyx_string_t *format, double value)
 {
     char buffer[256];
 
@@ -207,7 +207,7 @@ nyx_string_t *nyx_formated_double_to_str(nyx_string_t *format, double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double nyx_formated_str_to_double(nyx_string_t *format, nyx_string_t *value)
+double nyx_formated_string_to_double(nyx_string_t *format, nyx_string_t *value)
 {
     char buffer[256];
 
