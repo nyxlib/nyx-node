@@ -1630,9 +1630,16 @@ nyx_blob_t nyx_str_to_blob(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double nyx_formated_atof(
-    STR_t format,
-    STR_t s
+nyx_string_t *nyx_formated_double_to_string(
+    nyx_string_t *format,
+    double value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+double nyx_formated_string_to_double(
+    nyx_string_t *format,
+    nyx_string_t *value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1668,18 +1675,22 @@ nyx_dict_t *nyx_number_def_new(
 
 __INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
 {
-    return nyx_dict_set(def, "$", nyx_number_from(value));
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = nyx_formated_double_to_string(format, value);
+
+    return nyx_dict_set(def, "$", string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ double nyx_number_def_get(const nyx_dict_t *def)
 {
-    STR_t format = ((nyx_string_t *) nyx_dict_get(def, "@format"))->value;
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
-    STR_t value = ((nyx_string_t *) nyx_dict_get(def, /**/"$"/**/))->value;
+    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
 
-    return nyx_formated_atof(format, value);
+    return nyx_formated_string_to_double(format, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

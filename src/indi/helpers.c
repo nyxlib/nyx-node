@@ -196,21 +196,32 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
 /* NUMBER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double nyx_formated_atof(STR_t format, STR_t s)
+nyx_string_t *nyx_formated_double_to_str(nyx_string_t *format, double value)
 {
     char buffer[256];
 
-    /**/ if(strchr(s, 'd') != NULL)
+    snprintf(buffer, sizeof(buffer), format->value, value);
+
+    return nyx_string_dynamic_from(buffer);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+double nyx_formated_str_to_double(nyx_string_t *format, nyx_string_t *value)
+{
+    char buffer[256];
+
+    /**/ if(strchr(format->value, 'd') != NULL)
     {
-        int value = strtod(s, NULL);
-        snprintf(buffer, sizeof(buffer), format, value);
-        return strtof(buffer, NULL);
+        if(snprintf(buffer, sizeof(buffer), format->value, strtod(value->value, NULL)) > 0) {
+            return strtof(buffer, NULL);
+        }
     }
-    else if(strchr(s, 'f') != NULL)
+    else if(strchr(format->value, 'f') != NULL)
     {
-        double value = strtof(s, NULL);
-        snprintf(buffer, sizeof(buffer), format, value);
-        return strtof(buffer, NULL);
+        if(snprintf(buffer, sizeof(buffer), format->value, strtof(value->value, NULL)) > 0) {
+            return strtof(buffer, NULL);
+        }
     }
 
     return 0.0;
