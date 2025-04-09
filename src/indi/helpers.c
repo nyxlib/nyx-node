@@ -7,6 +7,7 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "../nyx_node_internal.h"
@@ -189,6 +190,21 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
     }
 
     NYX_LOG_FATAL("Internal error");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* NUMBER                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+float nyx_formated_atof(STR_t format, STR_t s)
+{
+    char buffer[64];
+
+    float value = strtof(s, NULL);
+
+    snprintf(buffer, sizeof(buffer), format, value);
+
+    return strtof(buffer, NULL);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

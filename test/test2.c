@@ -111,6 +111,8 @@ int main()
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
+    nyx_log_level = NYX_LOG_LEVEL_DEBUG;
+
     nyx_node_t *node = nyx_node_initialize(
         "tcp://0.0.0.0:7625",
         getenv("MQTT_URL"),

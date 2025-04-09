@@ -1630,6 +1630,13 @@ nyx_blob_t nyx_str_to_blob(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+float nyx_formated_atof(
+    STR_t format,
+    STR_t s
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
     __NULLABLE__ STR_t label;
@@ -1668,7 +1675,11 @@ __INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
 
 __INLINE__ double nyx_number_def_get(const nyx_dict_t *def)
 {
-    return ((nyx_number_t *) nyx_dict_get(def, "$"))->value;
+    STR_t format = ((nyx_string_t *) nyx_dict_get(def, "@format"))->value;
+
+    STR_t value = ((nyx_string_t *) nyx_dict_get(def, /**/"$"/**/))->value;
+
+    return nyx_formated_atof(format, value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
