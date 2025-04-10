@@ -1630,20 +1630,6 @@ nyx_blob_t nyx_str_to_blob(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_string_t *nyx_formated_double_to_string(
-    nyx_string_t *format,
-    double value
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-double nyx_formated_string_to_double(
-    nyx_string_t *format,
-    nyx_string_t *value
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 typedef struct
 {
     __NULLABLE__ STR_t label;
@@ -1652,6 +1638,34 @@ typedef struct
     __NULLABLE__ STR_t message;
 
 } nyx_opts_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_string_t *nyx_format_int_to_string(
+    nyx_string_t *format,
+    int value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+int nyx_format_string_to_int(
+    nyx_string_t *format,
+    nyx_string_t *value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_string_t *nyx_format_double_to_string(
+    nyx_string_t *format,
+    double value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+double nyx_format_string_to_double(
+    nyx_string_t *format,
+    nyx_string_t *value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
@@ -1673,24 +1687,46 @@ nyx_dict_t *nyx_number_def_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
+__INLINE__ bool nyx_number_def_set_int(nyx_dict_t *def, int value)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
-    nyx_string_t *string = nyx_formated_double_to_string(format, value);
+    nyx_string_t *string = nyx_format_int_to_string(format, value);
 
     return nyx_dict_set(def, "$", string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ double nyx_number_def_get(const nyx_dict_t *def)
+__INLINE__ int nyx_number_def_get_int(const nyx_dict_t *def)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
     nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
 
-    return nyx_formated_string_to_double(format, string);
+    return nyx_format_string_to_int(format, string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = nyx_format_double_to_string(format, value);
+
+    return nyx_dict_set(def, "$", string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
+
+    return nyx_format_string_to_double(format, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
