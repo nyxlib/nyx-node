@@ -198,9 +198,9 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
 
 nyx_string_t *nyx_formated_double_to_string(nyx_string_t *format, double value)
 {
-    char buffer[256];
+    char buffer[32];
 
-    /**/ if(strchr(format->value, 'd') != NULL && snprintf(buffer, sizeof(buffer), format->value, (long) value) > 0) {
+    /**/ if(strchr(format->value, 'd') != NULL && snprintf(buffer, sizeof(buffer), format->value, (int) value) > 0) {
         return nyx_string_dynamic_from(buffer);
     }
     else if(strchr(format->value, 'f') != NULL && snprintf(buffer, sizeof(buffer), format->value, (double) value) > 0) {
@@ -214,11 +214,9 @@ nyx_string_t *nyx_formated_double_to_string(nyx_string_t *format, double value)
 
 double nyx_formated_string_to_double(nyx_string_t *format, nyx_string_t *value)
 {
-    char buffer[256];
+    char buffer[32];
 
-    NYX_LOG_INFO("%s", format->value);
-
-    /**/ if(strchr(format->value, 'd') != NULL && snprintf(buffer, sizeof(buffer), format->value, (long) strtol(value->value, NULL, 10)) > 0) {
+    /**/ if(strchr(format->value, 'd') != NULL && snprintf(buffer, sizeof(buffer), format->value, (int) strtol(value->value, NULL, 10)) > 0) {
         return strtof(buffer, NULL);
     }
     else if(strchr(format->value, 'f') != NULL && snprintf(buffer, sizeof(buffer), format->value, (double) strtod(value->value, NULL /**/)) > 0) {
