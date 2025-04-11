@@ -217,7 +217,7 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
     /* SKIP PROTOCOL                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t proto_sep = url.indexOf("://");
+    int proto_sep = url.indexOf("://");
 
     if(proto_sep >= 0)
     {
@@ -230,7 +230,7 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
 
     String host;
 
-    size_t colon = url.indexOf(':');
+    int colon = url.indexOf(':');
 
     if(colon >= 0)
     {
