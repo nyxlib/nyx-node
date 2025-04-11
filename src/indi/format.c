@@ -39,7 +39,7 @@ int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
         NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
-        return strtof(buffer, NULL);
+        return (int) strtol(buffer, NULL, 10);
     }
 
     return 0;
@@ -73,7 +73,7 @@ long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
         NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
-        return strtof(buffer, NULL);
+        return (long) strtol(buffer, NULL, 10);
     }
 
     return 0;
@@ -108,7 +108,7 @@ double nyx_format_string_to_double(nyx_string_t *format, nyx_string_t *value)
         NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
-        return strtof(buffer, NULL);
+        return (double) strtof(buffer, NULL /**/);
     }
 
     return 0;
