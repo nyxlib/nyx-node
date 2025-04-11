@@ -1646,8 +1646,6 @@ nyx_string_t *nyx_format_int_to_string(
     int value
 );
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 int nyx_format_string_to_int(
     nyx_string_t *format,
     nyx_string_t *value
@@ -1660,8 +1658,6 @@ nyx_string_t *nyx_format_long_to_string(
     long value
 );
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 long nyx_format_string_to_long(
     nyx_string_t *format,
     nyx_string_t *value
@@ -1673,8 +1669,6 @@ nyx_string_t *nyx_format_double_to_string(
     nyx_string_t *format,
     double value
 );
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 double nyx_format_string_to_double(
     nyx_string_t *format,
