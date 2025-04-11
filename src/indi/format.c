@@ -12,25 +12,14 @@
 #include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* FORMAT INT                                                                                                         */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
 {
     char buffer[64];
 
     if(strchr(format->value, 'd') != NULL && snprintf(buffer, sizeof(buffer), format->value, (int) value) > 0) {
-        return nyx_string_dynamic_from(buffer);
-    }
-
-    return nyx_string_dynamic_from("0");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
-{
-    char buffer[64];
-
-    if(strchr(format->value, 'f') != NULL && snprintf(buffer, sizeof(buffer), format->value, (double) value) > 0) {
         return nyx_string_dynamic_from(buffer);
     }
 
@@ -49,6 +38,50 @@ int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
 
     return 0;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FORMAT LONG                                                                                                        */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
+{
+    char buffer[64];
+
+    if(strchr(format->value, 'l') != NULL && snprintf(buffer, sizeof(buffer), format->value, (long) value) > 0) {
+        return nyx_string_dynamic_from(buffer);
+    }
+
+    return nyx_string_dynamic_from("0");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
+{
+    char buffer[64];
+
+    if(strchr(format->value, 'l') != NULL && snprintf(buffer, sizeof(buffer), format->value, (long) strtol(value->value, NULL, 10)) > 0) {
+        return strtof(buffer, NULL);
+    }
+
+    return 0;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FORMAT DOUBLE                                                                                                      */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
+{
+    char buffer[64];
+
+    if(strchr(format->value, 'f') != NULL && snprintf(buffer, sizeof(buffer), format->value, (double) value) > 0) {
+        return nyx_string_dynamic_from(buffer);
+    }
+
+    return nyx_string_dynamic_from("0.0");
+}
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

@@ -1655,6 +1655,20 @@ int nyx_format_string_to_int(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+nyx_string_t *nyx_format_long_to_string(
+    nyx_string_t *format,
+    long value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+long nyx_format_string_to_long(
+    nyx_string_t *format,
+    nyx_string_t *value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 nyx_string_t *nyx_format_double_to_string(
     nyx_string_t *format,
     double value
@@ -1705,6 +1719,28 @@ __INLINE__ int nyx_number_def_get_int(const nyx_dict_t *def)
     nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
 
     return nyx_format_string_to_int(format, string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ bool nyx_number_def_set_long(nyx_dict_t *def, long value)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = nyx_format_long_to_string(format, value);
+
+    return nyx_dict_set(def, "$", string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ long nyx_number_def_get_long(const nyx_dict_t *def)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
+
+    return nyx_format_string_to_long(format, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
