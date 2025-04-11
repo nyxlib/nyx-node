@@ -10,17 +10,18 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 
-#if defined(HAS_WIFI)
+#if defined(NYX_HAS_WIFI)
 #  if defined(ARDUINO_ARCH_ESP8266)
 #    include <ESP8266WiFi.h>
 #  else
 #    include <WiFi.h>
 #  endif
-#elif defined(HAS_ETHERNET)
-#  include <Dns.h>
+#elif defined(NYX_HAS_ETHERNET)
 #  include <Ethernet.h>
+
+#  include <Dns.h>
 #else
-#  error "Neither HAS_WIFI nor HAS_ETHERNET is defined!"
+#  error "Neither NYX_HAS_WIFI nor NYX_HAS_ETHERNET is defined!"
 #endif
 
 #include "../nyx_node_internal.h"
@@ -33,12 +34,12 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifdef HAS_WIFI
+#ifdef NYX_HAS_WIFI
 static WiFiClient tcpClient;
 static WiFiServer tcpServer(0);
 #endif
 
-#ifdef HAS_ETHERNET
+#ifdef NYX_HAS_ETHERNET
 static EthernetClient tcpClient;
 static EthernetServer tcpServer(0);
 #endif
@@ -49,7 +50,7 @@ static PubSubClient mqttClient(tcpClient);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#if defined(HAS_ETHERNET)
+#if defined(NYX_HAS_ETHERNET)
 static DNSClient EthDNS;
 #endif
 
@@ -70,11 +71,11 @@ struct nyx_stack_s
 
     struct TCPClient
     {
-        #ifdef HAS_WIFI
+        #ifdef NYX_HAS_WIFI
         WiFiClient tcp_client;
         #endif
 
-        #ifdef HAS_ETHERNET
+        #ifdef NYX_HAS_ETHERNET
         EthernetClient tcp_client;
         #endif
 
@@ -246,11 +247,11 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
     /* RESOLVE DNS DOMAIN                                                                                             */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    #ifdef HAS_WIFI
+    #ifdef NYX_HAS_WIFI
     return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
     #endif
 
-    #ifdef HAS_ETHERNET
+    #ifdef NYX_HAS_ETHERNET
     return ip.fromString(host.c_str()) || EthDNS.getHostByName(host.c_str(), ip) == 1;
     #endif
 
@@ -274,19 +275,21 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 static uint16_t mqtt_estimate_buffer_size()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
+
     #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     uint32_t free_heap = ESP.getFreeHeap();
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    #elif defined(NYX_RAM_SIZE)
+
+    uint32_t free_heap = NYX_RAM_SIZE;
+
     #else
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     uint32_t free_heap = 4096;
 
-    /*----------------------------------------------------------------------------------------------------------------*/
     #endif
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uint16_t buff_size;
@@ -349,12 +352,12 @@ void nyx_node_stack_initialize(
         {
             NYX_LOG_INFO("TCP ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
-            #ifdef HAS_WIFI
+            #ifdef NYX_HAS_WIFI
             tcpServer = WiFiServer(port);
             tcpServer.begin();
             #endif
 
-            #ifdef HAS_ETHERNET
+            #ifdef NYX_HAS_ETHERNET
             tcpServer = EthernetServer(port);
             tcpServer.begin();
             #endif
@@ -518,11 +521,11 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         /* CLEANUP OLD CLIENTS & REGISTER NEW CLIENTS                                                                 */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        #ifdef HAS_WIFI
+        #ifdef NYX_HAS_WIFI
         WiFiClient new_client = tcpServer.accept();
         #endif
 
-        #ifdef HAS_ETHERNET
+        #ifdef NYX_HAS_ETHERNET
         EthernetClient new_client = tcpServer.accept();
         #endif
 
