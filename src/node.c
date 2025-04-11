@@ -123,14 +123,25 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void get_properties(nyx_node_t *node, nyx_dict_t *dict)
+static void get_properties(nyx_node_t *node, __NULLABLE__ nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t device1 = nyx_dict_get_string(dict, "@device");
-    STR_t name1 = nyx_dict_get_string(dict, "@name");
+    STR_t device1;
+    STR_t name1;
+
+    if(dict != NULL)
+    {
+        device1 = nyx_dict_get_string(dict, "@device");
+        name1 = nyx_dict_get_string(dict, "@name");
+    }
+    else
+    {
+        device1 = NULL;
+        name1 = NULL;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -589,6 +600,10 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
             nyx_memory_free(topic);
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        get_properties(node, NULL);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
