@@ -20,7 +20,7 @@ nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
     char buffer[64];
 
     if(strchr(format->value, 'd') == NULL || snprintf(buffer, sizeof(buffer), format->value, (int) value) == 0) {
-        NYX_LOG_ERROR("This function is not compatible with the format %s", format);
+        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
         return nyx_string_dynamic_from(buffer);
@@ -36,7 +36,7 @@ int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
     char buffer[64];
 
     if(strchr(format->value, 'd') == NULL || snprintf(buffer, sizeof(buffer), format->value, (int) strtol(value->value, NULL, 10)) == 0) {
-        NYX_LOG_ERROR("This function is not compatible with the format %s", format);
+        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
         return strtof(buffer, NULL);
@@ -54,7 +54,7 @@ nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
     char buffer[64];
 
     if(strchr(format->value, 'l') == NULL || snprintf(buffer, sizeof(buffer), format->value, (long) value) == 0) {
-        NYX_LOG_ERROR("This function is not compatible with the format %s", format);
+        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
         return nyx_string_dynamic_from(buffer);
@@ -70,7 +70,7 @@ long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
     char buffer[64];
 
     if(strchr(format->value, 'l') == NULL || snprintf(buffer, sizeof(buffer), format->value, (long) strtol(value->value, NULL, 10)) == 0) {
-        NYX_LOG_ERROR("This function is not compatible with the format %s", format);
+        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
         return strtof(buffer, NULL);
@@ -88,7 +88,7 @@ nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
     char buffer[64];
 
     if(strchr(format->value, 'f') == NULL || snprintf(buffer, sizeof(buffer), format->value, (double) value) == 0) {
-        NYX_LOG_ERROR("This function is not compatible with the format %s", format);
+        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
         return nyx_string_dynamic_from(buffer);
@@ -105,7 +105,7 @@ double nyx_format_string_to_double(nyx_string_t *format, nyx_string_t *value)
     char buffer[64];
 
     if(strchr(format->value, 'f') == NULL || snprintf(buffer, sizeof(buffer), format->value, (double) strtod(value->value, NULL /**/)) == 0) {
-        NYX_LOG_ERROR("This function is not compatible with the format %s", format);
+        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
         return strtof(buffer, NULL);
