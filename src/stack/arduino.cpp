@@ -20,7 +20,7 @@
 #  include <Dns.h>
 #  include <Ethernet.h>
 #else
-#  error "Neither HAS_WIFI nor HAS_ETHERNET are defined!"
+#  error "Neither HAS_WIFI nor HAS_ETHERNET is defined!"
 #endif
 
 #include "../nyx_node_internal.h"
