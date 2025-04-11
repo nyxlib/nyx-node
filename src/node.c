@@ -723,7 +723,7 @@ nyx_node_t *nyx_node_initialize(
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        vector->base.out_callback = ((((NULL))));
+        vector->base.out_callback = /**/NULL/**/;
         nyx_dict_set(vector, "@client", nyx_string_from(node_id));
         vector->base.out_callback = out_callback;
 
