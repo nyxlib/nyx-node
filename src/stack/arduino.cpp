@@ -333,7 +333,7 @@ void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
-    int retry_ms
+    __UNUSED__ int retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
