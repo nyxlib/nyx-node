@@ -272,30 +272,23 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static uint32_t mqtt_estimate_free_mem()
-{
-    #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
-
-    return ESP.getFreeHeap();
-
-    #elif defined(NYX_RAM_SIZE)
-
-    return NYX_RAM_SIZE;
-
-    #else
-
-    return 4096;
-
-    #endif
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 static uint16_t mqtt_estimate_buffer_size()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t free_heap = mqtt_estimate_free_mem();
+    #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+
+    uint32_t free_heap = ESP.getFreeHeap();
+
+    #elif defined(NYX_RAM_SIZE)
+
+    uint32_t free_heap = NYX_RAM_SIZE;
+
+    #else
+
+    uint32_t free_heap = 4096;
+
+    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
