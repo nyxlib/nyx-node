@@ -1,53 +1,51 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    container:
-      image: alpine:latest
+    build:
+        runs-on: ubuntu-latest
+        container:
+            image: alpine:latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            -   name: Checkout repository
+                uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          apk update
-          apk add --no-cache gcc make cmake rsync doxygen graphviz musl-dev openssh-client
+            -   name: Install dependencies
+                run: |
+                    apk update
+                    apk add --no-cache gcc make cmake rsync doxygen graphviz musl-dev openssh-client
 
-      - name: Setup SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        run: |
-          mkdir -p ~/.ssh/
-          chmod 700 ~/.ssh/
+            -   name: Build project
+                run: |
+                    mkdir -p build
+                    cd build
+                    cmake ..
+                    make all
+                    make docs
 
-          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
-
-          ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Build project
-        run: |
-          mkdir -p build
-          cd build
-          cmake ..
-          make all
-          make docs
-
-      - name: Deploy documentation
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          rsync -avz --delete ./docs/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/documentation/"
+            -   name: Deploy project
+                env:
+                    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                    DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+                    DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+                run: |
+                    mkdir -p ~/.ssh/
+                    chmod 700 ~/.ssh/
+                    
+                    echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+                    chmod 600 ~/.ssh/id_rsa
+                    
+                    eval $(ssh-agent -s)
+                    ssh-add ~/.ssh/id_rsa
+                    
+                    ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
+                    chmod 644 ~/.ssh/known_hosts
+                    
+                    cat  ~/.ssh/id_rsa
+                    
+                    rsync -avz --delete ./docs/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/documentation/"
