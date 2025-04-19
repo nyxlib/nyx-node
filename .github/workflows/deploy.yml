@@ -18,7 +18,8 @@ jobs:
             -   name: Install dependencies
                 run: |
                     apk update
-                    apk add --no-cache gcc bash make cmake rsync doxygen graphviz musl-dev openssh-client
+                    apk add --no-cache gcc bash make cmake rsync doxygen graphviz musl-dev openssh-client coreutils shadow procps
+
 
             -   name: Build project
                 shell: bash
@@ -36,6 +37,8 @@ jobs:
                     DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
                     DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
                 run: |
+                    export HOME=/root
+                    
                     mkdir -p ~/.ssh/
                     chmod 700 ~/.ssh/
                     
