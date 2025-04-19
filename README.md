@@ -35,7 +35,7 @@ Home page:
 * https://nyxlib.org/
 
 Documentation:
-* https://nyxlib.org/node/
+* https://nyxlib.org/documentation/
 
 Developer
 =========
