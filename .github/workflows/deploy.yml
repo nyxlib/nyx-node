@@ -49,5 +49,5 @@ jobs:
                     
                     ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
                     chmod 644 ~/.ssh/known_hosts
-                                        
+                    
                     rsync -avz --delete ./docs/ "${DEPLOY_USER}@${DEPLOY_HOST}:/var/www/nyxlib.org/documentation/"
