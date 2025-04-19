@@ -18,8 +18,7 @@ jobs:
             -   name: Install dependencies
                 run: |
                     apk update
-                    apk add --no-cache gcc bash make cmake rsync doxygen graphviz musl-dev openssh-client coreutils shadow procps
-
+                    apk add --no-cache gcc bash make cmake rsync doxygen graphviz musl-dev coreutils openssh-client
 
             -   name: Build project
                 shell: bash
