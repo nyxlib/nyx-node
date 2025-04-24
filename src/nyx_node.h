@@ -2026,13 +2026,13 @@ typedef struct nyx_node_s nyx_node_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
+ * \brief Nyx MQTT or TCP event type.
  */
 
 typedef enum nyx_event_type_e
 {
-    NYX_EVENT_OPEN = 0,
-    NYX_EVENT_MSG = 1,
+    NYX_EVENT_OPEN = 0,                                                                         //!< A connection is opened.
+    NYX_EVENT_MSG = 1,                                                                          //!< A message is received.
 
 } nyx_event_type_t;
 
