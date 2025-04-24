@@ -532,7 +532,7 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, size_t size, BUFF_t buff)
+static size_t tcp_handler(nyx_node_t *node, nyx_event_t event_type, size_t size, BUFF_t buff)
 {
     if(event_type == NYX_EVENT_MSG)
     {
@@ -574,7 +574,7 @@ static size_t tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, size_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, nyx_str_t event_topic, nyx_str_t event_message)
+static void mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_str_t event_topic, nyx_str_t event_message)
 {
     if(event_type == NYX_EVENT_OPEN)
     {

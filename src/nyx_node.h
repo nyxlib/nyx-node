@@ -2029,12 +2029,12 @@ typedef struct nyx_node_s nyx_node_t;
  * \brief Nyx MQTT or TCP event type.
  */
 
-typedef enum nyx_event_type_e
+typedef enum nyx_event_e
 {
     NYX_EVENT_OPEN = 0,                                                                         //!< A connection is opened.
     NYX_EVENT_MSG = 1,                                                                          //!< A message is received.
 
-} nyx_event_type_t;
+} nyx_event_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2042,7 +2042,7 @@ typedef enum nyx_event_type_e
  * \brief An MQTT event handler.
  *
  * @param node The Nyx node.
- * @param event_type The event type.
+ * @param event The event type.
  * @param topic_buff The MQTT topic buffer.
  * @param topic_size The MQTT topic length.
  * @param message_buff The MQTT message buffer.
@@ -2051,7 +2051,7 @@ typedef enum nyx_event_type_e
 
 typedef void (* nyx_mqtt_handler_t)(
     nyx_node_t *node,
-    nyx_event_type_t event_type,
+    nyx_event_t event,
     BUFF_t topic_buff,
     size_t topic_size,
     BUFF_t message_buff,
@@ -2211,8 +2211,8 @@ void nyx_mqtt_pub(
  */
 
 void nyx_mqtt_set_handler(
-        nyx_node_t *node,
-        __NULLABLE__ nyx_mqtt_handler_t mqtt_handler
+    nyx_node_t *node,
+    __NULLABLE__ nyx_mqtt_handler_t mqtt_handler
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -339,14 +339,14 @@ struct nyx_node_s
 
     size_t (* tcp_handler)(
         struct nyx_node_s *node,
-        enum nyx_event_type_e event_type,
+        enum nyx_event_e event_type,
         size_t size,
         BUFF_t buff
     );
 
     void (* mqtt_handler)(
         struct nyx_node_s *node,
-        enum nyx_event_type_e event_type,
+        enum nyx_event_e event_type,
         nyx_str_t topic,
         nyx_str_t message
     );
