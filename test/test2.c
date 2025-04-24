@@ -120,6 +120,7 @@ int main()
         getenv("MQTT_PASSWORD"),
         "TOTO",
         vector_list,
+        NULL,
         3000,
         true,
         true

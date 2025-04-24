@@ -532,7 +532,7 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t tcp_handler(nyx_node_t *node, nyx_event_t event_type, size_t size, BUFF_t buff)
+static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, size_t size, BUFF_t buff)
 {
     if(event_type == NYX_EVENT_MSG)
     {
@@ -574,7 +574,7 @@ static size_t tcp_handler(nyx_node_t *node, nyx_event_t event_type, size_t size,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_str_t event_topic, nyx_str_t event_message)
+static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_str_t event_topic, nyx_str_t event_message)
 {
     if(event_type == NYX_EVENT_OPEN)
     {
@@ -731,6 +731,7 @@ nyx_node_t *nyx_node_initialize(
     /**/
     STR_t node_id,
     nyx_dict_t *def_vectors[],
+    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
     /**/
     int retry_ms,
     bool enable_xml,
@@ -800,8 +801,9 @@ nyx_node_t *nyx_node_initialize(
 
     node->def_vectors = def_vectors;
 
-    node->tcp_handler = tcp_handler;
-    node->mqtt_handler = mqtt_handler;
+    node->tcp_handler = internal_tcp_handler;
+    node->mqtt_handler = internal_mqtt_handler;
+    node->user_mqtt_handler = user_mqtt_handler;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE STACK                                                                                               */
@@ -985,13 +987,6 @@ void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t message_buf
         _topic,
         _message
     );
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_mqtt_set_handler(nyx_node_t *node, __NULLABLE__ nyx_mqtt_handler_t mqtt_handler)
-{
-    node->user_mqtt_handler = mqtt_handler;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

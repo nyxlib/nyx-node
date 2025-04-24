@@ -2069,6 +2069,7 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param mqtt_password Optional MQTT password.
  * @param node_id Unique node identifier.
  * @param def_vectors Array of definition vectors.
+ * @param mqtt_handler Optional MQTT event handler.
  * @param retry_ms Connect retry time [milliseconds].
  * @param enable_xml Enables the XML compatibility layer.
  * @param validate_xml Enables the XML message validation.
@@ -2083,6 +2084,7 @@ nyx_node_t *nyx_node_initialize(
     /**/
     STR_t node_id,
     nyx_dict_t *def_vectors[],
+    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
     /**/
     int retry_ms,
     bool enable_xml,
@@ -2199,20 +2201,6 @@ void nyx_mqtt_pub(
     STR_t topic,
     __NULLABLE__ BUFF_t message_buff,
     __ZEROABLE__ size_t message_size
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Sets the MQTT event handler.
- *
- * @param node The Nyx node.
- * @param mqtt_handler The MQTT event handler.
- */
-
-void nyx_mqtt_set_handler(
-    nyx_node_t *node,
-    __NULLABLE__ nyx_mqtt_handler_t mqtt_handler
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
