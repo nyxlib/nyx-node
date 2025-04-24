@@ -136,9 +136,9 @@ typedef enum nyx_log_level_e
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the current log level.
+ * \brief Sets the log level threshold.
  *
- * @param level The log level.
+ * @param level The log level threshold.
  */
 
 void nyx_set_log_level(
