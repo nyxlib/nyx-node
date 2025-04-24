@@ -160,7 +160,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
+void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
     if(node->tcp_url != nullptr)
     {
@@ -180,7 +180,7 @@ void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
+void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 {
     if(node->mqtt_url != nullptr && mqttClient.connected())
     {
@@ -193,7 +193,7 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
+void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 {
     if(node->mqtt_url != nullptr && mqttClient.connected())
     {

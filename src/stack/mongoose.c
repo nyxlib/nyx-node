@@ -81,7 +81,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
+void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
     for(struct mg_connection *connection = node->stack->mgr.conns; connection != NULL; connection = connection->next)
     {
@@ -96,7 +96,7 @@ void nyx_tcp_pub(nyx_node_t *node, nyx_str_t message)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
+void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 {
     if(node->stack->mqtt_connection != NULL)
     {
@@ -114,7 +114,7 @@ void nyx_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
+void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 {
     if(node->stack->mqtt_connection != NULL)
     {

@@ -2002,6 +2002,21 @@ typedef struct nyx_node_s nyx_node_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief
+ */
+
+typedef void (* nyf_mqtt_user_handler_t)(
+    nyx_node_t *node,
+    int event_type,
+    BUFF_t topic_buff,
+    size_t topic_size,
+    BUFF_t message_buff,
+    size_t message_size
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * \brief Initializes the Nyx node.
  *
  * @param tcp_url Optional TCP URL (e.g. tcp://0.0.0.0:7625).
@@ -2108,6 +2123,49 @@ void nyx_node_send_message(
     nyx_node_t *node,
     STR_t device,
     STR_t message
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ *
+ * @param node
+ * @param topic
+ */
+
+void nyx_mqtt_sub(
+    nyx_node_t *node,
+    STR_t topic
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ *
+ * @param node
+ * @param topic
+ * @param buff
+ * @param size
+ */
+
+void nyx_mqtt_pub(
+    nyx_node_t *node,
+    STR_t topic,
+    __NULLABLE__ BUFF_t buff,
+    __ZEROABLE__ size_t size
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ *
+ * @param node
+ * @param mqtt_user_handler
+ */
+
+void nyx_mqtt_set_user_handler(
+    nyx_node_t *node,
+    __NULLABLE__ nyf_mqtt_user_handler_t mqtt_user_handler
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

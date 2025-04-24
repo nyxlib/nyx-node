@@ -350,21 +350,25 @@ struct nyx_node_s
         nyx_str_t topic,
         nyx_str_t message
     );
+
+    /**/
+
+    nyf_mqtt_user_handler_t mqtt_user_handler;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_tcp_pub(
+void internal_tcp_pub(
     nyx_node_t *node,
     nyx_str_t message
 );
 
-void nyx_mqtt_sub(
+void internal_mqtt_sub(
     nyx_node_t *node,
     nyx_str_t topic
 );
 
-void nyx_mqtt_pub(
+void internal_mqtt_pub(
     nyx_node_t *node,
     nyx_str_t topic,
     nyx_str_t message

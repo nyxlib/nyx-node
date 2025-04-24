@@ -47,8 +47,8 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
             /*--------------------------------------------------------------------------------------------------------*/
 
             str_t xml = nyx_xmldoc_to_string(xmldoc);
-            nyx_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml));
-            nyx_tcp_pub(node, nyx_str_s(xml));
+            internal_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml));
+            internal_tcp_pub(node, nyx_str_s(xml));
             nyx_memory_free(xml);
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -62,8 +62,8 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t json = nyx_object_to_string(object);
-    nyx_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json));
-    ///_tcp_pub(node, nyx_str_s(json));
+    internal_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json));
+    ////////_tcp_pub(node, nyx_str_s(json));
     nyx_memory_free(json);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -593,9 +593,9 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
                      /*---*/ topic /*---*/
                 );
 
-                nyx_mqtt_sub(node, SPECIAL_TOPICS[i]);
+                internal_mqtt_sub(node, SPECIAL_TOPICS[i]);
 
-                nyx_mqtt_sub(node, nyx_str_s(topic));
+                internal_mqtt_sub(node, nyx_str_s(topic));
             }
 
             nyx_memory_free(topic);
@@ -681,6 +681,23 @@ static void mqtt_handler(nyx_node_t *node, int event_type, nyx_str_t event_topic
 
                             nyx_xmldoc_free(xmldoc);
                         }
+
+                        /*--------------------------------------------------------------------------------------------*/
+                    }
+                    else if(node->mqtt_user_handler != NULL)
+                    {
+                        /*--------------------------------------------------------------------------------------------*/
+                        /* USER MESSAGE                                                                               */
+                        /*--------------------------------------------------------------------------------------------*/
+
+                        node->mqtt_user_handler(
+                            node,
+                            event_type,
+                            event_topic.buf,
+                            event_topic.len,
+                            event_message.buf,
+                            event_topic.len
+                        );
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
@@ -826,9 +843,9 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 
 void nyx_node_ping(nyx_node_t *node)
 {
-    nyx_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
+    internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
 
-    nyx_mqtt_pub(node, node->master_client_topic, node->master_client_message);
+    internal_mqtt_pub(node, node->master_client_topic, node->master_client_message);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -924,6 +941,45 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
 
         nyx_dict_free(dict);
     }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* MQTT                                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_mqtt_sub(nyx_node_t *node, STR_t topic)
+{
+    nyx_str_t _topic = nyx_str_s(topic);
+
+    internal_mqtt_sub(
+        node,
+        _topic
+    );
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size)
+{
+    nyx_str_t _topic = nyx_str_s(topic);
+
+    nyx_str_t _message = {
+        .buf = (str_t) buff,
+        .len = (size_t) size,
+    };
+
+    internal_mqtt_pub(
+        node,
+        _topic,
+        _message
+    );
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_mqtt_set_user_handler(nyx_node_t *node, __NULLABLE__ nyf_mqtt_user_handler_t mqtt_user_handler)
+{
+    node->mqtt_user_handler = mqtt_user_handler;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
