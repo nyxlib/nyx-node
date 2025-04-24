@@ -971,11 +971,14 @@ void nyx_mqtt_sub(nyx_node_t *node, STR_t topic)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size)
+void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t message_buff, __ZEROABLE__ size_t message_size)
 {
     nyx_str_t _topic = nyx_str_s(topic);
 
-    nyx_str_t _message = NYX_STR_S(buff, size);
+    nyx_str_t _message = NYX_STR_S(
+        message_buff,
+        message_size
+    );
 
     internal_mqtt_pub(
         node,

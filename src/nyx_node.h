@@ -2172,10 +2172,10 @@ void nyx_node_send_message(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
+ * \brief If MQTT enabled, subscribes to a topic.
  *
- * @param node
- * @param topic
+ * @param node The Nyx node.
+ * @param topic The MQTT topic.
  */
 
 void nyx_mqtt_sub(
@@ -2186,28 +2186,28 @@ void nyx_mqtt_sub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
+ * \brief If MQTT enabled, publishes a message to a topic.
  *
- * @param node
- * @param topic
- * @param buff
- * @param size
+ * @param node The Nyx node.
+ * @param topic The MQTT topic.
+ * @param message_buff The MQTT message buffer.
+ * @param message_size The MQTT message length.
  */
 
 void nyx_mqtt_pub(
     nyx_node_t *node,
     STR_t topic,
-    __NULLABLE__ BUFF_t buff,
-    __ZEROABLE__ size_t size
+    __NULLABLE__ BUFF_t message_buff,
+    __ZEROABLE__ size_t message_size
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
+ * \brief Sets the MQTT event handler.
  *
- * @param node
- * @param mqtt_user_handler
+ * @param node The Nyx node.
+ * @param mqtt_user_handler The MQTT event handler.
  */
 
 void nyx_mqtt_set_user_handler(
