@@ -42,8 +42,8 @@ Developer
 
 * [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-[Build Status]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/-/commits/main
-[Build Status img]:https://gitlab.in2p3.fr/lpsc-kid/nyx-node/badges/main/pipeline.svg
+[Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
+[Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg
 
 [License_mongoose]:https://www.gnu.org/licenses/gpl-2.0.txt
 [License_mongoose img]:https://img.shields.io/badge/license-GPL_2.0_only_(mongoose_layer)-blue.svg
