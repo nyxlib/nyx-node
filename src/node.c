@@ -963,10 +963,7 @@ void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t buff, __ZER
 {
     nyx_str_t _topic = nyx_str_s(topic);
 
-    nyx_str_t _message = {
-        .buf = (str_t) buff,
-        .len = (size_t) size,
-    };
+    nyx_str_t _message = NYX_STR_S(buff, size);
 
     internal_mqtt_pub(
         node,
