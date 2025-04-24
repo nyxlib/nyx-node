@@ -118,6 +118,10 @@ __NULLABLE__ buff_t nyx_memory_realloc(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Nyx log levels.
+ */
+
 typedef enum nyx_log_level_e
 {
     NYX_LOG_LEVEL_NONE    = 0,
@@ -131,7 +135,15 @@ typedef enum nyx_log_level_e
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern nyx_log_level_t nyx_log_level;
+/**
+ * \brief Sets the current log level.
+ *
+ * @param level The log level.
+ */
+
+void nyx_set_log_level(
+    nyx_log_level_t level
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -150,17 +162,37 @@ void nyx_log(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Logs a fatal message.
+ */
+
 #define NYX_LOG_FATAL(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(1)
+
+/**
+* \brief Logs an error message.
+*/
 
 #define NYX_LOG_ERROR(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
+/**
+ * \brief Logs an info message.
+ */
+
 #define NYX_LOG_INFO(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_INFO, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
+/**
+ * \brief Logs a debug message.
+ */
+
 #define NYX_LOG_DEBUG(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_DEBUG, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
+
+/**
+ * \brief Logs a verbose message.
+ */
 
 #define NYX_LOG_VERBOSE(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_VERBOSE, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
