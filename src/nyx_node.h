@@ -2210,7 +2210,7 @@ void nyx_mqtt_pub(
  * @param mqtt_handler The MQTT event handler.
  */
 
-void nyx_mqtt_set_user_handler(
+void nyx_mqtt_set_handler(
         nyx_node_t *node,
         __NULLABLE__ nyx_mqtt_handler_t mqtt_handler
 );
