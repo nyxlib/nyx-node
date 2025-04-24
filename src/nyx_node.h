@@ -2001,13 +2001,21 @@ typedef struct nyx_node_s nyx_node_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+typedef enum nyx_event_type_e {
+    NYX_EVENT_OPEN = 0,
+    NYX_EVENT_MSG = 1,
+
+} nyx_event_type_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * \brief
  */
 
 typedef void (* nyf_mqtt_user_handler_t)(
     nyx_node_t *node,
-    int event_type,
+    nyx_event_type_t event_type,
     BUFF_t topic_buff,
     size_t topic_size,
     BUFF_t message_buff,
@@ -2128,6 +2136,7 @@ void nyx_node_send_message(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief
  *
  * @param node
  * @param topic
@@ -2141,6 +2150,7 @@ void nyx_mqtt_sub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief
  *
  * @param node
  * @param topic
@@ -2158,6 +2168,7 @@ void nyx_mqtt_pub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief
  *
  * @param node
  * @param mqtt_user_handler

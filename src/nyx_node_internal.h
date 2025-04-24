@@ -297,9 +297,6 @@ bool nyx_stream_detect_closing_tag(
 /* NODE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_EVENT_OPEN  0
-#define NYX_EVENT_MSG   1
-
 #define NYX_PING_MS 5000UL
 
 #define NYX_ALL "@ALL"
@@ -331,22 +328,20 @@ struct nyx_node_s
 
     nyx_dict_t **def_vectors;
 
-    /**/
-
     __ZEROABLE__ uint32_t client_hashes[31];
 
     /**/
 
     size_t (* tcp_handler)(
         struct nyx_node_s *node,
-        int event_type,
+        enum nyx_event_type_e event_type,
         size_t size,
         BUFF_t buff
     );
 
     void (* mqtt_handler)(
         struct nyx_node_s *node,
-        int event_type,
+        enum nyx_event_type_e event_type,
         nyx_str_t topic,
         nyx_str_t message
     );
