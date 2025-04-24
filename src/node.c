@@ -989,7 +989,7 @@ void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t message_buf
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_set_user_handler(nyx_node_t *node, __NULLABLE__ nyf_mqtt_user_handler_t mqtt_user_handler)
+void nyx_mqtt_set_user_handler(nyx_node_t *node, __NULLABLE__ nyx_mqtt_user_handler_t mqtt_user_handler)
 {
     node->mqtt_user_handler = mqtt_user_handler;
 }

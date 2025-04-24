@@ -2049,7 +2049,7 @@ typedef enum nyx_event_type_e
  * @param message_size The MQTT message length.
  */
 
-typedef void (* nyf_mqtt_user_handler_t)(
+typedef void (* nyx_mqtt_user_handler_t)(
     nyx_node_t *node,
     nyx_event_type_t event_type,
     BUFF_t topic_buff,
@@ -2212,7 +2212,7 @@ void nyx_mqtt_pub(
 
 void nyx_mqtt_set_user_handler(
     nyx_node_t *node,
-    __NULLABLE__ nyf_mqtt_user_handler_t mqtt_user_handler
+    __NULLABLE__ nyx_mqtt_user_handler_t mqtt_user_handler
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
