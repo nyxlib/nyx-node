@@ -603,6 +603,18 @@ static void mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, nyx_str_
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        if(node->mqtt_user_handler != NULL)
+        {
+            node->mqtt_user_handler(
+                node,
+                event_type,
+                NULL, 0x00,
+                NULL, 0x00
+            );
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         get_properties(node, NULL);
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -696,7 +708,7 @@ static void mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, nyx_str_
                             event_topic.buf,
                             event_topic.len,
                             event_message.buf,
-                            event_topic.len
+                            event_message.len
                         );
 
                         /*--------------------------------------------------------------------------------------------*/
