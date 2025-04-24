@@ -2016,6 +2016,13 @@ typedef enum nyx_event_type_e
 
 /**
  * \brief .
+ *
+ * @param node
+ * @param event_type
+ * @param topic_buff
+ * @param topic_size
+ * @param message_buff
+ * @param message_size
  */
 
 typedef void (* nyf_mqtt_user_handler_t)(
