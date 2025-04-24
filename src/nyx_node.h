@@ -1641,10 +1641,18 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_string_t *nyx_format_int_to_string(
     nyx_string_t *format,
     int value
 );
+
+/**
+ * @private
+ */
 
 int nyx_format_string_to_int(
     nyx_string_t *format,
@@ -1653,10 +1661,18 @@ int nyx_format_string_to_int(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_string_t *nyx_format_long_to_string(
     nyx_string_t *format,
     long value
 );
+
+/**
+ * @private
+ */
 
 long nyx_format_string_to_long(
     nyx_string_t *format,
@@ -1665,10 +1681,18 @@ long nyx_format_string_to_long(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_string_t *nyx_format_double_to_string(
     nyx_string_t *format,
     double value
 );
+
+/**
+ * @private
+ */
 
 double nyx_format_string_to_double(
     nyx_string_t *format,
