@@ -2039,7 +2039,7 @@ typedef enum nyx_event_type_e
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
+ * \brief A MQTT event handler.
  *
  * @param node The Nyx node.
  * @param event_type The event type.
