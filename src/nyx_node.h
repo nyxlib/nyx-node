@@ -164,13 +164,19 @@ void nyx_log(
 
 /**
  * \brief Logs a fatal message.
+ *
+ * @param fmt Format string (printf-style).
+ * @param ... Format arguments.
  */
 
 #define NYX_LOG_FATAL(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(1)
 
 /**
-* \brief Logs an error message.
+ * \brief Logs an error message.
+ *
+ * @param fmt Format string (printf-style).
+ * @param ... Format arguments.
 */
 
 #define NYX_LOG_ERROR(fmt, ...) \
@@ -178,6 +184,9 @@ void nyx_log(
 
 /**
  * \brief Logs an info message.
+ *
+ * @param fmt Format string (printf-style).
+ * @param ... Format arguments.
  */
 
 #define NYX_LOG_INFO(fmt, ...) \
@@ -185,6 +194,9 @@ void nyx_log(
 
 /**
  * \brief Logs a debug message.
+ *
+ * @param fmt Format string (printf-style).
+ * @param ... Format arguments.
  */
 
 #define NYX_LOG_DEBUG(fmt, ...) \
@@ -192,6 +204,9 @@ void nyx_log(
 
 /**
  * \brief Logs a verbose message.
+ *
+ * @param fmt Format string (printf-style).
+ * @param ... Format arguments.
  */
 
 #define NYX_LOG_VERBOSE(fmt, ...) \
