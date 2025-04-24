@@ -2172,7 +2172,7 @@ void nyx_node_send_message(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief If MQTT enabled, subscribes to a topic.
+ * \brief If MQTT is enabled, subscribes to a topic.
  *
  * @param node The Nyx node.
  * @param topic The MQTT topic.
@@ -2186,7 +2186,7 @@ void nyx_mqtt_sub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief If MQTT enabled, publishes a message to a topic.
+ * \brief If MQTT is enabled, publishes a message to a topic.
  *
  * @param node The Nyx node.
  * @param topic The MQTT topic.
