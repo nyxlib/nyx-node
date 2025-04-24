@@ -14,7 +14,7 @@ The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7
 hardware. It enhances INDI by supporting multiple independent nodes, each with its own embedded stack.
 
 It enhances INDI by supporting multiple independent nodes, each with its own embedded protocol stack. The nodes can
-communicate via an [MQTT broker](https://mqtt.org/) or directly over TCP, offering flexibility and scalability for
+communicate via an [MQTT](https://mqtt.org/) broker or directly over TCP, offering flexibility and scalability for
 distributed systems.
 
 The `Nyx Node` library is written in C99 and requires no dependencies in a POSIX environment. Its low footprint makes
