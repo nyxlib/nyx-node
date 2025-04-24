@@ -603,9 +603,9 @@ static void mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, nyx_str_
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(node->mqtt_user_handler != NULL)
+        if(node->user_mqtt_handler != NULL)
         {
-            node->mqtt_user_handler(
+            node->user_mqtt_handler(
                 node,
                 NYX_EVENT_OPEN,
                 NULL, 0x00,
@@ -696,13 +696,13 @@ static void mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, nyx_str_
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
-                    else if(node->mqtt_user_handler != NULL)
+                    else if(node->user_mqtt_handler != NULL)
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* USER MESSAGE                                                                               */
                         /*--------------------------------------------------------------------------------------------*/
 
-                        node->mqtt_user_handler(
+                        node->user_mqtt_handler(
                             node,
                             NYX_EVENT_MSG,
                             event_topic.buf,
@@ -989,9 +989,9 @@ void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t message_buf
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_set_user_handler(nyx_node_t *node, __NULLABLE__ nyx_mqtt_user_handler_t mqtt_user_handler)
+void nyx_mqtt_set_user_handler(nyx_node_t *node, __NULLABLE__ nyx_mqtt_handler_t mqtt_handler)
 {
-    node->mqtt_user_handler = mqtt_user_handler;
+    node->user_mqtt_handler = mqtt_handler;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

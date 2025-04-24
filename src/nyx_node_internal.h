@@ -353,7 +353,7 @@ struct nyx_node_s
 
     /**/
 
-    nyx_mqtt_user_handler_t mqtt_user_handler;
+    nyx_mqtt_handler_t user_mqtt_handler;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
