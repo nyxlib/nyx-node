@@ -106,24 +106,24 @@ set_target_properties(nyx-node-shared PROPERTIES
 # INSTALLATION                                                                                                         #
 ########################################################################################################################
 
-install(TARGETS nyx-node-static EXPORT LibNyxNodeTargets ARCHIVE DESTINATION lib)
-install(TARGETS nyx-node-shared EXPORT LibNyxNodeTargets LIBRARY DESTINATION lib)
+install(TARGETS nyx-node-static EXPORT NyxNodeTargets ARCHIVE DESTINATION lib)
+install(TARGETS nyx-node-shared EXPORT NyxNodeTargets LIBRARY DESTINATION lib)
 
 install(FILES src/nyx_node.h DESTINATION include)
 
 ########################################################################################################################
 
-install(EXPORT LibNyxNodeTargets FILE LibNyxNodeTargets.cmake NAMESPACE LibNyxNode:: DESTINATION lib/cmake/LibNyxNode)
+install(EXPORT NyxNodeTargets FILE NyxNodeTargets.cmake NAMESPACE NyxNode:: DESTINATION lib/cmake/NyxNode)
 
 ########################################################################################################################
 
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/LibNyxNodeConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/LibNyxNodeConfig.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/NyxNodeConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/NyxNodeConfig.cmake"
     @ONLY
 )
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/LibNyxNodeConfig.cmake" DESTINATION lib/cmake/LibNyxNode)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/NyxNodeConfig.cmake" DESTINATION lib/cmake/NyxNode)
 
 ########################################################################################################################
 # TESTS                                                                                                                #

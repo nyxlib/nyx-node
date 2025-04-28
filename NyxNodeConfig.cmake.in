@@ -1,22 +1,22 @@
 @PACKAGE_INIT@
 ########################################################################################################################
 
-include("${CMAKE_CURRENT_LIST_DIR}/LibNyxNodeTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/NyxNodeTargets.cmake")
 
 ########################################################################################################################
 
-get_target_property(NYXNODE_STATIC_LIB_PATH LibNyxNode::nyx-node-static LOCATION)
-get_target_property(NYXNODE_SHARED_LIB_PATH LibNyxNode::nyx-node-shared LOCATION)
+get_target_property(NYXNODE_STATIC_LIB_PATH NyxNode::nyx-node-static LOCATION)
+get_target_property(NYXNODE_SHARED_LIB_PATH NyxNode::nyx-node-shared LOCATION)
 
 ########################################################################################################################
 
-set(LIBNYXNODE_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(NYXNODE_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 
 ########################################################################################################################
 
-message(STATUS "Found LibNyxNode (static): ${NYXNODE_STATIC_LIB_PATH} (found version \"@PROJECT_VERSION@\")")
-message(STATUS "Found LibNyxNode (shared): ${NYXNODE_SHARED_LIB_PATH} (found version \"@PROJECT_VERSION@\")")
+message(STATUS "Found NyxNode (static): ${NYXNODE_STATIC_LIB_PATH} (found version \"@PROJECT_VERSION@\")")
+message(STATUS "Found NyxNode (shared): ${NYXNODE_SHARED_LIB_PATH} (found version \"@PROJECT_VERSION@\")")
 
-message(STATUS "LibNyxNode include directory: ${CMAKE_INSTALL_PREFIX}/include")
+message(STATUS "NyxNode include directory: ${CMAKE_INSTALL_PREFIX}/include")
 
 ########################################################################################################################
