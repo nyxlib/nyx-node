@@ -22,6 +22,7 @@ struct nyx_stack_s
     struct mg_mqtt_opts mqtt_opts;
     struct mg_connection *tcp_connection;
     struct mg_connection *mqtt_connection;
+    struct mg_connection *redis_connection;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -156,10 +157,6 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
     }
     else if(ev == MG_EV_READ)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* MG_EV_READ                                                                                                 */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, connection->recv.len, connection->recv.buf);
 
         mg_iobuf_del(
@@ -167,8 +164,6 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
             0x00000000,
             consumed
         );
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 }
 
@@ -198,29 +193,41 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* MG_EV_MQTT_OPEN                                                                                            */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         NYX_LOG_INFO("%lu MQTT OPEN", connection->id);
 
-        /*------------------------------------------------------------------------------------------------------------*/
-
         node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
     else if(ev == MG_EV_MQTT_MSG)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* MG_EV_MQTT_MSG                                                                                             */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         struct mg_mqtt_message *message = (struct mg_mqtt_message *) ev_data;
 
         node->mqtt_handler(node, NYX_EVENT_MSG, message->topic, message->data);
+    }
+}
 
-        /*------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void redis_handler(struct mg_connection *connection, int ev, void *ev_data)
+{
+    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
+
+    /**/ if(ev == MG_EV_CONNECT)
+    {
+        NYX_LOG_INFO("%lu OPEN", connection->id);
+    }
+    else if(ev == MG_EV_CLOSE)
+    {
+        NYX_LOG_INFO("%lu CLOSE", connection->id);
+    }
+    else if(ev == MG_EV_ERROR)
+    {
+        NYX_LOG_ERROR("%lu ERROR %s", connection->id, (STR_t) ev_data);
+    }
+    else if(ev == MG_EV_READ)
+    {
+        NYX_LOG_DEBUG("Redis replied: %.*s\n", (int) connection->recv.len, (STR_t) connection->recv.buf);
+
+        mg_iobuf_del(&c->recv, 0, connection->recv.len);
     }
 }
 
@@ -295,6 +302,13 @@ void nyx_node_stack_initialize(
         mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, retry_timer_handler, node);
 
         mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, ping_timer_handler, node);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->redis_url != NULL)
+    {
+        mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
