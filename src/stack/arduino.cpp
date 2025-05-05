@@ -208,6 +208,13 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
+{
+    /* TODO */
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -326,7 +333,6 @@ void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     __UNUSED__ int retry_ms
 ) {
@@ -404,6 +410,13 @@ void nyx_node_stack_initialize(
 
             node->mqtt_url = nullptr;
         }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->redis_url != nullptr)
+    {
+        /* TODO */
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

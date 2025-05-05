@@ -79,7 +79,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* TCP & MQTT                                                                                                         */
+/* TCP, MQTT & REDIS                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
@@ -89,6 +89,8 @@ void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
         if(connection != node->stack->tcp_connection
            &&
            connection != node->stack->mqtt_connection
+           &&
+           connection != node->stack->redis_connection
         ) {
             mg_send(connection, message.buf, message.len);
         }
@@ -128,6 +130,16 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
         opts.qos = 1;
 
         mg_mqtt_pub(node->stack->mqtt_connection, &opts);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
+{
+    if(node->stack->redis_connection != NULL)
+    {
+        mg_send(node->stack->redis_connection, message.buf, message.len);
     }
 }
 
@@ -209,8 +221,6 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 static void redis_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
-
     /**/ if(ev == MG_EV_CONNECT)
     {
         NYX_LOG_INFO("%lu OPEN", connection->id);
@@ -227,7 +237,7 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
     {
         NYX_LOG_DEBUG("Redis replied: %.*s\n", (int) connection->recv.len, (STR_t) connection->recv.buf);
 
-        mg_iobuf_del(&c->recv, 0, connection->recv.len);
+        mg_iobuf_del(&connection->recv, 0, connection->recv.len);
     }
 }
 
@@ -264,7 +274,6 @@ void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     int retry_ms
 ) {
@@ -292,7 +301,10 @@ void nyx_node_stack_initialize(
 
     if(node->tcp_url != NULL)
     {
-        mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node);
+        if(mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node) != NULL)
+        {
+
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -308,7 +320,10 @@ void nyx_node_stack_initialize(
 
     if(node->redis_url != NULL)
     {
-        mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
+        if(mg_connect(&stack->mgr, node->redis_url, redis_handler, node) != NULL)
+        {
+            nyx_redis_auth(node, redis_password);
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

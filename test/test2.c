@@ -121,7 +121,6 @@ int main()
         getenv("MQTT_USERNAME"),
         getenv("MQTT_PASSWORD"),
         getenv("REDIS_URL"),
-        getenv("REDIS_USERNAME"),
         getenv("REDIS_PASSWORD"),
         "TOTO",
         vector_list,

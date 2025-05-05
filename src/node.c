@@ -730,7 +730,6 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
     __NULLABLE__ STR_t redis_url,
-    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     /**/
     STR_t node_id,
@@ -814,7 +813,7 @@ nyx_node_t *nyx_node_initialize(
     /* INITIALIZE STACK                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_node_stack_initialize(node, mqtt_username, mqtt_password, redis_username, redis_password, retry_ms);
+    nyx_node_stack_initialize(node, mqtt_username, mqtt_password, redis_password, retry_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SET LOCALE                                                                                                     */
@@ -998,6 +997,21 @@ void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t message_buf
         _topic,
         _message
     );
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* STREAM                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_stream_pub(nyx_node_t *node, STR_t stream, size_t max_len, size_t n_fields, ...)
+{
+    va_list ap;
+
+    va_start(ap, n_fields);
+
+    nyx_redis_pub(node, stream, max_len, n_fields, ap);
+
+    va_end(ap);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

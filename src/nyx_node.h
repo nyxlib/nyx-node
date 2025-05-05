@@ -2115,7 +2115,6 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
  * @param redis_url Optional Redis URL (e.g. mqtt://localhost:6379).
- * @param redis_username Optional Redis username.
  * @param redis_password Optional Redis password.
  * @param node_id Unique node identifier.
  * @param def_vectors Array of definition vectors.
@@ -2132,7 +2131,6 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
     __NULLABLE__ STR_t redis_url,
-    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     /**/
     STR_t node_id,
@@ -2254,6 +2252,28 @@ void nyx_mqtt_pub(
     STR_t topic,
     __NULLABLE__ BUFF_t message_buff,
     __ZEROABLE__ size_t message_size
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ???.
+ *
+ * @param node
+ * @param stream
+ * @param field
+ * @param message_buff
+ * @param message_size
+ * @param max_len
+ * @param encode
+ */
+
+void nyx_stream_pub(
+    nyx_node_t *node,
+    STR_t stream,
+    size_t max_len,
+    __ZEROABLE__ size_t n_fields,
+    ...
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -10,6 +10,8 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <stdarg.h>
+
 #include "nyx_node.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -379,6 +381,11 @@ void internal_mqtt_pub(
     nyx_str_t message
 );
 
+void internal_redis_pub(
+    nyx_node_t *node,
+    nyx_str_t message
+);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_node_ping(
@@ -391,13 +398,29 @@ void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     int retry_ms
 );
 
 void nyx_node_stack_finalize(
     nyx_node_t *node
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* REDIS                                                                                                              */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_redis_auth(
+    nyx_node_t *node,
+    __NULLABLE__ STR_t password
+);
+
+void nyx_redis_pub(
+    nyx_node_t *node,
+    STR_t stream,
+    size_t max_len,
+    __ZEROABLE__ size_t n_fields,
+    va_list args
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

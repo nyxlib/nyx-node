@@ -67,6 +67,7 @@ set(SOURCE_FILES
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
     src/stream.c
+    src/redis.c
     src/node.c
 )
 
