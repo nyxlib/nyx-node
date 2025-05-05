@@ -725,16 +725,18 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_node_t *nyx_node_initialize(
+    STR_t node_id,
+    nyx_dict_t *def_vectors[],
+    /**/
     __NULLABLE__ STR_t tcp_url,
+    /**/
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
+    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
+    /**/
     __NULLABLE__ STR_t redis_url,
     __NULLABLE__ STR_t redis_password,
-    /**/
-    STR_t node_id,
-    nyx_dict_t *def_vectors[],
-    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
     /**/
     int retry_ms,
     bool enable_xml,

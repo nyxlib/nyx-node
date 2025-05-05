@@ -116,15 +116,15 @@ int main()
     signal(SIGTERM, signal_handler);
 
     nyx_node_t *node = nyx_node_initialize(
+        "TOTO",
+        vector_list,
         "tcp://0.0.0.0:7625",
         getenv("MQTT_URL"),
         getenv("MQTT_USERNAME"),
         getenv("MQTT_PASSWORD"),
+        NULL,
         getenv("REDIS_URL"),
         getenv("REDIS_PASSWORD"),
-        "TOTO",
-        vector_list,
-        NULL,
         3000,
         true,
         true

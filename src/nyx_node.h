@@ -2110,15 +2110,15 @@ typedef void (* nyx_mqtt_handler_t)(
 /**
  * \brief Initializes the Nyx node.
  *
+ * @param node_id Unique node identifier.
+ * @param def_vectors Array of definition vectors.
  * @param tcp_url Optional TCP URL (e.g. tcp://0.0.0.0:7625).
  * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
+ * @param mqtt_handler Optional MQTT event handler.
  * @param redis_url Optional Redis URL (e.g. tcp://localhost:6379).
  * @param redis_password Optional Redis password.
- * @param node_id Unique node identifier.
- * @param def_vectors Array of definition vectors.
- * @param mqtt_handler Optional MQTT event handler.
  * @param retry_ms Connect retry time [milliseconds].
  * @param enable_xml Enables the XML compatibility layer.
  * @param validate_xml Enables the XML message validation.
@@ -2126,16 +2126,18 @@ typedef void (* nyx_mqtt_handler_t)(
  */
 
 nyx_node_t *nyx_node_initialize(
+    STR_t node_id,
+    nyx_dict_t *def_vectors[],
+    /**/
     __NULLABLE__ STR_t tcp_url,
+    /**/
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
+    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
+    /**/
     __NULLABLE__ STR_t redis_url,
     __NULLABLE__ STR_t redis_password,
-    /**/
-    STR_t node_id,
-    nyx_dict_t *def_vectors[],
-    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
     /**/
     int retry_ms,
     bool enable_xml,
