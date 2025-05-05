@@ -303,7 +303,7 @@ void nyx_node_stack_initialize(
     {
         if(mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node) != NULL)
         {
-
+            NYX_LOG_INFO("INDI support is enabled");
         }
     }
 
