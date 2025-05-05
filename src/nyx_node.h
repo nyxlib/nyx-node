@@ -2259,7 +2259,7 @@ void nyx_mqtt_pub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Publishes an entry to a Redis stream, see \href{https://redis.io/commands/xadd/}.
+ * \brief Publishes an entry to a Redis stream, see https://redis.io/commands/xadd/.
  *
  * @param node The Nyx node.
  * @param stream The stream name.
