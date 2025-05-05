@@ -2116,7 +2116,7 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
- * @param mqtt_handler Optional MQTT event handler.
+ * @param mqtt_handler Optional MQTT handler.
  * @param redis_url Optional Redis URL (e.g. tcp://localhost:6379).
  * @param redis_password Optional Redis password.
  * @param retry_ms Connect retry time [milliseconds].
