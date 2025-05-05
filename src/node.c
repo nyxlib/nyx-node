@@ -809,7 +809,7 @@ nyx_node_t *nyx_node_initialize(
 
     node->tcp_handler = internal_tcp_handler;
     node->mqtt_handler = internal_mqtt_handler;
-    node->user_mqtt_handler = /* user */ mqtt_handler;
+    node->user_mqtt_handler = /*--*/ mqtt_handler;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE STACK                                                                                               */
@@ -967,38 +967,6 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
 
         nyx_dict_free(dict);
     }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* MQTT                                                                                                               */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_mqtt_sub(nyx_node_t *node, STR_t topic)
-{
-    nyx_str_t _topic = nyx_str_s(topic);
-
-    internal_mqtt_sub(
-        node,
-        _topic
-    );
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NULLABLE__ BUFF_t message_buff, __ZEROABLE__ size_t message_size)
-{
-    nyx_str_t _topic = nyx_str_s(topic);
-
-    nyx_str_t _message = NYX_STR_S(
-        message_buff,
-        message_size
-    );
-
-    internal_mqtt_pub(
-        node,
-        _topic,
-        _message
-    );
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

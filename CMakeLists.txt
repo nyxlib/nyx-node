@@ -31,8 +31,18 @@ set(SOURCE_FILES
     src/nyx_node_schema.h
     src/nyx_node_internal.h
     #
-    src/stack/generated/mongoose.c
-    src/stack/mongoose.c
+    src/utils/addr.c
+    src/utils/base64.c
+    src/utils/hash32.c
+    src/utils/utf8.c
+    #
+    src/log.c
+    src/string_builder.c
+    src/object.c
+    src/dom.c
+    #
+    src/parsers/json.c
+    src/parsers/xml.c
     #
     src/json/json_boolean.c
     src/json/json_dict.c
@@ -51,24 +61,17 @@ set(SOURCE_FILES
     src/indi/indi_switch.c
     src/indi/indi_text.c
     #
-    src/utils/addr.c
-    src/utils/base64.c
-    src/utils/hash32.c
-    src/utils/utf8.c
+    src/stack/generated/mongoose.c
+    src/stack/mongoose.c
     #
-    src/parsers/json.c
-    src/parsers/xml.c
-    #
-    src/log.c
-    src/string_builder.c
-    src/object.c
-    src/dom.c
-    src/validation.c
+    src/xml_stream.c
+    src/xml_validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
-    src/stream.c
-    src/redis.c
     src/node.c
+    #
+    src/mqtt.c
+    src/redis.c
 )
 
 ########################################################################################################################
