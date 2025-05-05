@@ -2073,7 +2073,7 @@ typedef struct nyx_node_s nyx_node_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Nyx MQTT or TCP event type.
+ * \brief Nyx TCP or MQTT event type.
  */
 
 typedef enum nyx_event_e
