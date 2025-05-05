@@ -2261,11 +2261,9 @@ void nyx_mqtt_pub(
  *
  * @param node
  * @param stream
- * @param field
- * @param message_buff
- * @param message_size
  * @param max_len
- * @param encode
+ * @param n_fields
+ * @param ...
  */
 
 void nyx_stream_pub(
