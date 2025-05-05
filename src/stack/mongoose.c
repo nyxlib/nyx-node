@@ -313,6 +313,8 @@ void nyx_node_stack_initialize(
 
     if(node->mqtt_url != NULL)
     {
+        NYX_LOG_INFO("MQTT support is enabled");
+
         mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, retry_timer_handler, node);
 
         mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, ping_timer_handler, node);
