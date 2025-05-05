@@ -109,7 +109,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
             /*--------------------------------------------------------------------------------------------------------*/
 
             size_t size = va_arg(ap, size_t);
-            BUFF_t buff = va_arg(ap, BUFF_t);
+            buff_t buff = va_arg(ap, buff_t);
 
             if(size == 0x0U
                ||
@@ -117,6 +117,21 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
             ) {
                 size = 0U;
                 buff = "";
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            bool is_raw;
+
+            if(field[0] == '#')
+            {
+                buff = nyx_base64_encode(&size, size, buff);
+
+                is_raw = false;
+            }
+            else
+            {
+                is_raw = true;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -141,6 +156,10 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
                 internal_redis_pub(node, NYX_STR_S("\r\n", 2));
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(!is_raw) nyx_memory_free(buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
