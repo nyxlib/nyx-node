@@ -304,6 +304,8 @@ void nyx_node_stack_initialize(
         if(mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node) != NULL)
         {
             NYX_LOG_INFO("INDI support is enabled");
+
+            ///_tcp_auth(node, tcp_password);
         }
     }
 
@@ -322,6 +324,8 @@ void nyx_node_stack_initialize(
     {
         if(mg_connect(&stack->mgr, node->redis_url, redis_handler, node) != NULL)
         {
+            NYX_LOG_INFO("Redis support is enabled");
+
             nyx_redis_auth(node, redis_password);
         }
     }
