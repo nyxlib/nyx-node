@@ -733,7 +733,7 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ nyx_mqtt_handler_t user_mqtt_handler,
+    __NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
     /**/
     __NULLABLE__ STR_t redis_url,
     __NULLABLE__ STR_t redis_password,
@@ -809,7 +809,7 @@ nyx_node_t *nyx_node_initialize(
 
     node->tcp_handler = internal_tcp_handler;
     node->mqtt_handler = internal_mqtt_handler;
-    node->user_mqtt_handler = user_mqtt_handler;
+    node->user_mqtt_handler = /* user */ mqtt_handler;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE STACK                                                                                               */
