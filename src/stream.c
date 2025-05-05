@@ -47,7 +47,7 @@ static struct tag_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_detect_opening_tag(nyx_stream_t *stream, size_t size, BUFF_t buff)
+bool nyx_xml_stream_detect_opening_tag(nyx_xml_stream_t *xml_stream, size_t size, BUFF_t buff)
 {
     for(int i = 0; i < TAG_DEF_NB; i++)
     {
@@ -55,15 +55,15 @@ bool nyx_stream_detect_opening_tag(nyx_stream_t *stream, size_t size, BUFF_t buf
 
         if(p != NULL)
         {
-            stream->s_ptr = p + 0x000000000000000000000;
+            xml_stream->s_ptr = p + 0x000000000000000000000;
 
-            stream->pos = (
-                (size_t) stream->s_ptr
+            xml_stream->pos = (
+                (size_t) xml_stream->s_ptr
                 -
                 (size_t) /**/buff/**/
             );
 
-            stream->tag = &TAGS[i];
+            xml_stream->tag = &TAGS[i];
 
             return true;
         }
@@ -74,21 +74,21 @@ bool nyx_stream_detect_opening_tag(nyx_stream_t *stream, size_t size, BUFF_t buf
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_detect_closing_tag(nyx_stream_t *stream, size_t size, __UNUSED__ BUFF_t buff)
+bool nyx_xml_stream_detect_closing_tag(nyx_xml_stream_t *xml_stream, size_t size, __UNUSED__ BUFF_t buff)
 {
-    STR_t p = memmem(stream->s_ptr, size - stream->pos, stream->tag->e_tag_buff, stream->tag->e_tag_size);
+    STR_t p = memmem(xml_stream->s_ptr, size - xml_stream->pos, xml_stream->tag->e_tag_buff, xml_stream->tag->e_tag_size);
 
     if(p != NULL)
     {
-        stream->e_ptr = p + stream->tag->e_tag_size;
+        xml_stream->e_ptr = p + xml_stream->tag->e_tag_size;
 
-        stream->len = (
-            (size_t) stream->e_ptr
+        xml_stream->len = (
+            (size_t) xml_stream->e_ptr
             -
-            (size_t) stream->s_ptr
+            (size_t) xml_stream->s_ptr
         );
 
-        stream->tag = NULL;
+        xml_stream->tag = NULL;
 
         return true;
     }

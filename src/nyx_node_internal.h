@@ -270,7 +270,7 @@ nyx_dict_t *internal_xxxx_set_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* STREAM                                                                                                             */
+/* XML STREAM                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 typedef struct
@@ -283,23 +283,23 @@ typedef struct
     size_t pos;
     size_t len;
 
-} nyx_stream_t;
+} nyx_xml_stream_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_STREAM() \
-            ((nyx_stream_t) {.tag = NULL, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
+#define NYX_XML_STREAM() \
+            ((nyx_xml_stream_t) {.tag = NULL, .s_ptr = NULL, .e_ptr = NULL, .pos = 0, .len = 0})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_detect_opening_tag(
-    nyx_stream_t *stream,
+bool nyx_xml_stream_detect_opening_tag(
+    nyx_xml_stream_t *xml_stream,
     size_t size,
     BUFF_t buff
 );
 
-bool nyx_stream_detect_closing_tag(
-    nyx_stream_t *stream,
+bool nyx_xml_stream_detect_closing_tag(
+    nyx_xml_stream_t *xml_stream,
     size_t size,
     BUFF_t buff
 );

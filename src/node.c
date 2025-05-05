@@ -537,15 +537,15 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, siz
 {
     if(event_type == NYX_EVENT_MSG)
     {
-        nyx_stream_t stream = NYX_STREAM();
+        nyx_xml_stream_t xml_stream = NYX_XML_STREAM();
 
-        if(nyx_stream_detect_opening_tag(&stream, size, buff))
+        if(nyx_xml_stream_detect_opening_tag(&xml_stream, size, buff))
         {
-            if(nyx_stream_detect_closing_tag(&stream, size, buff))
+            if(nyx_xml_stream_detect_closing_tag(&xml_stream, size, buff))
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(stream.s_ptr, stream.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(xml_stream.s_ptr, xml_stream.len);
 
                 if(xmldoc != NULL)
                 {
@@ -563,7 +563,7 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, siz
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                return stream.pos + stream.len;
+                return xml_stream.pos + xml_stream.len;
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
