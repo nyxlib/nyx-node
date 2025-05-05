@@ -242,13 +242,13 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
+int internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
 {
     time_t now = time(NULL);
 
     struct tm *tm_now = localtime(&now);
 
-    snprintf(
+    return snprintf(
         timestamp_buff,
         timestamp_size,
         "%04d-%02d-%02dT%02d:%02d:%02d",

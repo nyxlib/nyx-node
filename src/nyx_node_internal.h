@@ -244,7 +244,7 @@ void nyx_xmldoc_add_attribute(
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_get_timestamp(
+int internal_get_timestamp(
     str_t timestamp_buff,
     size_t timestamp_size
 );
