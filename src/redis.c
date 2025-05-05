@@ -108,15 +108,15 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t size = va_arg(ap, size_t);
-            buff_t buff = va_arg(ap, buff_t);
+            size_t value_size = va_arg(ap, size_t);
+            buff_t value_buff = va_arg(ap, buff_t);
 
-            if(size == 0x0U
+            if(value_size == 0x0U
                ||
-               buff == NULL
+               value_buff == NULL
             ) {
-                size = 0U;
-                buff = "";
+                value_size = 0U;
+                value_buff = "";
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -125,7 +125,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             if(field[0] == '#')
             {
-                buff = nyx_base64_encode(&size, size, buff);
+                value_buff = nyx_base64_encode(&value_size, value_size, value_buff);
 
                 is_raw = false;
             }
@@ -136,30 +136,30 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            char field_buff[256];
+            char header_buff[256];
 
-            size_t field_size = snprintf(
-                /*--*/(field_buff),
-                sizeof(field_buff),
+            size_t header_size = snprintf(
+                /*--*/(header_buff),
+                sizeof(header_buff),
                 "$%zu\r\n%s\r\n"
                 "$%zu\r\n",
                 strlen(field),
                 /*--*/(field),
-                size
+                value_size
             );
 
-            if(field_size > 0 && field_size < sizeof(field_buff))
+            if(header_size > 0 && header_size < sizeof(header_buff))
             {
-                internal_redis_pub(node, NYX_STR_S(field_buff, field_size));
+                internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
 
-                internal_redis_pub(node, NYX_STR_S(buff, size));
+                internal_redis_pub(node, NYX_STR_S(value_buff, value_size));
 
                 internal_redis_pub(node, NYX_STR_S("\r\n", 2));
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(!is_raw) nyx_memory_free(buff);
+            if(!is_raw) nyx_memory_free(value_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
