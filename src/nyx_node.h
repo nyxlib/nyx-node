@@ -2266,7 +2266,7 @@ void nyx_mqtt_pub(
  * @param ...
  */
 
-void nyx_stream_pub(
+void nyx_redis_pub(
     nyx_node_t *node,
     STR_t stream,
     size_t max_len,

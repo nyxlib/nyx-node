@@ -415,14 +415,6 @@ void nyx_redis_auth(
     __NULLABLE__ STR_t password
 );
 
-void nyx_redis_pub(
-    nyx_node_t *node,
-    STR_t stream,
-    size_t max_len,
-    __ZEROABLE__ size_t n_fields,
-    va_list args
-);
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #ifndef ARDUINO
