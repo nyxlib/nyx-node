@@ -2259,13 +2259,13 @@ void nyx_mqtt_pub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ???.
+ * \brief Publishes an entry to a Redis stream, see \href{https://redis.io/commands/xadd/}.
  *
- * @param node
- * @param stream
- * @param max_len
- * @param n_fields
- * @param ...
+ * @param node The Nyx node.
+ * @param stream The stream name.
+ * @param max_len Maximum number of entries to keep in the stream.
+ * @param n_fields Number of field triplets (field name, value size, value buff).
+ * @param ... Field triplets (field name, value size, value buff). If a field name starts with \c #, its value will be automatically base64-encoded.
  */
 
 void nyx_redis_pub(
