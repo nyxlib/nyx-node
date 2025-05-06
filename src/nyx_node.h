@@ -762,6 +762,23 @@ STR_t nyx_string_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_string_t
+ * \brief ???.
+ *
+ * @param object The provided JSON string object.
+ * @param result_size ???.
+ * @param result_buff ???.
+ */
+
+void nyx_string_buff_get(
+    const nyx_string_t *object,
+    size_t *result_size,
+    buff_t *result_buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * @private
  */
 
@@ -1872,7 +1889,7 @@ __INLINE__ bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
 
 __INLINE__ STR_t nyx_text_def_get(const nyx_dict_t *def)
 {
-    return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
+    return nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$"));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2007,7 +2024,21 @@ __INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, STR_t value)
 
 __INLINE__ STR_t nyx_blob_def_get(const nyx_dict_t *def)
 {
-    return ((nyx_string_t *) nyx_dict_get(def, "$"))->value;
+    return nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$"));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ bool nyx_blob_def_buff_set(nyx_dict_t *def, size_t size, BUFF_t buff)
+{
+    return nyx_dict_set(def, "$", nyx_string_buff_from(size, buff));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void nyx_blob_def_buff_get(const nyx_dict_t *def, size_t *size, buff_t *buff)
+{
+    nyx_string_buff_get((nyx_string_t *) nyx_dict_get(def, "$"), size, buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2161,6 +2192,7 @@ void nyx_node_finalize(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Performs a single poll iteration.
  *
  * @param node The Nyx node.
@@ -2175,6 +2207,7 @@ void nyx_node_poll(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Enables a whole device or a definition vector.
  *
  * @param node The Nyx node.
@@ -2193,6 +2226,7 @@ void nyx_node_enable(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Disables a whole device or a definition vector.
  *
  * @param node The Nyx node.
@@ -2211,6 +2245,7 @@ void nyx_node_disable(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Sends a message to the clients.
  *
  * @param node The Nyx node.
@@ -2227,6 +2262,7 @@ void nyx_node_send_message(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief If MQTT is enabled, subscribes to a topic.
  *
  * @param node The Nyx node.
@@ -2241,6 +2277,7 @@ void nyx_mqtt_sub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief If MQTT is enabled, publishes a message to a topic.
  *
  * @param node The Nyx node.
@@ -2259,6 +2296,7 @@ void nyx_mqtt_pub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Publishes an entry to a Redis stream, see https://redis.io/commands/xadd/.
  *
  * @param node The Nyx node.
