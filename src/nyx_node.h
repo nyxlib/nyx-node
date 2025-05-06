@@ -379,7 +379,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
 
 /**
  * @memberof nyx_object_t
- * \brief Frees memory for the provided JSON object.
+ * \brief Frees memory of the provided JSON object.
  *
  * @param object The provided JSON document.
  */
@@ -465,7 +465,7 @@ nyx_null_t *nyx_null_new();
 
 /**
  * @memberof nyx_null_t
- * \brief Frees memory for the provided JSON null object.
+ * \brief Frees memory of the provided JSON null object.
  *
  * @param object The provided JSON null object.
  */
@@ -523,7 +523,7 @@ nyx_number_t *nyx_number_new();
 
 /**
  * @memberof nyx_number_t
- * \brief Frees memory for the provided JSON number object.
+ * \brief Frees memory of the provided JSON number object.
  *
  * @param object The provided JSON number object.
  */
@@ -642,7 +642,7 @@ nyx_boolean_t *nyx_boolean_new();
 
 /**
  * @memberof nyx_boolean_t
- * \brief Frees memory for the provided JSON boolean object.
+ * \brief Frees memory of the provided JSON boolean object.
  *
  * @param object The provided JSON boolean object.
  */
@@ -764,7 +764,7 @@ nyx_string_t *nyx_string_new();
 
 /**
  * @memberof nyx_string_t
- * \brief Frees memory for the provided JSON string object.
+ * \brief Frees memory of the provided JSON string object.
  *
  * @param object The provided JSON string object.
  */
@@ -1048,7 +1048,7 @@ nyx_dict_t *nyx_dict_new();
 
 /**
  * @memberof nyx_dict_t
- * \brief Frees memory for the provided JSON dict object.
+ * \brief Frees memory of the provided JSON dict object.
  *
  * @param object The provided JSON dict object.
  */
@@ -1269,7 +1269,8 @@ nyx_list_t *nyx_list_new();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Frees memory for the provided JSON list object.
+ * @memberof nyx_list_t
+ * \brief Frees memory of the provided JSON list object.
  *
  * @param object The provided JSON list object.
  */
@@ -1457,6 +1458,10 @@ typedef enum
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @struct nyx_xmldoc_t
+ */
+
 typedef struct nyx_xmldoc_s
 {
     str_t name;
@@ -1476,6 +1481,7 @@ typedef struct nyx_xmldoc_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_xmldoc_t
  * \brief Parses an XML document from a string buffer.
  *
  * \param buff The string pointer.
@@ -1488,7 +1494,10 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
     __ZEROABLE__ size_t size
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
+ * @memberof nyx_xmldoc_t
  * \brief Parses an XML document from a string.
  *
  * \param text The string.
@@ -1502,7 +1511,8 @@ nyx_xmldoc_t *nyx_xmldoc_parse(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Frees memory for the provided XML document.
+ * @memberof nyx_xmldoc_t
+ * \brief Frees memory of the provided XML document.
  *
  * @param xmldoc The provided XML document.
  */
@@ -1514,6 +1524,7 @@ void nyx_xmldoc_free(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_xmldoc_t
  * \brief Returns a string representing the provided XML document.
  *
  * @param xmldoc The provided XML document.
