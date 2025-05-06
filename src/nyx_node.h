@@ -476,10 +476,10 @@ void nyx_null_free(
 
 /**
  * @memberof nyx_null_t
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided JSON null object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON null object.
  */
 
 str_t nyx_null_to_string(
@@ -579,7 +579,7 @@ __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
  * \brief Returns a string representing the provided JSON number object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON number object.
  */
 
 str_t nyx_number_to_string(
@@ -592,7 +592,7 @@ str_t nyx_number_to_string(
  * @memberof nyx_number_t
  * \brief Returns a JSON number object holding the value of the provided argument.
  *
- * @param value
+ * @param value The value for the new JSON number object.
  * @return The new JSON number object.
  */
 
@@ -698,7 +698,7 @@ __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
  * \brief Returns a string representing the provided JSON boolean object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON boolean object.
  */
 
 str_t nyx_boolean_to_string(
@@ -711,7 +711,7 @@ str_t nyx_boolean_to_string(
  * @memberof nyx_boolean_t
  * \brief Returns a JSON boolean object holding the value of the provided argument.
  *
- * @param value
+ * @param value The value for the new JSON boolean object.
  * @return The new JSON boolean object.
  */
 
@@ -790,12 +790,7 @@ STR_t nyx_string_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @memberof nyx_string_t
- * \brief  Get the base64-decoded value of the provided JSON string object.
- *
- * @param object The provided JSON string object.
- * @param result_size Optional pointer to store the length of the decoded buffer size.
- * @param result_buff Optional pointer to store the length of the decoded buffer pointer.
+ * @private
  */
 
 void nyx_string_get_base64(
@@ -905,7 +900,7 @@ size_t nyx_string_length(
  * \brief Returns a string representing the provided JSON string object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON string object.
  */
 
 str_t nyx_string_to_string(
@@ -919,7 +914,7 @@ str_t nyx_string_to_string(
  * \brief Returns a C/C++ string representing the provided JSON string object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON string object.
  */
 
 str_t nyx_string_to_cstring(
@@ -932,7 +927,7 @@ str_t nyx_string_to_cstring(
  * @memberof nyx_string_t
  * \brief Returns a JSON string object holding the value of the provided argument (string duplication).
  *
- * @param value
+ * @param value The value for the new JSON string object.
  * @return The new JSON string object.
  */
 
@@ -951,7 +946,7 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
  * @memberof nyx_string_t
  * \brief Returns a JSON string object holding the value of the provided argument (string reference).
  *
- * @param value
+ * @param value The value for the new JSON string object.
  * @return The new JSON string object.
  */
 
@@ -970,8 +965,8 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
  * @memberof nyx_string_t
  * \brief Returns a JSON string object holding the value of the provided argument (base64 encoding).
  *
- * @param size
- * @param buff
+ * @param size The buffer size for the new JSON string object.
+ * @param buff The buffer pointer for the new JSON string object.
  * @return The new JSON string object.
  */
 
@@ -1170,10 +1165,10 @@ size_t nyx_dict_size(
 
 /**
  * @memberof nyx_dict_t
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided JSON dict object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON dict object.
  */
 
 str_t nyx_dict_to_string(
@@ -1390,10 +1385,10 @@ size_t nyx_list_size(
 
 /**
  * @memberof nyx_list_t
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided JSON list object.
  *
  * @param object The provided object.
- * @return The string representing the provided object.
+ * @return The string representing the provided JSON list object.
  */
 
 str_t nyx_list_to_string(

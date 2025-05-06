@@ -58,7 +58,11 @@ void nyx_string_get_base64(const nyx_string_t *object, __NULLABLE__ size_t *resu
 {
     buff_t buff = nyx_base64_decode(result_size, object->length, object->value);
 
-    if(result_buff != NULL)
+    if(result_buff == NULL)
+    {
+        nyx_memory_free(buff);
+    }
+    else
     {
         *result_buff = buff;
     }
