@@ -308,6 +308,10 @@ uint32_t nyx_hash32(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief JSON object types.
+ */
+
 typedef enum
 {
     NYX_TYPE_NULL = 100,                                                                        //!< Null object.
@@ -1446,13 +1450,17 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief XML node types.
+ */
+
 typedef enum
 {
-    NYX_XML_ELEM,
-    NYX_XML_ATTR,
-    NYX_XML_COMMENT,
-    NYX_XML_CDATA,
-    NYX_XML_TEXT,
+    NYX_XML_ELEM,                                                                               //!< Element node.
+    NYX_XML_ATTR,                                                                               //!< Attribute node.
+    NYX_XML_COMMENT,                                                                            //!< Comment node.
+    NYX_XML_CDATA,                                                                              //!< CDATA content.
+    NYX_XML_TEXT,                                                                               //!< Text content.
 
 } nyx_xml_type_t;
 
