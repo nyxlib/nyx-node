@@ -432,6 +432,10 @@ str_t nyx_object_to_cstring(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Struct describing a JSON null value.
+ */
+
 typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
@@ -481,6 +485,10 @@ str_t nyx_null_to_string(
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Struct describing a JSON number.
+ */
 
 typedef struct
 {
@@ -597,6 +605,10 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Struct describing a JSON boolean.
+ */
+
 typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
@@ -712,6 +724,10 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Struct describing a JSON string.
+ */
+
 typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
@@ -726,6 +742,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_string_t
  * \brief Allocates a new JSON string object.
  *
  * @return The new JSON string.
@@ -736,6 +753,7 @@ nyx_string_t *nyx_string_new();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_string_t
  * \brief Frees memory for the provided JSON string object.
  *
  * @param object The provided JSON string object.
@@ -980,6 +998,10 @@ __INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Struct describing a JSON dict.
+ */
+
 typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
@@ -1197,6 +1219,10 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Struct describing a JSON list.
+ */
 
 typedef struct
 {
@@ -2096,6 +2122,7 @@ nyx_dict_t *nyx_del_property_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @struct nyx_node_t
  * \brief Opaque struct describing a Nyx node.
  */
 
@@ -2178,6 +2205,7 @@ nyx_node_t *nyx_node_initialize(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Finalizes the Nyx node.
  *
  * @param node The Nyx node.
@@ -2296,6 +2324,7 @@ void nyx_mqtt_pub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Publishes an entry to a Redis stream, see https://redis.io/commands/xadd/.
  *
  * @param node The Nyx node.
