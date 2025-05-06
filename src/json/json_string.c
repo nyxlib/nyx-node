@@ -54,7 +54,7 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_get_base64(const nyx_string_t *object, size_t *result_size, buff_t *result_buff)
+void nyx_string_get_base64(const nyx_string_t *object, __NULLABLE__ size_t *result_size, __NULLABLE__ buff_t *result_buff)
 {
     buff_t buff = nyx_base64_decode(result_size, object->length, object->value);
 

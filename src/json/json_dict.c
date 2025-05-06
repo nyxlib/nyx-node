@@ -178,7 +178,7 @@ nyx_object_t *nyx_dict_get(const nyx_dict_t *object, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set2(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
+bool nyx_dict_set_alt(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

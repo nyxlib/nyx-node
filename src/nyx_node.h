@@ -552,7 +552,7 @@ double nyx_number_get(
  * @private
  */
 
-bool nyx_number_set2(
+bool nyx_number_set_alt(
     /*-*/ nyx_number_t *object,
     double value,
     bool notify
@@ -564,19 +564,19 @@ bool nyx_number_set2(
  *
  * @param object The provided JSON number object.
  * @param value The value for the provided JSON number object.
- * @return
+ * @return \c true if the value was modified, \c false otherwise.
  */
 
 __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
 {
-    return nyx_number_set2(object, value, true);
+    return nyx_number_set_alt(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_number_t
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided JSON number object.
  *
  * @param object The provided object.
  * @return The string representing the provided object.
@@ -590,10 +590,10 @@ str_t nyx_number_to_string(
 
 /**
  * @memberof nyx_number_t
- * \brief Returns a JSON number object holding the value of the given argument.
+ * \brief Returns a JSON number object holding the value of the provided argument.
  *
  * @param value
- * @return A new JSON number object.
+ * @return The new JSON number object.
  */
 
 __INLINE__ nyx_number_t *nyx_number_from(double value)
@@ -671,7 +671,7 @@ bool nyx_boolean_get(
  * @private
  */
 
-bool nyx_boolean_set2(
+bool nyx_boolean_set_alt(
     /*-*/ nyx_boolean_t *object,
     bool value,
     bool notify
@@ -683,19 +683,19 @@ bool nyx_boolean_set2(
  *
  * @param object The provided JSON boolean object.
  * @param value The value for the provided JSON boolean object.
- * @return
+ * @return \c true if the value was modified, \c false otherwise.
  */
 
 __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
 {
-    return nyx_boolean_set2(object, value, true);
+    return nyx_boolean_set_alt(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_boolean_t
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided JSON boolean object.
  *
  * @param object The provided object.
  * @return The string representing the provided object.
@@ -709,10 +709,10 @@ str_t nyx_boolean_to_string(
 
 /**
  * @memberof nyx_boolean_t
- * \brief Returns a JSON boolean object holding the value of the given argument.
+ * \brief Returns a JSON boolean object holding the value of the provided argument.
  *
  * @param value
- * @return A new JSON boolean object.
+ * @return The new JSON boolean object.
  */
 
 __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
@@ -791,17 +791,17 @@ STR_t nyx_string_get(
 
 /**
  * @memberof nyx_string_t
- * \brief ???.
+ * \brief  Get the base64-decoded value of the provided JSON string object.
  *
  * @param object The provided JSON string object.
- * @param result_size ???.
- * @param result_buff ???.
+ * @param result_size Optional pointer to store the length of the decoded buffer size.
+ * @param result_buff Optional pointer to store the length of the decoded buffer pointer.
  */
 
 void nyx_string_get_base64(
     const nyx_string_t *object,
-    size_t *result_size,
-    buff_t *result_buff
+    __NULLABLE__ size_t *result_size,
+    __NULLABLE__ buff_t *result_buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -818,11 +818,11 @@ bool nyx_string_set_dup_alt(
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object.
+ * \brief Set the value of the provided JSON string object (string duplication).
  *
  * @param object The provided JSON string object.
  * @param value The value for the provided JSON string object.
- * @return
+ * @return \c true if the value was modified, \c false otherwise.
  */
 
 __INLINE__ bool nyx_string_set_dup(nyx_string_t *object, STR_t value)
@@ -844,11 +844,11 @@ bool nyx_string_set_ref_alt(
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object.
+ * \brief Set the value of the provided JSON string object (string reference).
  *
  * @param object The provided JSON string object.
  * @param value The value for the provided JSON string object.
- * @return
+ * @return \c true if the value was modified, \c false otherwise.
  */
 
 __INLINE__ bool nyx_string_set_ref(nyx_string_t *object, STR_t value)
@@ -871,12 +871,12 @@ bool nyx_string_set_base64_alt(
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object.
+ * \brief Set the value of the provided JSON string object (base64 encoding).
  *
  * @param object The provided JSON string object.
  * @param size The value size for the provided JSON string object.
  * @param buff The value buffer for the provided JSON string object.
- * @return
+ * @return \c true if the value was modified, \c false otherwise.
  */
 
 __INLINE__ bool nyx_string_set_base64(nyx_string_t *object, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
@@ -888,9 +888,9 @@ __INLINE__ bool nyx_string_set_base64(nyx_string_t *object, __ZEROABLE__ size_t 
 
 /**
  * @memberof nyx_string_t
- * \brief ???
+ * \brief Returns the length of the string representing the provided JSON string object.
  *
- * @param object
+ * @param object The provided JSON string object.
  * @return
  */
 
@@ -902,7 +902,7 @@ size_t nyx_string_length(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a string representing the provided object.
+ * \brief Returns a string representing the provided JSON string object.
  *
  * @param object The provided object.
  * @return The string representing the provided object.
@@ -916,7 +916,7 @@ str_t nyx_string_to_string(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a C/C++ string representing the provided object.
+ * \brief Returns a C/C++ string representing the provided JSON string object.
  *
  * @param object The provided object.
  * @return The string representing the provided object.
@@ -930,10 +930,10 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the given argument (string duplication).
+ * \brief Returns a JSON string object holding the value of the provided argument (string duplication).
  *
  * @param value
- * @return A new JSON string object.
+ * @return The new JSON string object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
@@ -949,10 +949,10 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON number object holding the value of the given argument (string reference).
+ * \brief Returns a JSON string object holding the value of the provided argument (string reference).
  *
  * @param value
- * @return A new JSON string object.
+ * @return The new JSON string object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
@@ -968,11 +968,11 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON number object holding the value of the given argument (base64 encoding).
+ * \brief Returns a JSON string object holding the value of the provided argument (base64 encoding).
  *
  * @param size
  * @param buff
- * @return A new JSON string object.
+ * @return The new JSON string object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_base64(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
@@ -987,13 +987,13 @@ __INLINE__ nyx_string_t *nyx_string_from_base64(__ZEROABLE__ size_t size, __NULL
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @copydoc nyx_string_set_dup
+ * \brief Alias to @ref nyx_string_set_dup.
  */
 
 #define nyx_string_set nyx_string_set_dup
 
 /**
- * @copydoc nyx_string_from_dup
+ * \brief Alias to @ref nyx_string_from_dup.
  */
 
 #define nyx_string_from nyx_string_from_dup
@@ -1130,7 +1130,7 @@ nyx_object_t *nyx_dict_get(
  * @private
  */
 
-bool nyx_dict_set2(
+bool nyx_dict_set_alt(
     /*-*/ nyx_dict_t *object,
     STR_t key,
     buff_t value,
@@ -1149,7 +1149,7 @@ bool nyx_dict_set2(
 
 __INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
 {
-    return nyx_dict_set2(object, key, value, true);
+    return nyx_dict_set_alt(object, key, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1351,7 +1351,7 @@ nyx_object_t *nyx_list_get(
  * @private
  */
 
-nyx_list_t *nyx_list_set2(
+nyx_list_t *nyx_list_set_alt(
     /*-*/ nyx_list_t *object,
     size_t idx,
     buff_t value,
@@ -1369,7 +1369,7 @@ nyx_list_t *nyx_list_set2(
 
 __INLINE__ bool nyx_list_push(nyx_list_t *object, buff_t value)
 {
-    return nyx_list_set2(object, -1, value, true);
+    return nyx_list_set_alt(object, -1, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

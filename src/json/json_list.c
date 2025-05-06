@@ -174,7 +174,7 @@ nyx_object_t *nyx_list_get(const nyx_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_list_t *nyx_list_set2(nyx_list_t *object, size_t idx, buff_t value, bool notify)
+nyx_list_t *nyx_list_set_alt(nyx_list_t *object, size_t idx, buff_t value, bool notify)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

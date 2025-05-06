@@ -446,7 +446,8 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                     modified = internal_copy((nyx_dict_t *) object2, (nyx_dict_t *) object1, "$", false);
                                                 }
                                                 else {
-                                                    modified = nyx_dict_set2((nyx_dict_t *) object2, "$", nyx_string_from_ref("Off"), false);
+                                                    modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$",
+                                                                                nyx_string_from_ref("Off"), false);
                                                 }
 
                                                 /*--------------------------------------------------------------------*/

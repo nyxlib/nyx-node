@@ -213,17 +213,18 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_NUMBER:
-                return nyx_dict_set2(dst, key, nyx_number_from(nyx_number_get((nyx_number_t *) src_object)), notify);
+                return nyx_dict_set_alt(dst, key, nyx_number_from(nyx_number_get((nyx_number_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_BOOLEAN:
-                return nyx_dict_set2(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)), notify);
+                return nyx_dict_set_alt(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)),
+                                        notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_STRING:
-                return nyx_dict_set2(dst, key, nyx_string_from(nyx_string_get((nyx_string_t *) src_object)), notify);
+                return nyx_dict_set_alt(dst, key, nyx_string_from(nyx_string_get((nyx_string_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -366,7 +367,7 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
                 )
             );
 
-            nyx_dict_set2(dict, "@size", nyx_number_from((double) size), false);
+            nyx_dict_set_alt(dict, "@size", nyx_number_from((double) size), false);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/

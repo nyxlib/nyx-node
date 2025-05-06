@@ -44,7 +44,7 @@ bool nyx_boolean_get(const nyx_boolean_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_boolean_set2(nyx_boolean_t *object, bool value, bool notify)
+bool nyx_boolean_set_alt(nyx_boolean_t *object, bool value, bool notify)
 {
     bool modified = \
     object->value != value;
