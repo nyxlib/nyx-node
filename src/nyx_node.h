@@ -2117,7 +2117,7 @@ typedef enum nyx_event_e
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief An MQTT event handler.
+ * \brief MQTT event handler.
  *
  * @param node The Nyx node.
  * @param event The event type.
@@ -2296,7 +2296,6 @@ void nyx_mqtt_pub(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @memberof nyx_node_t
  * \brief Publishes an entry to a Redis stream, see https://redis.io/commands/xadd/.
  *
  * @param node The Nyx node.
