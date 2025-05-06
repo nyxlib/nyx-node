@@ -321,6 +321,10 @@ typedef enum
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @struct nyx_object_t
+ */
+
 typedef struct nyx_object_s
 {
     uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
@@ -346,6 +350,7 @@ typedef struct nyx_object_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_object_t
  * \brief Parses a JSON object from a string buffer.
  *
  * \param buff The string pointer.
@@ -359,6 +364,7 @@ nyx_object_t *nyx_object_parse_buff(
 );
 
 /**
+ * @memberof nyx_object_t
  * \brief Parses a JSON object from a string.
  *
  * \param text The string.
@@ -372,6 +378,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_object_t
  * \brief Frees memory for the provided JSON object.
  *
  * @param object The provided JSON document.
@@ -384,6 +391,7 @@ void nyx_object_free(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_object_t
  * \brief Compares two JSON objects.
  *
  * @param object1 The first JSON object.
@@ -399,6 +407,7 @@ bool nyx_object_equal(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_object_t
  * \brief Returns a string representing the provided object.
  *
  * @param object The provided object.
@@ -412,6 +421,7 @@ str_t nyx_object_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_object_t
  * \brief Returns a C/C++ string representing the provided object.
  *
  * @param object The provided object.
@@ -580,7 +590,7 @@ str_t nyx_number_to_string(
 
 /**
  * @memberof nyx_number_t
- * \brief Returns a JSON number object holding the value of the argument passed.
+ * \brief Returns a JSON number object holding the value of the given argument.
  *
  * @param value
  * @return A new JSON number object.
@@ -699,7 +709,7 @@ str_t nyx_boolean_to_string(
 
 /**
  * @memberof nyx_boolean_t
- * \brief Returns a JSON boolean object holding the value of the argument passed.
+ * \brief Returns a JSON boolean object holding the value of the given argument.
  *
  * @param value
  * @return A new JSON boolean object.
@@ -788,7 +798,7 @@ STR_t nyx_string_get(
  * @param result_buff ???.
  */
 
-void nyx_string_buff_get(
+void nyx_string_get_base64(
     const nyx_string_t *object,
     size_t *result_size,
     buff_t *result_buff
@@ -800,7 +810,7 @@ void nyx_string_buff_get(
  * @private
  */
 
-bool nyx_string_dynamic_set2(
+bool nyx_string_set_dup_alt(
     /*-*/ nyx_string_t *object,
     STR_t value,
     bool notify
@@ -815,9 +825,9 @@ bool nyx_string_dynamic_set2(
  * @return
  */
 
-__INLINE__ bool nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
+__INLINE__ bool nyx_string_set_dup(nyx_string_t *object, STR_t value)
 {
-    return nyx_string_dynamic_set2(object, value, true);
+    return nyx_string_set_dup_alt(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -826,7 +836,7 @@ __INLINE__ bool nyx_string_dynamic_set(nyx_string_t *object, STR_t value)
  * @private
  */
 
-bool nyx_string_static_set2(
+bool nyx_string_set_ref_alt(
     /*-*/ nyx_string_t *object,
     STR_t value,
     bool notify
@@ -841,9 +851,9 @@ bool nyx_string_static_set2(
  * @return
  */
 
-__INLINE__ bool nyx_string_static_set(nyx_string_t *object, STR_t value)
+__INLINE__ bool nyx_string_set_ref(nyx_string_t *object, STR_t value)
 {
-    return nyx_string_static_set2(object, value, true);
+    return nyx_string_set_ref_alt(object, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -852,10 +862,10 @@ __INLINE__ bool nyx_string_static_set(nyx_string_t *object, STR_t value)
  * @private
  */
 
-bool nyx_string_buff_set2(
+bool nyx_string_set_base64_alt(
     /*-*/ nyx_string_t *object,
-    size_t size,
-    BUFF_t buff,
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff,
     bool notify
 );
 
@@ -869,9 +879,9 @@ bool nyx_string_buff_set2(
  * @return
  */
 
-__INLINE__ bool nyx_string_buff_set(nyx_string_t *object, size_t size, BUFF_t buff)
+__INLINE__ bool nyx_string_set_base64(nyx_string_t *object, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    return nyx_string_buff_set2(object, size, buff, true);
+    return nyx_string_set_base64_alt(object, size, buff, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -920,17 +930,17 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the argument passed (dynamic allocation).
+ * \brief Returns a JSON string object holding the value of the given argument (string duplication).
  *
  * @param value
  * @return A new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_dynamic_from(STR_t value)
+__INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_dynamic_set(result, value);
+    nyx_string_set_dup(result, value);
 
     return result;
 }
@@ -939,17 +949,17 @@ __INLINE__ nyx_string_t *nyx_string_dynamic_from(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON number object holding the value of the argument passed (static allocation).
+ * \brief Returns a JSON number object holding the value of the given argument (string reference).
  *
  * @param value
  * @return A new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_static_from(STR_t value)
+__INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_static_set(result, value);
+    nyx_string_set_ref(result, value);
 
     return result;
 }
@@ -958,18 +968,18 @@ __INLINE__ nyx_string_t *nyx_string_static_from(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON number object holding the value of the buffer passed (base64 encoded).
+ * \brief Returns a JSON number object holding the value of the given argument (base64 encoding).
  *
  * @param size
  * @param buff
  * @return A new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
+__INLINE__ nyx_string_t *nyx_string_from_base64(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_buff_set(result, size, buff);
+    nyx_string_set_base64(result, size, buff);
 
     return result;
 }
@@ -977,16 +987,16 @@ __INLINE__ nyx_string_t *nyx_string_buff_from(size_t size, BUFF_t buff)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @copydoc nyx_string_dynamic_set
+ * @copydoc nyx_string_set_dup
  */
 
-#define nyx_string_set nyx_string_dynamic_set
+#define nyx_string_set nyx_string_set_dup
 
 /**
- * @copydoc nyx_string_dynamic_from
+ * @copydoc nyx_string_from_dup
  */
 
-#define nyx_string_from nyx_string_dynamic_from
+#define nyx_string_from nyx_string_from_dup
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* DICT                                                                                                               */
@@ -2055,16 +2065,16 @@ __INLINE__ STR_t nyx_blob_def_get(const nyx_dict_t *def)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_blob_def_buff_set(nyx_dict_t *def, size_t size, BUFF_t buff)
+__INLINE__ bool nyx_blob_def_set_base64(nyx_dict_t *def, size_t size, BUFF_t buff)
 {
-    return nyx_dict_set(def, "$", nyx_string_buff_from(size, buff));
+    return nyx_dict_set(def, "$", nyx_string_from_base64(size, buff));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_blob_def_buff_get(const nyx_dict_t *def, size_t *size, buff_t *buff)
+__INLINE__ void nyx_blob_def_get_base64(const nyx_dict_t *def, size_t *size, buff_t *buff)
 {
-    nyx_string_buff_get((nyx_string_t *) nyx_dict_get(def, "$"), size, buff);
+    nyx_string_get_base64((nyx_string_t *) nyx_dict_get(def, "$"), size, buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2134,7 +2144,7 @@ typedef struct nyx_node_s nyx_node_t;
  * \brief Nyx TCP or MQTT event type.
  */
 
-typedef enum nyx_event_e
+typedef enum
 {
     NYX_EVENT_OPEN = 0,                                                                         //!< A connection is opened.
     NYX_EVENT_MSG = 1,                                                                          //!< A message is received.
@@ -2166,6 +2176,7 @@ typedef void (* nyx_mqtt_handler_t)(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Initializes the Nyx node.
  *
  * @param node_id Unique node identifier.

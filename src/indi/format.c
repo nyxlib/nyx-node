@@ -23,10 +23,10 @@ nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
         NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
-        return nyx_string_dynamic_from(buffer);
+        return nyx_string_from_dup(buffer);
     }
 
-    return nyx_string_dynamic_from("0");
+    return nyx_string_from_dup("0");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -57,10 +57,10 @@ nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
         NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
-        return nyx_string_dynamic_from(buffer);
+        return nyx_string_from_dup(buffer);
     }
 
-    return nyx_string_dynamic_from("0");
+    return nyx_string_from_dup("0");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -91,10 +91,10 @@ nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
         NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
     }
     else {
-        return nyx_string_dynamic_from(buffer);
+        return nyx_string_from_dup(buffer);
     }
 
-    return nyx_string_dynamic_from("0.0");
+    return nyx_string_from_dup("0.0");
 }
 
 

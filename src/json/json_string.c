@@ -54,19 +54,19 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_buff_get(const nyx_string_t *object, size_t *result_size, buff_t *result_buff)
+void nyx_string_get_base64(const nyx_string_t *object, size_t *result_size, buff_t *result_buff)
 {
-    if(result_size != 0x00
-       &&
-       result_buff != NULL
-   ) {
-        *result_buff = nyx_base64_decode(result_size, object->length, object->value);
+    buff_t buff = nyx_base64_decode(result_size, object->length, object->value);
+
+    if(result_buff != NULL)
+    {
+        *result_buff = buff;
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
+bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
@@ -110,7 +110,7 @@ bool nyx_string_dynamic_set2(nyx_string_t *object, STR_t value, bool notify)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
+bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
 {
     if(value == NULL)
     {
@@ -154,7 +154,7 @@ bool nyx_string_static_set2(nyx_string_t *object, STR_t value, bool notify)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_buff_set2(nyx_string_t *object, size_t size, BUFF_t buff, bool notify)
+bool nyx_string_set_base64_alt(nyx_string_t *object, size_t size, BUFF_t buff, bool notify)
 {
     if(size == 0x00 || buff == NULL)
     {
