@@ -101,10 +101,9 @@ bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
             nyx_memory_free(object->value);
         }
 
-        object->dyn = true;
-
         /*------------------------------------------------------------------------------------------------------------*/
 
+        object->dyn = true;
         object->length = strlen(value);
         object->value = nyx_string_dup(value);
 
@@ -145,10 +144,9 @@ bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
             nyx_memory_free(object->value);
         }
 
-        object->dyn = false;
-
         /*------------------------------------------------------------------------------------------------------------*/
 
+        object->dyn = false;
         object->length = strlen(value);
         object->value = (/**/str_t/**/) value;
 
@@ -196,9 +194,8 @@ bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, boo
     else
     {
         object->dyn = false;
-
         object->length = size;
-        object->value = (/**/str_t/**/) buff;
+        object->value = (str_t) buff;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
