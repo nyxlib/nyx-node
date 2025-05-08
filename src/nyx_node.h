@@ -225,14 +225,14 @@ void nyx_log(
 /**
  * @brief Generates a MAC address based on a node identifier.
  *
- * @param mac Output array to store the generated MAC address.
+ * @param result_mac Output array to store the generated MAC address.
  * @param mac0 First fixed byte of the MAC address.
  * @param mac1 Second fixed byte of the MAC address.
  * @param node_id Unique node identifier used to hash the remaining bytes.
  */
 
 void nyx_generate_mac_addr(
-    uint8_t mac[6],
+    uint8_t result_mac[6],
     uint8_t mac0,
     uint8_t mac1,
     STR_t node_id
@@ -1574,7 +1574,7 @@ bool nyx_validation_finalize();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Validate the provided XML command using the INDI + Nyx additions XSD schema.
+ * \brief Validate the provided XML command using the XSD schema extended with INDI and Nyx additions.
  *
  * @param xmldoc The provided XML document.
  * @return `True` if the document is valid, and `false` if not.
