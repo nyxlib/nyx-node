@@ -54,17 +54,28 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_get_base64(const nyx_string_t *object, __NULLABLE__ size_t *result_size, __NULLABLE__ buff_t *result_buff)
+void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result_size, __NULLABLE__ buff_t *result_buff, bool base64_decode)
 {
-    buff_t buff = nyx_base64_decode(result_size, object->length, object->value);
-
-    if(result_buff == NULL)
+    if(base64_decode)
     {
-        nyx_memory_free(buff);
+        buff_t buff = nyx_base64_decode(result_size, object->length, object->value);
+
+        if(result_buff == NULL) {
+            nyx_memory_free(buff);
+        }
+        else {
+            *result_buff = buff;
+        }
     }
     else
     {
-        *result_buff = buff;
+        if(result_size) {
+            *result_size = object->length;
+        }
+
+        if(result_buff) {
+            *result_buff = object->value;
+        }
     }
 }
 
@@ -158,7 +169,7 @@ bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_set_base64_alt(nyx_string_t *object, size_t size, BUFF_t buff, bool notify)
+bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, bool base64_encode, bool notify)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -174,11 +185,21 @@ bool nyx_string_set_base64_alt(nyx_string_t *object, size_t size, BUFF_t buff, b
         nyx_memory_free(object->value);
     }
 
-    object->dyn = true;
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->value = nyx_base64_encode(&object->length, size, buff);
+    if(base64_encode)
+    {
+        object->dyn = true;
+
+        object->value = nyx_base64_encode(&object->length, size, buff);
+    }
+    else
+    {
+        object->dyn = false;
+
+        object->length = size;
+        object->value = (/**/str_t/**/) buff;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

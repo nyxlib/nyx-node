@@ -797,10 +797,11 @@ STR_t nyx_string_get(
  * @private
  */
 
-void nyx_string_get_base64(
+void nyx_string_get_buff(
     const nyx_string_t *object,
     __NULLABLE__ size_t *result_size,
-    __NULLABLE__ buff_t *result_buff
+    __NULLABLE__ buff_t *result_buff,
+    bool base64_decode
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -861,26 +862,28 @@ __INLINE__ bool nyx_string_set_ref(nyx_string_t *object, STR_t value)
  * @private
  */
 
-bool nyx_string_set_base64_alt(
+bool nyx_string_set_buff_alt(
     /*-*/ nyx_string_t *object,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff,
+    bool base64_encode,
     bool notify
 );
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object (base64 encoding).
+ * \brief Set the value of the provided JSON string object (buffer reference or base64 encoding).
  *
  * @param object The provided JSON string object.
  * @param size The value size for the provided JSON string object.
  * @param buff The value buffer for the provided JSON string object.
+ * @param base64_encode Indicates whether the buffer must be base64-encoded.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_string_set_base64(nyx_string_t *object, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+__INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool base64_encode)
 {
-    return nyx_string_set_base64_alt(object, size, buff, true);
+    return nyx_string_set_buff_alt(object, size, buff, base64_encode, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -967,18 +970,19 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided argument (base64 encoding).
+ * \brief Returns a JSON string object holding the value of the provided argument (buffer reference or base64 encoding).
  *
  * @param size The buffer size for the new JSON string object.
  * @param buff The buffer pointer for the new JSON string object.
+ * @param base64_encode Indicates whether the buffer must be base64-encoded.
  * @return The new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_base64(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+__INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool base64_encode)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_base64(result, size, buff);
+    nyx_string_set_buff(result, size, buff, base64_encode);
 
     return result;
 }
@@ -2065,30 +2069,16 @@ nyx_dict_t *nyx_blob_def_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, STR_t value)
+__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff, bool base64_encode)
 {
-    return nyx_dict_set(def, "$", nyx_string_from(value));
+    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, base64_encode));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ STR_t nyx_blob_def_get(const nyx_dict_t *def)
+__INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff, bool base64_decode)
 {
-    return nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$"));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-__INLINE__ bool nyx_blob_def_set_base64(nyx_dict_t *def, size_t size, BUFF_t buff)
-{
-    return nyx_dict_set(def, "$", nyx_string_from_base64(size, buff));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-__INLINE__ void nyx_blob_def_get_base64(const nyx_dict_t *def, size_t *size, buff_t *buff)
-{
-    nyx_string_get_base64((nyx_string_t *) nyx_dict_get(def, "$"), size, buff);
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, base64_decode);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2350,13 +2340,13 @@ void nyx_mqtt_pub(
 
 /**
  * @memberof nyx_node_t
- * \brief Publishes an entry to a Redis stream, see https://redis.io/commands/xadd/.
+ * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
  *
  * @param node The Nyx node.
  * @param stream The stream name.
  * @param max_len Maximum number of entries to keep in the stream.
- * @param n_fields Number of field triplets (field name, value size, value buff).
- * @param ... Field triplets (field name, value size, value buff). If a field name starts with \c #, its value will be automatically base64-encoded.
+ * @param n_fields Number of field triplets (field name, value length, value buffer).
+ * @param ... Field triplets (field name, value length, value buffer). If a field name starts with \c #, its value will be automatically base64-encoded.
  */
 
 void nyx_redis_pub(
