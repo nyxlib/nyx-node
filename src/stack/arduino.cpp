@@ -351,7 +351,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != nullptr)
+    if(node->tcp_url != nullptr && node->tcp_url[0] != '\0')
     {
         IPAddress ip;
         int port;
@@ -380,7 +380,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != nullptr)
+    if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
     {
         IPAddress ip;
         int port;
@@ -414,7 +414,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->redis_url != nullptr)
+    if(node->redis_url != nullptr && node->redis_url[0] != '\0')
     {
         /* TODO */
     }

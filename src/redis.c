@@ -38,13 +38,15 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t password)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, ...)
+void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, STR_t *names, size_t *sizes, buff_t *buffs)
 {
     if(node == NULL
        ||
        stream == NULL
        ||
        n_fields == 0x0U
+       ||
+       names == NULL || sizes == NULL || buffs == NULL
     ) {
         return;
     }
@@ -85,12 +87,6 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        va_list ap;
-
-        va_start(ap, n_fields);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -99,7 +95,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t field = va_arg(ap, STR_t);
+            STR_t field = names[i];
 
             if(field == NULL)
             {
@@ -108,8 +104,8 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t value_size = va_arg(ap, size_t);
-            buff_t value_buff = va_arg(ap, buff_t);
+            size_t value_size = sizes[i];
+            buff_t value_buff = buffs[i];
 
             if(value_size == 0x0U
                ||
@@ -163,10 +159,6 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        va_end(ap);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

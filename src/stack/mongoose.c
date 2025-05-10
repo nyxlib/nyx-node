@@ -299,7 +299,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL)
+    if(node->tcp_url != NULL && node->tcp_url[0] != '\0')
     {
         if(mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node) != NULL)
         {
@@ -311,7 +311,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != NULL)
+    if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
     {
         NYX_LOG_INFO("MQTT support is enabled");
 
@@ -322,7 +322,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->redis_url != NULL)
+    if(node->redis_url != NULL && node->redis_url[0] != '\0')
     {
         if(mg_connect(&stack->mgr, node->redis_url, redis_handler, node) != NULL)
         {
