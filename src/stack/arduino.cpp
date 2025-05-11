@@ -33,24 +33,6 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifdef NYX_HAS_WIFI
-static WiFiServer indiServer;
-static WiFiClient indiClient;
-static WiFiClient redisClient;
-#endif
-
-#ifdef NYX_HAS_ETHERNET
-static EthernetServer indiServer;
-static EthernetClient indiClient;
-static EthernetClient redisClient;
-#endif
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-static PubSubClient mqttClient(indiClient);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 #if defined(NYX_HAS_ETHERNET)
 static DNSClient EthDNS;
 #endif
@@ -63,6 +45,24 @@ static nyx_node_t *nyx_node = nullptr;
 
 struct nyx_stack_s
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    #ifdef NYX_HAS_WIFI
+    WiFiServer indi_server;
+    WiFiClient indi_client;
+    WiFiClient redis_client;
+    #endif
+
+    #ifdef NYX_HAS_ETHERNET
+    EthernetServer indi_server;
+    EthernetClient indi_client;
+    EthernetClient redis_client;
+    #endif
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    PubSubClient mqtt_client;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     IPAddress indi_ip;
@@ -86,6 +86,17 @@ struct nyx_stack_s
     /*----------------------------------------------------------------------------------------------------------------*/
 
     unsigned long last_ping_ms = 0;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_stack_s():
+        #ifdef NYX_HAS_WIFI
+        indi_server(), indi_client(), redis_client(), mqtt_client(indi_client)
+        #endif
+        #ifdef NYX_HAS_ETHERNET
+        indi_server(), indi_client(), redis_client(), mqtt_client(indi_client)
+        #endif
+    {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -160,9 +171,11 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
 void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node->indi_url != nullptr && indiClient.connected())
+    auto stack = node->stack;
+
+    if(stack->indi_client.connected())
     {
-        indiClient.write(message.buf, message.len);
+        stack->indi_client.write(message.buf, message.len);
     }
 }
 
@@ -170,9 +183,11 @@ void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 
 void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 {
-    if(node->mqtt_url != nullptr && mqttClient.connected())
+    auto stack = node->stack;
+
+    if(stack->mqtt_client.connected())
     {
-        if(!mqttClient.subscribe(topic.buf, 1))
+        if(!stack->mqtt_client.subscribe(topic.buf, 1))
         {
             NYX_LOG_ERROR("Cannot subscribe to %s", topic.buf);
         }
@@ -183,9 +198,11 @@ void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic)
 
 void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 {
-    if(node->mqtt_url != nullptr && mqttClient.connected())
+    auto stack = node->stack;
+
+    if(stack->mqtt_client.connected())
     {
-        if(!mqttClient.publish(
+        if(!stack->mqtt_client.publish(
             topic.buf,
             reinterpret_cast<uint8_t *>(message.buf),
             reinterpret_cast<unsigned int>(message.len)
@@ -199,9 +216,11 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 
 void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node->redis_url != nullptr && redisClient.connected())
+    auto stack = node->stack;
+
+    if(stack->redis_client.connected())
     {
-        redisClient.write(message.buf, message.len);
+        stack->redis_client.write(message.buf, message.len);
     }
 }
 
@@ -372,11 +391,11 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            if(mqttClient.setBufferSize(mqtt_estimate_buffer_size()))
+            if(stack->mqtt_client.setBufferSize(mqtt_estimate_buffer_size()))
             {
                 NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
-                mqttClient.setCallback(
+                stack->mqtt_client.setCallback(
                     mqtt_callback
                 ).setServer(
                     ip, port
@@ -436,13 +455,13 @@ void nyx_node_stack_finalize(__UNUSED__ nyx_node_t *node)
 
 static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 {
-    nyx_stack_t *stack = node->stack;
+    auto stack = node->stack;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* READ AVAILABLE DATA                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t available = indiClient.available();
+    size_t available = stack->indi_client.available();
 
     if(available == 0)
     {
@@ -467,7 +486,7 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
     /* CONSUME DATA                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    stack->recv_size += indiClient.read(static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size, available);
+    stack->recv_size += stack->indi_client.read(static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size, available);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -529,9 +548,9 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         /* RECONNECT SERVER                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!indiServer)
+        if(!stack->indi_server)
         {
-            indiServer.begin(stack->indi_port);
+            stack->indi_server.begin(stack->indi_port);
 
             NYX_LOG_INFO("INDI support is enabled");
         }
@@ -540,19 +559,19 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         /* ACCEPT CLIENT                                                                                              */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!indiClient.connected())
+        if(!stack->indi_client.connected())
         {
             #ifdef NYX_HAS_WIFI
-            WiFiClient newClient = indiServer.accept();
+            WiFiClient new_client = stack->indi_server.accept();
             #endif
 
             #ifdef NYX_HAS_ETHERNET
-            EthernetClient newClient = indiServer.accept();
+            EthernetClient new_client = stack->indi_server.accept();
             #endif
 
-            if(newClient.connected())
+            if(new_client.connected())
             {
-                indiClient = newClient;
+                stack->indi_client = new_client;
             }
         }
 
@@ -576,9 +595,9 @@ __mqtt:
         /* RECONNECT CLIENT                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!mqttClient.connected())
+        if(!stack->mqtt_client.connected())
         {
-            if(mqttClient.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
+            if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
                 node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
 
@@ -594,7 +613,7 @@ __mqtt:
         /* TREATMENT                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        mqttClient.loop();
+        stack->mqtt_client.loop();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -621,9 +640,9 @@ __redis:
         /* RECONNECT CLIENT                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!redisClient.connected())
+        if(!stack->redis_client.connected())
         {
-            if(redisClient.connect(stack->redis_ip, stack->redis_port))
+            if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
             {
                 nyx_redis_auth(node, stack->redis_password);
 
