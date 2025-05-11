@@ -37,7 +37,7 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t password)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t *names, const size_t *sizes, const buff_t *buffs)
+void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t names[], const size_t sizes[], const buff_t buffs[])
 {
     if(node == NULL
        ||

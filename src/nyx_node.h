@@ -2357,9 +2357,9 @@ void nyx_redis_pub(
     STR_t stream,
     size_t max_len,
     __ZEROABLE__ size_t n_fields,
-    const str_t *names,
-    const size_t *sizes,
-    const buff_t *buffs
+    const str_t names[],
+    const size_t sizes[],
+    const buff_t buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
