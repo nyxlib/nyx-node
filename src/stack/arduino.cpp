@@ -89,14 +89,7 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_stack_s():
-        #ifdef NYX_HAS_WIFI
-        indi_server(), indi_client(), redis_client(), mqtt_client(indi_client)
-        #endif
-        #ifdef NYX_HAS_ETHERNET
-        indi_server(), indi_client(), redis_client(), mqtt_client(indi_client)
-        #endif
-    {}
+    nyx_stack_s(): indi_server(), indi_client(), redis_client(), mqtt_client(indi_client) {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
