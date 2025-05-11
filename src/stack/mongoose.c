@@ -19,10 +19,14 @@
 struct nyx_stack_s
 {
     struct mg_mgr mgr;
-    struct mg_mqtt_opts mqtt_opts;
+
     struct mg_connection *tcp_connection;
     struct mg_connection *mqtt_connection;
     struct mg_connection *redis_connection;
+
+    struct mg_mqtt_opts mqtt_opts;
+
+    STR_t redis_password;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -155,6 +159,8 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
     else if(ev == MG_EV_CLOSE)
     {
         NYX_LOG_INFO("%lu CLOSE", connection->id);
+
+        node->stack->tcp_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
@@ -206,7 +212,12 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
     {
         struct mg_mqtt_message *message = (struct mg_mqtt_message *) ev_data;
 
-        node->mqtt_handler(node, NYX_EVENT_MSG, message->topic, message->data);
+        node->mqtt_handler(
+            node,
+            NYX_EVENT_MSG,
+            message->topic,
+            message->data
+        );
     }
 }
 
@@ -214,13 +225,21 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 static void redis_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    /**/ if(ev == MG_EV_CONNECT)
+    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
+
+    /**/ if(ev == MG_EV_OPEN)
+    {
+        NYX_LOG_INFO("%lu OPEN", connection->id);
+    }
+    else if(ev == MG_EV_CONNECT)
     {
         NYX_LOG_INFO("%lu OPEN", connection->id);
     }
     else if(ev == MG_EV_CLOSE)
     {
         NYX_LOG_INFO("%lu CLOSE", connection->id);
+
+        node->stack->redis_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
@@ -230,7 +249,11 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
     {
         NYX_LOG_DEBUG("%lu READ Redis replied: %.*s\n", (int) connection->recv.len, (STR_t) connection->recv.buf);
 
-        mg_iobuf_del(&connection->recv, 0, connection->recv.len);
+        mg_iobuf_del(
+            &connection->recv,
+            0,
+            connection->recv.len
+        );
     }
 }
 
@@ -242,7 +265,27 @@ static void retry_timer_handler(void *arg)
 
     nyx_stack_t *stack = (nyx_stack_t *) node->stack;
 
-    if(stack->mqtt_connection == NULL)
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* TCP                                                                                                            */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->tcp_url != NULL && node->tcp_url[0] != '\0' && stack->tcp_connection == NULL)
+    {
+        stack->tcp_connection = mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node);
+
+        if(stack->tcp_connection != NULL)
+        {
+            NYX_LOG_INFO("INDI support is enabled");
+
+            ///_tcp_auth(node, stack->tcp_password);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* MQTT                                                                                                           */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0' && stack->mqtt_connection == NULL)
     {
         stack->mqtt_connection = mg_mqtt_connect(
             &stack->mgr,
@@ -251,7 +294,30 @@ static void retry_timer_handler(void *arg)
             mqtt_handler,
             node
         );
+
+        if(stack->mqtt_connection != NULL)
+        {
+            NYX_LOG_INFO("MQTT support is enabled");
+        }
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* REDIS                                                                                                          */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->redis_url != NULL && node->redis_url[0] != '\0' && stack->redis_connection == NULL)
+    {
+        stack->redis_connection = mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
+
+        if(stack->redis_connection != NULL)
+        {
+            NYX_LOG_INFO("Redis support is enabled");
+
+            nyx_redis_auth(node, stack->redis_password);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -288,46 +354,22 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mg_mgr_init(&stack->mgr);
+    stack->redis_password = redis_password;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL && node->tcp_url[0] != '\0')
-    {
-        stack->tcp_connection = mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node);
-
-        if(stack->tcp_connection != NULL)
-        {
-            NYX_LOG_INFO("INDI support is enabled");
-
-            ///_tcp_auth(node, tcp_password);
-        }
-    }
+    mg_mgr_init(&stack->mgr);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
     {
-        NYX_LOG_INFO("MQTT support is enabled");
-
-        mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, retry_timer_handler, node);
-
         mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, ping_timer_handler, node);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->redis_url != NULL && node->redis_url[0] != '\0')
-    {
-        stack->redis_connection = mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
-
-        if(stack->redis_connection != NULL)
-        {
-            NYX_LOG_INFO("Redis support is enabled");
-
-            nyx_redis_auth(node, redis_password);
-        }
-    }
+    mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, retry_timer_handler, node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
