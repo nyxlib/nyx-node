@@ -84,16 +84,9 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
 void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
-    for(struct mg_connection *connection = node->stack->mgr.conns; connection != NULL; connection = connection->next)
+    if(node->stack->tcp_connection != NULL)
     {
-        if(connection != node->stack->tcp_connection
-           &&
-           connection != node->stack->mqtt_connection
-           &&
-           connection != node->stack->redis_connection
-        ) {
-            mg_send(connection, message.buf, message.len);
-        }
+        mg_send(node->stack->tcp_connection, message.buf, message.len);
     }
 }
 
@@ -301,7 +294,9 @@ void nyx_node_stack_initialize(
 
     if(node->tcp_url != NULL && node->tcp_url[0] != '\0')
     {
-        if(mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node) != NULL)
+        stack->tcp_connection = mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node);
+
+        if(stack->tcp_connection != NULL)
         {
             NYX_LOG_INFO("INDI support is enabled");
 
@@ -324,7 +319,9 @@ void nyx_node_stack_initialize(
 
     if(node->redis_url != NULL && node->redis_url[0] != '\0')
     {
-        if(mg_connect(&stack->mgr, node->redis_url, redis_handler, node) != NULL)
+        stack->redis_connection = mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
+
+        if(stack->redis_connection != NULL)
         {
             NYX_LOG_INFO("Redis support is enabled");
 

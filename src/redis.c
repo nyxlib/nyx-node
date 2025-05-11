@@ -15,7 +15,7 @@
 
 void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t password)
 {
-    if(password != NULL)
+    if(password != NULL || password[0] != '\0')
     {
         char buff[256];
 
