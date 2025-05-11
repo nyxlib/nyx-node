@@ -49,7 +49,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
             str_t xml = nyx_xmldoc_to_string(xmldoc);
             internal_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml));
-            internal_tcp_pub(node, nyx_str_s(xml));
+            internal_indi_pub(node, nyx_str_s(xml));
             nyx_memory_free(xml);
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -64,7 +64,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
     str_t json = nyx_object_to_string(object);
     internal_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json));
-    ////////_tcp_pub(node, nyx_str_s(json));
+    ////////_indi_pub(node, nyx_str_s(json));
     nyx_memory_free(json);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -446,8 +446,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                                                     modified = internal_copy((nyx_dict_t *) object2, (nyx_dict_t *) object1, "$", false);
                                                 }
                                                 else {
-                                                    modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$",
-                                                                                nyx_string_from_ref("Off"), false);
+                                                    modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_ref("Off"), false);
                                                 }
 
                                                 /*--------------------------------------------------------------------*/
@@ -729,7 +728,7 @@ nyx_node_t *nyx_node_initialize(
     STR_t node_id,
     nyx_dict_t *def_vectors[],
     /**/
-    __NULLABLE__ STR_t tcp_url,
+    __NULLABLE__ STR_t indi_url,
     /**/
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t mqtt_username,
@@ -799,7 +798,7 @@ nyx_node_t *nyx_node_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->tcp_url = tcp_url;
+    node->indi_url = indi_url;
     node->mqtt_url = mqtt_url;
     node->redis_url = redis_url;
 

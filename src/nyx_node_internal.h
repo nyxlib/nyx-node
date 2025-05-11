@@ -325,7 +325,7 @@ struct nyx_node_s
 
     /**/
 
-    STR_t tcp_url;
+    STR_t indi_url;
     STR_t mqtt_url;
     STR_t redis_url;
 
@@ -363,7 +363,7 @@ struct nyx_node_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_tcp_pub(
+void internal_indi_pub(
     nyx_node_t *node,
     nyx_str_t message
 );

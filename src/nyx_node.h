@@ -2185,7 +2185,7 @@ typedef void (* nyx_mqtt_handler_t)(
  *
  * @param node_id Unique node identifier.
  * @param def_vectors Array of definition vectors.
- * @param tcp_url Optional TCP URL (e.g. tcp://0.0.0.0:7625).
+ * @param indi_url Optional INDI URL (e.g. tcp://0.0.0.0:7625).
  * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
@@ -2202,7 +2202,7 @@ nyx_node_t *nyx_node_initialize(
     STR_t node_id,
     nyx_dict_t *def_vectors[],
     /**/
-    __NULLABLE__ STR_t tcp_url,
+    __NULLABLE__ STR_t indi_url,
     /**/
     __NULLABLE__ STR_t mqtt_url,
     __NULLABLE__ STR_t mqtt_username,

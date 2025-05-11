@@ -20,7 +20,7 @@ struct nyx_stack_s
 {
     struct mg_mgr mgr;
 
-    struct mg_connection *tcp_connection;
+    struct mg_connection *indi_connection;
     struct mg_connection *mqtt_connection;
     struct mg_connection *redis_connection;
 
@@ -86,11 +86,11 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 /* TCP, MQTT & REDIS                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
+void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node->stack->tcp_connection != NULL)
+    if(node->stack->indi_connection != NULL)
     {
-        mg_send(node->stack->tcp_connection, message.buf, message.len);
+        mg_send(node->stack->indi_connection, message.buf, message.len);
     }
 }
 
@@ -144,7 +144,7 @@ void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
+static void indi_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
     nyx_node_t *node = (nyx_node_t *) connection->fn_data;
 
@@ -160,7 +160,7 @@ static void tcp_handler(struct mg_connection *connection, int ev, void *ev_data)
     {
         NYX_LOG_INFO("%lu CLOSE", connection->id);
 
-        node->stack->tcp_connection = NULL;
+        node->stack->indi_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
@@ -206,7 +206,12 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
     {
         NYX_LOG_INFO("%lu MQTT OPEN", connection->id);
 
-        node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
+        node->mqtt_handler(
+            node,
+            NYX_EVENT_OPEN,
+            node->node_id,
+            node->node_id
+        );
     }
     else if(ev == MG_EV_MQTT_MSG)
     {
@@ -233,7 +238,7 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
     }
     else if(ev == MG_EV_CONNECT)
     {
-        NYX_LOG_INFO("%lu OPEN", connection->id);
+        NYX_LOG_INFO("%lu CONNECT", connection->id);
     }
     else if(ev == MG_EV_CLOSE)
     {
@@ -251,7 +256,7 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
 
         mg_iobuf_del(
             &connection->recv,
-            0,
+            0x0000000000000000,
             connection->recv.len
         );
     }
@@ -269,15 +274,15 @@ static void retry_timer_handler(void *arg)
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != NULL && node->tcp_url[0] != '\0' && stack->tcp_connection == NULL)
+    if(node->indi_url != NULL && node->indi_url[0] != '\0' && stack->indi_connection == NULL)
     {
-        stack->tcp_connection = mg_listen(&stack->mgr, node->tcp_url, tcp_handler, node);
+        stack->indi_connection = mg_listen(&stack->mgr, node->indi_url, indi_handler, node);
 
-        if(stack->tcp_connection != NULL)
+        if(stack->indi_connection != NULL)
         {
             NYX_LOG_INFO("INDI support is enabled");
 
-            ///_tcp_auth(node, stack->tcp_password);
+            ///_indi_auth(node, stack->indi_password);
         }
     }
 
@@ -351,8 +356,6 @@ void nyx_node_stack_initialize(
 
     stack->mqtt_opts.clean = true;
     stack->mqtt_opts.version = 0x04;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     stack->redis_password = redis_password;
 
