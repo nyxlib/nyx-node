@@ -274,15 +274,15 @@ static void retry_timer_handler(void *arg)
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->indi_url != NULL && node->indi_url[0] != '\0' && stack->indi_connection == NULL)
+    if(stack->indi_connection == NULL && node->indi_url != NULL && node->indi_url[0] != '\0')
     {
         stack->indi_connection = mg_listen(&stack->mgr, node->indi_url, indi_handler, node);
 
         if(stack->indi_connection != NULL)
         {
-            NYX_LOG_INFO("INDI support is enabled");
-
             ///_indi_auth(node, stack->indi_password);
+
+            NYX_LOG_INFO("INDI support is enabled");
         }
     }
 
@@ -290,7 +290,7 @@ static void retry_timer_handler(void *arg)
     /* MQTT                                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0' && stack->mqtt_connection == NULL)
+    if(stack->mqtt_connection == NULL && node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
     {
         stack->mqtt_connection = mg_mqtt_connect(
             &stack->mgr,
@@ -310,15 +310,15 @@ static void retry_timer_handler(void *arg)
     /* REDIS                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->redis_url != NULL && node->redis_url[0] != '\0' && stack->redis_connection == NULL)
+    if(stack->redis_connection == NULL && node->redis_url != NULL && node->redis_url[0] != '\0')
     {
         stack->redis_connection = mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
 
         if(stack->redis_connection != NULL)
         {
-            NYX_LOG_INFO("Redis support is enabled");
-
             nyx_redis_auth(node, stack->redis_password);
+
+            NYX_LOG_INFO("Redis support is enabled");
         }
     }
 

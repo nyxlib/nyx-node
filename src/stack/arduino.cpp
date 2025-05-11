@@ -33,20 +33,20 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #ifdef NYX_HAS_WIFI
-static WiFiServer tcpServer;
-static WiFiClient tcpClient;
+static WiFiServer indiServer;
+static WiFiClient indiClient;
 static WiFiClient redisClient;
 #endif
 
 #ifdef NYX_HAS_ETHERNET
-static EthernetServer tcpServer;
-static EthernetClient tcpClient;
+static EthernetServer indiServer;
+static EthernetClient indiClient;
 static EthernetClient redisClient;
 #endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static PubSubClient mqttClient(tcpClient);
+static PubSubClient mqttClient(indiClient);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -64,8 +64,17 @@ struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    IPAddress indi_ip;
+    int indi_port = 7624;
+
+    IPAddress redis_ip;
+    int redis_port = 6379;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     __NULLABLE__ STR_t mqtt_username = nullptr;
     __NULLABLE__ STR_t mqtt_password = nullptr;
+    __NULLABLE__ STR_t redis_password = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -148,11 +157,11 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
+void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node->tcp_url != nullptr && tcpClient.connected())
+    if(node->indi_url != nullptr && indiClient.connected())
     {
-        tcpClient.write(message.buf, message.len);
+        indiClient.write(message.buf, message.len);
     }
 }
 
@@ -325,6 +334,7 @@ void nyx_node_stack_initialize(
 
     stack->mqtt_username = mqtt_username;
     stack->mqtt_password = mqtt_password;
+    stack->redis_password = redis_password;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -332,32 +342,23 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != nullptr && node->tcp_url[0] != '\0')
+    if(node->indi_url != nullptr && node->indi_url[0] != '\0')
     {
-        IPAddress ip;
-        int port;
-
-        if(parse_host_port(node->tcp_url, ip, port, 7624))
+        if(parse_host_port(node->indi_url, stack->indi_ip, stack->indi_port, 7624))
         {
-            NYX_LOG_INFO("TCP ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
-
-            #ifdef NYX_HAS_WIFI
-            tcpServer = WiFiServer(port);
-            tcpServer.begin();
-            #endif
-
-            #ifdef NYX_HAS_ETHERNET
-            tcpServer = EthernetServer(port);
-            tcpServer.begin();
-            #endif
-
-            NYX_LOG_INFO("INDI support is enabled");
+            NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d",
+                stack->indi_ip[0],
+                stack->indi_ip[1],
+                stack->indi_ip[2],
+                stack->indi_ip[3],
+                stack->indi_port
+            );
         }
         else
         {
             NYX_LOG_ERROR("Cannot initialize TCP server: bad address");
 
-            node->tcp_url = nullptr;
+            node->indi_url = nullptr;
         }
     }
 
@@ -379,8 +380,6 @@ void nyx_node_stack_initialize(
                 ).setServer(
                     ip, port
                 );
-
-                NYX_LOG_INFO("MQTT support is enabled");
             }
             else
             {
@@ -401,25 +400,15 @@ void nyx_node_stack_initialize(
 
     if(node->redis_url != nullptr && node->redis_url[0] != '\0')
     {
-        IPAddress ip;
-        int port;
-
-        if(parse_host_port(node->redis_url, ip, port, 6379))
+        if(parse_host_port(node->redis_url, stack->redis_ip, stack->redis_port, 6379))
         {
-            NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
-
-            if(redisClient.connect(ip, port))
-            {
-                NYX_LOG_INFO("Redis support is enabled");
-
-                nyx_redis_auth(node, redis_password);
-            }
-            else
-            {
-                NYX_LOG_ERROR("Cannot initialize Redis client: cannot connect");
-
-                node->redis_url = nullptr;
-            }
+            NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d",
+                stack->redis_ip[0],
+                stack->redis_ip[1],
+                stack->redis_ip[2],
+                stack->redis_ip[3],
+                stack->redis_port
+            );
         }
         else
         {
@@ -452,7 +441,7 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
     /* READ AVAILABLE DATA                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t available = tcpClient.available();
+    size_t available = indiClient.available();
 
     if(available == 0)
     {
@@ -477,7 +466,7 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
     /* CONSUME DATA                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    stack->recv_size += tcpClient.read(static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size, available);
+    stack->recv_size += indiClient.read(static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size, available);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -508,7 +497,7 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 
             if(stack->recv_capa > grow_step && stack->recv_size < shrink_threshold)
             {
-                size_t new_capa = max(grow_step, static_cast<size_t>(stack->recv_size * shrink_factor));
+                size_t new_capa = max(grow_step, static_cast<size_t>(static_cast<float>(stack->recv_size) * shrink_factor));
 
                 stack->recv_buff = nyx_memory_realloc(stack->recv_buff, new_capa);
                 stack->recv_capa = new_capa;
@@ -533,37 +522,57 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->tcp_url != nullptr && node->tcp_url[0] != '\0')
+    if(node->indi_url != nullptr && node->indi_url[0] != '\0')
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        /* CLEANUP OLD CLIENTS & REGISTER NEW CLIENTS                                                                 */
+        /* RECONNECT SERVER                                                                                           */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(!indiServer)
+        {
+            indiServer.begin(stack->indi_port);
+
+            NYX_LOG_INFO("INDI support is enabled");
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* ACCEPT CLIENT                                                                                              */
         /*------------------------------------------------------------------------------------------------------------*/
 
         #ifdef NYX_HAS_WIFI
-        WiFiClient newClient = tcpServer.accept();
+        WiFiClient newClient = indiServer.accept();
         #endif
 
         #ifdef NYX_HAS_ETHERNET
-        EthernetClient newClient = tcpServer.accept();
+        EthernetClient newClient = indiServer.accept();
         #endif
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(!tcpClient.connected() && newClient.connected())
+        if(!indiClient.connected())
         {
-            tcpClient = newClient;
+            if(newClient.connected())
+            {
+                indiClient = newClient;
+            }
+            else
+            {
+                goto __mqtt;
+            }
         }
-        else if(newClient.connected())
+        else
         {
-            newClient.stop();
+            if(newClient.connected())
+            {
+                newClient.stop();
+            }
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
+        /* TREATMENT                                                                                                  */
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(tcpClient.connected())
-        {
-            read_data(node, TCP_RECV_BUFF_SIZE, 1.25f);
-        }
+        read_data(node, TCP_RECV_BUFF_SIZE, 1.25f);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -572,6 +581,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     /* MQTT                                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
+__mqtt:
     if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
     {
         /*------------------------------------------------------------------------------------------------------------*/
@@ -583,15 +593,17 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
             if(mqttClient.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
                 node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
+
+                NYX_LOG_INFO("MQTT support is enabled");
             }
             else
             {
-                goto __delay;
+                goto __redis;
             }
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* LOOP                                                                                                       */
+        /* TREATMENT                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
         mqttClient.loop();
@@ -606,6 +618,40 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 
             nyx_node_ping(node);
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* REDIS                                                                                                           */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+__redis:
+    if(node->redis_url != nullptr && node->redis_url[0] != '\0')
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* RECONNECT CLIENT                                                                                           */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(!redisClient.connected())
+        {
+            if(redisClient.connect(stack->redis_ip, stack->redis_port))
+            {
+                nyx_redis_auth(node, stack->redis_password);
+
+                NYX_LOG_INFO("Redis support is enabled");
+            }
+            else
+            {
+                goto __delay;
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* TREATMENT                                                                                                  */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        /* NOTHING TO DO */
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
