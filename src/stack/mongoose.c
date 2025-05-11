@@ -276,7 +276,12 @@ static void retry_timer_handler(void *arg)
 
     if(stack->indi_connection == NULL && node->indi_url != NULL && node->indi_url[0] != '\0')
     {
-        stack->indi_connection = mg_listen(&stack->mgr, node->indi_url, indi_handler, node);
+        stack->indi_connection = mg_listen(
+            &stack->mgr,
+            node->indi_url,
+            indi_handler,
+            node
+        );
 
         if(stack->indi_connection != NULL)
         {
@@ -312,7 +317,12 @@ static void retry_timer_handler(void *arg)
 
     if(stack->redis_connection == NULL && node->redis_url != NULL && node->redis_url[0] != '\0')
     {
-        stack->redis_connection = mg_connect(&stack->mgr, node->redis_url, redis_handler, node);
+        stack->redis_connection = mg_connect(
+            &stack->mgr,
+            node->redis_url,
+            redis_handler,
+            node
+        );
 
         if(stack->redis_connection != NULL)
         {
