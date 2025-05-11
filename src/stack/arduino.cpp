@@ -37,11 +37,13 @@
 #ifdef NYX_HAS_WIFI
 static WiFiClient tcpClient;
 static WiFiServer tcpServer(0);
+static WiFiClient redisClient;
 #endif
 
 #ifdef NYX_HAS_ETHERNET
 static EthernetClient tcpClient;
 static EthernetServer tcpServer(0);
+static EthernetClient redisClient;
 #endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -69,21 +71,9 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    struct TCPClient
-    {
-        #ifdef NYX_HAS_WIFI
-        WiFiClient tcp_client;
-        #endif
-
-        #ifdef NYX_HAS_ETHERNET
-        EthernetClient tcp_client;
-        #endif
-
-        __ZEROABLE__ size_t recv_capa = 0x00000;
-        __ZEROABLE__ size_t recv_size = 0x00000;
-        __NULLABLE__ buff_t recv_buff = nullptr;
-
-    } clients[TCP_MAX_CLIENTS];
+    __ZEROABLE__ size_t recv_capa = 0x00000;
+    __ZEROABLE__ size_t recv_size = 0x00000;
+    __NULLABLE__ buff_t recv_buff = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -162,19 +152,9 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
 void internal_tcp_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node->tcp_url != nullptr)
+    if(node->tcp_url != nullptr && tcpClient.connected())
     {
-        auto clients = node->stack->clients;
-
-        for(int i = 0; i < TCP_MAX_CLIENTS; i++)
-        {
-            auto &tcp_client = clients[i].tcp_client;
-
-            if(tcp_client.connected())
-            {
-                tcp_client.write(message.buf, message.len);
-            }
-        }
+        tcpClient.write(message.buf, message.len);
     }
 }
 
@@ -211,7 +191,10 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message)
 
 void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
 {
-    /* TODO */
+    if(node->redis_url != nullptr && redisClient.connected())
+    {
+        redisClient.write(message.buf, message.len);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -416,7 +399,21 @@ void nyx_node_stack_initialize(
 
     if(node->redis_url != nullptr && node->redis_url[0] != '\0')
     {
-        /* TODO */
+        IPAddress ip;
+        int port;
+
+        if(parse_host_port(node->redis_url, ip, port, 6379))
+        {
+            NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
+
+
+        }
+        else
+        {
+            NYX_LOG_ERROR("Cannot initialize Redis client: bad address");
+
+            node->redis_url = nullptr;
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -621,9 +618,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
             }
             else
             {
-                delay(timeout_ms);
-
-                return;
+                goto __delay;
             }
         }
 
@@ -646,6 +641,12 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* DELAY                                                                                                          */
+    /*----------------------------------------------------------------------------------------------------------------*/
+__delay:
+    delay(timeout_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
