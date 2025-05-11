@@ -347,7 +347,7 @@ void nyx_node_stack_initialize(
     {
         if(parse_host_port(node->indi_url, stack->indi_ip, stack->indi_port, 7624))
         {
-            NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d",
+            NYX_LOG_INFO("INDI ip: %d:%d:%d:%d, port: %d",
                 stack->indi_ip[0],
                 stack->indi_ip[1],
                 stack->indi_ip[2],
@@ -540,32 +540,19 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         /* ACCEPT CLIENT                                                                                              */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        #ifdef NYX_HAS_WIFI
-        WiFiClient newClient = indiServer.accept();
-        #endif
-
-        #ifdef NYX_HAS_ETHERNET
-        EthernetClient newClient = indiServer.accept();
-        #endif
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(!indiClient.connected())
         {
+            #ifdef NYX_HAS_WIFI
+            WiFiClient newClient = indiServer.accept();
+            #endif
+
+            #ifdef NYX_HAS_ETHERNET
+            EthernetClient newClient = indiServer.accept();
+            #endif
+
             if(newClient.connected())
             {
                 indiClient = newClient;
-            }
-            else
-            {
-                goto __mqtt;
-            }
-        }
-        else
-        {
-            if(newClient.connected())
-            {
-                newClient.stop();
             }
         }
 
