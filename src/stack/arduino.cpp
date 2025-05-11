@@ -444,7 +444,7 @@ void nyx_node_stack_finalize(__UNUSED__ nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void read_data(nyx_node_t *node)
+static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 {
     nyx_stack_t *stack = node->stack;
 
@@ -467,23 +467,18 @@ static void read_data(nyx_node_t *node)
 
     if(required > stack->recv_capa)
     {
-        size_t new_capa = max(required, stack->recv_capa + TCP_RECV_BUFF_SIZE);
+        size_t new_capa = max(required, stack->recv_capa + grow_step);
 
         stack->recv_buff = nyx_memory_realloc(stack->recv_buff, new_capa);
         stack->recv_capa = new_capa;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* READ INTO BUFFER                                                                                               */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    stack->recv_size += tcpClient.read(
-        static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size,
-        available
-    );
-
-    /*----------------------------------------------------------------------------------------------------------------*/
     /* CONSUME DATA                                                                                                   */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    stack->recv_size += tcpClient.read(static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size, available);
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(stack->recv_size > 0)
@@ -511,9 +506,9 @@ static void read_data(nyx_node_t *node)
 
             const size_t shrink_threshold = stack->recv_capa / 2;
 
-            if(stack->recv_capa > TCP_RECV_BUFF_SIZE && stack->recv_size < shrink_threshold)
+            if(stack->recv_capa > grow_step && stack->recv_size < shrink_threshold)
             {
-                size_t new_capa = max(TCP_RECV_BUFF_SIZE, (stack->recv_size * 5) / 4);
+                size_t new_capa = max(grow_step, static_cast<size_t>(stack->recv_size * shrink_factor));
 
                 stack->recv_buff = nyx_memory_realloc(stack->recv_buff, new_capa);
                 stack->recv_capa = new_capa;
@@ -567,7 +562,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 
         if(tcpClient.connected())
         {
-            read_data(node);
+            read_data(node, TCP_RECV_BUFF_SIZE, 1.25f);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
