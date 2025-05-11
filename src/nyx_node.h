@@ -2345,7 +2345,7 @@ void nyx_mqtt_pub(
  * @param node The Nyx node.
  * @param stream The stream name.
  * @param max_len Maximum number of entries to keep in the stream.
- * @param n_fields Number of field triplets (field name, value length, value buffer).
+ * @param n_fields Number of field triplets (field name, value size, value buff).
  * @param names ???.
  * @param sizes ???.
  * @param buffs ???.
