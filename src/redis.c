@@ -94,39 +94,41 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            str_t field = names[i];
-
-            if(field == NULL)
-            {
-                field = "";
-            }
+            STR_t name = names[i];
+            size_t size = sizes[i];
+            BUFF_t buff = buffs[i];
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t value_size = sizes[i];
-            buff_t value_buff = buffs[i];
+            bool q;
 
-            if(value_size == 0x0U
-               ||
-               value_buff == NULL
+            size_t value_size;
+            buff_t value_buff;
+
+            if(size != 0x0U
+               &&
+               buff != NULL
             ) {
-                value_size = 0U;
-                value_buff = "";
-            }
+                if(name[0] == '#')
+                {
+                    value_buff = nyx_base64_encode(&value_size, size, buff);
 
-            /*--------------------------------------------------------------------------------------------------------*/
+                    q = true;
+                }
+                else
+                {
+                    value_size = (size_t) size;
+                    value_buff = (buff_t) buff;
 
-            bool is_raw;
-
-            if(field[0] == '#')
-            {
-                value_buff = nyx_base64_encode(&value_size, value_size, value_buff);
-
-                is_raw = false;
+                    q = false;
+                }
             }
             else
             {
-                is_raw = true;
+                value_size = (size_t) 0U;
+                value_buff = (buff_t) "";
+
+                q = false;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -138,8 +140,8 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
                 sizeof(header_buff2),
                 "$%zu\r\n%s\r\n"
                 "$%zu\r\n",
-                strlen(field),
-                /*--*/(field),
+                strlen(name),
+                /*--*/(name),
                 value_size
             );
 
@@ -154,7 +156,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(!is_raw) nyx_memory_free(value_buff);
+            if(q) nyx_memory_free(value_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
