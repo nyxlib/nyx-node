@@ -283,7 +283,6 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
             {
                 switch(blob)
                 {
-
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_ALSO:
