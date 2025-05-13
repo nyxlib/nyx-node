@@ -268,7 +268,7 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef NYX_HAS_WIFI
-    return ip.fromString(host.c_str()) || WiFiClass::hostByName(host.c_str(), ip) == 1;
+    return ip.fromString(host.c_str()) || WiFiClass.hostByName(host.c_str(), ip) == 1;
     #endif
 
     #ifdef NYX_HAS_ETHERNET
