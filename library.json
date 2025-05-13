@@ -11,7 +11,7 @@
     "license": "GPL 2.0",
     "repository": {
         "type": "git",
-        "url": "https://gitlab.in2p3.fr/lpsc-kid/nyx-node"
+        "url": "https://github.com/nyxlib/nyx-node.git"
     },
     "frameworks": [
         "arduino"
