@@ -4,7 +4,7 @@
     "description": "Standalone Nyx / Indi node",
     "authors": [
         {
-            "name": "Jérôme Odier",
+            "name": "Jérôme ODIER",
             "email": "jerome.odier@lpsc.in2p3.fr"
         }
     ],
@@ -17,10 +17,7 @@
         "arduino"
     ],
     "platforms": [
-        "espressif8266",
-        "espressif32",
-        "atmelmegaavr",
-        "atmelsam"
+        "*"
     ],
     "dependencies": {
         "knolleary/PubSubClient": "^2.8"
