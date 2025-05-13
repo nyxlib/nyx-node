@@ -22,11 +22,7 @@
         "atmelmegaavr",
         "atmelsam"
     ],
-    "dependencies": [
-        {
-            "owner": "knolleary",
-            "name": "PubSubClient",
-            "version": "^2.0.0"
-        }
-    ]
+    "dependencies": {
+        "knolleary/PubSubClient": "^2.8"
+    }
 }
