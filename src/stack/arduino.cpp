@@ -48,13 +48,17 @@ struct nyx_stack_s
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef NYX_HAS_WIFI
-    WiFiServer indi_server;
+    WiFiClient tcp_client;
+    WiFiServer tcp_server;
+
     WiFiClient indi_client;
     WiFiClient redis_client;
     #endif
 
     #ifdef NYX_HAS_ETHERNET
-    EthernetServer indi_server;
+    EthernetClient tcp_client;
+    EthernetServer tcp_server;
+
     EthernetClient indi_client;
     EthernetClient redis_client;
     #endif
@@ -89,7 +93,13 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_stack_s(): indi_server(), indi_client(), redis_client(), mqtt_client(indi_client) {}
+    nyx_stack_s():
+        tcp_client(),
+        tcp_server(),
+        mqtt_client(tcp_client),
+        indi_client(),
+        redis_client()
+    {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -541,9 +551,9 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         /* RECONNECT SERVER                                                                                           */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!stack->indi_server)
+        if(!stack->tcp_server)
         {
-            stack->indi_server.begin(stack->indi_port);
+            stack->tcp_server.begin(stack->indi_port);
 
             NYX_LOG_INFO("INDI support is enabled");
         }
@@ -555,11 +565,11 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         if(!stack->indi_client.connected())
         {
             #ifdef NYX_HAS_WIFI
-            WiFiClient new_client = stack->indi_server.accept();
+            WiFiClient new_client = stack->tcp_server.accept();
             #endif
 
             #ifdef NYX_HAS_ETHERNET
-            EthernetClient new_client = stack->indi_server.accept();
+            EthernetClient new_client = stack->tcp_server.accept();
             #endif
 
             if(new_client.connected())
