@@ -21,5 +21,11 @@
         "espressif32",
         "atmelmegaavr",
         "atmelsam"
+    ],
+    "dependencies": [
+        {
+            "name": "PubSubClient",
+            "version": "^2.0.0"
+        }
     ]
 }
