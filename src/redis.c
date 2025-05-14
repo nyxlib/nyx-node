@@ -42,6 +42,8 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t pwd_buff)
 
         size_t pwd_size = strlen(pwd_buff);
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         size_t header_size = snprintf(
             /*--*/(header_buff),
             sizeof(header_buff),
