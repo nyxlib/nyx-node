@@ -305,9 +305,7 @@ static uint16_t mqtt_estimate_buffer_size()
     uint32_t free_heap = NYX_RAM_SIZE;
 
     #else
-
-    uint32_t free_heap = 4096;
-
+    #  error "NYX_RAM_SIZE is not defined!"
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
