@@ -61,8 +61,8 @@ set(SOURCE_FILES
     src/indi/indi_switch.c
     src/indi/indi_text.c
     #
-    src/stack/generated/mongoose.c
-    src/stack/mongoose.c
+    src/stacks/generated/mongoose.c
+    src/stacks/mongoose.c
     #
     src/xml_stream.c
     src/xml_validation.c
