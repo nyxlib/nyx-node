@@ -36,7 +36,7 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t pwd_buff)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        char header_buff[256];
+        char header_buff[128];
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -120,7 +120,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            bool q;
+            bool allocated;
 
             size_t value_size;
             buff_t value_buff;
@@ -133,14 +133,14 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
                 {
                     value_buff = nyx_base64_encode(&value_size, size, buff);
 
-                    q = true;
+                    allocated = true;
                 }
                 else
                 {
                     value_size = (size_t) size;
                     value_buff = (buff_t) buff;
 
-                    q = false;
+                    allocated = false;
                 }
             }
             else
@@ -148,7 +148,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
                 value_size = (size_t) 0U;
                 value_buff = (buff_t) "";
 
-                q = false;
+                allocated = false;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -174,7 +174,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(q) nyx_memory_free(value_buff);
+            if(allocated) nyx_memory_free(value_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
