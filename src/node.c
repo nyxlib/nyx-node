@@ -26,7 +26,7 @@ static bool nyx_startswith(nyx_str_t topic, nyx_str_t prefix)
 
 #define NYX_C_STR(a) {(str_t) (a), sizeof(a) - 1}
 
-static nyx_str_t SPECIAL_TOPICS[] = {
+static const nyx_str_t SPECIAL_TOPICS[] = {
     NYX_C_STR("nyx/cmd/trigger_ping"),
     NYX_C_STR("nyx/cmd/set_master_client"),
     NYX_C_STR("nyx/cmd/json"),
@@ -380,7 +380,7 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
                &&
                name2_string != NULL && name2_string->type == NYX_TYPE_STRING
                &&
-               children2_list != NULL && children1_list->type == NYX_TYPE_LIST
+               children2_list != NULL && children2_list->type == NYX_TYPE_LIST
             ) {
                 /*----------------------------------------------------------------------------------------------------*/
 
