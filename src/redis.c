@@ -11,27 +11,56 @@
 #include "nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* HELPERS                                                                                                            */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t password)
+static size_t intlen(size_t n)
 {
-    if(password != NULL && password[0] != '\0')
-    {
-        char buff[256];
+    size_t len;
 
-        size_t size = snprintf(
-            /*--*/(buff),
-            sizeof(buff),
+    for(len = 1; n >= 10; len++)
+    {
+        n /= 10;
+    }
+
+    return len;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* REDIS STREAM                                                                                                       */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t pwd_buff)
+{
+    if(pwd_buff != NULL && pwd_buff[0] != '\0')
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        char header_buff[256];
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        size_t pwd_size = strlen(pwd_buff);
+
+        size_t header_size = snprintf(
+            /*--*/(header_buff),
+            sizeof(header_buff),
             "*2\r\n"
             "$4\r\nAUTH\r\n"
-            "$%zu\r\n%s\r\n",
-            strlen(password),
-            /*--*/(password)
+            "$%zu\r\n",
+            pwd_size
         );
 
-        if(size > 0 && size < sizeof(buff))
+        if(header_size > 0 && header_size < sizeof(header_buff))
         {
-            internal_redis_pub(node, NYX_STR_S(buff, size));
+            internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
+
+            internal_redis_pub(node, NYX_STR_S(pwd_buff, pwd_size));
+
+            internal_redis_pub(node, NYX_STR_S("\r\n", 2));
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 }
 
@@ -52,41 +81,32 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    char max_len_buff[32];
-
-    snprintf(
-        /*--*/(max_len_buff),
-        sizeof(max_len_buff),
-        "%zu",
-        max_len
-    );
+    char header_buff[256];
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    char header_buff1[256];
-
-    size_t header_size1 = snprintf(
-        /*--*/(header_buff1),
-        sizeof(header_buff1),
+    size_t header_size = snprintf(
+        /*--*/(header_buff),
+        sizeof(header_buff),
         "*%zu\r\n"
         "$4\r\nXADD\r\n"
         "$%zu\r\n%s\r\n"
         "$6\r\nMAXLEN\r\n"
         "$1\r\n~\r\n"
-        "$%zu\r\n%s\r\n"
+        "$%zu\r\n%zu\r\n"
         "$1\r\n*\r\n",
         6 + 2 * n_fields,
         strlen(stream),
         /*--*/(stream),
-        strlen(max_len_buff),
-        /*--*/(max_len_buff)
+        intlen(max_len),
+        /*--*/(max_len)
     );
 
-    if(header_size1 > 0 && header_size1 < sizeof(header_buff1))
+    if(header_size > 0 && header_size < sizeof(header_buff))
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        internal_redis_pub(node, NYX_STR_S(header_buff1, header_size1));
+        internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -133,11 +153,9 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            char header_buff2[256];
-
-            size_t header_size2 = snprintf(
-                /*--*/(header_buff2),
-                sizeof(header_buff2),
+            header_size = snprintf(
+                /*--*/(header_buff),
+                sizeof(header_buff),
                 "$%zu\r\n%s\r\n"
                 "$%zu\r\n",
                 strlen(name),
@@ -145,9 +163,9 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
                 value_size
             );
 
-            if(header_size2 > 0 && header_size2 < sizeof(header_buff2))
+            if(header_size > 0 && header_size < sizeof(header_buff))
             {
-                internal_redis_pub(node, NYX_STR_S(header_buff2, header_size2));
+                internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
 
                 internal_redis_pub(node, NYX_STR_S(value_buff, value_size));
 
