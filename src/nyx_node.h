@@ -389,7 +389,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
  */
 
 void nyx_object_free(
-    __NULLABLE__ /*-*/ nyx_object_t *object
+    __NULLABLE__ nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1530,7 +1530,7 @@ nyx_xmldoc_t *nyx_xmldoc_parse(
  */
 
 void nyx_xmldoc_free(
-    __NULLABLE__ /*-*/ nyx_xmldoc_t *xmldoc
+    __NULLABLE__ nyx_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
