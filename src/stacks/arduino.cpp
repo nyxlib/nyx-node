@@ -79,6 +79,8 @@ struct nyx_stack_s
 
     __NULLABLE__ STR_t mqtt_username = nullptr;
     __NULLABLE__ STR_t mqtt_password = nullptr;
+
+    __NULLABLE__ STR_t redis_username = nullptr;
     __NULLABLE__ STR_t redis_password = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -344,6 +346,7 @@ void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
+    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     __UNUSED__ int retry_ms
 ) {
@@ -355,6 +358,7 @@ void nyx_node_stack_initialize(
 
     stack->mqtt_username = mqtt_username;
     stack->mqtt_password = mqtt_password;
+    stack->redis_username = redis_username;
     stack->redis_password = redis_password;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -649,7 +653,7 @@ __redis:
         {
             if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
             {
-                nyx_redis_auth(node, stack->redis_password);
+                nyx_redis_auth(node, stack->redis_usernam, stack->redis_password);
 
                 NYX_LOG_INFO("Redis support is enabled");
             }

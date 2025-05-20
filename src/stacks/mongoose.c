@@ -26,7 +26,8 @@ struct nyx_stack_s
 
     struct mg_mqtt_opts mqtt_opts;
 
-    STR_t redis_password;
+    __NULLABLE__ STR_t redis_username;
+    __NULLABLE__ STR_t redis_password;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -326,7 +327,7 @@ static void retry_timer_handler(void *arg)
 
         if(stack->redis_connection != NULL)
         {
-            nyx_redis_auth(node, stack->redis_password);
+            nyx_redis_auth(node, stack->redis_username, stack->redis_password);
 
             NYX_LOG_INFO("Redis support is enabled");
         }
@@ -348,6 +349,7 @@ void nyx_node_stack_initialize(
     nyx_node_t *node,
     __NULLABLE__ STR_t mqtt_username,
     __NULLABLE__ STR_t mqtt_password,
+    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     int retry_ms
 ) {
@@ -367,6 +369,7 @@ void nyx_node_stack_initialize(
     stack->mqtt_opts.clean = true;
     stack->mqtt_opts.version = 0x04;
 
+    stack->redis_username = redis_username;
     stack->redis_password = redis_password;
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -742,6 +742,7 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
     /**/
     __NULLABLE__ STR_t redis_url,
+    __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     /**/
     int retry_ms,
@@ -821,7 +822,7 @@ nyx_node_t *nyx_node_initialize(
     /* INITIALIZE STACK                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_node_stack_initialize(node, mqtt_username, mqtt_password, redis_password, retry_ms);
+    nyx_node_stack_initialize(node, mqtt_username, mqtt_password, redis_username, redis_password, retry_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SET LOCALE                                                                                                     */

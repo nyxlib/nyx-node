@@ -124,6 +124,7 @@ int main()
         getenv("MQTT_PASSWORD"),
         NULL,
         getenv("REDIS_URL"),
+        getenv("REDIS_USERNAME"),
         getenv("REDIS_PASSWORD"),
         3000,
         true,

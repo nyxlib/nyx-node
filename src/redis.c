@@ -30,37 +30,67 @@ static size_t intlen(size_t n)
 /* REDIS STREAM                                                                                                       */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t pwd_buff)
+void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLABLE__ STR_t password_buff)
 {
-    if(pwd_buff != NULL && pwd_buff[0] != '\0')
+    if(password_buff != NULL && password_buff[0] != '\0')
     {
-        /*------------------------------------------------------------------------------------------------------------*/
+        size_t password_size = strlen(password_buff);
 
-        char header_buff[128];
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        size_t pwd_size = strlen(pwd_buff);
-
-        size_t header_size = snprintf(
-            /*--*/(header_buff),
-            sizeof(header_buff),
-            "*2\r\n"
-            "$4\r\nAUTH\r\n"
-            "$%zu\r\n",
-            pwd_size
-        );
-
-        if(header_size > 0 && header_size < sizeof(header_buff))
+        if(username_buff != NULL && username_buff[0] != '\0')
         {
-            internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
+            size_t username_size = strlen(username_buff);
 
-            internal_redis_pub(node, NYX_STR_S(pwd_buff, pwd_size));
+            /*--------------------------------------------------------------------------------------------------------*/
 
-            internal_redis_pub(node, NYX_STR_S("\r\n", 2));
+            char cmd_buff[64 + username_size + password_size];
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            size_t cmd_size = snprintf(
+                /*--*/(cmd_buff),
+                sizeof(cmd_buff),
+                "*3\r\n"
+                "$4\r\nAUTH\r\n"
+                "$%zu\r\n%s\r\n"
+                "$%zu\r\n%s\r\n",
+                username_size,
+                username_buff,
+                password_size,
+                password_buff
+            );
+
+            if(cmd_size > 0 && cmd_size < sizeof(cmd_buff))
+            {
+                internal_redis_pub(node, NYX_STR_S(cmd_buff, cmd_size));
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
+        else
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            char cmd_buff[64 + password_size];
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            size_t cmd_size = snprintf(
+                /*--*/(cmd_buff),
+                sizeof(cmd_buff),
+                "*2\r\n"
+                "$4\r\nAUTH\r\n"
+                "$%zu\r\n%s\r\n",
+                password_size,
+                password_buff
+            );
+
+            if(cmd_size > 0 && cmd_size < sizeof(cmd_buff))
+            {
+                internal_redis_pub(node, NYX_STR_S(cmd_buff, cmd_size));
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
     }
 }
 
