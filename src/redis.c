@@ -134,8 +134,6 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
         /*--*/(max_len)
     );
 
-    printf("-> %zu\n", header_size);
-
     if(header_size > 0 && header_size < sizeof(header_buff))
     {
         /*------------------------------------------------------------------------------------------------------------*/

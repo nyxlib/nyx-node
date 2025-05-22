@@ -59,6 +59,7 @@ set(SOURCE_FILES
     src/indi/indi_message.c
     src/indi/indi_number.c
     src/indi/indi_switch.c
+    src/indi/indi_stream.c
     src/indi/indi_text.c
     #
     src/stacks/generated/mongoose.c
