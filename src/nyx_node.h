@@ -2360,6 +2360,7 @@ void nyx_mqtt_pub(
  * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
  *
  * @param node The Nyx node.
+ * @param device The device name.
  * @param stream The stream name.
  * @param max_len Maximum number of entries to keep in the stream.
  * @param n_fields Number of field triplets (field name, value size, value buff).
@@ -2371,6 +2372,7 @@ void nyx_mqtt_pub(
 
 void nyx_redis_pub(
     nyx_node_t *node,
+    STR_t device,
     STR_t stream,
     size_t max_len,
     __ZEROABLE__ size_t n_fields,

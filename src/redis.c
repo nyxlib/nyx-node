@@ -96,9 +96,11 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLAB
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t names[], const size_t sizes[], const buff_t buffs[])
+void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t names[], const size_t sizes[], const buff_t buffs[])
 {
     if(node == NULL
+       ||
+       device == NULL
        ||
        stream == NULL
        ||
@@ -120,17 +122,19 @@ void nyx_redis_pub(nyx_node_t *node, STR_t stream, size_t max_len, __ZEROABLE__ 
         sizeof(header_buff),
         "*%zu\r\n"
         "$4\r\nXADD\r\n"
-        "$%zu\r\n%s\r\n"
+        "$%zu\r\n%s:%s\r\n"
         "$6\r\nMAXLEN\r\n"
         "$1\r\n~\r\n"
         "$%zu\r\n%zu\r\n"
         "$1\r\n*\r\n",
         6 + 2 * n_fields,
-        strlen(stream),
-        /*--*/(stream),
+        strlen(device) + 1 + strlen(stream),
+        /*--*/(device)   ,   /*--*/(stream),
         intlen(max_len),
         /*--*/(max_len)
     );
+
+    printf("-> %zu\n", header_size);
 
     if(header_size > 0 && header_size < sizeof(header_buff))
     {
