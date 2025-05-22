@@ -9,36 +9,22 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_del_property_new(
+nyx_dict_t *nyx_def_stream_new(
     STR_t device,
-    __NULLABLE__ STR_t name,
-    __NULLABLE__ STR_t message
+    STR_t name,
+    nyx_state_t state
 ) {
     nyx_dict_t *result = nyx_dict_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    char timestamp[32];
-
-    internal_get_timestamp(timestamp, sizeof(timestamp));
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_dict_set(result, "<>", nyx_string_from("delProperty"));
+    nyx_dict_set(result, "<>", nyx_string_from("stream"));
 
     nyx_dict_set(result, "@client", nyx_string_from("unknown"));
     nyx_dict_set(result, "@device", nyx_string_from(device));
-    nyx_dict_set(result, "@timestamp", nyx_string_from(timestamp));
+    nyx_dict_set(result, "@name", nyx_string_from(name));
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(name != NULL) {
-        nyx_dict_set(result, "@name", nyx_string_from(name));
-    }
-
-    if(message != NULL) {
-        nyx_dict_set(result, "@message", nyx_string_from(message));
-    }
+    nyx_dict_set(result, "@state", nyx_string_from(nyx_state_to_str(state)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
