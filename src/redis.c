@@ -122,7 +122,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
         sizeof(header_buff),
         "*%zu\r\n"
         "$4\r\nXADD\r\n"
-        "$%zu\r\n%s:%s\r\n"
+        "$%zu\r\n%s/%s\r\n"
         "$6\r\nMAXLEN\r\n"
         "$1\r\n~\r\n"
         "$%zu\r\n%zu\r\n"
