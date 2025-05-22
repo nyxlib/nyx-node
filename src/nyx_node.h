@@ -2100,7 +2100,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_MESSAGE Nyx Stream
+  * @defgroup NYX_STREAM Nyx Stream
   * @ingroup NYX
   * @{
   */
