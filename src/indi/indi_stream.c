@@ -9,7 +9,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_def_stream_new(
+nyx_dict_t *nyx_stream_new(
     STR_t device,
     STR_t name,
     nyx_state_t state

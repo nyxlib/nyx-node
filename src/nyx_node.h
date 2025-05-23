@@ -2106,7 +2106,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_def_stream_new(
+nyx_dict_t *nyx_stream_new(
     STR_t device,
     STR_t name,
     nyx_state_t state
@@ -2363,10 +2363,12 @@ void nyx_mqtt_pub(
  * @param device The device name.
  * @param stream The stream name.
  * @param max_len Maximum number of entries to keep in the stream.
- * @param n_fields Number of field triplets (field name, field size, field buff).
+ * @param n_fields Number of field triplets (name, length, buffer).
  * @param field_names Array of field names.
- * @param field_sizes Array of field sizes.
- * @param field_buffs Array of field buffs.
+ * @param field_sizes Array of field lengths.
+ * @param field_buffs Array of field buffers.
+ * @note .
+ * @note Each stream must be previously provided to @nyx_node_initialize via @ref nyx_stream_new.
  * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
  */
 
