@@ -2367,8 +2367,8 @@ void nyx_mqtt_pub(
  * @param field_names Array of field names.
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
- * @note .
- * @note Each stream must be previously provided to @nyx_node_initialize via @ref nyx_stream_new.
+ * @note Each stream must be previously provided to @ref nyx_node_initialize via @ref nyx_stream_new.
+ *
  * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
  */
 
