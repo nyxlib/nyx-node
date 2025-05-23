@@ -96,7 +96,7 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLAB
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t names[], const size_t sizes[], const buff_t buffs[])
+void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
 {
     if(node == NULL
        ||
@@ -106,7 +106,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
        ||
        n_fields == 0x0U
        ||
-       names == NULL || sizes == NULL || buffs == NULL
+       field_names == NULL || field_sizes == NULL || field_buffs == NULL
     ) {
         return;
     }
@@ -146,9 +146,9 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t name = names[i];
-            size_t size = sizes[i];
-            BUFF_t buff = buffs[i];
+            STR_t field_name = field_names[i];
+            size_t field_size = field_sizes[i];
+            BUFF_t field_buff = field_buffs[i];
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -157,20 +157,20 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
             size_t value_size;
             buff_t value_buff;
 
-            if(size != 0x0U
+            if(field_size != 0x0U
                &&
-               buff != NULL
+               field_buff != NULL
             ) {
-                if(name[0] == '#')
+                if(field_name[0] == '#')
                 {
-                    value_buff = nyx_base64_encode(&value_size, size, buff);
+                    value_buff = nyx_base64_encode(&value_size, field_size, field_buff);
 
                     allocated = true;
                 }
                 else
                 {
-                    value_size = (size_t) size;
-                    value_buff = (buff_t) buff;
+                    value_size = (size_t) field_size;
+                    value_buff = (buff_t) field_buff;
 
                     allocated = false;
                 }
@@ -190,8 +190,8 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
                 sizeof(header_buff),
                 "$%zu\r\n%s\r\n"
                 "$%zu\r\n",
-                strlen(name),
-                /*--*/(name),
+                strlen(field_name),
+                /*--*/(field_name),
                 value_size
             );
 

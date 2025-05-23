@@ -2363,11 +2363,11 @@ void nyx_mqtt_pub(
  * @param device The device name.
  * @param stream The stream name.
  * @param max_len Maximum number of entries to keep in the stream.
- * @param n_fields Number of field triplets (field name, value size, value buff).
- * @param names ???.
- * @param sizes ???.
- * @param buffs ???.
- * @note If a field name starts with \c #, its value will be automatically base64-encoded.
+ * @param n_fields Number of field triplets (field name, field size, field buff).
+ * @param field_names Array of field names.
+ * @param field_sizes Array of field sizes.
+ * @param field_buffs Array of field buffs.
+ * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
  */
 
 void nyx_redis_pub(
@@ -2376,9 +2376,9 @@ void nyx_redis_pub(
     STR_t stream,
     size_t max_len,
     __ZEROABLE__ size_t n_fields,
-    const str_t names[],
-    const size_t sizes[],
-    const buff_t buffs[]
+    const str_t field_names[],
+    const size_t field_sizes[],
+    const buff_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
