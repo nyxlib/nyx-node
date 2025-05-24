@@ -39,6 +39,15 @@
       <xs:enumeration value="Only"/>
     </xs:restriction>
   </xs:simpleType>
+  <!-- NYX -->
+  <xs:simpleType name="streamEnable">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Never"/>
+      <xs:enumeration value="Also"/>
+      <xs:enumeration value="Only"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- NYX -->
   <!-- ************************************************************************************************************* -->
   <!-- Messages                                                                                                      -->
   <!-- ************************************************************************************************************* -->
@@ -76,6 +85,15 @@
       <xs:attribute name="name" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
+  <!-- NYX -->
+  <xs:element name="enableStream">
+    <xs:complexType mixed="true">
+      <xs:attribute name="client" type="xs:string" use="optional"/>
+      <xs:attribute name="device" type="xs:string" use="required"/>
+      <xs:attribute name="name" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- NYX -->
   <!-- ************************************************************************************************************* -->
   <!-- Number Vectors                                                                                                -->
   <!-- ************************************************************************************************************* -->
@@ -350,5 +368,9 @@
       <xs:attribute name="format" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
+  <!-- ************************************************************************************************************* -->
+  <!-- Streams                                                                                                       -->
+  <!-- ************************************************************************************************************* -->
+  <!-- TODO -->
   <!-- ************************************************************************************************************* -->
 </xs:schema>

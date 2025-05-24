@@ -192,6 +192,42 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* STREAM                                                                                                             */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+STR_t nyx_stream_to_str(nyx_stream_t stream)
+{
+    switch(stream)
+    {
+        case NYX_STREAM_NEVER:
+            return "Never";
+        case NYX_STREAM_ALSO:
+            return "Also";
+        case NYX_STREAM_ONLY:
+            return "Only";
+    }
+
+    NYX_LOG_FATAL("Internal error");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_stream_t nyx_str_to_stream(STR_t stream)
+{
+    /**/ if(strcmp("Never", stream) == 0) {
+        return NYX_STREAM_NEVER;
+    }
+    else if(strcmp("Also", stream) == 0) {
+        return NYX_STREAM_ALSO;
+    }
+    else if(strcmp("Only", stream) == 0) {
+        return NYX_STREAM_ONLY;
+    }
+
+    NYX_LOG_FATAL("Internal error");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 

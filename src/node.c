@@ -232,7 +232,7 @@ static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int shift)
+static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t))
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -253,7 +253,7 @@ static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int shift)
 
     if(device1 != NULL && value1 != NULL)
     {
-        nyx_blob_t blob = nyx_str_to_blob(value1);
+        int value = str_to_xxx(value1);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -286,20 +286,38 @@ static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int shift)
 
             if(tag2 == NULL || strcmp(tag2, tag) != 0)
             {
-                switch(blob)
+                switch(value)
                 {
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_ALSO:
                     case NYX_BLOB_ONLY:
-                        def_vector->base.flags |= (1U << (shift + index));
+                        def_vector->base.flags |= (1U << (2 + 0 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
-                        def_vector->base.flags &= ~(1U << (shift + index));
+                        def_vector->base.flags &= ~(1U << (2 + 0 * 31 + index));
                         break;
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    case NYX_STREAM_ALSO:
+                    case NYX_STREAM_ONLY:
+                        def_vector->base.flags |= (1U << (2 + 1 * 31 + index));
+                        break;
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    case NYX_STREAM_NEVER:
+                        def_vector->base.flags &= ~(1U << (2 + 1 * 31 + index));
+                        break;
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    default:
+                        NYX_LOG_FATAL("Internal error");
 
                     /*------------------------------------------------------------------------------------------------*/
                 }
@@ -318,14 +336,14 @@ static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int shift)
 
 __INLINE__ void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defBLOBVector", 2 + 0 * 31);
+    enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ void enable_stream(nyx_node_t *node, nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defStream", 2 + 1 * 31);
+    enable_xxx(node, dict, "defStream", (int (*)(STR_t)) nyx_str_to_stream);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
