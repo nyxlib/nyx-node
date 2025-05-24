@@ -106,9 +106,9 @@ nyx_dict_t *nyx_number_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *def_vector)
+nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *def)
 {
-    return internal_def_to_set(def_vector, "setNumberVector", "oneNumber");
+    return internal_def_to_set(def, "setNumberVector", "oneNumber");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

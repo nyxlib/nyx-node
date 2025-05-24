@@ -102,9 +102,9 @@ nyx_dict_t *nyx_blob_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *def_vector)
+nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *def)
 {
-    return internal_def_to_set(def_vector, "setBLOBVector", "oneBLOB");
+    return internal_def_to_set(def, "setBLOBVector", "oneBLOB");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
