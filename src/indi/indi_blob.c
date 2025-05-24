@@ -28,7 +28,7 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 
 nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value, STR_t format)
 {
-    if(label == NULL || label[0] == '\0' || format[0] == "\0")
+    if(label == NULL || label[0] == '\0' || format[0] == '\0')
     {
         label = name;
     }
