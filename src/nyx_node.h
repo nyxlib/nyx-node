@@ -280,7 +280,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
  * \param buff Length of the buffer to hash.
  * \param size Input buffer to hash.
  * \param seed Seed.
- * \return The 32-bit hash.
+ * \return The computed 32-bit hash.
  */
 
 uint32_t nyx_hash32(
