@@ -100,13 +100,15 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
             }
             else if(strcmp("defBLOBVector", tag) == 0) {
                 set_vector = nyx_blob_set_vector_new(def_vector);
-
                 if((set_vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
                     return;
                 }
             }
-            else if(strcmp("stream", tag) == 0) {
+            else if(strcmp(/**/"stream"/**/, tag) == 0) {
                 set_vector = nyx_stream_set_new(def_vector);
+                if((set_vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0) {
+                    return;
+                }
             }
             else {
                 return;
@@ -290,13 +292,13 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
                     case NYX_BLOB_ALSO:
                     case NYX_BLOB_ONLY:
-                        def_vector->base.flags |= (1U << (index + 1));
+                        def_vector->base.flags |= (1U << (index + 2));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
-                        def_vector->base.flags &= ~(1U << (index + 1));
+                        def_vector->base.flags &= ~(1U << (index + 2));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/

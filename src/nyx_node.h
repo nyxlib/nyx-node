@@ -303,8 +303,9 @@ uint32_t nyx_hash32(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_DISABLED ((uint32_t) 0x00000001U)                                             //!< Flag indicating that the object is disabled.
-#define NYX_FLAGS_BLOB_MASK ((uint32_t) 0xFFFFFFFEU)                                            //!< Mask indicating Nyx blob emission per client.
+#define NYX_FLAGS_DISABLED ((uint64_t) 0x0000000000000001U)                                     //!< Flag indicating that the object is disabled.
+#define NYX_FLAGS_BLOB_MASK ((uint64_t) 0x00000001FFFFFFFCU)                                    //!< Mask indicating Nyx blob emission per client.
+#define NYX_FLAGS_STREAM_MASK ((uint64_t) 0xFFFFFFFE00000000U)                                  //!< Mask indicating Nyx stream emission per client.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -332,7 +333,7 @@ typedef enum
 typedef struct nyx_object_s
 {
     uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
-    uint32_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX definitions.
+    uint64_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX definitions.
 
     nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
