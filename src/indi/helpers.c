@@ -313,7 +313,7 @@ void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR_t one_tag)
+nyx_dict_t *internal_def_to_set(const nyx_dict_t *def, STR_t set_tag, STR_t one_tag)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -325,13 +325,13 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
 
     nyx_dict_set(result, "<>", nyx_string_from(set_tag));
 
-    internal_copy(result, def_vector, "@client", false);
-    internal_copy(result, def_vector, "@device", false);
-    internal_copy(result, def_vector, "@name", false);
-    internal_copy(result, def_vector, "@state", false);
-    internal_copy(result, def_vector, "@timeout", false);
-    internal_copy(result, def_vector, "@timestamp", false);
-    internal_copy(result, def_vector, "@message", false);
+    internal_copy(result, def, "@client", false);
+    internal_copy(result, def, "@device", false);
+    internal_copy(result, def, "@name", false);
+    internal_copy(result, def, "@state", false);
+    internal_copy(result, def, "@timeout", false);
+    internal_copy(result, def, "@timestamp", false);
+    internal_copy(result, def, "@message", false);
 
     nyx_dict_set(result, "children", children);
 
@@ -341,7 +341,7 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
 
     nyx_object_t *object;
 
-    nyx_object_t *list = nyx_dict_get(def_vector, "children");
+    nyx_object_t *list = nyx_dict_get(def, "children");
 
     if(list != NULL)
     {

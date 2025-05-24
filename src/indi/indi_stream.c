@@ -59,9 +59,9 @@ nyx_dict_t *nyx_stream_def_new(
 /* SET STREAM                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_set_new(const nyx_dict_t *def_vector)
+nyx_dict_t *nyx_stream_set_new(const nyx_dict_t *stream_def)
 {
-    return internal_def_to_set(def_vector, "setStream", "N/A");
+    return internal_def_to_set(stream_def, "setStream", "N/A");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
