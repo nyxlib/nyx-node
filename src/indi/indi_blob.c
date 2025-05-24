@@ -26,9 +26,9 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
+nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value, STR_t format)
 {
-    if(label == NULL || label[0] == '\0')
+    if(label == NULL || label[0] == '\0' || format[0] == "\0")
     {
         label = name;
     }
@@ -41,6 +41,7 @@ nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
 
     nyx_dict_set(result, "@name", nyx_string_from(name));
     nyx_dict_set(result, "@label", nyx_string_from(label));
+    nyx_dict_set(result, "@format", nyx_string_from(format));
 
     nyx_dict_set(result, "$", nyx_string_from(value));
 
@@ -103,7 +104,7 @@ nyx_dict_t *nyx_blob_def_vector_new(
 
 nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *def_vector)
 {
-    return internal_xxxx_set_vector_new(def_vector, "setBLOBVector", "oneBLOB");
+    return internal_def_to_set(def_vector, "setBLOBVector", "oneBLOB");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

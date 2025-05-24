@@ -218,8 +218,7 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_BOOLEAN:
-                return nyx_dict_set_alt(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)),
-                                        notify);
+                return nyx_dict_set_alt(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -314,7 +313,7 @@ void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set_tag, STR_t one_tag)
+nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR_t one_tag)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -344,37 +343,40 @@ nyx_dict_t *internal_xxxx_set_vector_new(const nyx_dict_t *def_vector, STR_t set
 
     nyx_object_t *list = nyx_dict_get(def_vector, "children");
 
-    for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &object);)
+    if(list != NULL)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        nyx_dict_t *dict = nyx_dict_new();
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        nyx_dict_set(dict, "<>", nyx_string_from(one_tag));
-
-        internal_copy(dict, (nyx_dict_t *) object, "$", false);
-        internal_copy(dict, (nyx_dict_t *) object, "@name", false);
-
-        if(strcmp(one_tag, "oneBLOB") == 0)
+        for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &object);)
         {
-            internal_copy(dict, (nyx_dict_t *) object, "@format", false);
+            /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t size = nyx_string_length(
-                (nyx_string_t *) nyx_dict_get(
-                    (nyx_dict_t *) object, "$"
-                )
-            );
+            nyx_dict_t *dict = nyx_dict_new();
 
-            nyx_dict_set_alt(dict, "@size", nyx_number_from((double) size), false);
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyx_dict_set(dict, "<>", nyx_string_from(one_tag));
+
+            internal_copy(dict, (nyx_dict_t *) object, "$", false);
+            internal_copy(dict, (nyx_dict_t *) object, "@name", false);
+
+            if(strcmp(one_tag, "oneBLOB") == 0)
+            {
+                internal_copy(dict, (nyx_dict_t *) object, "@format", false);
+
+                size_t size = nyx_string_length(
+                    (nyx_string_t *) nyx_dict_get(
+                        (nyx_dict_t *) object, "$"
+                    )
+                );
+
+                nyx_dict_set_alt(dict, "@size", nyx_number_from((double) size), false);
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyx_list_push(children, dict);
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        nyx_list_push(children, dict);
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -2064,7 +2064,8 @@ nyx_dict_t *nyx_switch_set_vector_new(
 nyx_dict_t *nyx_blob_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
-    STR_t value
+    STR_t value,
+    STR_t format
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2106,10 +2107,16 @@ nyx_dict_t *nyx_blob_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_new(
+nyx_dict_t *nyx_stream_def_new(
     STR_t device,
     STR_t name,
     nyx_state_t state
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_dict_t *nyx_stream_set_new(
+    const nyx_dict_t *def_vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2367,7 +2374,7 @@ void nyx_mqtt_pub(
  * @param field_names Array of field names.
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
- * @warning Each stream name must be declared via @ref nyx_stream_new and provided to @ref nyx_node_initialize.
+ * @warning Each stream name must be declared via @ref nyx_stream_def_new and provided to @ref nyx_node_initialize.
  * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
  */
 

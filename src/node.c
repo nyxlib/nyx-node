@@ -105,6 +105,9 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
                     return;
                 }
             }
+            else if(strcmp("stream", tag) == 0) {
+                set_vector = nyx_stream_set_new(def_vector);
+            }
             else {
                 return;
             }
