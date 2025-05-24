@@ -318,14 +318,14 @@ static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int shift)
 
 __INLINE__ void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defBLOBVector", 2);
+    enable_xxx(node, dict, "defBLOBVector", 2 + 0 * 31);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ void enable_stream(nyx_node_t *node, nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defStream", 33);
+    enable_xxx(node, dict, "defStream", 2 + 1 * 31);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
