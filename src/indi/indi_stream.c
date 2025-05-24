@@ -29,7 +29,8 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 nyx_dict_t *nyx_stream_def_new(
     STR_t device,
     STR_t name,
-    nyx_state_t state
+    nyx_state_t state,
+    nyx_opts_t *opts
 ) {
     nyx_dict_t *result = nyx_dict_new();
 
@@ -42,6 +43,10 @@ nyx_dict_t *nyx_stream_def_new(
     nyx_dict_set(result, "@name", nyx_string_from(name));
 
     nyx_dict_set(result, "@state", nyx_string_from(nyx_state_to_str(state)));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    internal_set_opts(result, opts);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
