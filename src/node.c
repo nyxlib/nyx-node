@@ -232,7 +232,7 @@ static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
+static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int shift)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -284,7 +284,7 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(tag2 == NULL || strcmp(tag2, "defBLOBVector") != 0)
+            if(tag2 == NULL || strcmp(tag2, tag) != 0)
             {
                 switch(blob)
                 {
@@ -292,13 +292,13 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
                     case NYX_BLOB_ALSO:
                     case NYX_BLOB_ONLY:
-                        def_vector->base.flags |= (1U << (index + 2));
+                        def_vector->base.flags |= (1U << (shift + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
-                        def_vector->base.flags &= ~(1U << (index + 2));
+                        def_vector->base.flags &= ~(1U << (shift + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -312,6 +312,20 @@ static void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
+{
+    enable_xxx(node, dict, "defBLOBVector", 2);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ void enable_stream(nyx_node_t *node, nyx_dict_t *dict)
+{
+    enable_xxx(node, dict, "defStream", 33);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -518,6 +532,9 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
             }
             else if(strcmp(tag, "enableBLOB") == 0) {
                 enable_blob(node, (nyx_dict_t *) object);
+            }
+            else if(strcmp(tag, "enableStream") == 0) {
+                enable_stream(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "newNumberVector") == 0
                     ||
