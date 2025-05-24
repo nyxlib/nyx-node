@@ -775,12 +775,17 @@ nyx_node_t *nyx_node_initialize(
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        int idx;
-        nyx_object_t *object;
+        nyx_object_t *children = nyx_dict_get(vector, "children");
 
-        for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) nyx_dict_get(vector, "children")); nyx_list_iterate(&iter, &idx, &object);)
+        if(children != NULL && children->type == NYX_TYPE_LIST)
         {
-            object->/**/node/**/ = node;
+            int idx;
+            nyx_object_t *object;
+
+            for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &object);)
+            {
+                object->/**/node/**/ = node;
+            }
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
