@@ -207,7 +207,7 @@ static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t hash = nyx_hash32(client, strlen(client), NYX_OBJECT_MAGIC);
+    uint32_t hash = nyx_hash32(strlen(client), client, NYX_OBJECT_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -617,8 +617,8 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
             node->user_mqtt_handler(
                 node,
                 NYX_EVENT_OPEN,
-                NULL, 0x00,
-                NULL, 0x00
+                0x00, NULL,
+                0x00, NULL
             );
         }
 
@@ -715,10 +715,10 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
                         node->user_mqtt_handler(
                             node,
                             NYX_EVENT_MSG,
-                            event_topic.buf,
                             event_topic.len,
-                            event_message.buf,
-                            event_message.len
+                            event_topic.buf,
+                            event_message.len,
+                            event_message.buf
                         );
 
                         /*--------------------------------------------------------------------------------------------*/

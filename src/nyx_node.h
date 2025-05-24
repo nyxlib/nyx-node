@@ -284,8 +284,8 @@ __NULLABLE__ buff_t nyx_base64_decode(
  */
 
 uint32_t nyx_hash32(
-    __NULLABLE__ BUFF_t buff,
     __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff,
     uint32_t seed
 );
 
@@ -2184,19 +2184,19 @@ typedef enum
  *
  * @param node The Nyx node.
  * @param event The event type.
- * @param topic_buff The MQTT topic buffer.
  * @param topic_size The MQTT topic length.
- * @param message_buff The MQTT message buffer.
+ * @param topic_buff The MQTT topic buffer.
  * @param message_size The MQTT message length.
+ * @param message_buff The MQTT message buffer.
  */
 
 typedef void (* nyx_mqtt_handler_t)(
     nyx_node_t *node,
     nyx_event_t event,
-    BUFF_t topic_buff,
     size_t topic_size,
-    BUFF_t message_buff,
-    size_t message_size
+    BUFF_t topic_buff,
+    size_t message_size,
+    BUFF_t message_buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2350,15 +2350,15 @@ void nyx_mqtt_sub(
  *
  * @param node The Nyx node.
  * @param topic The MQTT topic.
- * @param message_buff The MQTT message buffer.
  * @param message_size The MQTT message length.
+ * @param message_buff The MQTT message buffer.
  */
 
 void nyx_mqtt_pub(
     nyx_node_t *node,
     STR_t topic,
-    __NULLABLE__ BUFF_t message_buff,
-    __ZEROABLE__ size_t message_size
+    __ZEROABLE__ size_t message_size,
+    __NULLABLE__ BUFF_t message_buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
