@@ -220,3 +220,52 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CHECK IF STREAM IS ENABLED                                                                                     */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+    {
+        nyx_dict_t *vector = *def_vector_ptr;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        STR_t vector_device = nyx_dict_get_string(vector, "@device");
+        STR_t vector_stream = nyx_dict_get_string(vector,  "@name" );
+
+        if(strcmp(vector_device, device) == 0 && strcmp(vector_stream, stream) == 0)
+        {
+            if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
+            {
+                return false;
+            }
+
+            break;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* BROADCAST STREAM                                                                                               */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_redis_pub(
+        node,
+        device,
+        stream,
+        max_len,
+        n_fields,
+        field_names,
+        field_sizes,
+        field_buffs
+    );
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return true;
+}
+/*--------------------------------------------------------------------------------------------------------------------*/
