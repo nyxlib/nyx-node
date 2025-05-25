@@ -1942,6 +1942,10 @@ nyx_dict_t *nyx_number_def_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_dict_t *nyx_number_set_vector_new(
     const nyx_dict_t *def_vector
 );
@@ -1986,6 +1990,10 @@ nyx_dict_t *nyx_text_def_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
 
 nyx_dict_t *nyx_text_set_vector_new(
     const nyx_dict_t *def_vector
@@ -2077,6 +2085,10 @@ nyx_dict_t *nyx_switch_def_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_dict_t *nyx_switch_set_vector_new(
     const nyx_dict_t *def_vector
 );
@@ -2123,6 +2135,10 @@ nyx_dict_t *nyx_blob_def_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_dict_t *nyx_blob_set_vector_new(
     const nyx_dict_t *def_vector
 );
@@ -2143,6 +2159,10 @@ nyx_dict_t *nyx_stream_def_vector_new(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
 
 nyx_dict_t *nyx_stream_set_vector_new(
     const nyx_dict_t *def_vector
