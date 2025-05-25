@@ -47,8 +47,8 @@ typedef struct
 {
     bool tag;
 
-    STR_t buff;
     size_t size;
+    STR_t buff;
 
     xml_token_t curr_token;
 
@@ -862,11 +862,11 @@ static nyx_xmldoc_t *xml_parse_content(xml_parser_t *parser, nyx_xmldoc_t *paren
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size)
+nyx_xmldoc_t *nyx_xmldoc_parse_buff(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    if(buff == NULL
+    if(size == 0x00
        ||
-       size == 0x00
+       buff == NULL
     ) {
         return NULL;
     }
@@ -875,8 +875,8 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_
 
     xml_parser_t *parser = &((xml_parser_t) {
         .tag = false,
-        .buff = buff,
         .size = size,
+        .buff = buff,
         .curr_token = {
             .value = NULL,
             .token_type = XML_TOKEN_ERROR,
@@ -909,7 +909,10 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_
 
 nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t text)
 {
-    return nyx_xmldoc_parse_buff(text, strlen(text));
+    return nyx_xmldoc_parse_buff(
+        strlen(text),
+        /*--*/(text)
+    );
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

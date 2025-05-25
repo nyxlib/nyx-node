@@ -277,8 +277,8 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /**
  * \brief Hashes a buffer using the MurmurHash2 algorithm.
  *
- * \param buff Length of the buffer to hash.
  * \param size Input buffer to hash.
+ * \param buff Length of the buffer to hash.
  * \param seed Seed.
  * \return The computed 32-bit hash.
  */
@@ -363,14 +363,14 @@ typedef struct nyx_object_s
  * @memberof nyx_object_t
  * \brief Parses a JSON object from a string buffer.
  *
- * \param buff The string pointer.
  * \param size The string size.
+ * \param buff The string pointer.
  * \return The new JSON object.
  */
 
 nyx_object_t *nyx_object_parse_buff(
-    __NULLABLE__ BUFF_t buff,
-    __ZEROABLE__ size_t size
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
 );
 
 /**
@@ -1502,14 +1502,14 @@ typedef struct nyx_xmldoc_s
  * @memberof nyx_xmldoc_t
  * \brief Parses an XML document from a string buffer.
  *
- * \param buff The string pointer.
  * \param size The string size.
+ * \param buff The string pointer.
  * \return The new XML document.
  */
 
 nyx_xmldoc_t *nyx_xmldoc_parse_buff(
-    __NULLABLE__ BUFF_t buff,
-    __ZEROABLE__ size_t size
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -47,8 +47,8 @@ typedef struct
 
 typedef struct
 {
-    STR_t buff;
     size_t size;
+    STR_t buff;
 
     json_token_t curr_token;
 
@@ -683,11 +683,11 @@ _err:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_object_t *nyx_object_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_t size)
+nyx_object_t *nyx_object_parse_buff(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    if(buff == NULL
+    if(size == 0x00
        ||
-       size == 0x00
+       buff == NULL
     ) {
         return NULL;
     }
@@ -695,8 +695,8 @@ nyx_object_t *nyx_object_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_
     /*----------------------------------------------------------------------------------------------------------------*/
 
     json_parser_t *parser = &((json_parser_t) {
-        .buff = buff,
         .size = size,
+        .buff = buff,
         .curr_token = {
             .value = NULL,
             .token_type = JSON_TOKEN_ERROR,
@@ -751,7 +751,10 @@ nyx_object_t *nyx_object_parse_buff(__NULLABLE__ BUFF_t buff, __ZEROABLE__ size_
 
 nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
 {
-    return nyx_object_parse_buff(text, strlen(text));
+    return nyx_object_parse_buff(
+        strlen(text),
+        /*--*/(text)
+    );
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

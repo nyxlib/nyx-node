@@ -591,7 +591,7 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, siz
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(xml_stream.s_ptr, xml_stream.len);
+                nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(xml_stream.len, xml_stream.s_ptr);
 
                 if(xmldoc != NULL)
                 {
@@ -711,7 +711,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
                         /* JSON NEW XXX VECTOR                                                                        */
                         /*--------------------------------------------------------------------------------------------*/
 
-                        nyx_object_t *object = nyx_object_parse_buff(event_message.buf, event_message.len);
+                        nyx_object_t *object = nyx_object_parse_buff(event_message.len, event_message.buf);
 
                         if(object != NULL)
                         {
@@ -728,7 +728,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
                         /* XML NEW XXX VECTOR                                                                         */
                         /*--------------------------------------------------------------------------------------------*/
 
-                        nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.buf, event_message.len);
+                        nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.len, event_message.buf);
 
                         if(xmldoc != NULL)
                         {
