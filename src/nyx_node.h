@@ -2403,6 +2403,7 @@ void nyx_mqtt_pub(
  * @param field_names Array of field names.
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
+ * @warning This function **doesn't check** if the stream has been declared via @ref nyx_stream_def_vector_new and registered via @ref nyx_node_initialize.
  * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
  */
 
@@ -2431,8 +2432,7 @@ void nyx_redis_pub(
  * @param field_names Array of field names.
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
- * @warning Each stream name must be declared via @ref nyx_stream_def_vector_new and provided to @ref nyx_node_initialize.
- * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
+ * @warning This function **checks** if the stream has been declared via @ref nyx_stream_def_vector_new and registered via @ref nyx_node_initialize. * @note If a field name starts with \c #, its buffer is automatically base64-encoded.
  */
 
 bool nyx_stream_pub(
