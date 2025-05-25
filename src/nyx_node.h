@@ -1853,6 +1853,18 @@ double nyx_format_string_to_double(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new INDI / Nyx number.
+ * @param name
+ * @param label
+ * @param format
+ * @param min
+ * @param max
+ * @param step
+ * @param value
+ * @return
+ */
+
 nyx_dict_t *nyx_number_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
@@ -1930,6 +1942,17 @@ __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx number vector.
+ * @param device
+ * @param name
+ * @param state
+ * @param perm
+ * @param defs
+ * @param opts
+ * @return
+ */
 
 nyx_dict_t *nyx_number_def_vector_new(
     STR_t device,
