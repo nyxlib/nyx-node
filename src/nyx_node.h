@@ -2256,7 +2256,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new stream vector.
+ * \brief Allocates a new Nyx stream vector.
  * @param device
  * @param name
  * @param state
