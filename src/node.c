@@ -346,7 +346,7 @@ __INLINE__ void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
 
 __INLINE__ void enable_stream(nyx_node_t *node, nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defStream", (int (*)(STR_t)) nyx_str_to_stream);
+    enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
