@@ -103,9 +103,9 @@ nyx_dict_t *nyx_switch_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_switch_set_vector_new(const nyx_dict_t *def)
+nyx_dict_t *nyx_switch_set_vector_new(const nyx_dict_t *def_vector)
 {
-    return internal_def_to_set(def, "setSwitchVector", "oneSwitch");
+    return internal_def_to_set(def_vector, "setSwitchVector", "oneSwitch");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

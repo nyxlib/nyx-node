@@ -101,9 +101,9 @@ nyx_dict_t *nyx_text_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_text_set_vector_new(const nyx_dict_t *def)
+nyx_dict_t *nyx_text_set_vector_new(const nyx_dict_t *def_vector)
 {
-    return internal_def_to_set(def, "setTextVector", "oneText");
+    return internal_def_to_set(def_vector, "setTextVector", "oneText");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -26,7 +26,7 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 /* DEF STREAM                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_def_new(
+nyx_dict_t *nyx_stream_def_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -36,7 +36,7 @@ nyx_dict_t *nyx_stream_def_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from("defStream"));
+    nyx_dict_set(result, "<>", nyx_string_from("defStreamVector"));
 
     nyx_dict_set(result, "@client", nyx_string_from("unknown"));
     nyx_dict_set(result, "@device", nyx_string_from(device));
@@ -59,9 +59,9 @@ nyx_dict_t *nyx_stream_def_new(
 /* SET STREAM                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_set_new(const nyx_dict_t *def)
+nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *def)
 {
-    return internal_def_to_set(def, "setStream", "N/A");
+    return internal_def_to_set(def, "setStreamVector", "N/A");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
