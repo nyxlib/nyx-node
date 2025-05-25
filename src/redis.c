@@ -221,32 +221,35 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, bool check, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+    if(check)
     {
-        nyx_dict_t *vector = *def_vector_ptr;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        STR_t vector_device = nyx_dict_get_string(vector, "@device");
-        STR_t vector_stream = nyx_dict_get_string(vector,  "@name" );
-
-        if(strcmp(vector_device, device) == 0 && strcmp(vector_stream, stream) == 0)
+        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
         {
-            if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
+            nyx_dict_t *vector = *def_vector_ptr;
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            STR_t vector_device = nyx_dict_get_string(vector, "@device");
+            STR_t vector_stream = nyx_dict_get_string(vector,  "@name" );
+
+            if(strcmp(vector_device, device) == 0 && strcmp(vector_stream, stream) == 0)
             {
-                return false;
+                if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
+                {
+                    return false;
+                }
+
+                break;
             }
 
-            break;
+            /*--------------------------------------------------------------------------------------------------------*/
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
