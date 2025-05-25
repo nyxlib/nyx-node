@@ -1958,6 +1958,14 @@ nyx_dict_t *nyx_number_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new INDI / Nyx text.
+ * @param name
+ * @param label
+ * @param value
+ * @return
+ */
+
 nyx_dict_t *nyx_text_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
@@ -1979,6 +1987,17 @@ __INLINE__ STR_t nyx_text_def_get(const nyx_dict_t *def)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx text vector.
+ * @param device
+ * @param name
+ * @param state
+ * @param perm
+ * @param defs
+ * @param opts
+ * @return
+ */
 
 nyx_dict_t *nyx_text_def_vector_new(
     STR_t device,
@@ -2007,6 +2026,14 @@ nyx_dict_t *nyx_text_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new INDI / Nyx light.
+ * @param name
+ * @param label
+ * @param value
+ * @return
+ */
+
 nyx_dict_t *nyx_light_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
@@ -2028,6 +2055,16 @@ __INLINE__ nyx_state_t nyx_light_def_get(const nyx_dict_t *def)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx light vector.
+ * @param device
+ * @param name
+ * @param state
+ * @param defs
+ * @param opts
+ * @return
+ */
 
 nyx_dict_t *nyx_light_def_vector_new(
     STR_t device,
@@ -2055,6 +2092,14 @@ nyx_dict_t *nyx_light_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new INDI / Nyx switch.
+ * @param name
+ * @param label
+ * @param value
+ * @return
+ */
+
 nyx_dict_t *nyx_switch_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
@@ -2076,6 +2121,18 @@ __INLINE__ nyx_onoff_t nyx_switch_def_get(const nyx_dict_t *def)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx switch vector.
+ * @param device
+ * @param name
+ * @param state
+ * @param perm
+ * @param rule
+ * @param defs
+ * @param opts
+ * @return
+ */
 
 nyx_dict_t *nyx_switch_def_vector_new(
     STR_t device,
@@ -2105,6 +2162,15 @@ nyx_dict_t *nyx_switch_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new INDI / Nyx BLOB.
+ * @param name
+ * @param label
+ * @param value
+ * @param format
+ * @return
+ */
+
 nyx_dict_t *nyx_blob_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
@@ -2127,6 +2193,17 @@ __INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *bu
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx BLOB vector.
+ * @param device
+ * @param name
+ * @param state
+ * @param perm
+ * @param defs
+ * @param opts
+ * @return
+ */
 
 nyx_dict_t *nyx_blob_def_vector_new(
     STR_t device,
@@ -2155,6 +2232,15 @@ nyx_dict_t *nyx_blob_set_vector_new(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Allocates a new stream vector.
+ * @param device
+ * @param name
+ * @param state
+ * @param opts
+ * @return
+ */
+
 nyx_dict_t *nyx_stream_def_vector_new(
     STR_t device,
     STR_t name,
@@ -2179,6 +2265,13 @@ nyx_dict_t *nyx_stream_set_vector_new(
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx message.
+ * @param device
+ * @param message
+ * @return
+ */
 
 nyx_dict_t *nyx_message_new(
     STR_t device,
