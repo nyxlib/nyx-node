@@ -2039,6 +2039,10 @@ nyx_dict_t *nyx_light_def_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 nyx_dict_t *nyx_light_set_vector_new(
     const nyx_dict_t *def_vector
 );
