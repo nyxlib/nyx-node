@@ -152,6 +152,8 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
     /**/ if(ev == MG_EV_OPEN)
     {
         NYX_LOG_INFO("%lu OPEN", connection->id);
+
+        node->stack->indi_connection = connection;
     }
     else if(ev == MG_EV_ACCEPT)
     {
@@ -188,6 +190,8 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
     /**/ if(ev == MG_EV_OPEN)
     {
         NYX_LOG_INFO("%lu OPEN", connection->id);
+
+        node->stack->mqtt_connection = connection;
     }
     else if(ev == MG_EV_CONNECT)
     {
