@@ -699,9 +699,9 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
 
                         nyx_memory_free(node->master_client_message.buf);
 
-                        node->master_client_message.buf = nyx_memory_alloc(event_message.len + 1);
+                        /*--------------------------------------------------------------------------------------------*/
 
-                        strncpy(node->master_client_message.buf, event_message.buf, event_message.len)[node->master_client_message.len = event_message.len] = '\0';
+                        node->master_client_message.buf = nyx_string_ndup(event_message.buf, node->master_client_message.len = event_message.len);
 
                         /*--------------------------------------------------------------------------------------------*/
                     }

@@ -219,9 +219,33 @@ __NULLABLE__ str_t nyx_string_dup(__NULLABLE__ STR_t s)
 {
     if(s != NULL)
     {
-        str_t str = nyx_memory_alloc(strlen(s) + 1);
+        size_t len = strlen(s);
 
-        strcpy(str, s);
+        str_t str = nyx_memory_alloc(len + 1);
+
+        memcpy(str, s, len);
+
+        str[len] = '\0';
+
+        return str;
+    }
+
+    return NULL;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__NULLABLE__ str_t nyx_string_ndup(__NULLABLE__ STR_t s, __ZEROABLE__ size_t n)
+{
+    if(s != NULL)
+    {
+        size_t len = strnlen(s, n);
+
+        str_t str = nyx_memory_alloc(len + 1);
+
+        memcpy(str, s, len);
+
+        str[len] = '\0';
 
         return str;
     }

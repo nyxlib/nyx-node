@@ -336,9 +336,7 @@ static void tokenizer_next(json_parser_t *parser)
 
         size_t length = TRIM(s, e);
 
-        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-        strncpy(p, s, length)[length] = '\0';
+        parser->curr_token.value = nyx_string_ndup(s, length);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

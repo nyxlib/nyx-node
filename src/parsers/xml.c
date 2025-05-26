@@ -397,11 +397,7 @@ _text:
         STR_t s = start + 4;
         STR_t e =  end  - 3;
 
-        size_t length = e - s;
-
-        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-        strncpy(p, s, length)[length] = '\0';
+        parser->curr_token.value = nyx_string_ndup(s, (size_t) e - (size_t) s);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -411,11 +407,7 @@ _text:
         STR_t s = start + 9;
         STR_t e =  end  - 3;
 
-        size_t length = e - s;
-
-        str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-        strncpy(p, s, length)[length] = '\0';
+        parser->curr_token.value = nyx_string_ndup(s, (size_t) e - (size_t) s);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -425,13 +417,11 @@ _text:
         STR_t s = start;
         STR_t e =  end ;
 
-        size_t length = e - s;
+        size_t length = (size_t) e - (size_t) s;
 
         if(length > 0)
         {
-            str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
-
-            strncpy(p, s, length)[length] = '\0';
+            parser->curr_token.value = nyx_string_ndup(s, length);
         }
         else
         {
