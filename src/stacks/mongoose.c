@@ -155,10 +155,6 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
 
         node->stack->indi_connection = connection;
     }
-    else if(ev == MG_EV_ACCEPT)
-    {
-        NYX_LOG_INFO("%lu ACCEPT", connection->id);
-    }
     else if(ev == MG_EV_CLOSE)
     {
         NYX_LOG_INFO("%lu CLOSE", connection->id);
@@ -192,10 +188,6 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
         NYX_LOG_INFO("%lu OPEN", connection->id);
 
         node->stack->mqtt_connection = connection;
-    }
-    else if(ev == MG_EV_CONNECT)
-    {
-        NYX_LOG_INFO("%lu CONNECT", connection->id);
     }
     else if(ev == MG_EV_CLOSE)
     {
@@ -240,10 +232,8 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
     /**/ if(ev == MG_EV_OPEN)
     {
         NYX_LOG_INFO("%lu OPEN", connection->id);
-    }
-    else if(ev == MG_EV_CONNECT)
-    {
-        NYX_LOG_INFO("%lu CONNECT", connection->id);
+
+        node->stack->redis_connection = connection;
     }
     else if(ev == MG_EV_CLOSE)
     {
