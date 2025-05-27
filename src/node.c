@@ -107,7 +107,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
                 if((set_vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
                     return;
                 }
-            }else {
+            } else {
                 return;
             }
 
