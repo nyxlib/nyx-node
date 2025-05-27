@@ -254,8 +254,8 @@ void nyx_xmldoc_add_attribute(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 int internal_get_timestamp(
-    str_t timestamp_buff,
-    size_t timestamp_size
+    str_t buff,
+    size_t size
 );
 
 void internal_set_opts(

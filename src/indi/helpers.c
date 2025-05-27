@@ -278,15 +278,15 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
+int internal_get_timestamp(str_t buff, size_t size)
 {
     time_t now = time(NULL);
 
     struct tm *tm_now = localtime(&now);
 
     return snprintf(
-        timestamp_buff,
-        timestamp_size,
+        buff,
+        size,
         "%04d-%02d-%02dT%02d:%02d:%02d",
         tm_now->tm_year + 1900,
         tm_now->tm_mon + 1,
