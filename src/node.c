@@ -576,7 +576,7 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, size_t size, BUFF_t buff)
+static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, nyx_str_t payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* NYX_EVENT_MSG                                                                                                  */
@@ -586,9 +586,9 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, siz
     {
         nyx_xml_stream_t xml_stream = NYX_XML_STREAM();
 
-        if(nyx_xml_stream_detect_opening_tag(&xml_stream, size, buff))
+        if(nyx_xml_stream_detect_opening_tag(&xml_stream, payload.len, payload.buf))
         {
-            if(nyx_xml_stream_detect_closing_tag(&xml_stream, size, buff))
+            if(nyx_xml_stream_detect_closing_tag(&xml_stream, payload.len, payload.buf))
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -624,7 +624,7 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_str_t event_topic, nyx_str_t event_message)
+static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_str_t event_topic, nyx_str_t event_payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* NYX_EVENT_OPEN                                                                                                 */
@@ -690,7 +690,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
             }
             else
             {
-                if(event_message.len > 0 && event_message.buf != NULL)
+                if(event_payload.len > 0 && event_payload.buf != NULL)
                 {
                     /**/ if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
                     {
@@ -702,7 +702,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
 
                         /*--------------------------------------------------------------------------------------------*/
 
-                        node->master_client_message.buf = nyx_string_ndup(event_message.buf, node->master_client_message.len = event_message.len);
+                        node->master_client_message.buf = nyx_string_ndup(event_payload.buf, node->master_client_message.len = event_payload.len);
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
@@ -712,7 +712,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
                         /* JSON NEW XXX VECTOR                                                                        */
                         /*--------------------------------------------------------------------------------------------*/
 
-                        nyx_object_t *object = nyx_object_parse_buff(event_message.len, event_message.buf);
+                        nyx_object_t *object = nyx_object_parse_buff(event_payload.len, event_payload.buf);
 
                         if(object != NULL)
                         {
@@ -729,7 +729,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
                         /* XML NEW XXX VECTOR                                                                         */
                         /*--------------------------------------------------------------------------------------------*/
 
-                        nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_message.len, event_message.buf);
+                        nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_payload.len, event_payload.buf);
 
                         if(xmldoc != NULL)
                         {
@@ -754,12 +754,12 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, nyx_
                         /*--------------------------------------------------------------------------------------------*/
 
                         node->user_mqtt_handler(
-                            node,
-                            NYX_EVENT_MSG,
-                            event_topic.len,
-                            event_topic.buf,
-                            event_message.len,
-                            event_message.buf
+                                node,
+                                NYX_EVENT_MSG,
+                                event_topic.len,
+                                event_topic.buf,
+                                event_payload.len,
+                                event_payload.buf
                         );
 
                         /*--------------------------------------------------------------------------------------------*/

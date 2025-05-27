@@ -497,7 +497,7 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 
     if(stack->recv_size > 0)
     {
-        size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, stack->recv_size, stack->recv_buff);
+        size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, NYX_STR_S(stack->recv_buff, stack->recv_size));
 
         if(consumed > stack->recv_size)
         {
