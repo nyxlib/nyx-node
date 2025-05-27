@@ -299,7 +299,7 @@ int internal_get_timestamp(str_t timestamp_buff, size_t timestamp_size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_set_opts(nyx_dict_t *dict, nyx_opts_t *opts)
+void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

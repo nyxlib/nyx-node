@@ -223,7 +223,7 @@ __NULLABLE__ str_t nyx_xmldoc_get_name(
 );
 
 void nyx_xmldoc_set_name(
-    nyx_xmldoc_t *xmldoc,
+    /*-*/ nyx_xmldoc_t *xmldoc,
     __NULLABLE__ STR_t name
 );
 
@@ -232,7 +232,7 @@ __NULLABLE__ str_t nyx_xmldoc_get_content(
 );
 
 void nyx_xmldoc_set_content(
-    nyx_xmldoc_t *xmldoc,
+    /*-*/ nyx_xmldoc_t *xmldoc,
     __NULLABLE__ STR_t data
 );
 
@@ -259,8 +259,8 @@ int internal_get_timestamp(
 );
 
 void internal_set_opts(
-    nyx_dict_t *dict,
-    nyx_opts_t *opts
+    /*-*/ nyx_dict_t *dict,
+    const nyx_opts_t *opts
 );
 
 bool internal_copy(
@@ -373,24 +373,24 @@ struct nyx_node_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_indi_pub(
-    nyx_node_t *node,
-    nyx_str_t message
+    /*-*/ nyx_node_t *node,
+    const nyx_str_t message
 );
 
 void internal_mqtt_sub(
-    nyx_node_t *node,
-    nyx_str_t topic
+    /*-*/ nyx_node_t *node,
+    const nyx_str_t topic
 );
 
 void internal_mqtt_pub(
-    nyx_node_t *node,
-    nyx_str_t topic,
-    nyx_str_t message
+    /*-*/ nyx_node_t *node,
+    const nyx_str_t topic,
+    const nyx_str_t message
 );
 
 void internal_redis_pub(
-    nyx_node_t *node,
-    nyx_str_t message
+    /*-*/ nyx_node_t *node,
+    const nyx_str_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
