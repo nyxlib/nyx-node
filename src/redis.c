@@ -271,4 +271,5 @@ bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, bool check, si
 
     return true;
 }
+
 /*--------------------------------------------------------------------------------------------------------------------*/
