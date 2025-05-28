@@ -58,7 +58,7 @@ nyx_dict_t *nyx_light_def_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_dict_t *defs[],
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 

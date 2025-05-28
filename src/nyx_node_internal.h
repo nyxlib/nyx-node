@@ -259,8 +259,8 @@ int internal_get_timestamp(
 );
 
 void internal_set_opts(
-    /*-*/ nyx_dict_t *dict,
-    const nyx_opts_t *opts
+    /*--------*/ /*-*/ nyx_dict_t *dict,
+    __NULLABLE__ const nyx_opts_t *opts
 );
 
 bool internal_copy(

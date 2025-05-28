@@ -30,7 +30,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 ) {
     nyx_dict_t *result = nyx_dict_new();
 

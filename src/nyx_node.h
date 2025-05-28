@@ -1960,7 +1960,7 @@ nyx_dict_t *nyx_number_def_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *defs[],
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2028,7 +2028,7 @@ nyx_dict_t *nyx_text_def_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *defs[],
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2094,7 +2094,7 @@ nyx_dict_t *nyx_light_def_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_dict_t *defs[],
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2164,7 +2164,7 @@ nyx_dict_t *nyx_switch_def_vector_new(
     nyx_perm_t perm,
     nyx_rule_t rule,
     nyx_dict_t *defs[],
-    nyx_opts_t *opts
+    __NULLABLE__ const  nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2234,7 +2234,7 @@ nyx_dict_t *nyx_blob_def_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *defs[],
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2268,7 +2268,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
-    nyx_opts_t *opts
+    __NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
