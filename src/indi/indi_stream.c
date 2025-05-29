@@ -13,7 +13,7 @@
 
 static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 {
-    nyx_dict_t *dict = nyx_number_set_vector_new((nyx_dict_t *) object);
+    nyx_dict_t *dict = nyx_stream_set_vector_new((nyx_dict_t *) object);
 
     str_t json = nyx_dict_to_string(dict);
     printf("** \033[91mNOT REGISTERED\033[0m **\n%s\n", json);
@@ -23,20 +23,54 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF STREAM                                                                                                         */
+/* DEF                                                                                                                */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_dict_t *nyx_stream_def_new(STR_t name, __NULLABLE__ STR_t label)
+{
+    if(label == NULL)
+    {
+        label = name;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_dict_t *result = nyx_dict_new();
+
+    nyx_dict_set(result, "<>", nyx_string_from("defStream"));
+
+    nyx_dict_set(result, "@name", nyx_string_from(name));
+    nyx_dict_set(result, "@label", nyx_string_from(label));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* DEF VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_stream_def_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
+    nyx_dict_t *defs[],
     __NULLABLE__ const nyx_opts_t *opts
 ) {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     nyx_dict_t *result = nyx_dict_new();
+
+    nyx_list_t *children = nyx_list_new();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_set(result, "<>", nyx_string_from("defStreamVector"));
+
+    nyx_dict_set(result, "children", children);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_set(result, "@client", nyx_string_from("unknown"));
     nyx_dict_set(result, "@device", nyx_string_from(device));
@@ -50,18 +84,22 @@ nyx_dict_t *nyx_stream_def_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    for(; *defs != NULL; defs++) nyx_list_push(children, *defs);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     result->base.out_callback = debug_callback;
 
     return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SET STREAM                                                                                                         */
+/* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *def)
+nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *def_vector)
 {
-    return internal_def_to_set(def, "setStreamVector", "N/A");
+    return internal_def_to_set(def_vector, "setStreamVector", "oneStream");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

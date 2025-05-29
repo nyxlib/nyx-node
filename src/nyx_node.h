@@ -2256,10 +2256,25 @@ nyx_dict_t *nyx_blob_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief Allocates a new INDI / Nyx Stream.
+ * @param name
+ * @param label
+ * @return
+ */
+
+nyx_dict_t *nyx_stream_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * \brief Allocates a new Nyx stream vector.
  * @param device
  * @param name
  * @param state
+ * @param defs
  * @param opts
  * @return
  */
@@ -2268,6 +2283,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
+    nyx_dict_t *defs[],
     __NULLABLE__ const nyx_opts_t *opts
 );
 
