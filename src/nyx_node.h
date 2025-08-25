@@ -355,6 +355,8 @@ typedef struct nyx_object_s
         bool modified                                                                           //!< Indicate weather the value has been modified.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
+    void *ctx;
+
 } nyx_object_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/

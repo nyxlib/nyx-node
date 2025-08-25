@@ -108,7 +108,8 @@ int nyx_unicode_to_utf8(
                 .node = NULL,                   \
                 .parent = NULL,                 \
                 .in_callback = NULL,            \
-                .out_callback = NULL            \
+                .out_callback = NULL,           \
+                .ctx = NULL                     \
             })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
