@@ -27,7 +27,6 @@ namespace Nyx {
 class BaseDevice
 {
 public:
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     virtual ~BaseDevice() = default;
@@ -44,16 +43,19 @@ public:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    inline void registerVector(nyx_dict_t *vector)
+    inline const std::vector<nyx_dict_t *> &vectors() const
     {
-        m_vectors.push_back(vector);
+        return m_vectors;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    inline const std::vector<nyx_dict_t *> &vectors() const
+protected:
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    inline void registerVector(nyx_dict_t *vector)
     {
-        return m_vectors;
+        m_vectors.push_back(vector);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
