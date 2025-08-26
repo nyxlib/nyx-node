@@ -17,10 +17,14 @@
 #include "nyx_node.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* NyxDevice                                                                                                          */
+
+namespace Nyx {
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* BaseDevice                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-class NyxDevice
+class BaseDevice
 {
 public:
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -31,7 +35,11 @@ public:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    inline void add_vector(nyx_dict_t *vector)
+    virtual STR_t name() const = 0;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    inline void registerVector(nyx_dict_t *vector)
     {
         m_vectors.push_back(vector);
     }
@@ -54,10 +62,10 @@ private:
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* NyxDriver                                                                                                          */
+/* BaseDriver                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-class NyxDriver
+class BaseDriver
 {
 public:
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -70,20 +78,22 @@ public:
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        this->build();
+        this->initialize();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        std::vector<nyx_dict_t *> vector_list;
+        std::vector<nyx_dict_t *> vectors;
 
         for(const auto &uptr: this->m_devices)
         {
-            const auto &vecs = uptr->vectors();
+            const auto &subVectors = uptr->vectors();
 
-            vector_list.insert(vector_list.end(), vecs.begin(), vecs.end());
+            vectors.insert(vectors.end(), subVectors.begin(), subVectors.end());
         }
 
-        vector_list.push_back(nullptr);
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        vectors.push_back(nullptr);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -100,16 +110,16 @@ public:
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_node_t *node = nyx_node_initialize(
-            this->node_name(),
-            vector_list.data(),
-            this->tcp_uri(),
-            this->mqtt_uri(),
-            this->mqtt_username(),
-            this->mqtt_password(),
+            this->name(),
+            vectors.data(),
+            this->tcpURI(),
+            this->mqttURI(),
+            this->mqttUsername(),
+            this->mqttPassword(),
             nullptr,
-            this->redis_uri(),
-            this->redis_username(),
-            this->redis_password(),
+            this->redisURI(),
+            this->redisUsername(),
+            this->redisPassword(),
             3000,
             true,
             true
@@ -117,7 +127,7 @@ public:
 
         while(s_signo == 0)
         {
-            nyx_node_poll(node, this->node_timeout_ms());
+            nyx_node_poll(node, this->nodeTimeoutMS());
         }
 
         nyx_node_finalize(node, true);
@@ -140,33 +150,29 @@ public:
 protected:
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    virtual void build() = 0;
+    virtual void initialize() = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    virtual STR_t node_name() const = 0;
+    virtual STR_t name() const = 0;
 
-    virtual STR_t tcp_uri()  const = 0;
+    virtual STR_t tcpURI() const = 0;
 
-    virtual STR_t mqtt_uri() const = 0;
+    virtual STR_t mqttURI() const = 0;
+    virtual STR_t mqttUsername() const = 0;
+    virtual STR_t mqttPassword() const = 0;
 
-    virtual STR_t redis_uri() const = 0;
+    virtual STR_t redisURI() const = 0;
+    virtual STR_t redisUsername() const = 0;
+    virtual STR_t redisPassword() const = 0;
 
-    virtual STR_t mqtt_username() const = 0;
-
-    virtual STR_t mqtt_password() const = 0;
-
-    virtual STR_t redis_username() const = 0;
-
-    virtual STR_t redis_password() const = 0;
-
-    virtual int node_timeout_ms() const = 0;
+    virtual int nodeTimeoutMS() const = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    inline void register_device(std::unique_ptr<NyxDevice> dev)
+    inline void registerDevice(std::unique_ptr<BaseDevice> device)
     {
-        this->m_devices.emplace_back(std::move(dev));
+        this->m_devices.emplace_back(std::move(device));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -174,10 +180,14 @@ protected:
 private:
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    std::vector<std::unique_ptr<NyxDevice>> m_devices;
+    std::vector<std::unique_ptr<BaseDevice>> m_devices;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+} /* namespace Nyx */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
