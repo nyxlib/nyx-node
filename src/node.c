@@ -149,9 +149,9 @@ static void get_properties(nyx_node_t *node, __NULLABLE__ nyx_dict_t *dict)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+    for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
     {
-        nyx_dict_t *def_vector = *def_vector_ptr;
+        nyx_dict_t *def_vector = *vector_ptr;
 
         if((def_vector->base.flags & NYX_FLAGS_DISABLED) == 0)
         {
@@ -255,9 +255,9 @@ static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int (* str
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *def_vector = *def_vector_ptr;
+            nyx_dict_t *def_vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -405,9 +405,9 @@ static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *def_vector = *def_vector_ptr;
+            nyx_dict_t *def_vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -776,7 +776,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, cons
 
 nyx_node_t *nyx_node_initialize(
     STR_t node_id,
-    nyx_dict_t *def_vectors[],
+    nyx_dict_t *vectors[],
     /**/
     __NULLABLE__ STR_t indi_url,
     /**/
@@ -804,9 +804,9 @@ nyx_node_t *nyx_node_initialize(
     /* PATH VECTORS                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(nyx_dict_t **def_vector_ptr = def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+    for(nyx_dict_t **vector_ptr = vectors; *vector_ptr != NULL; vector_ptr++)
     {
-        nyx_dict_t *vector = *def_vector_ptr;
+        nyx_dict_t *vector = *vector_ptr;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -862,7 +862,7 @@ nyx_node_t *nyx_node_initialize(
     node->enable_xml = enable_xml;
     node->validate_xml = validate_xml;
 
-    node->def_vectors = def_vectors;
+    node->vectors = vectors;
 
     node->tcp_handler = internal_tcp_handler;
     node->mqtt_handler = internal_mqtt_handler;
@@ -901,9 +901,9 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 
     if(free_vectors)
     {
-        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_free(*def_vector_ptr);
+            nyx_dict_free(*vector_ptr);
         }
     }
 
@@ -941,9 +941,9 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *def_vector = *def_vector_ptr;
+            nyx_dict_t *def_vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 

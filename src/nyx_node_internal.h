@@ -346,7 +346,7 @@ struct nyx_node_s
 
     nyx_stack_t *stack;
 
-    nyx_dict_t **def_vectors;
+    nyx_dict_t **vectors;
 
     __ZEROABLE__ uint32_t client_hashes[31];
 

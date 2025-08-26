@@ -229,9 +229,9 @@ bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, bool check, si
 
     if(check)
     {
-        for(nyx_dict_t **def_vector_ptr = node->def_vectors; *def_vector_ptr != NULL; def_vector_ptr++)
+        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *vector = *def_vector_ptr;
+            nyx_dict_t *vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
