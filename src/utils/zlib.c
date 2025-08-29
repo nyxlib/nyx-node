@@ -94,11 +94,8 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_uncompress(/*--------*/ size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
+buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
 {
-#ifndef HAVE_ZLIB
-    return nyx_base64_decode(result_size, len, str);
-#else
     if(result_size == NULL)
     {
         NYX_LOG_ERROR("Initial size not provided in `result_size`");
@@ -106,6 +103,9 @@ buff_t nyx_zlib_uncompress(/*--------*/ size_t *result_size, __ZEROABLE__ size_t
         return NULL;
     }
 
+#ifndef HAVE_ZLIB
+    return nyx_base64_decode(result_size, len, str);
+#else
     if(*result_size == 0x00 || len == 0x00 || str == NULL)
     {
         *result_size = 0x00;
