@@ -400,7 +400,8 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
 
                 size_t raw_size = nyx_string_raw_size(
                     (nyx_string_t *) nyx_dict_get(
-                        (nyx_dict_t *) object, "$"
+                        (nyx_dict_t *) object,
+                        "$"
                     )
                 );
 

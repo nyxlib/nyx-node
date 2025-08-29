@@ -115,11 +115,11 @@ bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->dyn = true;
         object->raw_size = \
         object->length = \
         strlen(value);
         object->value = nyx_string_dup(value);
+        object->dyn = true;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -160,11 +160,11 @@ bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->dyn = false;
         object->raw_size = \
         object->length = \
         strlen(value);
         object->value = (/**/str_t/**/) value;
+        object->dyn = false;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
