@@ -26,6 +26,18 @@ check_function_exists(malloc_usable_size HAVE_MALLOC_USABLE_SIZE)
 
 ########################################################################################################################
 
+find_package(ZLIB QUIET)
+
+if(ZLIB_FOUND)
+    set(HAVE_ZLIB 1)
+    message(STATUS "Zlib found: ${ZLIB_INCLUDE_DIRS} ${ZLIB_LIBRARIES}")
+else()
+    set(HAVE_ZLIB 0)
+    message(STATUS "Zlib not found -> building without compression support")
+endif()
+
+########################################################################################################################
+
 set(SOURCE_FILES
     src/nyx_node.h
     src/nyx_node_schema.h
@@ -33,6 +45,7 @@ set(SOURCE_FILES
     #
     src/utils/addr.c
     src/utils/base64.c
+    src/utils/zlib.c
     src/utils/hash32.c
     src/utils/utf8.c
     #
@@ -87,6 +100,12 @@ if(HAVE_MALLOC_USABLE_SIZE)
     target_compile_definitions(nyx-node-static PRIVATE HAVE_MALLOC_USABLE_SIZE)
 endif()
 
+if(HAVE_ZLIB)
+    target_compile_definitions(nyx-node-static PRIVATE HAVE_ZLIB)
+    target_include_directories(nyx-node-static PRIVATE ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(nyx-node-static PRIVATE ${ZLIB_LIBRARIES})
+endif()
+
 set_target_properties(nyx-node-static PROPERTIES
     OUTPUT_NAME "nyx-node"
 )
@@ -101,6 +120,12 @@ endif()
 
 if(HAVE_MALLOC_USABLE_SIZE)
     target_compile_definitions(nyx-node-shared PRIVATE HAVE_MALLOC_USABLE_SIZE)
+endif()
+
+if(HAVE_ZLIB)
+    target_compile_definitions(nyx-node-shared PRIVATE HAVE_ZLIB)
+    target_include_directories(nyx-node-shared PRIVATE ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(nyx-node-shared PRIVATE ${ZLIB_LIBRARIES})
 endif()
 
 set_target_properties(nyx-node-shared PROPERTIES

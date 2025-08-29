@@ -318,7 +318,7 @@
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
-      <xs:attribute name="format" type="xs:string" use="optional"/>
+      <xs:attribute name="format" type="xs:string" use="optional"/>  <!-- Nyx only -->
     </xs:complexType>
   </xs:element>
   <xs:element name="setBLOBVector">

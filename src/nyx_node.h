@@ -275,6 +275,42 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief Compresses a buffer to a ZLib-compressed string.
+ *
+ * \param result_len Optional pointer to store the length of the encoded string.
+ * \param size Size of the buffer to encode.
+ * \param buff Input buffer to encode.
+ * \return The encoded string.
+ */
+
+__NULLABLE__ str_t nyx_zlib_compress(
+    __NULLABLE__ size_t *result_len,
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Decompresses a ZLib-compressed string to a buffer.
+ *
+ * \param result_size Optional pointer to store the size of the decoded buffer.
+ * \param raw_size ???.
+ * \param len Length of the string to decode.
+ * \param str Input string to decode.
+ * \return The decoded buffer.
+ */
+
+__NULLABLE__ buff_t nyx_zlib_uncompress(
+    __NULLABLE__ size_t *result_size,
+    __ZEROABLE__ size_t raw_size,
+    __ZEROABLE__ size_t len,
+    __NULLABLE__ STR_t str
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * \brief Hashes a buffer using the MurmurHash2 algorithm.
  *
  * \param size Input buffer to hash.
@@ -755,6 +791,7 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< ???
 
+    size_t raw_size;                                                                            //!< ???
     size_t length;                                                                              //!< ???
     str_t value;                                                                                //!< ???
 
@@ -810,7 +847,8 @@ void nyx_string_get_buff(
     const nyx_string_t *object,
     __NULLABLE__ size_t *result_size,
     __NULLABLE__ buff_t *result_buff,
-    bool base64_decode
+    bool base64_decode,
+    bool compress
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -876,6 +914,7 @@ bool nyx_string_set_buff_alt(
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff,
     bool base64_encode,
+    bool compress,
     bool notify
 );
 
@@ -887,19 +926,34 @@ bool nyx_string_set_buff_alt(
  * @param size The value size for the provided JSON string object.
  * @param buff The value buffer for the provided JSON string object.
  * @param base64_encode Indicates whether the buffer must be base64-encoded.
+ * @param compress Indicates whether the buffer must be ZLib-compressed.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool base64_encode)
+__INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool base64_encode, bool compress)
 {
-    return nyx_string_set_buff_alt(object, size, buff, base64_encode, true);
+    return nyx_string_set_buff_alt(object, size, buff, base64_encode, compress, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_string_t
- * \brief Returns the length of the string representing the provided JSON string object.
+ * \brief Returns the raw size (before base64-encoding or compressing) of JSON string object.
+ *
+ * @param object The provided JSON string object.
+ * @return
+ */
+
+size_t nyx_string_raw_size(
+    const nyx_string_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
+ * \brief Returns the length of the provided JSON string object.
  *
  * @param object The provided JSON string object.
  * @return
@@ -984,14 +1038,15 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
  * @param size The buffer size for the new JSON string object.
  * @param buff The buffer pointer for the new JSON string object.
  * @param base64_encode Indicates whether the buffer must be base64-encoded.
+ * @param compress Indicates whether the buffer must be ZLib-compressed.
  * @return The new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool base64_encode)
+__INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool base64_encode, bool compress)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_buff(result, size, buff, base64_encode);
+    nyx_string_set_buff(result, size, buff, base64_encode, compress);
 
     return result;
 }
@@ -2206,16 +2261,16 @@ nyx_dict_t *nyx_blob_def_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff, bool base64_encode)
+__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff, bool base64_encode, bool compress)
 {
-    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, base64_encode));
+    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, base64_encode, compress));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff, bool base64_decode)
+__INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff, bool base64_decode, bool uncompress)
 {
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, base64_decode);
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, base64_decode, uncompress);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
