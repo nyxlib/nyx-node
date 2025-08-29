@@ -59,7 +59,12 @@ void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result
 {
     /**/ if(uncompress)
     {
-        buff_t buff = nyx_zlib_uncompress(result_size, object->raw_size, object->length, object->value);
+        if(result_size != NULL)
+        {
+            *result_size = object->raw_size;
+        }
+
+        buff_t buff = nyx_zlib_uncompress(result_size, object->length, object->value);
 
         if(result_buff == NULL) {
             nyx_memory_free(buff);

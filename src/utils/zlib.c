@@ -46,7 +46,7 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int ret = compress2(comp_buff, &comp_size, (Bytef *) buff, (uLong) size, Z_BEST_COMPRESSION);
+    int ret = compress2(comp_buff, &comp_size, (const Bytef *) buff, (uLong) size, Z_BEST_COMPRESSION);
 
     ///_memory_free(comp_buff);
 
@@ -94,17 +94,21 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_uncompress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t raw_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
+buff_t nyx_zlib_uncompress(/*--------*/ size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
 {
 #ifndef HAVE_ZLIB
     return nyx_base64_decode(result_size, len, str);
 #else
-    if(raw_size == 0x00 || len == 0x00 || str == NULL)
+    if(result_size == NULL)
     {
-        if(result_size)
-        {
-            *result_size = 0x00;
-        }
+        NYX_LOG_ERROR("Initial size not provided in `result_size`");
+
+        return NULL;
+    }
+
+    if(len == 0x00 || str == NULL)
+    {
+        *result_size = 0x00;
 
         return NULL;
     }
@@ -116,21 +120,18 @@ buff_t nyx_zlib_uncompress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t
 
     if(comp_size == 0x00 || comp_buff == NULL)
     {
-        if(result_size)
-        {
-            *result_size = 0x00;
-        }
+        *result_size = 0x00;
 
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uLongf size = (uLongf) raw_size;
+    uLongf size = (uLongf) *result_size;
 
-    Bytef *buff = (Bytef *) nyx_memory_alloc(raw_size);
+    Bytef *buff = (Bytef *) nyx_memory_alloc(*result_size);
 
-    int ret = uncompress(buff, &size, (Bytef *) comp_buff, (uLong) comp_size);
+    int ret = uncompress(buff, &size, (const Bytef *) comp_buff, (uLong) comp_size);
 
     nyx_memory_free(comp_buff);
 
@@ -138,20 +139,14 @@ buff_t nyx_zlib_uncompress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t
     {
         nyx_memory_free(buff);
 
-        if(result_size)
-        {
-            *result_size = 0x00;
-        }
+        *result_size = 0x00;
 
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(result_size)
-    {
-        *result_size = (size_t) size;
-    }
+    *result_size = (size_t) size;
 
     return (buff_t) buff;
 #endif
