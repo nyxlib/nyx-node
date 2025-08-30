@@ -47,7 +47,7 @@ nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t forma
     nyx_dict_set(result, "@max", nyx_number_from(max));
     nyx_dict_set(result, "@step", nyx_number_from(step));
 
-    nyx_dict_set(result, "$", nyx_number_from(value));
+    nyx_dict_set(result, "$", nyx_format_double_to_string(format, value));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

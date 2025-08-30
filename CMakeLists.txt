@@ -103,8 +103,10 @@ endif()
 if(HAVE_ZLIB)
     target_compile_definitions(nyx-node-static PRIVATE HAVE_ZLIB)
     target_include_directories(nyx-node-static PRIVATE ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(nyx-node-static PRIVATE ${ZLIB_LIBRARIES})
+    target_link_libraries(nyx-node-static PRIVATE ${ZLIB_LIBRARIES} m)
 endif()
+
+target_link_libraries(nyx-node-static PRIVATE m)
 
 set_target_properties(nyx-node-static PROPERTIES
     OUTPUT_NAME "nyx-node"
@@ -127,6 +129,8 @@ if(HAVE_ZLIB)
     target_include_directories(nyx-node-shared PRIVATE ${ZLIB_INCLUDE_DIRS})
     target_link_libraries(nyx-node-shared PRIVATE ${ZLIB_LIBRARIES})
 endif()
+
+target_link_libraries(nyx-node-shared PRIVATE m)
 
 set_target_properties(nyx-node-shared PROPERTIES
     OUTPUT_NAME "nyx-node"

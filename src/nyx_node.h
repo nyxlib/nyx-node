@@ -1847,48 +1847,8 @@ typedef struct
  * @private
  */
 
-nyx_string_t *nyx_format_int_to_string(
-    nyx_string_t *format,
-    int value
-);
-
-/**
- * @private
- */
-
-int nyx_format_string_to_int(
-    nyx_string_t *format,
-    nyx_string_t *value
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-nyx_string_t *nyx_format_long_to_string(
-    nyx_string_t *format,
-    long value
-);
-
-/**
- * @private
- */
-
-long nyx_format_string_to_long(
-    nyx_string_t *format,
-    nyx_string_t *value
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
 nyx_string_t *nyx_format_double_to_string(
-    nyx_string_t *format,
+    STR_t format,
     double value
 );
 
@@ -1897,7 +1857,7 @@ nyx_string_t *nyx_format_double_to_string(
  */
 
 double nyx_format_string_to_double(
-    nyx_string_t *format,
+    STR_t format,
     nyx_string_t *value
 );
 
@@ -1933,55 +1893,11 @@ nyx_dict_t *nyx_number_def_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_number_def_set_int(nyx_dict_t *def, int value)
-{
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
-
-    nyx_string_t *string = nyx_format_int_to_string(format, value);
-
-    return nyx_dict_set(def, "$", string);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-__INLINE__ int nyx_number_def_get_int(const nyx_dict_t *def)
-{
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
-
-    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
-
-    return nyx_format_string_to_int(format, string);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-__INLINE__ bool nyx_number_def_set_long(nyx_dict_t *def, long value)
-{
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
-
-    nyx_string_t *string = nyx_format_long_to_string(format, value);
-
-    return nyx_dict_set(def, "$", string);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-__INLINE__ long nyx_number_def_get_long(const nyx_dict_t *def)
-{
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
-
-    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
-
-    return nyx_format_string_to_long(format, string);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 __INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
-    nyx_string_t *string = nyx_format_double_to_string(format, value);
+    nyx_string_t *string = nyx_format_double_to_string(format->value, value);
 
     return nyx_dict_set(def, "$", string);
 }
@@ -1994,7 +1910,7 @@ __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
 
     nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
 
-    return nyx_format_string_to_double(format, string);
+    return nyx_format_string_to_double(format->value, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

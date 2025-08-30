@@ -333,155 +333,101 @@ static bool _format_m_value(str_t dst_str, size_t dst_len, int w, int f, double 
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FORMAT INT                                                                                                         */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
-{
-    char conv;
-    int lcnt;
-
-    char buffer[64];
-
-    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 0)
-    {
-        if(((conv == 'd' /*----------------------------------------*/) && snprintf(buffer, sizeof(buffer), format->value, (signed int) value) >= 0)
-           ||
-           ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X') && snprintf(buffer, sizeof(buffer), format->value, (unsigned int) value) >= 0)
-        ) {
-            return nyx_string_from_dup(buffer);
-        }
-    }
-
-    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
-
-    return nyx_string_from_dup("0");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
-{
-    char conv;
-    int lcnt;
-
-    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 0)
-    {
-        if(conv == 'd' || conv == 'u') {
-            return (int) strtol(value->value, NULL, 10);
-        }
-        if(conv == 'o' /*----------*/) {
-            return (int) strtol(value->value, NULL, 8);
-        }
-        if(conv == 'x' || conv == 'X') {
-            return (int) strtol(value->value, NULL, 16);
-        }
-    }
-
-    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
-
-    return 0;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* FORMAT LONG                                                                                                        */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
-{
-    char conv;
-    int lcnt;
-
-    char buffer[64];
-
-    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 1)
-    {
-        if(((conv == 'd' /*----------------------------------------*/) && snprintf(buffer, sizeof(buffer), format->value, (signed long) value) >= 0)
-           ||
-           ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X') && snprintf(buffer, sizeof(buffer), format->value, (unsigned long) value) >= 0)
-        ) {
-            return nyx_string_from_dup(buffer);
-        }
-    }
-
-    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
-
-    return nyx_string_from_dup("0");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
-{
-    char conv;
-    int lcnt;
-
-    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 1)
-    {
-        if(conv == 'd' || conv == 'u') {
-            return (long) strtol(value->value, NULL, 10);
-        }
-        if(conv == 'o' /*----------*/) {
-            return (long) strtol(value->value, NULL, 8);
-        }
-        if(conv == 'x' || conv == 'X') {
-            return (long) strtol(value->value, NULL, 16);
-        }
-    }
-
-    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
-
-    return 0;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* FORMAT DOUBLE                                                                                                      */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
+nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
 {
     char conv;
     int lcnt, w, f;
 
     char buffer[64];
 
-    /**/ if(_parse_format(&conv, &lcnt, &w, &f, format->value) && lcnt == 0)
+    if(_parse_format(&conv, &lcnt, &w, &f, format))
     {
-        if(((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format->value, value) >= 0)
-           ||
-           ((conv == 'm' /*----------------------------------------------------------------------*/) && _format_m_value(buffer, sizeof(buffer), w, f, value))
-        ) {
-            return nyx_string_from_dup(buffer);
+        /**/ if(lcnt == 1)
+        {
+            if(((conv == 'd' /*----------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, (signed long) value) >= 0)
+               ||
+               ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------*/) && snprintf(buffer, sizeof(buffer), format, (unsigned long) value) >= 0)
+               ||
+               ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
+               ||
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && _format_m_value(buffer, sizeof(buffer), w, f, value))
+            ) {
+                return nyx_string_from_dup(buffer);
+            }
+        }
+        else if(lcnt == 0)
+        {
+            if(((conv == 'd' /*----------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, (signed int) value) >= 0)
+               ||
+               ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------*/) && snprintf(buffer, sizeof(buffer), format, (unsigned int) value) >= 0)
+               ||
+               ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
+               ||
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && _format_m_value(buffer, sizeof(buffer), w, f, value))
+            ) {
+                return nyx_string_from_dup(buffer);
+            }
         }
     }
 
-    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
 
-    return nyx_string_from_dup("0.0");
+    return nyx_string_from_dup("0");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double nyx_format_string_to_double(nyx_string_t *format, nyx_string_t *value)
+double nyx_format_string_to_double(STR_t format, nyx_string_t *value)
 {
     char conv;
-    int lcnt, w, f;
+    int lcnt;
 
-    if(_parse_format(&conv, &lcnt, &w, &f, format->value) && lcnt == 0)
+    if(_parse_format(&conv, &lcnt, NULL, NULL, format))
     {
-        if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G')
+        /**/ if(lcnt == 1)
         {
-            return (double) strtod(value->value, NULL);
+            if(conv == 'd' || conv == 'u' /*------------------------------------------------------------*/) {
+                return (double) strtol(value->value, NULL, 10);
+            }
+            if(conv == 'o' /*---------------------------------------------------------------------------*/) {
+                return (double) strtol(value->value, NULL, 8);
+            }
+            if(conv == 'x' || conv == 'X' /*------------------------------------------------------------*/) {
+                return (double) strtol(value->value, NULL, 16);
+            }
+            else if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
+                return (double) strtod(value->value, NULL);
+            }
+            else if(conv == 'm' /*----------------------------------------------------------------------*/) {
+                return (double) _parse_m_value(value->value);
+            }
         }
-        if(conv == 'm' /*----------------------------------------------------------------------*/)
+        else if(lcnt == 0)
         {
-            return (double) _parse_m_value(value->value);
+            if(conv == 'd' || conv == 'u' /*------------------------------------------------------------*/) {
+                return (double) strtol(value->value, NULL, 10);
+            }
+            if(conv == 'o' /*---------------------------------------------------------------------------*/) {
+                return (double) strtol(value->value, NULL, 8);
+            }
+            if(conv == 'x' || conv == 'X' /*------------------------------------------------------------*/) {
+                return (double) strtol(value->value, NULL, 16);
+            }
+            else if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
+                return (double) strtod(value->value, NULL);
+            }
+            else if(conv == 'm' /*----------------------------------------------------------------------*/) {
+                return (double) _parse_m_value(value->value);
+            }
         }
     }
 
-    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format);
 
-    return 0.0;
+    return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
