@@ -114,7 +114,7 @@ static bool _parse_format(char *result_conv, int *result_lcnt, int *result_w, in
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static double _parse_m_value(STR_t p)
+static double sextod(STR_t p)
 {
     double deg;
     double min;
@@ -402,7 +402,7 @@ double nyx_format_string_to_double(STR_t format, nyx_string_t *value)
                 return (double) strtod(value->value, NULL);
             }
             if(conv == 'm' /*----------------------------------------------------------------------*/) {
-                return (double) _parse_m_value(value->value);
+                return (double) sextod(value->value);
             }
         }
         else if(lcnt == 0)
@@ -420,7 +420,7 @@ double nyx_format_string_to_double(STR_t format, nyx_string_t *value)
                 return (double) strtod(value->value, NULL);
             }
             if(conv == 'm' /*----------------------------------------------------------------------*/) {
-                return (double) _parse_m_value(value->value);
+                return (double) sextod(value->value);
             }
         }
     }
