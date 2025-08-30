@@ -17,7 +17,7 @@
 /* UTILITIES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _parse_format(char *result_conv, int *result_lcount, int *result_hcount, int *result_w, int *result_f, STR_t s)
+static bool _parse_format(char *result_conv, int *result_lcnt, int *result_w, int *result_f, STR_t s)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -68,11 +68,10 @@ static bool _parse_format(char *result_conv, int *result_lcount, int *result_hco
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(result_conv    != NULL) { *result_conv    = 'm'; }
-        if(result_lcount  != NULL) { *result_lcount  =  0 ; }
-        if(result_hcount  != NULL) { *result_hcount  =  0 ; }
-        if(result_w       != NULL) { *result_w       =  w ; }
-        if(result_f       != NULL) { *result_f       =  f ; }
+        if(result_conv != NULL) { *result_conv = 'm'; }
+        if(result_lcnt != NULL) { *result_lcnt =  0 ; }
+        if(result_w    != NULL) { *result_w    =  w ; }
+        if(result_f    != NULL) { *result_f    =  f ; }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -82,19 +81,13 @@ static bool _parse_format(char *result_conv, int *result_lcount, int *result_hco
     /*----------------------------------------------------------------------------------------------------------------*/
 
     int lcnt = 0;
-    int hcnt = 0;
 
     /**/ if(*p == 'l')
     {
         lcnt = 1; p++;
         if(*p == 'l') { lcnt = 2; p++; }
     }
-    else if(*p == 'h')
-    {
-        hcnt = 1; p++;
-        if(*p == 'h') { hcnt = 2; p++; }
-    }
-    else if(*p == 'j' || *p == 'z' || *p == 't' || *p == 'L')
+    else if(*p == 'h' || *p == 'j' || *p == 'z' || *p == 't' || *p == 'L')
     {
         return false;
     }
@@ -109,11 +102,10 @@ static bool _parse_format(char *result_conv, int *result_lcount, int *result_hco
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(result_conv    != NULL) { *result_conv    = conv; }
-    if(result_lcount  != NULL) { *result_lcount  = lcnt; }
-    if(result_hcount  != NULL) { *result_hcount  = hcnt; }
-    if(result_w       != NULL) { *result_w       = 0; }
-    if(result_f       != NULL) { *result_f       = 0; }
+    if(result_conv != NULL) { *result_conv = conv; }
+    if(result_lcnt != NULL) { *result_lcnt = lcnt; }
+    if(result_w    != NULL) { *result_w    = 0x00; }
+    if(result_f    != NULL) { *result_f    = 0x00; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -347,11 +339,11 @@ static bool _format_m_value(str_t dst_str, size_t dst_len, int w, int f, double 
 nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
 {
     char conv;
-    int lcnt, hcnt;
+    int lcnt;
 
     char buffer[64];
 
-    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 0 && hcnt == 0)
+    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 0)
     {
         if(((conv == 'd' /*----------------------------------------*/) && snprintf(buffer, sizeof(buffer), format->value, (signed int) value) >= 0)
            ||
@@ -371,9 +363,9 @@ nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
 int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
 {
     char conv;
-    int lcnt, hcnt;
+    int lcnt;
 
-    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 0 && hcnt == 0)
+    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 0)
     {
         if(conv == 'd' || conv == 'u') {
             return (int) strtol(value->value, NULL, 10);
@@ -398,11 +390,11 @@ int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
 nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
 {
     char conv;
-    int lcnt, hcnt;
+    int lcnt;
 
     char buffer[64];
 
-    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 1 && hcnt == 0)
+    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 1)
     {
         if(((conv == 'd' /*----------------------------------------*/) && snprintf(buffer, sizeof(buffer), format->value, (signed long) value) >= 0)
            ||
@@ -422,9 +414,9 @@ nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
 long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
 {
     char conv;
-    int lcnt, hcnt;
+    int lcnt;
 
-    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 1 && hcnt == 0)
+    if(_parse_format(&conv, &lcnt, NULL, NULL, format->value) && lcnt == 1)
     {
         if(conv == 'd' || conv == 'u') {
             return (long) strtol(value->value, NULL, 10);
@@ -449,11 +441,11 @@ long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
 nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
 {
     char conv;
-    int lcnt, hcnt, w, f;
+    int lcnt, w, f;
 
     char buffer[64];
 
-    /**/ if(_parse_format(&conv, &lcnt, &hcnt, &w, &f, format->value) && lcnt == 0 && hcnt == 0)
+    /**/ if(_parse_format(&conv, &lcnt, &w, &f, format->value) && lcnt == 0)
     {
         if(((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format->value, value) >= 0)
            ||
@@ -474,9 +466,9 @@ nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
 double nyx_format_string_to_double(nyx_string_t *format, nyx_string_t *value)
 {
     char conv;
-    int lcnt, hcnt, w, f;
+    int lcnt, w, f;
 
-    if(_parse_format(&conv, &lcnt, &hcnt, &w, &f, format->value) && lcnt == 0 && hcnt == 0)
+    if(_parse_format(&conv, &lcnt, &w, &f, format->value) && lcnt == 0)
     {
         if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G')
         {
