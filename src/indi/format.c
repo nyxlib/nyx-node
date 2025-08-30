@@ -449,8 +449,7 @@ nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
     {
         if(((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format->value, value) >= 0)
            ||
-           ((conv == 'm' /*----------------------------------------------------------------------*/) &&
-                   _format_m_value(buffer, sizeof(buffer), w, f, value))
+           ((conv == 'm' /*----------------------------------------------------------------------*/) && _format_m_value(buffer, sizeof(buffer), w, f, value))
         ) {
             return nyx_string_from_dup(buffer);
         }
