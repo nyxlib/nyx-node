@@ -17,188 +17,182 @@
 /* UTILITIES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _parse_m_format(int *w_out, int *f_out, STR_t s)
+static bool _parse_format(char *result_conv, int *result_lcount, int *result_hcount, int *result_w, int *result_f, STR_t s)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     STR_t p = strchr(s, '%');
-
-    if(p == NULL)
-    {
-        return false;
-    }
+    if(p == NULL) { return false; }
 
     p++;
 
     STR_t q = strchr(p, '%');
-
-    if(q != NULL)
-    {
-        return false;
-    }
+    if(q != NULL) { return false; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    bool have_w = false;
+    while(*p == '+' || *p == '-' || *p == ' ' || *p == '#' || *p == '0') { p++; }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     int w = 0;
-
-    while(isdigit((unsigned char) *p))
-    {
-        have_w = true;
-        w = (w * 10) + (int) (*p++ - '0');
-    }
-
-    if(!have_w) {
-        return false;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(*p != '.')
-    {
-        return false;
-    }
-
-    p++;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    bool have_f = false;
     int f = 0;
 
-    while(isdigit((unsigned char) *p))
+    bool have_w = false;
+    bool have_f = false;
+
+    while(isdigit((unsigned char) *p)) { w = (w * 10) + (int) (*p++ - '0'); have_w = true; }
+
+    if(*p == '.')
     {
-        have_f = true;
-        f = (f * 10) + (int) (*p++ - '0');
+        p++;
+
+        while(isdigit((unsigned char) *p)) { f = (f * 10) + (int) (*p++ - '0'); have_f = true; }
     }
 
-    if(!have_f) {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(*p == 'm')
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        p++;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(*p != '\0') { return false; }
+
+        if(!(have_w && have_f)) { return false; }
+
+        if(f != 3 && f != 5 && f != 6 && f != 8 && f != 9) { return false; }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(result_conv    != NULL) { *result_conv    = 'm'; }
+        if(result_lcount  != NULL) { *result_lcount  =  0 ; }
+        if(result_hcount  != NULL) { *result_hcount  =  0 ; }
+        if(result_w       != NULL) { *result_w       =  w ; }
+        if(result_f       != NULL) { *result_f       =  f ; }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        return true;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    int lcnt = 0;
+    int hcnt = 0;
+
+    /**/ if(*p == 'l')
+    {
+        lcnt = 1; p++;
+        if(*p == 'l') { lcnt = 2; p++; }
+    }
+    else if(*p == 'h')
+    {
+        hcnt = 1; p++;
+        if(*p == 'h') { hcnt = 2; p++; }
+    }
+    else if(*p == 'j' || *p == 'z' || *p == 't' || *p == 'L')
+    {
         return false;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(*p != 'm')
-    {
-        return false;
-    }
+    if(*p == '\0') { return false; }
 
-    p++;
+    char conv = *p++; if(conv == 'n') { return false; }
 
-    if(*p != '\0')
-    {
-        return false;
-    }
+    if(*p != '\0') { return false; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(f != 3 && f != 5 && f != 6 && f != 8 && f != 9)
-    {
-        return false;
-    }
+    if(result_conv    != NULL) { *result_conv    = conv; }
+    if(result_lcount  != NULL) { *result_lcount  = lcnt; }
+    if(result_hcount  != NULL) { *result_hcount  = hcnt; }
+    if(result_w       != NULL) { *result_w       = 0; }
+    if(result_f       != NULL) { *result_f       = 0; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    *w_out = w;
-    *f_out = f;
 
     return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static double _parse_m_value(STR_t s)
+static double _parse_m_value(STR_t p)
 {
+    double deg;
+    double min;
+    double sec;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t p = s;
+    while(*p != '\0' && isspace((unsigned char) *p)) { p++; }
 
-    while(*p != '\0' && isspace((unsigned char) *p))
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    double sign = 1;
+
+    for(;;)
     {
-        p++;
+        /**/ if(*p == '-') { sign *= -1; p++; }
+        else if(*p == '+') { sign *= +1; p++; }
+        else {
+            break;
+        }
     }
 
-    bool neg;
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    /**/ if(*p == '-')
-    {
-        neg = true;
-        p++;
-    }
-    else if(*p == '+')
-    {
-        neg = false;
-        p++;
+    str_t end1 = NULL;
+    deg = (double) strtol(p, &end1, 10);
+
+    if(p == end1) {
+        return NAN;
     }
     else {
-        neg = false;
+        p = end1;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t end = NULL;
-    long deg_l = strtol(p, &end, 10);
-
-    if(p == end) {
-        return nan("");
-    }
-    else {
-        p = end;
-    }
-
-    int deg_i = (int) deg_l;
+    if(*p != ':') { return NAN; } p++;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(*p != ':')
-    {
-        return nan("");
-    }
+    STR_t colon = strchr(p, ':');
 
-    p++;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    double min_v;
-
-    double sec_v = 0.0;
-
-    STR_t colon2 = strchr(p, ':');
-
-    if(colon2 != NULL)
+    if(colon != NULL)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        str_t end_mm = NULL;
-        long mm_l = strtol(p, &end_mm, 10);
+        str_t end2 = NULL;
+        min = (double) strtol(p, &end2, 10);
 
-        if(p == end_mm) {
-            return nan("");
+        if(p == end2) {
+            return NAN;
         }
         else {
-            p = colon2;
+            p = end2;
         }
-        min_v = (double) mm_l;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(p != end_mm)
-        {
-            return nan("");
-        }
-
-        p++;
+        if(p != colon) { return NAN; } p++;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        str_t end_ss = NULL;
-        sec_v = strtod(p, &end_ss);
+        str_t end3 = NULL;
+        sec = (double) strtod(p, &end3);
 
-        if(p == end_ss) {
-            return nan("");
+        if(p == end3) {
+            return NAN;
         }
         else {
-            p = end_ss;
+            p = end3;
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -207,64 +201,46 @@ static double _parse_m_value(STR_t s)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        str_t end_mm = NULL;
-        min_v = strtod(p, &end_mm);
+        str_t end4 = NULL;
+        min = (double) strtod(p, &end4);
 
-        if(p == end_mm) {
-            return nan("");
+        if(p == end4) {
+            return NAN;
         }
         else {
-            p = end_mm;
+            p = end4;
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        sec = 0.0;
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    while(*p != '\0' && isspace((unsigned char) *p))
-    {
-        p++;
-    }
-
-    if(*p != '\0')
-    {
-        return nan("");
-    }
+    while(*p != '\0' && isspace((unsigned char) *p)) { p++; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!(min_v >= 0.0 && min_v < 60.0)) {
-        return nan("");
-    }
+    if(*p != '\0') { return NAN; }
 
-    if(!(sec_v >= 0.0 && sec_v < 60.0)) {
-        return nan("");
-    }
+    if(!(min >= 0.0 && min < 60.0)) { return NAN; }
+
+    if(!(sec >= 0.0 && sec < 60.0)) { return NAN; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    double v = (double) deg_i + (min_v / 60.0) + (sec_v / 3600.0);
-
-    return neg ? -v : +v;
+    return sign * (deg + (min / 60.0) + (sec / 3600.0));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _format_m(str_t dst_str, size_t dst_len, STR_t format, double value)
+static bool _format_m_value(str_t dst_str, size_t dst_len, int w, int f, double value)
 {
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    int w;
-    int f;
-
-    if(!_parse_m_format(&w, &f, format))
-    {
-        return false;
-    }
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     STR_t sign_str = signbit(value) ? "-"
@@ -277,7 +253,7 @@ static bool _format_m(str_t dst_str, size_t dst_len, STR_t format, double value)
 
     int deg_i = (int) floor(value);
 
-    double frac = value - (double) deg_i;
+    double frac_d = value - (double) deg_i;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -287,62 +263,62 @@ static bool _format_m(str_t dst_str, size_t dst_len, STR_t format, double value)
     {
         case 3: /* :mm */
         {
-            long min_1 = llround(frac * 60.0);
-            int  min_r = (int) min_1;
+            long m1 = lround(frac_d * 60.0);
+            int  mm = (int) m1;
 
-            if(min_r >= 60) { min_r = 0; deg_i++; }
+            if(mm >= 60) { mm = 0; deg_i++; }
 
-            snprintf(core, sizeof(core), "%s%d:%02d", sign_str, deg_i, min_r);
+            snprintf(core, sizeof(core), "%s%d:%02d", sign_str, deg_i, mm);
         }
             break;
 
         case 5: /* :mm.m */
         {
-            long min_10 = llround(frac * 600.0);
-            int  min_r_i = (int) (min_10 / 10);
-            int  min_r_d = (int) (min_10 % 10);
+            long m10   = lround(frac_d * 600.0);
+            int  mm    = (int) (m10 / 10);
+            int  mm_t1 = (int) (m10 % 10);
 
-            if(min_r_i >= 60) { min_r_i = 0; deg_i++; }
+            if(mm >= 60) { mm = 0; deg_i++; }
 
-            snprintf(core, sizeof(core), "%s%d:%02d.%01d", sign_str, deg_i, min_r_i, min_r_d);
+            snprintf(core, sizeof(core), "%s%d:%02d.%01d", sign_str, deg_i, mm, mm_t1);
         }
             break;
 
         case 6: /* :mm:ss */
         {
-            long sec_1 = llround(frac * 3600.0);
-            int  min_r = (int) (sec_1 / 60);
-            int  sec_r_i = (int) (sec_1 % 60);
+            long s1 = lround(frac_d * 3600.0);
+            int  mm = (int) (s1 / 60);
+            int  ss = (int) (s1 % 60);
 
-            if(min_r >= 60) { min_r = 0; deg_i++; }
+            if(mm >= 60) { mm = 0; deg_i++; }
 
-            snprintf(core, sizeof(core), "%s%d:%02d:%02d", sign_str, deg_i, min_r, sec_r_i);
+            snprintf(core, sizeof(core), "%s%d:%02d:%02d", sign_str, deg_i, mm, ss);
         }
             break;
 
         case 8: /* :mm:ss.s */
         {
-            long sec_10 = llround(frac * 36000.0);
-            int  min_r   = (int) (sec_10 / 600);
-            int  sec_r_i = (int) ((sec_10 % 600) / 10);
-            int  sec_r_d = (int) (sec_10 % 10);
+            long s10   = lround(frac_d * 36000.0);
+            int  mm    = (int) (s10 / 600);
+            int  ss    = (int) ((s10 % 600) / 10);
+            int  ss_t1 = (int) (s10 % 10);
 
-            if(min_r >= 60) { min_r = 0; deg_i++; }
+            if(mm >= 60) { mm = 0; deg_i++; }
 
-            snprintf(core, sizeof(core), "%s%d:%02d:%02d.%01d", sign_str, deg_i, min_r, sec_r_i, sec_r_d);
+            snprintf(core, sizeof(core), "%s%d:%02d:%02d.%01d", sign_str, deg_i, mm, ss, ss_t1);
         }
             break;
 
         case 9: default: /* :mm:ss.ss */
         {
-            long sec_100 = llround(frac * 360000.0);
-            int  min_r    = (int) (sec_100 / 6000);
-            int  sec_r_i  = (int) ((sec_100 % 6000) / 100);
-            int  sec_r_c  = (int) (sec_100 % 100);
+            long s100  = lround(frac_d * 360000.0);
+            int  mm    = (int) (s100 / 6000);
+            int  ss    = (int) ((s100 % 6000) / 100);
+            int  ss_t2 = (int) (s100 % 100);
 
-            if(min_r >= 60) { min_r = 0; deg_i++; }
+            if(mm >= 60) { mm = 0; deg_i++; }
 
-            snprintf(core, sizeof(core), "%s%d:%02d:%02d.%02d", sign_str, deg_i, min_r, sec_r_i, sec_r_c);
+            snprintf(core, sizeof(core), "%s%d:%02d:%02d.%02d", sign_str, deg_i, mm, ss, ss_t2);
         }
             break;
     }
@@ -370,23 +346,22 @@ static bool _format_m(str_t dst_str, size_t dst_len, STR_t format, double value)
 
 nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
 {
+    char conv;
+    int lcnt, hcnt;
+
     char buffer[64];
 
-    if((strchr(format->value, 'd') == NULL && strchr(format->value, 'u') == NULL) || snprintf(buffer, sizeof(buffer), format->value, value) < 0)
+    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 0 && hcnt == 0)
     {
-        if((strchr(format->value, 'x') == NULL && strchr(format->value, 'X') == NULL) || snprintf(buffer, sizeof(buffer), format->value, value) < 0)
-        {
-            NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
-        }
-        else
-        {
+        if(((conv == 'd' /*----------------------------------------*/) && snprintf(buffer, sizeof(buffer), format->value, (signed int) value) >= 0)
+           ||
+           ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X') && snprintf(buffer, sizeof(buffer), format->value, (unsigned int) value) >= 0)
+        ) {
             return nyx_string_from_dup(buffer);
         }
     }
-    else
-    {
-        return nyx_string_from_dup(buffer);
-    }
+
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
 
     return nyx_string_from_dup("0");
 }
@@ -395,21 +370,23 @@ nyx_string_t *nyx_format_int_to_string(nyx_string_t *format, int value)
 
 int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
 {
-    if(strchr(format->value, 'd') == NULL && strchr(format->value, 'u') == NULL)
+    char conv;
+    int lcnt, hcnt;
+
+    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 0 && hcnt == 0)
     {
-        if(strchr(format->value, 'x') == NULL && strchr(format->value, 'X') == NULL)
-        {
-            NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+        if(conv == 'd' || conv == 'u') {
+            return (int) strtol(value->value, NULL, 10);
         }
-        else
-        {
+        if(conv == 'o' /*----------*/) {
+            return (int) strtol(value->value, NULL, 8);
+        }
+        if(conv == 'x' || conv == 'X') {
             return (int) strtol(value->value, NULL, 16);
         }
     }
-    else
-    {
-        return (int) strtol(value->value, NULL, 10);
-    }
+
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
 
     return 0;
 }
@@ -420,16 +397,22 @@ int nyx_format_string_to_int(nyx_string_t *format, nyx_string_t *value)
 
 nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
 {
+    char conv;
+    int lcnt, hcnt;
+
     char buffer[64];
 
-    if(strchr(format->value, 'l') == NULL || snprintf(buffer, sizeof(buffer), format->value, (long) value) < 0)
+    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 1 && hcnt == 0)
     {
-        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+        if(((conv == 'd' /*----------------------------------------*/) && snprintf(buffer, sizeof(buffer), format->value, (signed long) value) >= 0)
+           ||
+           ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X') && snprintf(buffer, sizeof(buffer), format->value, (unsigned long) value) >= 0)
+        ) {
+            return nyx_string_from_dup(buffer);
+        }
     }
-    else
-    {
-        return nyx_string_from_dup(buffer);
-    }
+
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
 
     return nyx_string_from_dup("0");
 }
@@ -438,14 +421,23 @@ nyx_string_t *nyx_format_long_to_string(nyx_string_t *format, long value)
 
 long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
 {
-    if(strchr(format->value, 'l') == NULL)
+    char conv;
+    int lcnt, hcnt;
+
+    if(_parse_format(&conv, &lcnt, &hcnt, NULL, NULL, format->value) && lcnt == 1 && hcnt == 0)
     {
-        NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+        if(conv == 'd' || conv == 'u') {
+            return (long) strtol(value->value, NULL, 10);
+        }
+        if(conv == 'o' /*----------*/) {
+            return (long) strtol(value->value, NULL, 8);
+        }
+        if(conv == 'x' || conv == 'X') {
+            return (long) strtol(value->value, NULL, 16);
+        }
     }
-    else
-    {
-        return (long) strtol(value->value, NULL, 10);
-    }
+
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
 
     return 0;
 }
@@ -456,23 +448,23 @@ long nyx_format_string_to_long(nyx_string_t *format, nyx_string_t *value)
 
 nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
 {
+    char conv;
+    int lcnt, hcnt, w, f;
+
     char buffer[64];
 
-    if((strchr(format->value, 'f') == NULL && strchr(format->value, 'e') == NULL && strchr(format->value, 'g') == NULL) || snprintf(buffer, sizeof(buffer), format->value, (double) value) < 0)
+    /**/ if(_parse_format(&conv, &lcnt, &hcnt, &w, &f, format->value) && lcnt == 0 && hcnt == 0)
     {
-        if(!_format_m(buffer, sizeof(buffer), format->value, value))
-        {
-            NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
-        }
-        else
-        {
+        if(((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format->value, value) >= 0)
+           ||
+           ((conv == 'm' /*----------------------------------------------------------------------*/) &&
+                   _format_m_value(buffer, sizeof(buffer), w, f, value))
+        ) {
             return nyx_string_from_dup(buffer);
         }
     }
-    else
-    {
-        return nyx_string_from_dup(buffer);
-    }
+
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
 
     return nyx_string_from_dup("0.0");
 }
@@ -481,25 +473,24 @@ nyx_string_t *nyx_format_double_to_string(nyx_string_t *format, double value)
 
 double nyx_format_string_to_double(nyx_string_t *format, nyx_string_t *value)
 {
-    if(strchr(format->value, 'f') == NULL && strchr(format->value, 'e') == NULL && strchr(format->value, 'g') == NULL)
-    {
-        int w, f;
+    char conv;
+    int lcnt, hcnt, w, f;
 
-        if(!_parse_m_format(&w, &f, format->value))
+    if(_parse_format(&conv, &lcnt, &hcnt, &w, &f, format->value) && lcnt == 0 && hcnt == 0)
+    {
+        if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G')
         {
-            NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+            return (double) strtod(value->value, NULL);
         }
-        else
+        if(conv == 'm' /*----------------------------------------------------------------------*/)
         {
             return (double) _parse_m_value(value->value);
         }
     }
-    else
-    {
-        return (double) strtod(value->value, NULL);
-    }
 
-    return 0;
+    NYX_LOG_ERROR("This function is not compatible with the format `%s`", format->value);
+
+    return 0.0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
