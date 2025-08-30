@@ -389,37 +389,37 @@ double nyx_format_string_to_double(STR_t format, nyx_string_t *value)
     {
         /**/ if(lcnt == 1)
         {
-            if(conv == 'd' || conv == 'u' /*------------------------------------------------------------*/) {
+            if(conv == 'd' || conv == 'u' /*-------------------------------------------------------*/) {
                 return (double) strtol(value->value, NULL, 10);
             }
-            if(conv == 'o' /*---------------------------------------------------------------------------*/) {
+            if(conv == 'o' /*----------------------------------------------------------------------*/) {
                 return (double) strtol(value->value, NULL, 8);
             }
-            if(conv == 'x' || conv == 'X' /*------------------------------------------------------------*/) {
+            if(conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) {
                 return (double) strtol(value->value, NULL, 16);
             }
-            else if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
+            if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
                 return (double) strtod(value->value, NULL);
             }
-            else if(conv == 'm' /*----------------------------------------------------------------------*/) {
+            if(conv == 'm' /*----------------------------------------------------------------------*/) {
                 return (double) _parse_m_value(value->value);
             }
         }
         else if(lcnt == 0)
         {
-            if(conv == 'd' || conv == 'u' /*------------------------------------------------------------*/) {
+            if(conv == 'd' || conv == 'u' /*-------------------------------------------------------*/) {
                 return (double) strtol(value->value, NULL, 10);
             }
-            if(conv == 'o' /*---------------------------------------------------------------------------*/) {
+            if(conv == 'o' /*----------------------------------------------------------------------*/) {
                 return (double) strtol(value->value, NULL, 8);
             }
-            if(conv == 'x' || conv == 'X' /*------------------------------------------------------------*/) {
+            if(conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) {
                 return (double) strtol(value->value, NULL, 16);
             }
-            else if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
+            if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
                 return (double) strtod(value->value, NULL);
             }
-            else if(conv == 'm' /*----------------------------------------------------------------------*/) {
+            if(conv == 'm' /*----------------------------------------------------------------------*/) {
                 return (double) _parse_m_value(value->value);
             }
         }
