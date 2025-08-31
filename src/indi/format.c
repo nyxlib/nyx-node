@@ -345,7 +345,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------*/) && snprintf(buffer, sizeof(buffer), format, (unsigned long) value) >= 0)
                ||
-               ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
+               ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (double) value) >= 0)
                ||
                ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value) >= 0)
             ) {
@@ -358,7 +358,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------*/) && snprintf(buffer, sizeof(buffer), format, (unsigned int) value) >= 0)
                ||
-               ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
+               ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (double) value) >= 0)
                ||
                ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value) >= 0)
             ) {
