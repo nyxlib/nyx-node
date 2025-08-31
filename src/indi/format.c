@@ -231,7 +231,7 @@ static double sextod(STR_t p)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
+static int snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -318,18 +318,12 @@ static bool snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(w > 0) {
-        if(snprintf(dst_str, dst_len, "%*s", w, core) < 0) {
-            return false;
-        }
+        return snprintf(dst_str, dst_len, "%*s", w, core);
     } else {
-        if(snprintf(dst_str, dst_len, "%s", core) < 0) {
-            return false;
-        }
+        return snprintf(dst_str, dst_len, "%s", core);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -353,7 +347,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
                ||
-               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value))
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value) >= 0)
             ) {
                 return nyx_string_from_dup(buffer);
             }
@@ -366,7 +360,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
                ||
-               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value))
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value) >= 0)
             ) {
                 return nyx_string_from_dup(buffer);
             }
