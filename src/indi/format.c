@@ -231,7 +231,7 @@ static double sextod(STR_t p)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _format_m_value(str_t dst_str, size_t dst_len, int w, int f, double value)
+static bool snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -353,7 +353,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
                ||
-               ((conv == 'm' /*----------------------------------------------------------------------*/) && _format_m_value(buffer, sizeof(buffer), w, f, value))
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value))
             ) {
                 return nyx_string_from_dup(buffer);
             }
@@ -366,7 +366,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (/**/double/**/) value) >= 0)
                ||
-               ((conv == 'm' /*----------------------------------------------------------------------*/) && _format_m_value(buffer, sizeof(buffer), w, f, value))
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value))
             ) {
                 return nyx_string_from_dup(buffer);
             }
