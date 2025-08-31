@@ -383,45 +383,23 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
 double nyx_format_string_to_double(STR_t format, nyx_string_t *value)
 {
     char conv;
-    int lcnt;
 
-    if(_parse_format(&conv, &lcnt, NULL, NULL, format))
+    if(_parse_format(&conv, NULL, NULL, NULL, format))
     {
-        /**/ if(lcnt == 1)
-        {
-            if(conv == 'd' || conv == 'u' /*-------------------------------------------------------*/) {
-                return (double) strtol(value->value, NULL, 10);
-            }
-            if(conv == 'o' /*----------------------------------------------------------------------*/) {
-                return (double) strtol(value->value, NULL, 8);
-            }
-            if(conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) {
-                return (double) strtol(value->value, NULL, 16);
-            }
-            if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
-                return (double) strtod(value->value, NULL);
-            }
-            if(conv == 'm' /*----------------------------------------------------------------------*/) {
-                return (double) sextod(value->value);
-            }
+        if(conv == 'd' || conv == 'u' /*-------------------------------------------------------*/) {
+            return (double) strtol(value->value, NULL, 10);
         }
-        else if(lcnt == 0)
-        {
-            if(conv == 'd' || conv == 'u' /*-------------------------------------------------------*/) {
-                return (double) strtol(value->value, NULL, 10);
-            }
-            if(conv == 'o' /*----------------------------------------------------------------------*/) {
-                return (double) strtol(value->value, NULL, 8);
-            }
-            if(conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) {
-                return (double) strtol(value->value, NULL, 16);
-            }
-            if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
-                return (double) strtod(value->value, NULL);
-            }
-            if(conv == 'm' /*----------------------------------------------------------------------*/) {
-                return (double) sextod(value->value);
-            }
+        if(conv == 'o' /*----------------------------------------------------------------------*/) {
+            return (double) strtol(value->value, NULL, 8);
+        }
+        if(conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) {
+            return (double) strtol(value->value, NULL, 16);
+        }
+        if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') {
+            return (double) strtod(value->value, NULL);
+        }
+        if(conv == 'm' /*----------------------------------------------------------------------*/) {
+            return (double) sextod(value->value);
         }
     }
 
