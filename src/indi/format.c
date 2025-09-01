@@ -82,8 +82,7 @@ static bool _parse_format(char *result_conv, int *result_lcnt, int *result_w, in
 
     int lcnt = 0;
 
-    /**/ if(*p == 'l')
-    {
+    if(*p == 'l') {
         lcnt = 1; p++;
         if(*p == 'l') {
             lcnt = 2; p++;
