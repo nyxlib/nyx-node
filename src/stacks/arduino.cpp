@@ -653,7 +653,7 @@ __redis:
         {
             if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
             {
-                nyx_redis_auth(node, stack->redis_usernam, stack->redis_password);
+                nyx_redis_auth(node, stack->redis_username, stack->redis_password);
 
                 NYX_LOG_INFO("Redis support is enabled");
             }
