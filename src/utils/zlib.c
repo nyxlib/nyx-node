@@ -111,7 +111,7 @@ static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src
         size_t chunk = 65535u < rem ? 65535u : rem;
 
         uint16_t len = (uint16_t) chunk;
-        uint16_t nlen = ~(uint16_t) chunk;
+        uint16_t nlen = (uint16_t) (~len);
 
         *dst++ = (uint8_t) (chunk == rem);
         *dst++ = (uint8_t) (len & 0xFF);
@@ -128,16 +128,16 @@ static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src
             rem -= chunk;
         }
 
-    } while(rem != 0);
+    } while(rem > 0);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t ad = _nyx_adler32((const uint8_t *) src_buff, src_size);
+    uint32_t hash = nyx_hash32(src_size, src_buff, 1u);
 
-    *dst++ = (uint8_t) (ad >> 24);
-    *dst++ = (uint8_t) (ad >> 16);
-    *dst++ = (uint8_t) (ad >> 8);
-    *dst++ = (uint8_t) (ad >> 0);
+    *dst++ = (uint8_t) (hash >> 24);
+    *dst++ = (uint8_t) (hash >> 16);
+    *dst++ = (uint8_t) (hash >> 8);
+    *dst++ = (uint8_t) (hash >> 0);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -163,7 +163,7 @@ static buff_t _internal_inflate(size_t *result_size, __UNUSED__ size_t comp_size
 
 str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    if(size != 0x00 || buff == NULL)
+    if(size == 0x00 || buff == NULL)
     {
         if(result_len)
         {
