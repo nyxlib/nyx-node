@@ -12,12 +12,97 @@
 #include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+#ifdef HAVE_ZLIB
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static buff_t _internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t uncomp_buff)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uLongf comp_size = compressBound((uLong) uncomp_size);
+
+    Bytef *comp_buff = (Bytef *) nyx_memory_alloc((size_t) comp_size);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    int ret = compress2(comp_buff, &comp_size, (const Bytef *) uncomp_buff, (uLong) uncomp_size, Z_BEST_COMPRESSION);
+
+    if(ret != Z_OK)
+    {
+        nyx_memory_free(comp_buff);
+
+        *result_size = 0x00;
+
+        return NULL;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    *result_size = comp_size;
+
+    return comp_buff;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uLongf uncomp_size = (uLongf) *result_size;
+
+    Bytef *uncomp_buff = (Bytef *) nyx_memory_alloc(*result_size);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    int ret = uncompress(uncomp_buff, &uncomp_size, (const Bytef *) comp_buff, (uLong) comp_size);
+
+    if(ret != Z_OK)
+    {
+        nyx_memory_free(uncomp_buff);
+
+        *result_size = 0x00;
+
+        return false;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    *result_size = uncomp_size;
+
+    return uncomp_buff;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+#else
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static buff_t _internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t uncomp_buff)
+{
+    *result_size = size;
+
+    return buff;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+{
+    *result_size = size;
+
+    return buff;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+#endif
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-#ifndef HAVE_ZLIB
-    return nyx_base64_encode(result_len, size, buff);
-#else
     if(size == 0x00 || buff == NULL)
     {
         if(result_len)
@@ -30,66 +115,26 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uLongf comp_size = compressBound((uLong) size);
+    size_t comp_size;
+    buff_t comp_buff = _internal_deflate(&comp_size, size, buff);
 
-    Bytef *comp_buff = (Bytef *) nyx_memory_alloc((size_t) comp_size);
-
-    if(comp_buff == NULL)
+    if(comp_size > 0x00 && comp_buff != NULL)
     {
-        if(result_len)
-        {
-            *result_len = 0x00;
-        }
+        str_t result = nyx_base64_encode(result_len, comp_size, comp_buff);
 
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    int ret = compress2(comp_buff, &comp_size, (const Bytef *) buff, (uLong) size, Z_BEST_COMPRESSION);
-
-    ///_memory_free(comp_buff);
-
-    if(ret != Z_OK)
-    {
         nyx_memory_free(comp_buff);
 
-        if(result_len)
-        {
-            *result_len = 0x00;
-        }
-
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    size_t len;
-    str_t str = nyx_base64_encode(&len, (size_t) comp_size, (BUFF_t) comp_buff);
-
-    nyx_memory_free(comp_buff);
-
-    if(str == NULL)
-    {
-        ///_memory_free(comp_buff);
-
-        if(result_len)
-        {
-            *result_len = 0x00;
-        }
-
-        return NULL;
+        return result;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(result_len)
     {
-        *result_len = len;
+        *result_len = 0x00;
     }
 
-    return str;
-#endif
+    return NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -103,10 +148,7 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
         return NULL;
     }
 
-#ifndef HAVE_ZLIB
-    return nyx_base64_decode(result_size, len, str);
-#else
-    if(*result_size == 0x00 || len == 0x00 || str == NULL)
+    if(len == 0x00 || str == NULL)
     {
         *result_size = 0x00;
 
@@ -118,38 +160,20 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
     size_t comp_size;
     buff_t comp_buff = nyx_base64_decode(&comp_size, len, str);
 
-    if(comp_size == 0x00 || comp_buff == NULL)
+    if(comp_size > 0x00 && comp_buff != NULL)
     {
-        *result_size = 0x00;
+        buff_t result = _internal_inflate(result_size, comp_size, comp_buff);
 
-        return NULL;
+        nyx_memory_free(comp_buff);
+
+        return result;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uLongf size = (uLongf) *result_size;
+    *result_size = 0x00;
 
-    Bytef *buff = (Bytef *) nyx_memory_alloc(*result_size);
-
-    int ret = uncompress(buff, &size, (const Bytef *) comp_buff, (uLong) comp_size);
-
-    nyx_memory_free(comp_buff);
-
-    if(ret != Z_OK)
-    {
-        nyx_memory_free(buff);
-
-        *result_size = 0x00;
-
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    *result_size = (size_t) size;
-
-    return (buff_t) buff;
-#endif
+    return NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
