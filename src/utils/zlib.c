@@ -108,16 +108,25 @@ static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src
     size_t rem = src_size;
 
     do {
-        size_t chunk = 65535u < rem ? 65535u : rem;
+        size_t chunk = 65535u < rem ? 65535u
+                                    : rem
+        ;
 
         uint16_t len = (uint16_t) chunk;
         uint16_t nlen = (uint16_t) (~len);
 
+        /* LAST */
+
         *dst++ = (uint8_t) (chunk == rem);
+
+        /* LENGTH */
+
         *dst++ = (uint8_t) (len & 0xFF);
         *dst++ = (uint8_t) (len >> 8);
         *dst++ = (uint8_t) (nlen & 0xFF);
         *dst++ = (uint8_t) (nlen >> 8);
+
+        /* PAYLOAD */
 
         if(chunk > 0)
         {
