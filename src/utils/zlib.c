@@ -148,13 +148,13 @@ static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_inflate(size_t *result_size, __UNUSED__ size_t comp_size, __UNUSED__ BUFF_t comp_buff)
+static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
 {
     NYX_LOG_ERROR("ZLib uncompress not supported");
 
-    *result_size = 0x00;
+    *result_size = comp_size;
 
-    return NULL;
+    return comp_buff;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
