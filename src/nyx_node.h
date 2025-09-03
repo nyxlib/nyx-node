@@ -2175,16 +2175,24 @@ nyx_dict_t *nyx_blob_def_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff, bool base64_encode, bool compress)
+/**
+ * @private
+ */
+
+bool nyx_glob_is_compressed(const nyx_dict_t *def);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff)
 {
-    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, base64_encode, compress));
+    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, nyx_glob_is_compressed(def)));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff, bool base64_decode, bool uncompress)
+__INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff)
 {
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, base64_decode, uncompress);
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, true, nyx_glob_is_compressed(def));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

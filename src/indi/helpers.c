@@ -421,3 +421,12 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_glob_is_compressed(const nyx_dict_t *def)
+{
+    const nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    return (format != NULL) && (format->raw_size > 2) && (strcmp(format->value + format->raw_size - 2, ".z") == 0);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
