@@ -17,7 +17,7 @@
 #ifdef HAVE_ZLIB
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t uncomp_buff)
+static buff_t internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t uncomp_buff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -49,7 +49,7 @@ static buff_t _internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+static buff_t internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -81,9 +81,51 @@ static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t co
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 #else
+
+uint32_t internal_adler32(size_t src_size, BUFF_t src_buff)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const uint8_t *p = (const uint8_t *) src_buff;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uint32_t a = 1u;
+    uint32_t b = 0u;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    while(src_size > 0)
+    {
+        size_t t = (src_size > ADLER_N_MAX) ? ADLER_N_MAX : src_size;
+
+        src_size -= t;
+
+        for(; t >= 4; t -= 4)
+        {
+            a += *p++; b += a;
+            a += *p++; b += a;
+            a += *p++; b += a;
+            a += *p++; b += a;
+        }
+
+        for(; t > 0; t -= 1)
+        {
+            a += *p++; b += a;
+        }
+
+        a %= ADLER_MOD;
+        b %= ADLER_MOD;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return (b << 16) | (a << 0);
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_buff)
+static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_buff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -141,7 +183,7 @@ static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t hash = nyx_hash32(src_size, src_buff, 1u);
+    uint32_t hash = internal_adler32(src_size, src_buff);
 
     *dst++ = (uint8_t) (hash >> 24);
     *dst++ = (uint8_t) (hash >> 16);
@@ -157,7 +199,7 @@ static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+static buff_t internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
 {
     NYX_LOG_ERROR("ZLib uncompress not supported");
 
@@ -185,7 +227,7 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
     /*----------------------------------------------------------------------------------------------------------------*/
 
     size_t comp_size;
-    buff_t comp_buff = _internal_deflate(&comp_size, size, buff);
+    buff_t comp_buff = internal_deflate(&comp_size, size, buff);
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
@@ -231,7 +273,7 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
-        buff_t result = _internal_inflate(result_size, comp_size, comp_buff);
+        buff_t result = internal_inflate(result_size, comp_size, comp_buff);
 
         nyx_memory_free(comp_buff);
 
