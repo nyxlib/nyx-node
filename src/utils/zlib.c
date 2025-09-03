@@ -6,7 +6,9 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #ifdef HAVE_ZLIB
-#include <zlib.h>
+#  include <zlib.h>
+#else
+#  include <string.h>
 #endif
 
 #include "../nyx_node_internal.h"
@@ -81,20 +83,78 @@ static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t co
 #else
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t uncomp_buff)
+static buff_t _internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_buff)
 {
-    *result_size = size;
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    return buff;
+    size_t n_blocks = (src_size > 0) ? ((src_size + 65534u) / 65535u) : 1;
+
+    size_t dst_size = 2 + n_blocks * 5 + src_size + 4;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const uint8_t *src = (const uint8_t *) /*------------*/(src_buff);
+    /*-*/ uint8_t *dst = (/*-*/ uint8_t *) nyx_memory_alloc(dst_size);
+
+    uint8_t *dst_buff = dst;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    *dst++ = 0x78;
+    *dst++ = 0x01;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    size_t rem = src_size;
+
+    do {
+        size_t chunk = 65535u < rem ? 65535u : rem;
+
+        uint16_t len = (uint16_t) chunk;
+        uint16_t nlen = ~(uint16_t) chunk;
+
+        *dst++ = (uint8_t) (chunk == rem);
+        *dst++ = (uint8_t) (len & 0xFF);
+        *dst++ = (uint8_t) (len >> 8);
+        *dst++ = (uint8_t) (nlen & 0xFF);
+        *dst++ = (uint8_t) (nlen >> 8);
+
+        if(chunk > 0)
+        {
+            memcpy(dst, src, chunk);
+
+            dst += chunk;
+            src += chunk;
+            rem -= chunk;
+        }
+
+    } while(rem != 0);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uint32_t ad = _nyx_adler32((const uint8_t *) src_buff, src_size);
+
+    *dst++ = (uint8_t) (ad >> 24);
+    *dst++ = (uint8_t) (ad >> 16);
+    *dst++ = (uint8_t) (ad >> 8);
+    *dst++ = (uint8_t) (ad >> 0);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    *result_size = (size_t) (dst - dst_buff);
+
+    return (buff_t) dst_buff;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+static buff_t _internal_inflate(size_t *result_size, __UNUSED__ size_t comp_size, __UNUSED__ BUFF_t comp_buff)
 {
-    *result_size = size;
+    NYX_LOG_ERROR("ZLib uncompress not supported");
 
-    return buff;
+    *result_size = 0x00;
+
+    return NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -103,7 +163,7 @@ static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t co
 
 str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    if(size == 0x00 || buff == NULL)
+    if(buff == NULL)
     {
         if(result_len)
         {
