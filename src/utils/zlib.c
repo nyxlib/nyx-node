@@ -67,7 +67,7 @@ static buff_t _internal_inflate(size_t *result_size, size_t comp_size, BUFF_t co
 
         *result_size = 0x00;
 
-        return false;
+        return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -163,7 +163,7 @@ static buff_t _internal_inflate(size_t *result_size, __UNUSED__ size_t comp_size
 
 str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    if(buff == NULL)
+    if(size != 0x00 || buff == NULL)
     {
         if(result_len)
         {
