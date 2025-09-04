@@ -238,7 +238,7 @@ bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, bool check, si
             STR_t vector_device = nyx_dict_get_string(vector, "@device");
             STR_t vector_stream = nyx_dict_get_string(vector,  "@name" );
 
-            if(strcmp(vector_device, device) == 0 && strcmp(vector_stream, stream) == 0)
+            if(vector_device!= NULL && vector_stream != NULL && strcmp(vector_device, device) == 0 && strcmp(vector_stream, stream) == 0)
             {
                 if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
                 {
