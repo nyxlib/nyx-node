@@ -266,7 +266,10 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
 
     if(len == 0x00 || str == NULL)
     {
-        *result_size = 0x00;
+        //(result_size)
+        {
+            *result_size = 0x00;
+        }
 
         return NULL;
     }
@@ -287,7 +290,10 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    *result_size = 0x00;
+    //(result_size)
+    {
+        *result_size = 0x00;
+    }
 
     return NULL;
 }
