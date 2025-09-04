@@ -1893,7 +1893,7 @@ nyx_dict_t *nyx_number_def_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
+__INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
@@ -1904,7 +1904,7 @@ __INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
+__INLINE__ double nyx_number_def_get(const nyx_dict_t *def)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
