@@ -161,7 +161,15 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
                &&
                field_buff != NULL
             ) {
-                if(field_name[0] == '#')
+                /**/ if(field_name[0] == '%')
+                {
+                    value_buff = nyx_zlib_compress(&value_size, field_size, field_buff);
+
+                    field_name = field_name + 1;
+
+                    allocated = true;
+                }
+                else if(field_name[0] == '#')
                 {
                     value_buff = nyx_base64_encode(&value_size, field_size, field_buff);
 
