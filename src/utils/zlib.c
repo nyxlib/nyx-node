@@ -100,8 +100,6 @@ uint32_t internal_adler32(size_t src_size, BUFF_t src_buff)
     uint32_t a = 1u;
     uint32_t b = 0u;
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     while(src_size > 0)
     {
         size_t t = (src_size > ADLER_N_MAX) ? ADLER_N_MAX : src_size;

@@ -62,31 +62,17 @@ void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result
         *result_size = object->raw_size;
     }
 
-    /**/ if(uncompress)
+    if(result_buff != NULL)
     {
-        buff_t buff = nyx_zlib_uncompress(result_size, object->length, object->value);
-
-        if(result_buff == NULL) {
-            nyx_memory_free(buff);
+        /**/ if(uncompress)
+        {
+            *result_buff = nyx_zlib_uncompress(result_size, object->length, object->value);
         }
-        else {
-            *result_buff = buff;
+        else if(base64_decode)
+        {
+            *result_buff = nyx_base64_decode(result_size, object->length, object->value);
         }
-    }
-    else if(base64_decode)
-    {
-        buff_t buff = nyx_base64_decode(result_size, object->length, object->value);
-
-        if(result_buff == NULL) {
-            nyx_memory_free(buff);
-        }
-        else {
-            *result_buff = buff;
-        }
-    }
-    else
-    {
-        if(result_buff)
+        else
         {
             *result_buff = object->value;
         }
