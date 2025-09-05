@@ -328,6 +328,10 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
             nyx_dict_set(dict, "@label", nyx_string_from(opts->label));
         }
 
+        if(opts->hints != NULL) {
+            nyx_dict_set(dict, "@hints", nyx_string_from(opts->hints));
+        }
+
         if(opts->timeout > 0.00) {
             nyx_dict_set(dict, "@timeout", nyx_number_from(opts->timeout));
         }

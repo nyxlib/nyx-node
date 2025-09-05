@@ -1836,6 +1836,7 @@ typedef struct
 {
     __NULLABLE__ STR_t label;
     __NULLABLE__ STR_t group;
+    __NULLABLE__ STR_t hints;
     __NULLABLE__ double timeout;
     __NULLABLE__ STR_t message;
 
