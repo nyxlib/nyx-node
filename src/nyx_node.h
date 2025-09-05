@@ -292,7 +292,7 @@ __NULLABLE__ str_t nyx_zlib_compress(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib-decompresses a string to a buffer.
+ * \brief ZLib-uncompresses a string to a buffer.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
  * \param len Length of the string to decode.
