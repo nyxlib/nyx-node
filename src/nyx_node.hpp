@@ -132,8 +132,7 @@ public:
             this->redisUsername(),
             this->redisPassword(),
             3000,
-            true,
-            false
+            true
         );
 
         while(s_signo == 0)
