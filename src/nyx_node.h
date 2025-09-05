@@ -280,7 +280,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
  * \param buff Input buffer to encode.
- * \return The encoded string.
+ * \return The compressed string.
  */
 
 __NULLABLE__ str_t nyx_zlib_compress(
@@ -297,7 +297,7 @@ __NULLABLE__ str_t nyx_zlib_compress(
  * \param result_size Mandatory pointer to provide and store the size of the decoded buffer.
  * \param len Length of the string to decode.
  * \param str Input string to decode.
- * \return The decoded buffer.
+ * \return The uncompressed buffer.
  */
 
 __NULLABLE__ buff_t nyx_zlib_uncompress(
