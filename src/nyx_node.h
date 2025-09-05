@@ -241,7 +241,7 @@ void nyx_generate_mac_addr(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Encodes a buffer to a Base64-encoded string.
+ * \brief Base64-encodes a buffer to a string.
  *
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
@@ -258,7 +258,7 @@ __NULLABLE__ str_t nyx_base64_encode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Decodes a Base64-encoded string to a buffer.
+ * \brief Base64-encodes a string to a buffer.
  *
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
@@ -275,7 +275,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Compresses a buffer to a ZLib-compressed string.
+ * \brief ZLib-compresses a buffer to a string.
  *
  * \param result_len Optional pointer to store the length of the uncompressed string.
  * \param size Size of the buffer to encode.
@@ -292,7 +292,7 @@ __NULLABLE__ str_t nyx_zlib_compress(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Decompresses a ZLib-compressed string to a buffer.
+ * \brief ZLib-decompresses a string to a buffer.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
  * \param len Length of the string to decode.
