@@ -281,11 +281,11 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
-        buff_t result_str = internal_inflate(result_size, comp_size, comp_buff);
+        buff_t result_buff = internal_inflate(result_size, comp_size, comp_buff);
 
         nyx_memory_free(comp_buff);
 
-        return result_str;
+        return result_buff;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
