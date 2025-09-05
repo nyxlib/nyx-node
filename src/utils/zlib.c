@@ -236,11 +236,11 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
-        str_t result = nyx_base64_encode(result_len, comp_size, comp_buff);
+        str_t result_str = nyx_base64_encode(result_len, comp_size, comp_buff);
 
         nyx_memory_free(comp_buff);
 
-        return result;
+        return result_str;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -281,11 +281,11 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
-        buff_t result = internal_inflate(result_size, comp_size, comp_buff);
+        buff_t result_str = internal_inflate(result_size, comp_size, comp_buff);
 
         nyx_memory_free(comp_buff);
 
-        return result;
+        return result_str;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
