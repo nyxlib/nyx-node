@@ -82,25 +82,9 @@ static nyx_xmldoc_t *transform(const nyx_object_t *dict) // NOLINT(misc-no-recur
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_xmldoc_t *nyx_object_to_xmldoc(__NULLABLE__ const nyx_object_t *object, bool validate)
+nyx_xmldoc_t *nyx_object_to_xmldoc(__NULLABLE__ const nyx_object_t *object)
 {
-    if(object == NULL)
-    {
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_xmldoc_t *xmldoc = transform(object);
-
-    if(validate && nyx_validation_check(xmldoc) == false)
-    {
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return xmldoc;
+    return object != NULL ? transform(object) : NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -41,7 +41,7 @@ static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
 
     if(node->enable_xml)
     {
-        nyx_xmldoc_t *xmldoc = nyx_object_to_xmldoc(object, node->validate_xml);
+        nyx_xmldoc_t *xmldoc = nyx_object_to_xmldoc(object);
 
         if(xmldoc != NULL)
         {
@@ -596,7 +596,7 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, con
 
                 if(xmldoc != NULL)
                 {
-                    nyx_object_t *object = nyx_xmldoc_to_object(xmldoc, node->validate_xml);
+                    nyx_object_t *object = nyx_xmldoc_to_object(xmldoc);
 
                     if(object != NULL)
                     {
@@ -733,7 +733,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, cons
 
                         if(xmldoc != NULL)
                         {
-                            nyx_object_t *object = nyx_xmldoc_to_object(xmldoc, node->validate_xml);
+                            nyx_object_t *object = nyx_xmldoc_to_object(xmldoc);
 
                             if(object != NULL)
                             {
@@ -791,8 +791,7 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t redis_password,
     /**/
     int retry_ms,
-    bool enable_xml,
-    bool validate_xml
+    bool enable_xml
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -860,7 +859,6 @@ nyx_node_t *nyx_node_initialize(
     node->redis_url = redis_url;
 
     node->enable_xml = enable_xml;
-    node->validate_xml = validate_xml;
 
     node->vectors = vectors;
 

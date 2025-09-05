@@ -97,25 +97,9 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_object_t *nyx_xmldoc_to_object(__NULLABLE__ const nyx_xmldoc_t *xmldoc, bool validate)
+nyx_object_t *nyx_xmldoc_to_object(__NULLABLE__ const nyx_xmldoc_t *xmldoc)
 {
-    if(xmldoc == NULL)
-    {
-        return NULL;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(validate && nyx_validation_check(xmldoc) == false)
-    {
-        return NULL;
-    }
-
-    nyx_object_t *object = transform(xmldoc);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    return object;
+    return xmldoc != NULL ? transform(xmldoc) : NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

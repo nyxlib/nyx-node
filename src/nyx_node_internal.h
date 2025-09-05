@@ -340,7 +340,6 @@ struct nyx_node_s
     STR_t redis_url;
 
     bool enable_xml;
-    bool validate_xml;
 
     /**/
 

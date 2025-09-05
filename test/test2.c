@@ -30,7 +30,7 @@ static void off_callback(struct nyx_object_s *def_vector, bool modified)
 
     if(modified)
     {
-        nyx_node_send_message(def_vector->node, "Telescope Simulator", "Hello World!");
+        nyx_node_send_message(def_vector->node, "Test", "Hello World!");
     }
 }
 
@@ -48,15 +48,6 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(nyx_validation_initialize() == false)
-    {
-        printf("Error initializing validation\n");
-
-        goto _err;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     nyx_opts_t opt = {
         .group = "Test"
     };
@@ -67,7 +58,7 @@ int main()
     nyx_dict_t *defs1[] = {def1, def2, NULL};
 
     nyx_dict_t *switch_vector1 = nyx_switch_def_vector_new(
-        "Telescope Simulator",
+        "Test",
         "foo",
         NYX_STATE_OK,
         NYX_PERM_RW,
@@ -85,7 +76,7 @@ int main()
     nyx_dict_t *defs2[] = {def3, def4, NULL};
 
     nyx_dict_t *switch_vector2 = nyx_switch_def_vector_new(
-        "Telescope Simulator",
+        "Test",
         "bar",
         NYX_STATE_OK,
         NYX_PERM_RW,
@@ -100,7 +91,7 @@ int main()
     nyx_dict_t *defs3[] = {def5, def6, NULL};
 
     nyx_dict_t *number_vector1 = nyx_number_def_vector_new(
-        "Telescope Simulator",
+        "Test",
         "qux",
         NYX_STATE_OK,
         NYX_PERM_RW,
@@ -127,7 +118,6 @@ int main()
         getenv("REDIS_USERNAME"),
         getenv("REDIS_PASSWORD"),
         3000,
-        true,
         true
     );
 
@@ -140,23 +130,11 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(nyx_validation_finalize() == false)
-    {
-        printf("Error finalizing validation\n");
-
-        goto _err;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-_err:
     nyx_memory_finalize();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     printf("Bye.\n");
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 
     return 0;
 }

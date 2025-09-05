@@ -1610,45 +1610,6 @@ str_t nyx_xmldoc_to_string(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* VALIDATION                                                                                                         */
-/*--------------------------------------------------------------------------------------------------------------------*/
-/** @}
-  * @defgroup VALIDATION XML validation
-  * XML validation for Nyx / INDI commands.
-  * @{
-  */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Initialize the XML validation subsystem.
- */
-
-bool nyx_validation_initialize();
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Initialize the XML validation subsystem.
- */
-
-bool nyx_validation_finalize();
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Validate the provided XML command using the XSD schema extended with INDI and Nyx additions.
- *
- * @param xmldoc The provided XML document.
- * @return `True` if the document is valid, and `false` if not.
- *
- * @include ./src/schema/nyx.xsd
- */
-
-bool nyx_validation_check(
-    __NULLABLE__ const nyx_xmldoc_t *xmldoc
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* TRANSFORM                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
@@ -1662,13 +1623,11 @@ bool nyx_validation_check(
  * \brief Convert an XML Nyx / INDI command to the JSON one.
  *
  * @param xmldoc The provided XML Nyx / INDI command.
- * @param validate If `true`, the input XML command is validated (see @ref nyx_validation_check).
  * @return The generated JSON Nyx / INDI command.
  */
 
 __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
-    __NULLABLE__ const nyx_xmldoc_t *xmldoc,
-    bool validate
+    __NULLABLE__ const nyx_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1677,13 +1636,11 @@ __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
  * \brief Convert an JSON Nyx / INDI command to the XML one.
  *
  * @param object The provided JSON Nyx / INDI command.
- * @param validate If `true`, the output XML command is validated (see @ref nyx_validation_check).
  * @return The generated XML Nyx / INDI command.
  */
 
 __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
-    __NULLABLE__ const nyx_object_t *object,
-    bool validate
+    __NULLABLE__ const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2382,7 +2339,6 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param redis_password Optional Redis password.
  * @param retry_ms Connect retry time [milliseconds].
  * @param enable_xml Enables the XML compatibility layer.
- * @param validate_xml Enables the XML message validation.
  * @return
  */
 
@@ -2403,8 +2359,7 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t redis_password,
     /**/
     int retry_ms,
-    bool enable_xml,
-    bool validate_xml
+    bool enable_xml
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -79,7 +79,6 @@ set(SOURCE_FILES
     src/stacks/mongoose.c
     #
     src/xml_stream.c
-    src/xml_validation.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
     src/node.c

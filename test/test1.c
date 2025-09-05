@@ -14,15 +14,6 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(nyx_validation_initialize() == false)
-    {
-        printf("Error initializing validation\n");
-
-        goto _err;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     nyx_dict_t *def1 = nyx_switch_def_new("turn_on", "Turn ON", NYX_ONOFF_ON);
     nyx_dict_t *def2 = nyx_switch_def_new("turn_off", "Turn OFF", NYX_ONOFF_OFF);
 
@@ -38,7 +29,7 @@ int main()
         NULL
     );
 
-    nyx_xmldoc_t *doc = nyx_object_to_xmldoc(&switch_vector->base, true);
+    nyx_xmldoc_t *doc = nyx_object_to_xmldoc(&switch_vector->base);
 
     str_t xml = nyx_xmldoc_to_string(doc);
     printf("%s\n", xml);
@@ -55,27 +46,13 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(nyx_validation_finalize() == false)
-    {
-        printf("Error finalizing validation\n");
-
-        goto _err;
-    }
+    nyx_memory_finalize();
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_memory_finalize();
 
     printf("[SUCCESS]\n");
 
     return 0;
-
-_err:
-    nyx_memory_finalize();
-
-    printf("[ERROR]\n");
-
-    return 1;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
