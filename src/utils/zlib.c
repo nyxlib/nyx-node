@@ -285,7 +285,7 @@ str_t nyx_zlib_base64_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ siz
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(result_len)
+    if(result_len != NULL)
     {
         *result_len = 0x00;
     }
@@ -313,7 +313,7 @@ buff_t nyx_zlib_base64_uncompress(__NOTNULL__ size_t *result_size, __ZEROABLE__ 
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    //(result_size != NULL)
+    if(result_size != NULL)
     {
         *result_size = 0x00;
     }
