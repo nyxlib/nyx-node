@@ -155,9 +155,7 @@ static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_
     size_t rem = src_size;
 
     do {
-        size_t chunk = 65535u < rem ? 65535u
-                                    : rem
-        ;
+        size_t chunk = 65535u < rem ? 65535u : rem;
 
         /* LAST */
 
