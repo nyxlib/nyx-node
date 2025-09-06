@@ -159,19 +159,16 @@ static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_
                                     : rem
         ;
 
-        uint16_t len = (uint16_t) chunk;
-        uint16_t nlen = (uint16_t) (~len);
-
         /* LAST */
 
         *dst++ = (uint8_t) (chunk == rem);
 
         /* LENGTH */
 
-        *dst++ = (uint8_t) (len & 0xFF);
-        *dst++ = (uint8_t) (len >> 8);
-        *dst++ = (uint8_t) (nlen & 0xFF);
-        *dst++ = (uint8_t) (nlen >> 8);
+        *dst++ = (uint8_t) (chunk & 0xFF);
+        *dst++ = (uint8_t) (chunk >> 8);
+        *dst++ = (uint8_t) ((~chunk) & 0xFF);
+        *dst++ = (uint8_t) ((~chunk) >> 8);
 
         /* PAYLOAD */
 
