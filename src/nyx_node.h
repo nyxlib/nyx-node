@@ -34,6 +34,9 @@ double nan(const char *tag);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define __NOTNULL__ \
+            /* do nothing */
+
 #define __NULLABLE__ \
             /* do nothing */
 
@@ -301,7 +304,7 @@ __NULLABLE__ buff_t nyx_zlib_compress(
  */
 
 __NULLABLE__ buff_t nyx_zlib_uncompress(
-    /*--------*/ size_t *result_size,
+    __NOTNULL__ size_t *result_size,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -335,7 +338,7 @@ __NULLABLE__ str_t nyx_zlib_base64_compress(
  */
 
 __NULLABLE__ buff_t nyx_zlib_base64_uncompress(
-    /*--------*/ size_t *result_size,
+    __NOTNULL__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str
 );
