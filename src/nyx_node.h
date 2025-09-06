@@ -283,7 +283,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
  * \return The compressed string.
  */
 
-__NULLABLE__ str_t nyx_zlib_compress(
+__NULLABLE__ buff_t nyx_zlib_compress(
     __NULLABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
@@ -295,12 +295,46 @@ __NULLABLE__ str_t nyx_zlib_compress(
  * \brief ZLib-uncompresses a string to a buffer.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
+ * \param size Size of the buffer to decode.
+ * \param buff IInput buffer to decode.
+ * \return The uncompressed buffer.
+ */
+
+__NULLABLE__ buff_t nyx_zlib_uncompress(
+    /*--------*/ size_t *result_size,
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ZLib+base64-compresses a buffer to a string.
+ *
+ * \param result_len Optional pointer to store the length of the uncompressed string.
+ * \param size Size of the buffer to encode.
+ * \param buff Input buffer to encode.
+ * \return The compressed string.
+ */
+
+__NULLABLE__ str_t nyx_zlib_base64_compress(
+    __NULLABLE__ size_t *result_len,
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief ZLib+base64-uncompresses a string to a buffer.
+ *
+ * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
  * \param len Length of the string to decode.
  * \param str Input string to decode.
  * \return The uncompressed buffer.
  */
 
-__NULLABLE__ buff_t nyx_zlib_uncompress(
+__NULLABLE__ buff_t nyx_zlib_base64_uncompress(
     /*--------*/ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str

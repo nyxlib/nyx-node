@@ -17,8 +17,18 @@
 #ifdef HAVE_ZLIB
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t uncomp_buff)
+buff_t nyx_zlib_compress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t uncomp_size, __NULLABLE__ BUFF_t uncomp_buff)
 {
+    if(uncomp_size == 0x00 || uncomp_buff == NULL)
+    {
+        if(result_size)
+        {
+            *result_size = 0x00;
+        }
+
+        return NULL;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uLongf comp_size = compressBound((uLong) uncomp_size);
@@ -33,14 +43,20 @@ static buff_t internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t u
     {
         nyx_memory_free(comp_buff);
 
-        *result_size = 0x00;
+        if(result_size != NULL)
+        {
+            *result_size = 0x00;
+        }
 
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    *result_size = comp_size;
+    if(result_size != NULL)
+    {
+        *result_size = comp_size;
+    }
 
     return comp_buff;
 
@@ -49,8 +65,25 @@ static buff_t internal_deflate(size_t *result_size, size_t uncomp_size, BUFF_t u
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+buff_t nyx_zlib_uncompress(/*--------*/ size_t *result_size, __ZEROABLE__ size_t comp_size, __NULLABLE__ BUFF_t comp_buff)
 {
+    if(result_size == NULL)
+    {
+        NYX_LOG_ERROR("Initial size not provided in `result_size`");
+
+        return NULL;
+    }
+
+    if(comp_size == 0x00 || comp_buff == NULL)
+    {
+        //(result_size)
+        {
+            *result_size = 0x00;
+        }
+
+        return NULL;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uLongf uncomp_size = (uLongf) *result_size;
@@ -65,14 +98,20 @@ static buff_t internal_inflate(size_t *result_size, size_t comp_size, BUFF_t com
     {
         nyx_memory_free(uncomp_buff);
 
-        *result_size = 0x00;
+        //(result_size != NULL)
+        {
+            *result_size = 0x00;
+        }
 
         return NULL;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    *result_size = uncomp_size;
+    //(result_size != NULL)
+    {
+        *result_size = uncomp_size;
+    }
 
     return uncomp_buff;
 
@@ -130,20 +169,30 @@ uint32_t internal_adler32(size_t src_size, BUFF_t src_buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_buff)
+buff_t nyx_zlib_compress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t size, BUFF_t buff)
 {
+    if(size == 0x00 || buff == NULL)
+    {
+        if(result_size)
+        {
+            *result_size = 0x00;
+        }
+
+        return NULL;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t n_blocks = src_size > 0 ? (src_size + 65534u) / 65535u : 1;
+    size_t n_blocks = size > 0 ? (size + 65534u) / 65535u : 1;
 
-    size_t dst_size = 2 + n_blocks * 5 + src_size + 4;
+    size_t dst_size = 2 + n_blocks * 5 + size + 4;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const uint8_t *src = (const uint8_t *) /*------------*/(src_buff);
+    const uint8_t *src = (const uint8_t *) /*------------*/(  buff  );
     /*-*/ uint8_t *dst = (/*-*/ uint8_t *) nyx_memory_alloc(dst_size);
 
-    uint8_t *dst_buff = dst;
+    uint8_t *result_buff = dst;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -152,7 +201,7 @@ static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t rem = src_size;
+    size_t rem = size;
 
     do {
         size_t chunk = 65535u < rem ? 65535u : rem;
@@ -183,7 +232,7 @@ static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t hash = internal_adler32(src_size, src_buff);
+    uint32_t hash = internal_adler32(size, buff);
 
     *dst++ = (uint8_t) (hash >> 24);
     *dst++ = (uint8_t) (hash >> 16);
@@ -192,42 +241,38 @@ static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    *result_size = (size_t) (dst - dst_buff);
+    if(result_size)
+    {
+        *result_size = (size_t) (dst - result_buff);
+    }
 
-    return (buff_t) dst_buff;
+    return (buff_t) result_buff;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static buff_t internal_inflate(size_t *result_size, size_t comp_size, BUFF_t comp_buff)
+buff_t nyx_zlib_uncompress(__NULLABLE__ size_t *result_size, __UNUSED__ size_t size, __UNUSED__ BUFF_t buff)
 {
     NYX_LOG_ERROR("ZLib uncompression not supported");
 
-    *result_size = comp_size;
+    if(result_size)
+    {
+        *result_size = 0x00;
+    }
 
-    return comp_buff;
+    return NULL;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 #endif
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+str_t nyx_zlib_base64_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
-    if(size == 0x00 || buff == NULL)
-    {
-        if(result_len)
-        {
-            *result_len = 0x00;
-        }
-
-        return NULL;
-    }
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     size_t comp_size;
-    buff_t comp_buff = internal_deflate(&comp_size, size, buff);
+    buff_t comp_buff = nyx_zlib_compress(&comp_size, size, buff);
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
@@ -250,25 +295,8 @@ str_t nyx_zlib_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
+buff_t nyx_zlib_base64_uncompress(/*----------*/ size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
 {
-    if(result_size == NULL)
-    {
-        NYX_LOG_ERROR("Initial size not provided in `result_size`");
-
-        return NULL;
-    }
-
-    if(len == 0x00 || str == NULL)
-    {
-        //(result_size)
-        {
-            *result_size = 0x00;
-        }
-
-        return NULL;
-    }
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     size_t comp_size;
@@ -276,7 +304,7 @@ buff_t nyx_zlib_uncompress(size_t *result_size, __ZEROABLE__ size_t len, __NULLA
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
-        buff_t result_buff = internal_inflate(result_size, comp_size, comp_buff);
+        buff_t result_buff = nyx_zlib_uncompress(result_size, comp_size, comp_buff);
 
         nyx_memory_free(comp_buff);
 
