@@ -754,12 +754,12 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, cons
                         /*--------------------------------------------------------------------------------------------*/
 
                         node->user_mqtt_handler(
-                                node,
-                                NYX_EVENT_MSG,
-                                event_topic.len,
-                                event_topic.buf,
-                                event_payload.len,
-                                event_payload.buf
+                            node,
+                            NYX_EVENT_MSG,
+                            event_topic.len,
+                            event_topic.buf,
+                            event_payload.len,
+                            event_payload.buf
                         );
 
                         /*--------------------------------------------------------------------------------------------*/
