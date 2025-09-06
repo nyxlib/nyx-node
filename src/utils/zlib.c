@@ -102,7 +102,7 @@ uint32_t internal_adler32(size_t src_size, BUFF_t src_buff)
 
     while(src_size > 0)
     {
-        size_t t = (ADLER_N_MAX < src_size) ? ADLER_N_MAX : src_size;
+        size_t t = ADLER_N_MAX < src_size ? ADLER_N_MAX : src_size;
 
         src_size -= t;
 
@@ -134,7 +134,7 @@ static buff_t internal_deflate(size_t *result_size, size_t src_size, BUFF_t src_
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t n_blocks = (src_size > 0) ? ((src_size + 65534u) / 65535u) : 1;
+    size_t n_blocks = src_size > 0 ? (src_size + 65534u) / 65535u : 1;
 
     size_t dst_size = 2 + n_blocks * 5 + src_size + 4;
 
