@@ -40,6 +40,7 @@ endif()
 
 set(SOURCE_FILES
     src/nyx_node.h
+    src/nyx_node.hpp
     src/nyx_node_schema.h
     src/nyx_node_internal.h
     #
