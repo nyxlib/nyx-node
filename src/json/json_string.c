@@ -66,7 +66,7 @@ void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result
     {
         /**/ if(uncompress)
         {
-            *result_buff = nyx_zlib_base64_uncompress(result_size, object->length, object->value);
+            *result_buff = nyx_zlib_base64_inflate(result_size, object->length, object->value);
         }
         else if(base64_decode)
         {
@@ -194,7 +194,7 @@ bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, boo
         object->dyn = true;
         object->raw_size = size;
 
-        object->value = nyx_zlib_base64_compress(&object->length, size, buff);
+        object->value = nyx_zlib_base64_deflate(&object->length, size, buff);
     }
     else if(base64_encode)
     {

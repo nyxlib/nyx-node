@@ -235,9 +235,9 @@ void nyx_log(
  */
 
 uint32_t nyx_hash32(
-        __ZEROABLE__ size_t size,
-        __NULLABLE__ BUFF_t buff,
-        uint32_t seed
+    __ZEROABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff,
+    uint32_t seed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -303,7 +303,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
  * \return The compressed string.
  */
 
-__NULLABLE__ buff_t nyx_zlib_compress(
+__NULLABLE__ buff_t nyx_zlib_deflate(
     __NULLABLE__ size_t *result_buff,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
@@ -320,7 +320,7 @@ __NULLABLE__ buff_t nyx_zlib_compress(
  * \return The uncompressed buffer.
  */
 
-__NULLABLE__ buff_t nyx_zlib_uncompress(
+__NULLABLE__ buff_t nyx_zlib_inflate(
     __NOTNULL__ size_t *result_size,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
@@ -337,7 +337,7 @@ __NULLABLE__ buff_t nyx_zlib_uncompress(
  * \return The compressed string.
  */
 
-__NULLABLE__ str_t nyx_zlib_base64_compress(
+__NULLABLE__ str_t nyx_zlib_base64_deflate(
     __NULLABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
@@ -354,7 +354,7 @@ __NULLABLE__ str_t nyx_zlib_base64_compress(
  * \return The uncompressed buffer.
  */
 
-__NULLABLE__ buff_t nyx_zlib_base64_uncompress(
+__NULLABLE__ buff_t nyx_zlib_base64_inflate(
     __NOTNULL__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str

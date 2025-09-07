@@ -17,7 +17,7 @@
 #ifdef HAVE_ZLIB
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_compress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+buff_t nyx_zlib_deflate(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -65,7 +65,7 @@ buff_t nyx_zlib_compress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_uncompress(__NOTNULL__ size_t *result_size, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+buff_t nyx_zlib_inflate(__NOTNULL__ size_t *result_size, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(result_size == NULL)
     {
@@ -169,7 +169,7 @@ uint32_t internal_adler32(size_t src_size, BUFF_t src_buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_compress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t size, BUFF_t buff)
+buff_t nyx_zlib_deflate(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t size, BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -251,7 +251,7 @@ buff_t nyx_zlib_compress(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_uncompress(__NOTNULL__ size_t *result_size, __UNUSED__ size_t size, __UNUSED__ BUFF_t buff)
+buff_t nyx_zlib_inflate(__NOTNULL__ size_t *result_size, __UNUSED__ size_t size, __UNUSED__ BUFF_t buff)
 {
     NYX_LOG_ERROR("ZLib uncompression not supported");
 
@@ -267,12 +267,12 @@ buff_t nyx_zlib_uncompress(__NOTNULL__ size_t *result_size, __UNUSED__ size_t si
 #endif
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_zlib_base64_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+str_t nyx_zlib_base64_deflate(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     size_t comp_size;
-    buff_t comp_buff = nyx_zlib_compress(&comp_size, size, buff);
+    buff_t comp_buff = nyx_zlib_deflate(&comp_size, size, buff);
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
@@ -295,7 +295,7 @@ str_t nyx_zlib_base64_compress(__NULLABLE__ size_t *result_len, __ZEROABLE__ siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_base64_uncompress(__NOTNULL__ size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
+buff_t nyx_zlib_base64_inflate(__NOTNULL__ size_t *result_size, __ZEROABLE__ size_t len, __NULLABLE__ STR_t str)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -304,7 +304,7 @@ buff_t nyx_zlib_base64_uncompress(__NOTNULL__ size_t *result_size, __ZEROABLE__ 
 
     if(comp_size > 0x00 && comp_buff != NULL)
     {
-        buff_t result_buff = nyx_zlib_uncompress(result_size, comp_size, comp_buff);
+        buff_t result_buff = nyx_zlib_inflate(result_size, comp_size, comp_buff);
 
         nyx_memory_free(comp_buff);
 
