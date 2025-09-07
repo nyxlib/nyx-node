@@ -2231,7 +2231,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx Stream.
+ * \brief Allocates a new Nyx Stream.
  * @param name
  * @param label
  * @return
