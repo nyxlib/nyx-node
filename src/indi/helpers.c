@@ -411,7 +411,7 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
 
                     if(payload != NULL && payload->type == NYX_TYPE_STRING)
                     {
-                        nyx_dict_set_alt(dst_dict, "@size", nyx_number_from(nyx_string_raw_size((nyx_string_t *) payload)), false);
+                        nyx_dict_set_alt(dst_dict, "@size", nyx_number_from((double) nyx_string_raw_size((nyx_string_t *) payload)), false);
                     }
 
                     /*------------------------------------------------------------------------------------------------*/
