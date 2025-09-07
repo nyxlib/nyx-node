@@ -60,7 +60,7 @@ bool nyx_xml_stream_detect_opening_tag(nyx_xml_stream_t *xml_stream, size_t size
             xml_stream->pos = (
                 (size_t) xml_stream->s_ptr
                 -
-                (size_t) /**/buff/**/
+                (size_t) /*--*/buff/*--*/
             );
 
             xml_stream->tag = &TAGS[i];
