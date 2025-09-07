@@ -226,6 +226,23 @@ void nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief Hashes a buffer using the MurmurHash2 algorithm.
+ *
+ * \param size Input buffer to hash.
+ * \param buff Length of the buffer to hash.
+ * \param seed Seed.
+ * \return The computed 32-bit hash.
+ */
+
+uint32_t nyx_hash32(
+        __ZEROABLE__ size_t size,
+        __NULLABLE__ BUFF_t buff,
+        uint32_t seed
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * @brief Generates a MAC address based on a node identifier.
  *
  * @param result_mac Output array to store the generated MAC address.
@@ -341,23 +358,6 @@ __NULLABLE__ buff_t nyx_zlib_base64_uncompress(
     __NOTNULL__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Hashes a buffer using the MurmurHash2 algorithm.
- *
- * \param size Input buffer to hash.
- * \param buff Length of the buffer to hash.
- * \param seed Seed.
- * \return The computed 32-bit hash.
- */
-
-uint32_t nyx_hash32(
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff,
-    uint32_t seed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
