@@ -382,7 +382,7 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
 
     nyx_object_t *list = nyx_dict_get(def_vector, "children");
 
-    if(list != NULL)
+    if(list != NULL && list->type == NYX_TYPE_LIST)
     {
         for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &object);)
         {
