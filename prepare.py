@@ -53,7 +53,7 @@ def download_doxygen_awesome():
 
             with open(f'.doxygen/{filename}', 'wt') as f:
 
-                f.write(response.content.decode('UTF-8'))
+                f.write(response.content.decode('UTF-8').replace('--content-maxwidth: 1050px;', '--content-maxwidth: 1250px;'))
 
         else:
 
