@@ -824,7 +824,7 @@ nyx_node_t *nyx_node_initialize(
 
             for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &object);)
             {
-                object->/**/node/**/ = node;
+                object->node = node;
             }
         }
 
