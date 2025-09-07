@@ -386,36 +386,43 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *def_vector, STR_t set_tag, STR
     {
         for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &object);)
         {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            nyx_dict_t *dict = nyx_dict_new();
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            nyx_dict_set(dict, "<>", nyx_string_from(one_tag));
-
-            internal_copy(dict, (nyx_dict_t *) object, "$", false);
-            internal_copy(dict, (nyx_dict_t *) object, "@name", false);
-
-            if(strcmp(one_tag, "oneBLOB") == 0)
+            if(object->type == NYX_TYPE_DICT)
             {
-                internal_copy(dict, (nyx_dict_t *) object, "@format", false);
+                /*----------------------------------------------------------------------------------------------------*/
 
-                size_t raw_size = nyx_string_raw_size(
-                    (nyx_string_t *) nyx_dict_get(
-                        (nyx_dict_t *) object,
-                        "$"
-                    )
-                );
+                nyx_dict_t *src_dict = (nyx_dict_t *) object, *dst_dict = nyx_dict_new();
 
-                nyx_dict_set_alt(dict, "@size", nyx_number_from((double) raw_size), false);
+                /*----------------------------------------------------------------------------------------------------*/
+
+                nyx_dict_set_alt(dst_dict, "<>", nyx_string_from(one_tag), false);
+
+                internal_copy(dst_dict, src_dict,   "$"  , false);
+                internal_copy(dst_dict, src_dict, "@name", false);
+
+                if(strcmp(one_tag, "oneBLOB") == 0)
+                {
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    internal_copy(dst_dict, src_dict, "@format", false);
+
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    nyx_object_t *payload = nyx_dict_get(src_dict, "$");
+
+                    if(payload != NULL && payload->type == NYX_TYPE_STRING)
+                    {
+                        nyx_dict_set_alt(dst_dict, "@size", nyx_number_from(nyx_string_raw_size((nyx_string_t *) payload)), false);
+                    }
+
+                    /*------------------------------------------------------------------------------------------------*/
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                nyx_list_push(children, dst_dict);
+
+                /*----------------------------------------------------------------------------------------------------*/
             }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            nyx_list_push(children, dict);
-
-            /*--------------------------------------------------------------------------------------------------------*/
         }
     }
 
