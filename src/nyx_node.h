@@ -2164,8 +2164,8 @@ nyx_dict_t *nyx_switch_set_vector_new(
 nyx_dict_t *nyx_blob_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
-    STR_t value,
-    __NULLABLE__ STR_t format
+    __NULLABLE__ STR_t format,
+    STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
