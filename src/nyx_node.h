@@ -2156,8 +2156,8 @@ nyx_dict_t *nyx_switch_set_vector_new(
  * \brief Allocates a new INDI / Nyx BLOB.
  * @param name
  * @param label
- * @param value
  * @param format
+ * @param value
  * @return
  */
 
