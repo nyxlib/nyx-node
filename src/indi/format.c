@@ -375,7 +375,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-double nyx_format_string_to_double(STR_t format, nyx_string_t *value)
+double nyx_format_string_to_double(STR_t format, const nyx_string_t *value)
 {
     char conv;
 

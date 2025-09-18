@@ -713,7 +713,7 @@ _err:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool xml_parse_closing_tag(xml_parser_t *parser, nyx_xmldoc_t *current)
+static bool xml_parse_closing_tag(xml_parser_t *parser, const nyx_xmldoc_t *current)
 {
     if(current->self_closing == false)
     {
