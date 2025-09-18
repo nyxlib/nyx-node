@@ -35,7 +35,7 @@ static const nyx_str_t SPECIAL_TOPICS[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void sub_object(struct nyx_node_s *node, nyx_object_t *object)
+static void sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -127,7 +127,7 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void get_properties(nyx_node_t *node, __NULLABLE__ nyx_dict_t *dict)
+static void get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
@@ -230,7 +230,7 @@ static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t))
+static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t))
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -338,21 +338,21 @@ static void enable_xxx(nyx_node_t *node, nyx_dict_t *dict, STR_t tag, int (* str
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void enable_blob(nyx_node_t *node, nyx_dict_t *dict)
+__INLINE__ void enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
 {
     enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void enable_stream(nyx_node_t *node, nyx_dict_t *dict)
+__INLINE__ void enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 {
     enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool is_allowed(nyx_node_t *node, nyx_dict_t *dict)
+static bool is_allowed(nyx_node_t *node, const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -379,7 +379,7 @@ static bool is_allowed(nyx_node_t *node, nyx_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void set_properties(nyx_node_t *node, nyx_dict_t *dict)
+static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 {
     if(!is_allowed(node, dict))
     {
