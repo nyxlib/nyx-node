@@ -433,7 +433,7 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t o
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_glob_is_compressed(const nyx_dict_t *def)
+bool nyx_blob_is_compressed(const nyx_dict_t *def)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 

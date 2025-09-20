@@ -485,7 +485,7 @@ typedef struct nyx_object_s
  * \return The new JSON object.
  */
 
-nyx_object_t *nyx_object_parse_buff(
+__NULLABLE__ nyx_object_t *nyx_object_parse_buff(
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -1643,12 +1643,10 @@ typedef struct nyx_xmldoc_s
  * \return The new XML document.
  */
 
-nyx_xmldoc_t *nyx_xmldoc_parse_buff(
+__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_xmldoc_t
@@ -1658,7 +1656,7 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
  * \return The new XML document.
  */
 
-nyx_xmldoc_t *nyx_xmldoc_parse(
+__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
     __NULLABLE__ STR_t text
 );
 
@@ -2217,20 +2215,20 @@ nyx_dict_t *nyx_blob_def_new(
  * @private
  */
 
-bool nyx_glob_is_compressed(const nyx_dict_t *def);
+bool nyx_blob_is_compressed(const nyx_dict_t *def);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff)
 {
-    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, nyx_glob_is_compressed(def)));
+    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, nyx_blob_is_compressed(def)));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff)
 {
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, true, nyx_glob_is_compressed(def));
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, true, nyx_blob_is_compressed(def));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2422,7 +2420,7 @@ typedef void (* nyx_mqtt_handler_t)(
  * @return
  */
 
-nyx_node_t *nyx_node_initialize(
+__NULLABLE__ nyx_node_t *nyx_node_initialize(
     STR_t node_id,
     nyx_dict_t *vectors[],
     /**/
