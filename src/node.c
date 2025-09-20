@@ -496,6 +496,23 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                 {
                                                     /*----------------------------------------------------------------*/
 
+                                                    case NYX_TYPE_BOOLEAN:
+                                                        {
+                                                            bool old_val = nyx_boolean_get((nyx_boolean_t *) old_value);
+                                                            bool new_val = nyx_boolean_get((nyx_boolean_t *) new_value);
+
+                                                            success = object2->in_callback._bool != NULL ? object2->in_callback._bool(object2, new_val, old_val) : true;
+
+                                                            if(success)
+                                                            {
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_boolean_from(new_val), false);
+                                                            }
+                                                        }
+
+                                                        break;
+
+                                                    /*----------------------------------------------------------------*/
+
                                                     case NYX_TYPE_NUMBER:
                                                         {
                                                             double old_val = nyx_number_get((nyx_number_t *) old_value);
