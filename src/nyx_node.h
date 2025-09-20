@@ -453,7 +453,7 @@ typedef struct nyx_object_s
             struct nyx_object_s *object                                                         //!< This object.
         );
 
-        __NULLABLE__ void *_ptr;                                                                //!< ???.
+        __NULLABLE__ void *_ptr;                                                                //!< The pointer.
 
     } in_callback;
 
