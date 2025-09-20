@@ -444,8 +444,6 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                     nyx_object_t *object1;
                     nyx_object_t *object2;
 
-                    bool vector_modified = false;
-
                     /*------------------------------------------------------------------------------------------------*/
 
                     STR_t rule = nyx_dict_get_string(def_vector, "@rule");
@@ -484,28 +482,68 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                             {
                                                 /*--------------------------------------------------------------------*/
 
-                                                bool modified;
+                                                nyx_object_t *old_value = nyx_dict_get((nyx_dict_t *) object2, "$");
+                                                nyx_object_t *new_value = is_current ? nyx_dict_get((nyx_dict_t *) object1, "$")
+                                                                                     : (nyx_object_t *) nyx_string_from_ref("Off")
+                                                ;
 
-                                                if(is_current) {
-                                                    modified = internal_copy((nyx_dict_t *) object2, (nyx_dict_t *) object1, "$", false);
-                                                }
-                                                else {
-                                                    modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_ref("Off"), false);
+                                                /*--------------------------------------------------------------------*/
+
+                                                bool success = false;
+                                                bool modified = false;
+
+                                                switch(new_value->type)
+                                                {
+                                                    /*----------------------------------------------------------------*/
+
+                                                    case NYX_TYPE_NUMBER:
+                                                        {
+                                                            double old_val = nyx_number_get((nyx_number_t *) old_value);
+                                                            double new_val = nyx_number_get((nyx_number_t *) new_value);
+
+                                                            success = object2->in_callback._double != NULL ? object2->in_callback._double(object2, new_val, old_val) : true;
+
+                                                            if(success)
+                                                            {
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_number_from(new_val), false);
+                                                            }
+                                                        }
+
+                                                        break;
+
+                                                    /*----------------------------------------------------------------*/
+
+                                                    case NYX_TYPE_STRING:
+                                                        {
+                                                            STR_t old_val = nyx_string_get((nyx_string_t *) old_value);
+                                                            STR_t new_val = nyx_string_get((nyx_string_t *) new_value);
+
+                                                            success = object2->in_callback._str != NULL ? object2->in_callback._str(object2, new_val, old_val) : true;
+
+                                                            if(success)
+                                                            {
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(new_val), false);
+                                                            }
+                                                        }
+
+                                                        break;
+
+                                                    /*----------------------------------------------------------------*/
+
+                                                    default:
+                                                        NYX_LOG_ERROR("Invalid object");
+                                                        continue;
+
+                                                    /*----------------------------------------------------------------*/
                                                 }
 
                                                 /*--------------------------------------------------------------------*/
 
-                                                if(object2->in_callback == NULL || object2->in_callback(object2, modified))
+                                                if(success)
                                                 {
                                                     str_t str = nyx_object_to_string(object2);
                                                     NYX_LOG_DEBUG("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str);
                                                     nyx_memory_free(str);
-
-                                                    vector_modified = vector_modified || modified;
-                                                }
-                                                else
-                                                {
-
                                                 }
 
                                                 /*--------------------------------------------------------------------*/
@@ -523,7 +561,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    if(def_vector->base.in_callback != NULL) def_vector->base.in_callback(&def_vector->base, vector_modified);
+                    if(def_vector->base.in_callback._vector != NULL) def_vector->base.in_callback._vector(&def_vector->base);
 
                     nyx_object_notify(&def_vector->base);
 

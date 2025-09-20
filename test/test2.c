@@ -17,20 +17,20 @@ static void signal_handler(int signo)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool on_callback(struct nyx_object_s *def_vector, bool modified)
+static bool on_callback(struct nyx_object_s *def_vector, int new_value, int old_value)
 {
-    printf("ON button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), modified ? "true" : "false");
+    printf("ON button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), old_value != new_value ? "true" : "false");
 
     return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool off_callback(struct nyx_object_s *def_vector, bool modified)
+static bool off_callback(struct nyx_object_s *def_vector, int new_value, int old_value)
 {
-    printf("OFF button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), modified ? "true" : "false");
+    printf("OFF button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), old_value != new_value ? "true" : "false");
 
-    if(modified)
+    if(old_value != new_value)
     {
         nyx_node_send_message(def_vector->node, "Test", "Hello World!");
     }
@@ -71,8 +71,8 @@ int main()
         &opt
     );
 
-    def1->base.in_callback = on_callback;
-    def2->base.in_callback = off_callback;
+    def1->base.in_callback._int = on_callback;
+    def2->base.in_callback._int = off_callback;
 
     nyx_dict_t *def3 = nyx_switch_def_new("foo_on", "Foo ON", NYX_ONOFF_ON);
     nyx_dict_t *def4 = nyx_switch_def_new("foo_off", "Foo OFF", NYX_ONOFF_OFF);
