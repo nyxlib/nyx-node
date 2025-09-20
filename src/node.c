@@ -72,7 +72,7 @@ static void sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
+static bool out_callback(nyx_object_t *object)
 {
     nyx_dict_t *def_vector = (nyx_dict_t *) object;
 
@@ -105,11 +105,11 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
                 set_vector = nyx_blob_set_vector_new(def_vector);
 
                 if((set_vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
-                    return;
+                    return false;
                 }
             }
             else {
-                return;
+                return false;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -121,8 +121,12 @@ static void out_callback(nyx_object_t *object, __UNUSED__ bool modified)
             nyx_dict_free(set_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
+
+            return true;
         }
     }
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -491,17 +495,18 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                                                 /*--------------------------------------------------------------------*/
 
-                                                vector_modified = vector_modified || modified;
+                                                if(object2->in_callback == NULL || object2->in_callback(object2, modified))
+                                                {
+                                                    str_t str = nyx_object_to_string(object2);
+                                                    NYX_LOG_DEBUG("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str);
+                                                    nyx_memory_free(str);
 
-                                                /*--------------------------------------------------------------------*/
+                                                    vector_modified = vector_modified || modified;
+                                                }
+                                                else
+                                                {
 
-                                                str_t str = nyx_object_to_string(object2);
-                                                NYX_LOG_DEBUG("Updating (modified: %s) `%s::%s` with %s", modified ? "true" : "false", device1, name1, str);
-                                                nyx_memory_free(str);
-
-                                                /*--------------------------------------------------------------------*/
-
-                                                if(object2->in_callback != NULL) object2->in_callback(object2, modified);
+                                                }
 
                                                 /*--------------------------------------------------------------------*/
                                             }
@@ -520,7 +525,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                     if(def_vector->base.in_callback != NULL) def_vector->base.in_callback(&def_vector->base, vector_modified);
 
-                    nyx_object_notify(&def_vector->base, vector_modified);
+                    nyx_object_notify(&def_vector->base);
 
                     break; /* property found */
 

@@ -432,16 +432,16 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_notify(__NULLABLE__ nyx_object_t *object, bool modified)
+void nyx_object_notify(__NULLABLE__ nyx_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {
         if(object->out_callback != NULL)
         {
-            object->out_callback(
-                object,
-                modified
-            );
+            if(!object->out_callback(object))
+            {
+                break;
+            }
         }
     }
 }

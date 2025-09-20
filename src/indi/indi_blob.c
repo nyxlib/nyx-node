@@ -11,7 +11,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
+static bool debug_callback(nyx_object_t *object)
 {
     nyx_dict_t *dict = nyx_blob_set_vector_new((nyx_dict_t *) object);
 
@@ -20,6 +20,8 @@ static void debug_callback(nyx_object_t *object, __UNUSED__ bool modified)
     nyx_memory_free(json);
 
     nyx_dict_free(dict);
+
+    return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

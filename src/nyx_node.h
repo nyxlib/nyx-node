@@ -417,14 +417,13 @@ typedef struct nyx_object_s
 
     __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
 
-    __NULLABLE__ void (* in_callback)(
+    __NULLABLE__ bool (* in_callback)(
         struct nyx_object_s *object,                                                            //!< This object.
         bool modified                                                                           //!< Indicate weather the value has been modified.
     );                                                                                          //!< Callback triggered when a client modifies this object.
 
-    __NULLABLE__ void (* out_callback)(
-        struct nyx_object_s *object,                                                            //!< This object.
-        bool modified                                                                           //!< Indicate weather the value has been modified.
+    __NULLABLE__ bool (* out_callback)(
+        struct nyx_object_s *object                                                             //!< This object.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
     __NULLABLE__ void *ctx;                                                                     //!< Custom pointer for callbacks.

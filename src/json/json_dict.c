@@ -95,7 +95,7 @@ void nyx_dict_clear(nyx_dict_t *object)
 {
     internal_dict_clear(object);
 
-    nyx_object_notify(&object->base, true);
+    nyx_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -234,9 +234,9 @@ bool nyx_dict_set_alt(nyx_dict_t *object, STR_t key, buff_t value, bool notify)
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    if(notify)
+    if(notify && modified)
     {
-        nyx_object_notify(&object->base, modified);
+        nyx_object_notify(&object->base);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

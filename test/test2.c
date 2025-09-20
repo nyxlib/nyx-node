@@ -17,14 +17,16 @@ static void signal_handler(int signo)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void on_callback(struct nyx_object_s *def_vector, bool modified)
+static bool on_callback(struct nyx_object_s *def_vector, bool modified)
 {
     printf("ON button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), modified ? "true" : "false");
+
+    return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void off_callback(struct nyx_object_s *def_vector, bool modified)
+static bool off_callback(struct nyx_object_s *def_vector, bool modified)
 {
     printf("OFF button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), modified ? "true" : "false");
 
@@ -32,6 +34,8 @@ static void off_callback(struct nyx_object_s *def_vector, bool modified)
     {
         nyx_node_send_message(def_vector->node, "Test", "Hello World!");
     }
+
+    return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

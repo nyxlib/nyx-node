@@ -91,7 +91,7 @@ void nyx_list_clear(nyx_list_t *object)
 {
     internal_list_clear(object);
 
-    nyx_object_notify(&object->base, true);
+    nyx_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -228,9 +228,9 @@ nyx_list_t *nyx_list_set_alt(nyx_list_t *object, size_t idx, buff_t value, bool 
     /*----------------------------------------------------------------------------------------------------------------*/
 
 _ok:
-    if(notify)
+    if(notify && modified)
     {
-        nyx_object_notify(&object->base, modified);
+        nyx_object_notify(&object->base);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

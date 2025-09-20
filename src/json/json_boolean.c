@@ -50,9 +50,9 @@ bool nyx_boolean_set_alt(nyx_boolean_t *object, bool value, bool notify)
     object->value != value;
     object->value = value;
 
-    if(notify)
+    if(notify && modified)
     {
-        nyx_object_notify(&object->base, modified);
+        nyx_object_notify(&object->base);
     }
 
     return modified;

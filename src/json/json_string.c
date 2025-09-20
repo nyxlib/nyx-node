@@ -111,9 +111,9 @@ bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(notify)
+        if(notify && modified)
         {
-            nyx_object_notify(&object->base, modified);
+            nyx_object_notify(&object->base);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -156,9 +156,9 @@ bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(notify)
+        if(notify && modified)
         {
-            nyx_object_notify(&object->base, modified);
+            nyx_object_notify(&object->base);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -216,7 +216,7 @@ bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, boo
 
     if(notify)
     {
-        nyx_object_notify(&object->base, true);
+        nyx_object_notify(&object->base);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
