@@ -419,6 +419,8 @@ typedef struct nyx_object_s
 
     union {
 
+        __NULLABLE__ void *_ptr;                                                                //!< The pointer.
+
         __NULLABLE__ bool (* _bool)(
             struct nyx_object_s *object,                                                        //!< This object.
             bool new_value,                                                                     //!< New value.
@@ -453,9 +455,7 @@ typedef struct nyx_object_s
             struct nyx_object_s *object                                                         //!< This object.
         );
 
-        __NULLABLE__ void *_ptr;                                                                //!< The pointer.
-
-    } in_callback;
+    } in_callback;                                                                               //!< Callback triggered when the client modifies this object.
 
     __NULLABLE__ bool (* out_callback)(
         struct nyx_object_s *object                                                             //!< This object.
