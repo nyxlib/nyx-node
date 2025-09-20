@@ -72,13 +72,13 @@ static void sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool out_callback(nyx_object_t *object)
+static void out_callback(nyx_object_t *object)
 {
-    nyx_dict_t *def_vector = (nyx_dict_t *) object;
+    nyx_dict_t *vector = (nyx_dict_t *) object;
 
-    if((def_vector->base.flags & NYX_FLAGS_DISABLED) == 0)
+    if((vector->base.flags & NYX_FLAGS_DISABLED) == 0)
     {
-        STR_t tag = nyx_dict_get_string(def_vector, "<>");
+        STR_t tag = nyx_dict_get_string(vector, "<>");
 
         if(tag != NULL)
         {
@@ -87,29 +87,29 @@ static bool out_callback(nyx_object_t *object)
             nyx_dict_t *set_vector;
 
             /**/ if(strcmp("defNumberVector", tag) == 0) {
-                set_vector = nyx_number_set_vector_new(def_vector);
+                set_vector = nyx_number_set_vector_new(vector);
             }
             else if(strcmp("defTextVector", tag) == 0) {
-                set_vector = nyx_text_set_vector_new(def_vector);
+                set_vector = nyx_text_set_vector_new(vector);
             }
             else if(strcmp("defLightVector", tag) == 0) {
-                set_vector = nyx_light_set_vector_new(def_vector);
+                set_vector = nyx_light_set_vector_new(vector);
             }
             else if(strcmp("defSwitchVector", tag) == 0) {
-                set_vector = nyx_switch_set_vector_new(def_vector);
+                set_vector = nyx_switch_set_vector_new(vector);
             }
             else if(strcmp("defStreamVector", tag) == 0) {
-                set_vector = nyx_stream_set_vector_new(def_vector);
+                set_vector = nyx_stream_set_vector_new(vector);
             }
             else if(strcmp("defBLOBVector", tag) == 0) {
-                set_vector = nyx_blob_set_vector_new(def_vector);
+                set_vector = nyx_blob_set_vector_new(vector);
 
                 if((set_vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
-                    return false;
+                    return;
                 }
             }
             else {
-                return false;
+                return;
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -121,12 +121,8 @@ static bool out_callback(nyx_object_t *object)
             nyx_dict_free(set_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
-
-            return true;
         }
     }
-
-    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -155,14 +151,14 @@ static void get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict
 
     for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
     {
-        nyx_dict_t *def_vector = *vector_ptr;
+        nyx_dict_t *vector = *vector_ptr;
 
-        if((def_vector->base.flags & NYX_FLAGS_DISABLED) == 0)
+        if((vector->base.flags & NYX_FLAGS_DISABLED) == 0)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t device2 = nyx_dict_get_string(def_vector, "@device");
-            STR_t name2 = nyx_dict_get_string(def_vector, "@name");
+            STR_t device2 = nyx_dict_get_string(vector, "@device");
+            STR_t name2 = nyx_dict_get_string(vector, "@name");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -188,7 +184,7 @@ static void get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                sub_object(node, (nyx_object_t *) def_vector);
+                sub_object(node, (nyx_object_t *) vector);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -261,13 +257,13 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
 
         for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *def_vector = *vector_ptr;
+            nyx_dict_t *vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t device2 = nyx_dict_get_string(def_vector, "@device");
-            STR_t name2 = nyx_dict_get_string(def_vector, "@name");
-            STR_t tag2 = nyx_dict_get_string(def_vector, "<>");
+            STR_t device2 = nyx_dict_get_string(vector, "@device");
+            STR_t name2 = nyx_dict_get_string(vector, "@name");
+            STR_t tag2 = nyx_dict_get_string(vector, "<>");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -296,13 +292,13 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
 
                     case NYX_BLOB_ALSO:
                     case NYX_BLOB_ONLY:
-                        def_vector->base.flags |= (1U << (2 + 0 * 31 + index));
+                        vector->base.flags |= (1U << (2 + 0 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_NEVER:
-                        def_vector->base.flags &= ~(1U << (2 + 0 * 31 + index));
+                        vector->base.flags &= ~(1U << (2 + 0 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -311,13 +307,13 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
 
                     case NYX_STREAM_ALSO:
                     case NYX_STREAM_ONLY:
-                        def_vector->base.flags |= (1U << (2 + 1 * 31 + index));
+                        vector->base.flags |= (1U << (2 + 1 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_STREAM_NEVER:
-                        def_vector->base.flags &= ~(1U << (2 + 1 * 31 + index));
+                        vector->base.flags &= ~(1U << (2 + 1 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -411,13 +407,13 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
         for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *def_vector = *vector_ptr;
+            nyx_dict_t *vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_object_t *device2_string = nyx_dict_get(def_vector, "@device");
-            nyx_object_t *name2_string = nyx_dict_get(def_vector, "@name");
-            nyx_object_t *children2_list = nyx_dict_get(def_vector, "children");
+            nyx_object_t *device2_string = nyx_dict_get(vector, "@device");
+            nyx_object_t *name2_string = nyx_dict_get(vector, "@name");
+            nyx_object_t *children2_list = nyx_dict_get(vector, "children");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -446,7 +442,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    STR_t rule = nyx_dict_get_string(def_vector, "@rule");
+                    STR_t rule = nyx_dict_get_string(vector, "@rule");
 
                     bool is_one_of_many = rule != NULL && strcmp(rule, "OneOfMany") == 0;
 
@@ -501,7 +497,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             bool old_val = nyx_boolean_get((nyx_boolean_t *) old_value);
                                                             bool new_val = nyx_boolean_get((nyx_boolean_t *) new_value);
 
-                                                            success = object2->in_callback._bool != NULL ? object2->in_callback._bool(def_vector, (nyx_dict_t *) object2, new_val, old_val) : true;
+                                                            success = object2->in_callback._bool != NULL ? object2->in_callback._bool(vector, (nyx_dict_t *) object2, new_val, old_val) : true;
 
                                                             if(success)
                                                             {
@@ -518,7 +514,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             double old_val = nyx_number_get((nyx_number_t *) old_value);
                                                             double new_val = nyx_number_get((nyx_number_t *) new_value);
 
-                                                            success = object2->in_callback._double != NULL ? object2->in_callback._double(def_vector, (nyx_dict_t *) object2, new_val, old_val) : true;
+                                                            success = object2->in_callback._double != NULL ? object2->in_callback._double(vector, (nyx_dict_t *) object2, new_val, old_val) : true;
 
                                                             if(success)
                                                             {
@@ -535,7 +531,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             STR_t old_val = nyx_string_get((nyx_string_t *) old_value);
                                                             STR_t new_val = nyx_string_get((nyx_string_t *) new_value);
 
-                                                            success = object2->in_callback._str != NULL ? object2->in_callback._str(def_vector, (nyx_dict_t *) object2, new_val, old_val) : true;
+                                                            success = object2->in_callback._str != NULL ? object2->in_callback._str(vector, (nyx_dict_t *) object2, new_val, old_val) : true;
 
                                                             if(success)
                                                             {
@@ -578,9 +574,9 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    if(def_vector->base.in_callback._vector != NULL) def_vector->base.in_callback._vector(&def_vector->base);
+                    if(vector->base.in_callback._vector != NULL) vector->base.in_callback._vector(vector);
 
-                    nyx_object_notify(&def_vector->base);
+                    nyx_object_notify(&vector->base);
 
                     break; /* property found */
 
@@ -1001,12 +997,12 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
 
         for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
         {
-            nyx_dict_t *def_vector = *vector_ptr;
+            nyx_dict_t *vector = *vector_ptr;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            STR_t device2 = nyx_dict_get_string(def_vector, "@device");
-            STR_t name2 = nyx_dict_get_string(def_vector, "@name");
+            STR_t device2 = nyx_dict_get_string(vector, "@device");
+            STR_t name2 = nyx_dict_get_string(vector, "@name");
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -1028,13 +1024,13 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
             switch(onoff)
             {
                 case NYX_ONOFF_OFF:
-                    def_vector->base.flags |= NYX_FLAGS_DISABLED;
+                    vector->base.flags |= NYX_FLAGS_DISABLED;
                     break;
 
                 case NYX_ONOFF_ON:
-                    def_vector->base.flags &= ~NYX_FLAGS_DISABLED;
+                    vector->base.flags &= ~NYX_FLAGS_DISABLED;
 
-                    sub_object(node, (nyx_object_t *) def_vector);
+                    sub_object(node, (nyx_object_t *) vector);
                     break;
             }
 

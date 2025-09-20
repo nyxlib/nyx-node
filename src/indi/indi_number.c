@@ -11,7 +11,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool debug_callback(nyx_object_t *object)
+static void debug_callback(nyx_object_t *object)
 {
     nyx_dict_t *dict = nyx_number_set_vector_new((nyx_dict_t *) object);
 
@@ -20,8 +20,6 @@ static bool debug_callback(nyx_object_t *object)
     nyx_memory_free(json);
 
     nyx_dict_free(dict);
-
-    return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -108,9 +106,9 @@ nyx_dict_t *nyx_number_def_vector_new(
 /* SET VECTOR                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *def_vector)
+nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *vector)
 {
-    return internal_def_to_set(def_vector, "setNumberVector", "oneNumber");
+    return internal_def_to_set(vector, "setNumberVector", "oneNumber");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

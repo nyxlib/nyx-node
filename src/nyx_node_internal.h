@@ -271,7 +271,7 @@ bool internal_copy(
 );
 
 nyx_dict_t *internal_def_to_set(
-    const nyx_dict_t *def_vector,
+    const nyx_dict_t *vector,
     STR_t set_tag,
     STR_t one_tag
 );

@@ -460,13 +460,13 @@ typedef struct nyx_object_s
             STR_t old_value                                                                     //!< Old value.
         );
 
-        __NULLABLE__ bool (* _vector)(
-            struct nyx_object_s *vector                                                         //!< This object.
+        __NULLABLE__ void (* _vector)(
+            struct nyx_dict_s *vector                                                           //!< This object.
         );
 
     } in_callback;                                                                              //!< Callback triggered when the client modifies this object.
 
-    __NULLABLE__ bool (* out_callback)(
+    __NULLABLE__ void (* out_callback)(
         struct nyx_object_s *object                                                             //!< This object.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
@@ -1980,7 +1980,7 @@ nyx_dict_t *nyx_number_def_vector_new(
  */
 
 nyx_dict_t *nyx_number_set_vector_new(
-    const nyx_dict_t *def_vector
+    const nyx_dict_t *vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2048,7 +2048,7 @@ nyx_dict_t *nyx_text_def_vector_new(
  */
 
 nyx_dict_t *nyx_text_set_vector_new(
-    const nyx_dict_t *def_vector
+    const nyx_dict_t *vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2114,7 +2114,7 @@ nyx_dict_t *nyx_light_def_vector_new(
  */
 
 nyx_dict_t *nyx_light_set_vector_new(
-    const nyx_dict_t *def_vector
+    const nyx_dict_t *vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2184,7 +2184,7 @@ nyx_dict_t *nyx_switch_def_vector_new(
  */
 
 nyx_dict_t *nyx_switch_set_vector_new(
-    const nyx_dict_t *def_vector
+    const nyx_dict_t *vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2262,7 +2262,7 @@ nyx_dict_t *nyx_blob_def_vector_new(
  */
 
 nyx_dict_t *nyx_blob_set_vector_new(
-    const nyx_dict_t *def_vector
+    const nyx_dict_t *vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2312,7 +2312,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
  */
 
 nyx_dict_t *nyx_stream_set_vector_new(
-    const nyx_dict_t *def_vector
+    const nyx_dict_t *vector
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
