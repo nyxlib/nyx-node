@@ -17,22 +17,22 @@ static void signal_handler(int signo)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool on_callback(struct nyx_object_s *def_vector, int new_value, int old_value)
+static bool on_callback(nyx_dict_t *def_vector, nyx_dict_t *def, int new_value, int old_value)
 {
-    printf("ON button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), old_value != new_value ? "true" : "false");
+    printf("ON button %d, modified: %s\n", nyx_switch_def_get(def), old_value != new_value ? "true" : "false");
 
     return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool off_callback(struct nyx_object_s *def_vector, int new_value, int old_value)
+static bool off_callback(nyx_dict_t *def_vector, nyx_dict_t *def, int new_value, int old_value)
 {
-    printf("OFF button %d, modified: %s\n", nyx_switch_def_get((nyx_dict_t *) def_vector), old_value != new_value ? "true" : "false");
+    printf("OFF button %d, modified: %s\n", nyx_switch_def_get(def), old_value != new_value ? "true" : "false");
 
     if(old_value != new_value)
     {
-        nyx_node_send_message(def_vector->node, "Test", "Hello World!");
+        nyx_node_send_message(def_vector->base.node, "Test", "Hello World!");
     }
 
     return true;

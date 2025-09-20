@@ -501,7 +501,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             bool old_val = nyx_boolean_get((nyx_boolean_t *) old_value);
                                                             bool new_val = nyx_boolean_get((nyx_boolean_t *) new_value);
 
-                                                            success = object2->in_callback._bool != NULL ? object2->in_callback._bool(object2, new_val, old_val) : true;
+                                                            success = object2->in_callback._bool != NULL ? object2->in_callback._bool(def_vector, (nyx_dict_t *) object2, new_val, old_val) : true;
 
                                                             if(success)
                                                             {
@@ -518,7 +518,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             double old_val = nyx_number_get((nyx_number_t *) old_value);
                                                             double new_val = nyx_number_get((nyx_number_t *) new_value);
 
-                                                            success = object2->in_callback._double != NULL ? object2->in_callback._double(object2, new_val, old_val) : true;
+                                                            success = object2->in_callback._double != NULL ? object2->in_callback._double(def_vector, (nyx_dict_t *) object2, new_val, old_val) : true;
 
                                                             if(success)
                                                             {
@@ -535,7 +535,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             STR_t old_val = nyx_string_get((nyx_string_t *) old_value);
                                                             STR_t new_val = nyx_string_get((nyx_string_t *) new_value);
 
-                                                            success = object2->in_callback._str != NULL ? object2->in_callback._str(object2, new_val, old_val) : true;
+                                                            success = object2->in_callback._str != NULL ? object2->in_callback._str(def_vector, (nyx_dict_t *) object2, new_val, old_val) : true;
 
                                                             if(success)
                                                             {

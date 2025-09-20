@@ -402,6 +402,10 @@ typedef enum
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+struct nyx_dict_s;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @struct nyx_object_t
  */
@@ -422,40 +426,45 @@ typedef struct nyx_object_s
         __NULLABLE__ void *_ptr;                                                                //!< The pointer.
 
         __NULLABLE__ bool (* _bool)(
-            struct nyx_object_s *object,                                                        //!< This object.
+            struct nyx_dict_s *def_vector,
+            struct nyx_dict_s *def,                                                             //!< This object.
             bool new_value,                                                                     //!< New value.
             bool old_value                                                                      //!< Old value.
         );
 
         __NULLABLE__ bool (* _int)(
-            struct nyx_object_s *object,                                                        //!< This object.
+            struct nyx_dict_s *def_vector,
+            struct nyx_dict_s *def,                                                             //!< This object.
             int new_value,                                                                      //!< New value.
             int old_value                                                                       //!< Old value.
         );
 
         __NULLABLE__ bool (* _long)(
-            struct nyx_object_s *object,                                                        //!< This object.
+            struct nyx_dict_s *def_vector,
+            struct nyx_dict_s *def,                                                             //!< This object.
             long new_value,                                                                     //!< New value.
             long old_value                                                                      //!< Old value.
         );
 
         __NULLABLE__ bool (* _double)(
-            struct nyx_object_s *object,                                                        //!< This object.
+            struct nyx_dict_s *def_vector,
+            struct nyx_dict_s *def,                                                             //!< This object.
             double new_value,                                                                   //!< New value.
             double old_value                                                                    //!< Old value.
         );
 
         __NULLABLE__ bool (* _str)(
-            struct nyx_object_s *object,                                                        //!< This object.
+            struct nyx_dict_s *def_vector,
+            struct nyx_dict_s *def,                                                             //!< This object.
             STR_t new_value,                                                                    //!< New value.
             STR_t old_value                                                                     //!< Old value.
         );
 
         __NULLABLE__ bool (* _vector)(
-            struct nyx_object_s *object                                                         //!< This object.
+            struct nyx_object_s *def_vector                                                     //!< This object.
         );
 
-    } in_callback;                                                                               //!< Callback triggered when the client modifies this object.
+    } in_callback;                                                                              //!< Callback triggered when the client modifies this object.
 
     __NULLABLE__ bool (* out_callback)(
         struct nyx_object_s *object                                                             //!< This object.
@@ -1148,7 +1157,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool bas
  * \brief Struct describing a JSON dict.
  */
 
-typedef struct
+typedef struct nyx_dict_s
 {
     nyx_object_t base;                                                                          //!< ???
 
@@ -1370,7 +1379,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
  * \brief Struct describing a JSON list.
  */
 
-typedef struct
+typedef struct nyx_list_s
 {
     nyx_object_t base;                                                                          //!< ???
 
