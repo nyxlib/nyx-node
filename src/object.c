@@ -437,6 +437,7 @@ void nyx_object_notify(__NULLABLE__ nyx_object_t *object)
     for(; object != NULL; object = object->parent)
     {
         if(object->out_callback != NULL && object->out_callback(object))
+        {
             break;
         }
     }
