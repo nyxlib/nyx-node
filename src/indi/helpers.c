@@ -352,6 +352,28 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void internal_inject_blob_info(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict)
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    internal_copy(dst_dict, src_dict, "@format", false);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_object_t *payload = nyx_dict_get(src_dict, "$");
+
+    if(payload != NULL && payload->type == NYX_TYPE_STRING)
+    {
+        double size = (double) nyx_string_raw_size((nyx_string_t *) payload);
+
+        nyx_dict_set_alt(dst_dict, "@size", nyx_number_from(size), false);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t one_tag)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -401,20 +423,7 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t o
 
                 if(strcmp(one_tag, "oneBLOB") == 0)
                 {
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    internal_copy(dst_dict, src_dict, "@format", false);
-
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    nyx_object_t *payload = nyx_dict_get(src_dict, "$");
-
-                    if(payload != NULL && payload->type == NYX_TYPE_STRING)
-                    {
-                        nyx_dict_set_alt(dst_dict, "@size", nyx_number_from((double) nyx_string_raw_size((nyx_string_t *) payload)), false);
-                    }
-
-                    /*------------------------------------------------------------------------------------------------*/
+                    internal_inject_blob_info(dst_dict, src_dict);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
