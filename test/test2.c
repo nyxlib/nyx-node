@@ -19,7 +19,7 @@ static void signal_handler(int signo)
 
 static bool on_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
 {
-    printf("ON button %d, modified: %s\n", nyx_switch_def_get(def), old_value != new_value ? "true" : "false");
+    printf("ON button %d, modified: %s\n", new_value, old_value != new_value ? "true" : "false");
 
     return true;
 }
@@ -28,7 +28,7 @@ static bool on_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int 
 
 static bool off_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
 {
-    printf("OFF button %d, modified: %s\n", nyx_switch_def_get(def), old_value != new_value ? "true" : "false");
+    printf("OFF button %d, modified: %s\n", new_value, old_value != new_value ? "true" : "false");
 
     if(old_value != new_value)
     {
