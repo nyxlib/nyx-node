@@ -295,12 +295,12 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib-compresses a buffer to a string.
+ * \brief ZLib-compresses a buffer.
  *
- * \param result_buff Optional pointer to store the length of the uncompressed string.
+ * \param result_buff Optional pointer to store the length of the uncompressed buffer.
  * \param size Size of the buffer to encode.
  * \param buff Input buffer to encode.
- * \return The compressed string.
+ * \return The compressed buffer.
  */
 
 __NULLABLE__ buff_t nyx_zlib_deflate(
@@ -312,7 +312,7 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib-uncompresses a string to a buffer.
+ * \brief ZLib-uncompresses a buffer.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
  * \param size Size of the buffer to decode.
@@ -426,14 +426,14 @@ typedef struct nyx_object_s
         __NULLABLE__ void *_ptr;                                                                //!< The pointer.
 
         __NULLABLE__ bool (* _bool)(
-            struct nyx_dict_s *vector,
+            struct nyx_dict_s *vector,                                                          //!< The parent vector.
             struct nyx_dict_s *def,                                                             //!< This object.
             bool new_value,                                                                     //!< New value.
             bool old_value                                                                      //!< Old value.
         );
 
         __NULLABLE__ bool (* _int)(
-            struct nyx_dict_s *vector,
+            struct nyx_dict_s *vector,                                                          //!< The parent vector.
             struct nyx_dict_s *def,                                                             //!< This object.
             int new_value,                                                                      //!< New value.
             int old_value                                                                       //!< Old value.
@@ -447,14 +447,14 @@ typedef struct nyx_object_s
         );
 
         __NULLABLE__ bool (* _double)(
-            struct nyx_dict_s *vector,
+            struct nyx_dict_s *vector,                                                          //!< The parent vector.
             struct nyx_dict_s *def,                                                             //!< This object.
             double new_value,                                                                   //!< New value.
             double old_value                                                                    //!< Old value.
         );
 
         __NULLABLE__ bool (* _str)(
-            struct nyx_dict_s *vector,
+            struct nyx_dict_s *vector,                                                          //!< The parent vector.
             struct nyx_dict_s *def,                                                             //!< This object.
             STR_t new_value,                                                                    //!< New value.
             STR_t old_value                                                                     //!< Old value.
