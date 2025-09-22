@@ -423,7 +423,7 @@ typedef struct nyx_object_s
 
     union {
 
-        __NULLABLE__ void *_ptr;                                                                //!< The pointer.
+        __NULLABLE__ void *_ptr;                                                                //!< The untyped pointer.
 
         __NULLABLE__ bool (* _bool)(
             struct nyx_dict_s *vector,                                                          //!< The parent vector.
