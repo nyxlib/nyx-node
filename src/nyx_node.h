@@ -419,49 +419,49 @@ typedef struct nyx_object_s
 
     __NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
 
-    __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.                                                                                       //!< Callback triggered when a client modifies this object.
+    __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
 
     union {
 
         __NULLABLE__ void *_ptr;                                                                //!< The untyped pointer.
 
         __NULLABLE__ bool (* _bool)(
-            struct nyx_dict_s *vector,                                                          //!< The parent vector.
-            struct nyx_dict_s *def,                                                             //!< This object.
-            bool new_value,                                                                     //!< New value.
-            bool old_value                                                                      //!< Old value.
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< The def object.
+            bool new_value,                                                                     //!< The new value.
+            bool old_value                                                                      //!< The old value.
         );
 
         __NULLABLE__ bool (* _int)(
-            struct nyx_dict_s *vector,                                                          //!< The parent vector.
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
             struct nyx_dict_s *def,                                                             //!< This object.
-            int new_value,                                                                      //!< New value.
-            int old_value                                                                       //!< Old value.
+            int new_value,                                                                      //!< The new value.
+            int old_value                                                                       //!< The old value.
         );
 
         __NULLABLE__ bool (* _long)(
-            struct nyx_dict_s *vector,
-            struct nyx_dict_s *def,                                                             //!< This object.
-            long new_value,                                                                     //!< New value.
-            long old_value                                                                      //!< Old value.
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< The def object.
+            long new_value,                                                                     //!< The new value.
+            long old_value                                                                      //!< The old value.
         );
 
         __NULLABLE__ bool (* _double)(
-            struct nyx_dict_s *vector,                                                          //!< The parent vector.
-            struct nyx_dict_s *def,                                                             //!< This object.
-            double new_value,                                                                   //!< New value.
-            double old_value                                                                    //!< Old value.
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< The def object.
+            double new_value,                                                                   //!< The new value.
+            double old_value                                                                    //!< The old value.
         );
 
         __NULLABLE__ bool (* _str)(
-            struct nyx_dict_s *vector,                                                          //!< The parent vector.
-            struct nyx_dict_s *def,                                                             //!< This object.
-            STR_t new_value,                                                                    //!< New value.
-            STR_t old_value                                                                     //!< Old value.
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< The def object.
+            STR_t new_value,                                                                    //!< The new value.
+            STR_t old_value                                                                     //!< The old value.
         );
 
         __NULLABLE__ void (* _vector)(
-            struct nyx_dict_s *vector                                                           //!< This object.
+            struct nyx_dict_s *vector                                                           //!< The vector object.
         );
 
     } in_callback;                                                                              //!< Callback triggered when the client modifies this object.
