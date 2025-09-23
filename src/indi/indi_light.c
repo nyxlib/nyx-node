@@ -117,7 +117,7 @@ bool nyx_light_def_set(nyx_dict_t *def, nyx_state_t value)
 
 nyx_state_t nyx_light_def_get(const nyx_dict_t *def)
 {
-    return nyx_str_to_state(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
+    return nyx_str_to_state(nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$")));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

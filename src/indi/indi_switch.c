@@ -121,7 +121,7 @@ bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
 
 nyx_onoff_t nyx_switch_def_get(const nyx_dict_t *def)
 {
-    return nyx_str_to_onoff(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
+    return nyx_str_to_onoff(nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$")));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
