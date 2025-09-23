@@ -446,7 +446,7 @@ bool nyx_blob_is_compressed(const nyx_dict_t *def)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
-    return format != NULL && format->raw_size > 2 && strcmp(format->value + format->raw_size - 2, ".z") == 0;
+    return format != NULL && format->raw_size > 2 && format->value[format->raw_size - 2] == '.' && format->value[format->raw_size - 1] == 'z';
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

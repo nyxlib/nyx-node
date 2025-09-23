@@ -161,7 +161,9 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
                &&
                field_buff != NULL
             ) {
-                /**/ if(field_name[0] == '%')
+                int len = strlen(field_name);
+
+                /**/ if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'z')
                 {
                     value_buff = nyx_zlib_base64_deflate(&value_size, field_size, field_buff);
 
@@ -169,7 +171,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
                     allocated = true;
                 }
-                else if(field_name[0] == '#')
+                else if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'b')
                 {
                     value_buff = nyx_base64_encode(&value_size, field_size, field_buff);
 
