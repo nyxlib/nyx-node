@@ -1893,6 +1893,10 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 typedef struct
 {
     enum
@@ -1919,24 +1923,49 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t v) {
-    return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = v}};
+/**
+ * @private
+ */
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
+{
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = value}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t v) {
-    return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = v}};
+/**
+ * @private
+ */
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
+{
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = value}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t v) {
-    return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = v}};
+/**
+ * @private
+ */
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
+{
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = value}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t v) {
-    return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = v}};
+/**
+ * @private
+ */
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
+{
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double v) {
-    return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = v}};
+/**
+ * @private
+ */
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
+{
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
