@@ -228,8 +228,8 @@ void nyx_log(
 /**
  * \brief Hashes a buffer using the MurmurHash2 algorithm.
  *
- * \param size Input buffer to hash.
- * \param buff Length of the buffer to hash.
+ * \param size Size of the buffer to hash.
+ * \param buff Pointer to the buffer to hash.
  * \param seed Seed.
  * \return The computed 32-bit hash.
  */
@@ -265,7 +265,7 @@ void nyx_generate_mac_addr(
  *
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
- * \param buff Input buffer to encode.
+ * \param buff Pointer to the buffer to encode.
  * \return The encoded string.
  */
 
@@ -282,7 +282,7 @@ __NULLABLE__ str_t nyx_base64_encode(
  *
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
- * \param str Input string to decode.
+ * \param str Pointer to the string to decode.
  * \return The decoded buffer.
  */
 
@@ -298,8 +298,8 @@ __NULLABLE__ buff_t nyx_base64_decode(
  * \brief ZLib-compresses a buffer.
  *
  * \param result_buff Optional pointer to store the length of the uncompressed buffer.
- * \param size Size of the buffer to encode.
- * \param buff Input buffer to encode.
+ * \param size Size of the buffer to compressed.
+ * \param buff Pointer to the buffer to compressed.
  * \return The compressed buffer.
  */
 
@@ -315,8 +315,8 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
  * \brief ZLib-uncompresses a buffer.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
- * \param size Size of the buffer to decode.
- * \param buff Input buffer to decode.
+ * \param size Size of the buffer to uncompress.
+ * \param buff Input buffer to uncompress.
  * \return The uncompressed buffer.
  */
 
@@ -332,8 +332,8 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
  * \brief ZLib+base64-compresses a buffer to a string.
  *
  * \param result_len Optional pointer to store the length of the uncompressed string.
- * \param size Size of the buffer to encode.
- * \param buff Input buffer to encode.
+ * \param size Size of the buffer to compress.
+ * \param buff Pointer to the buffer to compress.
  * \return The compressed string.
  */
 
@@ -349,8 +349,8 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
  * \brief ZLib+base64-uncompresses a string to a buffer.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
- * \param len Length of the string to decode.
- * \param str Input string to decode.
+ * \param len Length of the string to uncompressed.
+ * \param str Pointer to the string to uncompressed.
  * \return The uncompressed buffer.
  */
 
@@ -463,8 +463,8 @@ typedef struct nyx_object_s
         __NULLABLE__ bool (* _blob)(
             struct nyx_dict_s *vector,                                                          //!< The parent vector object.
             struct nyx_dict_s *def,                                                             //!< The def object.
-            size_t size,                                                                        //!< The new value size.
-            BUFF_t buff                                                                         //!< The new value pointer.
+            size_t size,                                                                        //!< The size of the new buffer.
+            BUFF_t buff                                                                         //!< The pointer to the new buffer.
         );
 
         __NULLABLE__ void (* _vector)(
