@@ -348,7 +348,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (double) value) >= 0)
                ||
-               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value) >= 0)
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, (double) value) >= 0)
             ) {
                 return nyx_string_from_dup(buffer);
             }
@@ -361,7 +361,7 @@ nyx_string_t *nyx_format_double_to_string(STR_t format, double value)
                ||
                ((conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, (double) value) >= 0)
                ||
-               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value) >= 0)
+               ((conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, (double) value) >= 0)
             ) {
                 return nyx_string_from_dup(buffer);
             }
