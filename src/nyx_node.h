@@ -460,6 +460,13 @@ typedef struct nyx_object_s
             STR_t old_value                                                                     //!< The old value.
         );
 
+        __NULLABLE__ bool (* _blob)(
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< The def object.
+            size_t size,                                                                        //!< The new value size.
+            BUFF_t buff                                                                         //!< The new value buffer.
+        );
+
         __NULLABLE__ void (* _vector)(
             struct nyx_dict_s *vector                                                           //!< The vector object.
         );

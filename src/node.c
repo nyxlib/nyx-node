@@ -577,12 +577,16 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                                                     case 0x29BFE4D7:    // defBLOBVector
                                                         {
-                                                            STR_t old_val = nyx_string_get((nyx_string_t *) old_value);
-                                                            STR_t new_val = nyx_string_get((nyx_string_t *) new_value);
+                                                            size_t size;
+                                                            buff_t buff;
 
-                                                            if((success = object2->in_callback._str != NULL ? object2->in_callback._str(vector, (nyx_dict_t *) object2, new_val, old_val) : true))
+                                                            bool compress = nyx_blob_is_compressed((nyx_dict_t *) object2);
+
+                                                            nyx_string_get_buff((nyx_string_t *) new_value, &size, &buff, true, compress);
+
+                                                            if((success = object2->in_callback._str != NULL ? object2->in_callback._blob(vector, (nyx_dict_t *) object2, size, buff) : true))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(new_val), false);
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff(size, buff, true, compress), false);
                                                             }
                                                         }
 
