@@ -1919,19 +1919,19 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int v) {
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t v) {
     return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = v}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(unsigned int v) {
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t v) {
     return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = v}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(long v) {
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t v) {
     return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = v}};
 }
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(unsigned long v) {
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t v) {
     return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = v}};
 }
 
@@ -1995,7 +1995,8 @@ nyx_dict_t *nyx_number_def_new(
  * @return
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int min, int max, int step, int value) {
+__INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
+{
     return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
 }
 
@@ -2011,7 +2012,8 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t labe
  * @return
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, unsigned int min, unsigned int max, unsigned int step, unsigned int value) {
+__INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
+{
     return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
 }
 
@@ -2027,7 +2029,8 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t lab
  * @return
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, long min, long max, long step, long value) {
+__INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
+{
     return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
 }
 
@@ -2043,7 +2046,8 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t lab
  * @return
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, unsigned long min, unsigned long max, unsigned long step, unsigned long value) {
+__INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
+{
     return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
 }
 
@@ -2059,9 +2063,27 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t la
  * @return
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value) {
+__INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
+{
     return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/** @private
+ */
+
+bool nyx_number_def_set(
+    nyx_dict_t *def,
+    nyx_variant_t value
+);
+
+/** @private
+ */
+
+nyx_variant_t nyx_number_def_get(
+    const nyx_dict_t *def
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2072,16 +2094,10 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t l
  * @return
  */
 
-__INLINE__ bool nyx_number_def_set(nyx_dict_t *def, nyx_variant_t value)
+__INLINE__ bool nyx_number_def_set_int(nyx_dict_t *def, int32_t value)
 {
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
-
-    nyx_string_t *string = nyx_format_variant_to_string(format->value, value);
-
-    return nyx_dict_set(def, "$", string);
+    return nyx_number_def_set(def, NYX_VARIANT_FROM_INT(value));
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  *
@@ -2089,13 +2105,101 @@ __INLINE__ bool nyx_number_def_set(nyx_dict_t *def, nyx_variant_t value)
  * @return
  */
 
-__INLINE__ nyx_variant_t nyx_number_def_get(const nyx_dict_t *def)
+__INLINE__ int32_t nyx_number_def_get_int(const nyx_dict_t *def)
 {
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+    return nyx_number_def_get(def).value._int;
+}
 
-    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
+/**
+ *
+ * @param def
+ * @param value
+ * @return
+ */
 
-    return nyx_format_string_to_variant(format->value, string);
+__INLINE__ bool nyx_number_def_set_uint(nyx_dict_t *def, uint32_t value)
+{
+    return nyx_number_def_set(def, NYX_VARIANT_FROM_UINT(value));
+}
+
+/**
+ *
+ * @param def
+ * @return
+ */
+
+__INLINE__ uint32_t nyx_number_def_get_uint(const nyx_dict_t *def)
+{
+    return nyx_number_def_get(def).value._uint;
+}
+
+/**
+ *
+ * @param def
+ * @param value
+ * @return
+ */
+
+__INLINE__ bool nyx_number_def_set_long(nyx_dict_t *def, int64_t value)
+{
+    return nyx_number_def_set(def, NYX_VARIANT_FROM_LONG(value));
+}
+
+/**
+ *
+ * @param def
+ * @return
+ */
+
+__INLINE__ int64_t nyx_number_def_get_long(const nyx_dict_t *def)
+{
+    return nyx_number_def_get(def).value._long;
+}
+
+/**
+ *
+ * @param def
+ * @param value
+ * @return
+ */
+
+__INLINE__ bool nyx_number_def_set_ulong(nyx_dict_t *def, uint64_t value)
+{
+    return nyx_number_def_set(def, NYX_VARIANT_FROM_ULONG(value));
+}
+
+/**
+ *
+ * @param def
+ * @return
+ */
+
+__INLINE__ uint64_t nyx_number_def_get_ulong(const nyx_dict_t *def)
+{
+    return nyx_number_def_get(def).value._ulong;
+}
+
+/**
+ *
+ * @param def
+ * @param value
+ * @return
+ */
+
+__INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
+{
+    return nyx_number_def_set(def, NYX_VARIANT_FROM_DOUBLE(value));
+}
+
+/**
+ *
+ * @param def
+ * @return
+ */
+
+__INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
+{
+    return nyx_number_def_get(def).value._double;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

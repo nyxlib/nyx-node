@@ -112,3 +112,27 @@ nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *vector)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* SETTER & GETTER                                                                                                    */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_number_def_set(nyx_dict_t *def, nyx_variant_t value)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = nyx_format_variant_to_string(format->value, value);
+
+    return nyx_dict_set(def, "$", string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_variant_t nyx_number_def_get(const nyx_dict_t *def)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
+
+    return nyx_format_string_to_variant(format->value, string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
