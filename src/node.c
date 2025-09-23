@@ -519,7 +519,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                                 double old_val = nyx_format_string_to_double(format, (nyx_string_t *) old_value);
                                                                 double new_val = nyx_format_string_to_double(format, (nyx_string_t *) new_value);
 
-                                                                if((success = object2->in_callback._double != NULL ? object2->in_callback._double(vector, (nyx_dict_t *) object2, new_val, old_val) : true))
+                                                                if((success = object2->in_callback._double == NULL || object2->in_callback._double(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                                 {
                                                                     modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_format_double_to_string(format, new_val), false);
                                                                 }
@@ -535,7 +535,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             STR_t old_val = nyx_string_get((nyx_string_t *) old_value);
                                                             STR_t new_val = nyx_string_get((nyx_string_t *) new_value);
 
-                                                            if((success = object2->in_callback._str != NULL ? object2->in_callback._str(vector, (nyx_dict_t *) object2, new_val, old_val) : true))
+                                                            if((success = object2->in_callback._str == NULL || object2->in_callback._str(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
                                                                 modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(new_val), false);
                                                             }
@@ -550,7 +550,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             nyx_state_t old_val = nyx_str_to_state(nyx_string_get((nyx_string_t *) old_value));
                                                             nyx_state_t new_val = nyx_str_to_state(nyx_string_get((nyx_string_t *) new_value));
 
-                                                            if((success = object2->in_callback._double != NULL ? object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val) : true))
+                                                            if((success = object2->in_callback._double == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
                                                                 modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(nyx_state_to_str(new_val)), false);
                                                             }
@@ -565,7 +565,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             nyx_onoff_t old_val = nyx_str_to_onoff(nyx_string_get((nyx_string_t *) old_value));
                                                             nyx_onoff_t new_val = nyx_str_to_onoff(nyx_string_get((nyx_string_t *) new_value));
 
-                                                            if((success = object2->in_callback._double != NULL ? object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val) : true))
+                                                            if((success = object2->in_callback._double == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
                                                                 modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(nyx_onoff_to_str(new_val)), false);
                                                             }
@@ -584,7 +584,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             nyx_string_get_buff((nyx_string_t *) new_value, &size, &buff, true, compress);
 
-                                                            if((success = object2->in_callback._str != NULL ? object2->in_callback._blob(vector, (nyx_dict_t *) object2, size, buff) : true))
+                                                            if((success = object2->in_callback._str == NULL || object2->in_callback._blob(vector, (nyx_dict_t *) object2, size, buff)))
                                                             {
                                                                 modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff(size, buff, true, compress), false);
                                                             }
