@@ -425,13 +425,6 @@ typedef struct nyx_object_s
 
         __NULLABLE__ void *_ptr;                                                                //!< The untyped pointer.
 
-        __NULLABLE__ bool (* _bool)(
-            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
-            struct nyx_dict_s *def,                                                             //!< The def object.
-            bool new_value,                                                                     //!< The new value.
-            bool old_value                                                                      //!< The old value.
-        );
-
         __NULLABLE__ bool (* _int)(
             struct nyx_dict_s *vector,                                                          //!< The parent vector object.
             struct nyx_dict_s *def,                                                             //!< This object.
@@ -439,11 +432,25 @@ typedef struct nyx_object_s
             int old_value                                                                       //!< The old value.
         );
 
+        __NULLABLE__ bool (* _uint)(
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< This object.
+            unsigned int new_value,                                                             //!< The new value.
+            unsigned int old_value                                                              //!< The old value.
+        );
+
         __NULLABLE__ bool (* _long)(
             struct nyx_dict_s *vector,                                                          //!< The parent vector object.
             struct nyx_dict_s *def,                                                             //!< The def object.
             long new_value,                                                                     //!< The new value.
             long old_value                                                                      //!< The old value.
+        );
+
+        __NULLABLE__ bool (* _ulong)(
+            struct nyx_dict_s *vector,                                                          //!< The parent vector object.
+            struct nyx_dict_s *def,                                                             //!< The def object.
+            unsigned long new_value,                                                            //!< The new value.
+            unsigned long old_value                                                             //!< The old value.
         );
 
         __NULLABLE__ bool (* _double)(
@@ -460,7 +467,7 @@ typedef struct nyx_object_s
             STR_t old_value                                                                     //!< The old value.
         );
 
-        __NULLABLE__ bool (* _blob)(
+        __NULLABLE__ bool (* _buffer)(
             struct nyx_dict_s *vector,                                                          //!< The parent vector object.
             struct nyx_dict_s *def,                                                             //!< The def object.
             size_t size,                                                                        //!< The size of the new buffer.
@@ -1886,20 +1893,68 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+typedef struct
+{
+    enum
+    {
+        NYX_VARIANT_TYPE_INT,
+        NYX_VARIANT_TYPE_UINT,
+        NYX_VARIANT_TYPE_LONG,
+        NYX_VARIANT_TYPE_ULONG,
+        NYX_VARIANT_TYPE_DOUBLE,
+
+    } type;
+
+    union
+    {
+        int32_t _int;
+        uint32_t _uint;
+        int64_t _long;
+        uint64_t _ulong;
+        double _double;
+
+    } value;
+
+} nyx_variant_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int v) {
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = v}};
+}
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(unsigned int v) {
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = v}};
+}
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(long v) {
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = v}};
+}
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(unsigned long v) {
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = v}};
+}
+
+__INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double v) {
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = v}};
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
 
-nyx_string_t *nyx_format_double_to_string(
+nyx_string_t *nyx_format_variant_to_string(
     STR_t format,
-    double value
+    nyx_variant_t value
 );
 
 /**
  * @private
  */
 
-double nyx_format_string_to_double(
+nyx_variant_t nyx_format_string_to_variant(
     STR_t format,
     const nyx_string_t *value
 );
@@ -1910,6 +1965,22 @@ double nyx_format_string_to_double(
   * @ingroup NYX
   * @{
   */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
+
+nyx_dict_t *nyx_number_def_new(
+    STR_t name,
+    __NULLABLE__ STR_t label,
+    STR_t format,
+    nyx_variant_t min,
+    nyx_variant_t max,
+    nyx_variant_t step,
+    nyx_variant_t value
+);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -1924,15 +1995,73 @@ double nyx_format_string_to_double(
  * @return
  */
 
-nyx_dict_t *nyx_number_def_new(
-    STR_t name,
-    __NULLABLE__ STR_t label,
-    STR_t format,
-    double min,
-    double max,
-    double step,
-    double value
-);
+__INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int min, int max, int step, int value) {
+    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
+}
+
+/**
+ * \brief Allocates a new INDI / Nyx number.
+ * @param name
+ * @param label
+ * @param format
+ * @param min
+ * @param max
+ * @param step
+ * @param value
+ * @return
+ */
+
+__INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, unsigned int min, unsigned int max, unsigned int step, unsigned int value) {
+    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
+}
+
+/**
+ * \brief Allocates a new INDI / Nyx number.
+ * @param name
+ * @param label
+ * @param format
+ * @param min
+ * @param max
+ * @param step
+ * @param value
+ * @return
+ */
+
+__INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, long min, long max, long step, long value) {
+    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
+}
+
+/**
+ * \brief Allocates a new INDI / Nyx number.
+ * @param name
+ * @param label
+ * @param format
+ * @param min
+ * @param max
+ * @param step
+ * @param value
+ * @return
+ */
+
+__INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, unsigned long min, unsigned long max, unsigned long step, unsigned long value) {
+    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
+}
+
+/**
+ * \brief Allocates a new INDI / Nyx number.
+ * @param name
+ * @param label
+ * @param format
+ * @param min
+ * @param max
+ * @param step
+ * @param value
+ * @return
+ */
+
+__INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value) {
+    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1943,11 +2072,11 @@ nyx_dict_t *nyx_number_def_new(
  * @return
  */
 
-__INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
+__INLINE__ bool nyx_number_def_set(nyx_dict_t *def, nyx_variant_t value)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
-    nyx_string_t *string = nyx_format_double_to_string(format->value, value);
+    nyx_string_t *string = nyx_format_variant_to_string(format->value, value);
 
     return nyx_dict_set(def, "$", string);
 }
@@ -1960,13 +2089,13 @@ __INLINE__ bool nyx_number_def_set(nyx_dict_t *def, double value)
  * @return
  */
 
-__INLINE__ double nyx_number_def_get(const nyx_dict_t *def)
+__INLINE__ nyx_variant_t nyx_number_def_get(const nyx_dict_t *def)
 {
     nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
 
     nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
 
-    return nyx_format_string_to_double(format->value, string);
+    return nyx_format_string_to_variant(format->value, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

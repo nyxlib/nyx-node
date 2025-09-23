@@ -26,7 +26,7 @@ static void debug_callback(nyx_object_t *object)
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
+nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, nyx_variant_t min, nyx_variant_t max, nyx_variant_t step, nyx_variant_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -43,11 +43,11 @@ nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t forma
     nyx_dict_set(result, "@label", nyx_string_from(label));
     nyx_dict_set(result, "@format", nyx_string_from(format));
 
-    nyx_dict_set(result, "@min", nyx_number_from(min));
-    nyx_dict_set(result, "@max", nyx_number_from(max));
-    nyx_dict_set(result, "@step", nyx_number_from(step));
+    nyx_dict_set(result, "@min", nyx_format_variant_to_string(format, min));
+    nyx_dict_set(result, "@max", nyx_format_variant_to_string(format, max));
+    nyx_dict_set(result, "@step", nyx_format_variant_to_string(format, step));
 
-    nyx_dict_set(result, "$", nyx_format_double_to_string(format, value));
+    nyx_dict_set(result, "$", nyx_format_variant_to_string(format, value));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

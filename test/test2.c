@@ -89,8 +89,8 @@ int main()
         &opt
     );
 
-    nyx_dict_t *def5 = nyx_number_def_new("qux1", "Qux 1", "%.1f", 0.0, 1.0, 0.1, 0.5);
-    nyx_dict_t *def6 = nyx_number_def_new("qux2", "Qux 2", "%.1f", 0.0, 1.0, 0.1, 0.5);
+    nyx_dict_t *def5 = nyx_number_def_new_double("qux1", "Qux 1", "%.1f", 0.0, 1.0, 0.1, 0.5);
+    nyx_dict_t *def6 = nyx_number_def_new_double("qux2", "Qux 2", "%.1f", 0.0, 1.0, 0.1, 0.5);
 
     nyx_dict_t *defs3[] = {def5, def6, NULL};
 
