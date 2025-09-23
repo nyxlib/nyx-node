@@ -2294,10 +2294,10 @@ nyx_dict_t *nyx_text_def_new(
  * @return
  */
 
-__INLINE__ bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
-{
-    return  nyx_dict_set(def, "$", nyx_string_from(value));
-}
+bool nyx_text_def_set(
+    nyx_dict_t *def,
+    STR_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2307,10 +2307,9 @@ __INLINE__ bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
  * @return
  */
 
-__INLINE__ STR_t nyx_text_def_get(const nyx_dict_t *def)
-{
-    return nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$"));
-}
+STR_t nyx_text_def_get(
+    const nyx_dict_t *def
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2375,10 +2374,10 @@ nyx_dict_t *nyx_light_def_new(
  * @return
  */
 
-__INLINE__ bool nyx_light_def_set(nyx_dict_t *def, nyx_state_t value)
-{
-    return nyx_dict_set(def, "$", nyx_string_from(nyx_state_to_str(value)));
-}
+bool nyx_light_def_set(
+    nyx_dict_t *def,
+    nyx_state_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2388,10 +2387,9 @@ __INLINE__ bool nyx_light_def_set(nyx_dict_t *def, nyx_state_t value)
  * @return
  */
 
-__INLINE__ nyx_state_t nyx_light_def_get(const nyx_dict_t *def)
-{
-    return nyx_str_to_state(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
-}
+nyx_state_t nyx_light_def_get(
+    const nyx_dict_t *def$
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2454,10 +2452,10 @@ nyx_dict_t *nyx_switch_def_new(
  * @return
  */
 
-__INLINE__ bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
-{
-    return nyx_dict_set(def, "$", nyx_string_from(nyx_onoff_to_str(value)));
-}
+bool nyx_switch_def_set(
+    nyx_dict_t *def,
+    nyx_onoff_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2467,10 +2465,9 @@ __INLINE__ bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
  * @return
  */
 
-__INLINE__ nyx_onoff_t nyx_switch_def_get(const nyx_dict_t *def)
-{
-    return nyx_str_to_onoff(((nyx_string_t *) nyx_dict_get(def, "$"))->value);
-}
+nyx_onoff_t nyx_switch_def_get(
+    const nyx_dict_t *def
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2533,14 +2530,6 @@ nyx_dict_t *nyx_blob_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @private
- */
-
-bool nyx_blob_is_compressed(const nyx_dict_t *def);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
  *
  * @param def
  * @param size
@@ -2548,10 +2537,11 @@ bool nyx_blob_is_compressed(const nyx_dict_t *def);
  * @return
  */
 
-__INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff)
-{
-    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, nyx_blob_is_compressed(def)));
-}
+bool nyx_blob_def_set(
+    nyx_dict_t *def,
+    size_t size,
+    BUFF_t buff
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2562,10 +2552,11 @@ __INLINE__ bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff)
  * @param buff
  */
 
-__INLINE__ void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff)
-{
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, true, nyx_blob_is_compressed(def));
-}
+void nyx_blob_def_get(
+    const nyx_dict_t *def,
+    size_t *size,
+    buff_t *buff
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

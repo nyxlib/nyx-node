@@ -604,7 +604,7 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             size_t size;
                                                             buff_t buff;
 
-                                                            bool compress = nyx_blob_is_compressed((nyx_dict_t *) object2);
+                                                            bool compress = internal_blob_is_compressed((nyx_dict_t *) object2);
 
                                                             nyx_string_get_buff((nyx_string_t *) new_value, &size, &buff, true, compress);
 

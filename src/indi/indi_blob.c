@@ -113,3 +113,19 @@ nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *vector)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* SETTER & GETTER                                                                                                    */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff)
+{
+    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, internal_blob_is_compressed(def)));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_blob_def_get(const nyx_dict_t *def, size_t *size, buff_t *buff)
+{
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, true, internal_blob_is_compressed(def));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
