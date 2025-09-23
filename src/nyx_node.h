@@ -464,7 +464,7 @@ typedef struct nyx_object_s
             struct nyx_dict_s *vector,                                                          //!< The parent vector object.
             struct nyx_dict_s *def,                                                             //!< The def object.
             size_t size,                                                                        //!< The new value size.
-            BUFF_t buff                                                                         //!< The new value buffer.
+            BUFF_t buff                                                                         //!< The new value pointer.
         );
 
         __NULLABLE__ void (* _vector)(
