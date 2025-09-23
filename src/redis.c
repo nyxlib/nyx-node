@@ -163,7 +163,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
             ) {
                 /**/ if(field_name[0] == '%')
                 {
-                    value_buff = nyx_zlib_deflate(&value_size, field_size, field_buff);
+                    value_buff = nyx_zlib_base64_deflate(&value_size, field_size, field_buff);
 
                     field_name = field_name + 1;
 
