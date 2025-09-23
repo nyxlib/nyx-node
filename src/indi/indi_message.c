@@ -17,7 +17,7 @@ nyx_dict_t *nyx_message_new(STR_t device, STR_t message)
 
     char timestamp[32];
 
-    internal_get_timestamp(timestamp, sizeof(timestamp));
+    internal_get_timestamp(sizeof(timestamp), timestamp);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

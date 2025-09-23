@@ -20,7 +20,7 @@ nyx_dict_t *nyx_del_property_new(
 
     char timestamp[32];
 
-    internal_get_timestamp(timestamp, sizeof(timestamp));
+    internal_get_timestamp(sizeof(timestamp), timestamp);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
