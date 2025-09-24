@@ -2117,7 +2117,7 @@ nyx_variant_t nyx_number_def_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2129,7 +2129,7 @@ __INLINE__ bool nyx_number_def_set_int(nyx_dict_t *def, int32_t value)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2140,7 +2140,7 @@ __INLINE__ int32_t nyx_number_def_get_int(const nyx_dict_t *def)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2152,7 +2152,7 @@ __INLINE__ bool nyx_number_def_set_uint(nyx_dict_t *def, uint32_t value)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2163,7 +2163,7 @@ __INLINE__ uint32_t nyx_number_def_get_uint(const nyx_dict_t *def)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2175,7 +2175,7 @@ __INLINE__ bool nyx_number_def_set_long(nyx_dict_t *def, int64_t value)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2186,7 +2186,7 @@ __INLINE__ int64_t nyx_number_def_get_long(const nyx_dict_t *def)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2198,7 +2198,7 @@ __INLINE__ bool nyx_number_def_set_ulong(nyx_dict_t *def, uint64_t value)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2209,7 +2209,7 @@ __INLINE__ uint64_t nyx_number_def_get_ulong(const nyx_dict_t *def)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2221,7 +2221,7 @@ __INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
 }
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2288,7 +2288,7 @@ nyx_dict_t *nyx_text_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2302,7 +2302,7 @@ bool nyx_text_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2368,7 +2368,7 @@ nyx_dict_t *nyx_light_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2382,13 +2382,13 @@ bool nyx_light_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
 
 nyx_state_t nyx_light_def_get(
-    const nyx_dict_t *def$
+    const nyx_dict_t *def
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2446,7 +2446,7 @@ nyx_dict_t *nyx_switch_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @param value
  * @return
@@ -2460,7 +2460,7 @@ bool nyx_switch_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @return
  */
@@ -2530,7 +2530,7 @@ nyx_dict_t *nyx_blob_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @param size
  * @param buff
@@ -2546,7 +2546,7 @@ bool nyx_blob_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- *
+ * \brief .
  * @param def
  * @param size
  * @param buff
