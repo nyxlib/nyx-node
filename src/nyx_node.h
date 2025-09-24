@@ -54,8 +54,8 @@ double nan(const char *tag);
 typedef /*-*/ void *buff_t;                                                                     //!< Alias for `void *`
 typedef const void *BUFF_t;                                                                     //!< Alias for `const void *`
 
-typedef /*-*/ char *str_t;                                                                     //!< Alias for `char *`
-typedef const char *STR_t;                                                                     //!< Alias for `const char *`
+typedef /*-*/ char *str_t;                                                                      //!< Alias for `char *`
+typedef const char *STR_t;                                                                      //!< Alias for `const char *`
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
