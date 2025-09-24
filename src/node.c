@@ -290,14 +290,11 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
                     /* BLOB                                                                                           */
                     /*------------------------------------------------------------------------------------------------*/
 
-                    case NYX_BLOB_ALSO:
-                    case NYX_BLOB_ONLY:
+                    case NYX_BLOB_STATE_ENABLED:
                         vector->base.flags |= (1U << (2 + 0 * 31 + index));
                         break;
 
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    case NYX_BLOB_NEVER:
+                    case NYX_BLOB_STATE_DISABLED:
                         vector->base.flags &= ~(1U << (2 + 0 * 31 + index));
                         break;
 
@@ -305,14 +302,11 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
                     /* STREAM                                                                                         */
                     /*------------------------------------------------------------------------------------------------*/
 
-                    case NYX_STREAM_ALSO:
-                    case NYX_STREAM_ONLY:
+                    case NYX_STREAM_STATE_ENABLED:
                         vector->base.flags |= (1U << (2 + 1 * 31 + index));
                         break;
 
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    case NYX_STREAM_NEVER:
+                    case NYX_STREAM_STATE_DISABLED:
                         vector->base.flags &= ~(1U << (2 + 1 * 31 + index));
                         break;
 
@@ -340,14 +334,14 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
 
 __INLINE__ void enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob);
+    enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ void enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream);
+    enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

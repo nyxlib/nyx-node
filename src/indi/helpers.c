@@ -36,16 +36,16 @@ STR_t nyx_state_to_str(nyx_state_t state)
 
 nyx_state_t nyx_str_to_state(STR_t state)
 {
-    /**/ if(strcmp("Idle", state) == 0) {
+    if(strcmp("Idle", state) == 0) {
         return NYX_STATE_IDLE;
     }
-    else if(strcmp("Ok", state) == 0) {
+    if(strcmp("Ok", state) == 0) {
         return NYX_STATE_OK;
     }
-    else if(strcmp("Busy", state) == 0) {
+    if(strcmp("Busy", state) == 0) {
         return NYX_STATE_BUSY;
     }
-    else if(strcmp("Alert", state) == 0) {
+    if(strcmp("Alert", state) == 0) {
         return NYX_STATE_ALERT;
     }
 
@@ -75,13 +75,13 @@ STR_t nyx_perm_to_str(nyx_perm_t perm)
 
 nyx_perm_t nyx_str_to_perm(STR_t perm)
 {
-    /**/ if(strcmp("ro", perm) == 0) {
+    if(strcmp("ro", perm) == 0) {
         return NYX_PERM_RO;
     }
-    else if(strcmp("wo", perm) == 0) {
+    if(strcmp("wo", perm) == 0) {
         return NYX_PERM_WO;
     }
-    else if(strcmp("rw", perm) == 0) {
+    if(strcmp("rw", perm) == 0) {
         return NYX_PERM_RW;
     }
 
@@ -111,16 +111,15 @@ STR_t nyx_rule_to_str(nyx_rule_t rule)
 
 nyx_rule_t nyx_str_to_rule(STR_t rule)
 {
-    /**/ if(strcmp("OneOfMany", rule) == 0) {
+    if(strcmp("OneOfMany", rule) == 0) {
         return NYX_RULE_ONE_OF_MANY;
     }
-    else if(strcmp("AtMostOne", rule) == 0) {
+    if(strcmp("AtMostOne", rule) == 0) {
         return NYX_RULE_AT_MOST_ONE;
     }
-    else if(strcmp("AnyOfMany", rule) == 0) {
+    if(strcmp("AnyOfMany", rule) == 0) {
         return NYX_RULE_ANY_OF_MANY;
     }
-
     NYX_LOG_FATAL("Internal error");
 }
 
@@ -145,10 +144,10 @@ STR_t nyx_onoff_to_str(nyx_onoff_t onoff)
 
 nyx_onoff_t nyx_str_to_onoff(STR_t onoff)
 {
-    /**/ if(strcmp("On", onoff) == 0) {
+    if(strcmp("On", onoff) == 0) {
         return NYX_ONOFF_ON;
     }
-    else if(strcmp("Off", onoff) == 0) {
+    if(strcmp("Off", onoff) == 0) {
         return NYX_ONOFF_OFF;
     }
 
@@ -159,16 +158,14 @@ nyx_onoff_t nyx_str_to_onoff(STR_t onoff)
 /* BLOB                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t nyx_blob_to_str(nyx_blob_t blob)
+STR_t nyx_blob_state_to_str(nyx_blob_state_t blob)
 {
     switch(blob)
     {
-        case NYX_BLOB_NEVER:
+        case NYX_BLOB_STATE_DISABLED:
             return "Never";
-        case NYX_BLOB_ALSO:
+        case NYX_BLOB_STATE_ENABLED:
             return "Also";
-        case NYX_BLOB_ONLY:
-            return "Only";
     }
 
     NYX_LOG_FATAL("Internal error");
@@ -176,16 +173,16 @@ STR_t nyx_blob_to_str(nyx_blob_t blob)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_blob_t nyx_str_to_blob(STR_t blob)
+nyx_blob_state_t nyx_str_to_blob_state(STR_t blob)
 {
-    /**/ if(strcmp("Never", blob) == 0) {
-        return NYX_BLOB_NEVER;
+    if(strcmp("Never", blob) == 0) {
+        return NYX_BLOB_STATE_DISABLED;
     }
-    else if(strcmp("Also", blob) == 0) {
-        return NYX_BLOB_ALSO;
-    }
-    else if(strcmp("Only", blob) == 0) {
-        return NYX_BLOB_ONLY;
+    if(strcmp("Also", blob) == 0
+       ||
+       strcmp("Only", blob) == 0
+    ) {
+        return NYX_BLOB_STATE_ENABLED;
     }
 
     NYX_LOG_FATAL("Internal error");
@@ -195,16 +192,14 @@ nyx_blob_t nyx_str_to_blob(STR_t blob)
 /* STREAM                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t nyx_stream_to_str(nyx_stream_t stream)
+STR_t nyx_stream_state_to_str(nyx_stream_state_t stream)
 {
     switch(stream)
     {
-        case NYX_STREAM_NEVER:
+        case NYX_STREAM_STATE_DISABLED:
             return "Never";
-        case NYX_STREAM_ALSO:
+        case NYX_STREAM_STATE_ENABLED:
             return "Also";
-        case NYX_STREAM_ONLY:
-            return "Only";
     }
 
     NYX_LOG_FATAL("Internal error");
@@ -212,16 +207,16 @@ STR_t nyx_stream_to_str(nyx_stream_t stream)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_stream_t nyx_str_to_stream(STR_t stream)
+nyx_stream_state_t nyx_str_to_stream_state(STR_t stream)
 {
-    /**/ if(strcmp("Never", stream) == 0) {
-        return NYX_STREAM_NEVER;
+    if(strcmp("Never", stream) == 0) {
+        return NYX_BLOB_STATE_DISABLED;
     }
-    else if(strcmp("Also", stream) == 0) {
-        return NYX_STREAM_ALSO;
-    }
-    else if(strcmp("Only", stream) == 0) {
-        return NYX_STREAM_ONLY;
+    if(strcmp("Also", stream) == 0
+       ||
+       strcmp("Only", stream) == 0
+    ) {
+        return NYX_STREAM_STATE_ENABLED;
     }
 
     NYX_LOG_FATAL("Internal error");

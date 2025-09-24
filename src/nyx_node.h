@@ -1766,7 +1766,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Vector state.
+ * \brief Vector state hint.
  */
 
 typedef enum
@@ -1801,7 +1801,7 @@ nyx_state_t nyx_str_to_state(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Vector permission hint, with respect to client.
+ * \brief Vector permission hint.
  */
 
 typedef enum
@@ -1848,11 +1848,19 @@ typedef enum
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @private
+ */
+
 STR_t nyx_rule_to_str(
     nyx_rule_t rule
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
 
 nyx_rule_t nyx_str_to_rule(
     STR_t rule
@@ -1894,16 +1902,17 @@ nyx_onoff_t nyx_str_to_onoff(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief TODO.
+ * @private
+ * \brief BLOB state.
  */
 
 typedef enum
 {
-    NYX_BLOB_NEVER = 800,
-    NYX_BLOB_ALSO = 801,
-    NYX_BLOB_ONLY = 802,
+    NYX_BLOB_STATE_DISABLED = 800,                                                              //!< BLOBs are disabled (default).
+    NYX_BLOB_STATE_ENABLED = 801,                                                               //!< BLOBs are enabled.
 
-} nyx_blob_t;
+} nyx_blob_state_t;
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1911,8 +1920,8 @@ typedef enum
  * @private
  */
 
-STR_t nyx_blob_to_str(
-    nyx_blob_t blob
+STR_t nyx_blob_state_to_str(
+    nyx_blob_state_t blob
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1921,33 +1930,41 @@ STR_t nyx_blob_to_str(
  * @private
  */
 
-nyx_blob_t nyx_str_to_blob(
+nyx_blob_state_t nyx_str_to_blob_state(
     STR_t blob
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief TODO.
+ * @private
+ * \brief Stream state.
  */
 
 typedef enum
 {
-    NYX_STREAM_NEVER = 900,
-    NYX_STREAM_ALSO = 901,
-    NYX_STREAM_ONLY = 902,
+    NYX_STREAM_STATE_DISABLED = 900,                                                            //!< Stream are disabled (default).
+    NYX_STREAM_STATE_ENABLED = 901,                                                             //!< Stream are enabled.
 
-} nyx_stream_t;
+} nyx_stream_state_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t nyx_stream_to_str(
-    nyx_stream_t stream
+/**
+ * @private
+ */
+
+STR_t nyx_stream_state_to_str(
+    nyx_stream_state_t stream
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_stream_t nyx_str_to_stream(
+/**
+ * @private
+ */
+
+nyx_stream_state_t nyx_str_to_stream_state(
     STR_t stream
 );
 
