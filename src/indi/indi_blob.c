@@ -26,7 +26,7 @@ static void debug_callback(nyx_object_t *object)
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format, STR_t value)
+nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format, __NULLABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -48,7 +48,7 @@ nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ 
     nyx_dict_set(result, "@label", nyx_string_from(label));
     nyx_dict_set(result, "@format", nyx_string_from(format));
 
-    nyx_dict_set(result, "$", nyx_string_from(value));
+    nyx_blob_def_set(result, size, buff);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -118,6 +118,12 @@ nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *vector)
 
 bool nyx_blob_def_set(nyx_dict_t *def, size_t size, BUFF_t buff)
 {
+    if(size == 0x00 || buff == NULL)
+    {
+        size = 0x00;
+        buff = ("");
+    }
+
     return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, internal_blob_is_compressed(def)));
 }
 

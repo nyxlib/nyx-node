@@ -2273,16 +2273,16 @@ nyx_dict_t *nyx_number_set_vector_new(
 
 /**
  * \brief Allocates a new INDI / Nyx text.
- * @param name
- * @param label
- * @param value
- * @return
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param value Initial value.
+ * @return The new definition object.
  */
 
 nyx_dict_t *nyx_text_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
-    STR_t value
+    __NULLABLE__ STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2296,7 +2296,7 @@ nyx_dict_t *nyx_text_def_new(
 
 bool nyx_text_def_set(
     nyx_dict_t *def,
-    STR_t value
+    __NULLABLE__ STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2353,10 +2353,10 @@ nyx_dict_t *nyx_text_set_vector_new(
 
 /**
  * \brief Allocates a new INDI / Nyx light.
- * @param name
- * @param label
- * @param value
- * @return
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param value Initial value.
+ * @return The new definition object.
  */
 
 nyx_dict_t *nyx_light_def_new(
@@ -2431,10 +2431,10 @@ nyx_dict_t *nyx_light_set_vector_new(
 
 /**
  * \brief Allocates a new INDI / Nyx switch.
- * @param name
- * @param label
- * @param value
- * @return
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param value Initial value.
+ * @return The new definition object.
  */
 
 nyx_dict_t *nyx_switch_def_new(
@@ -2512,19 +2512,23 @@ nyx_dict_t *nyx_switch_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx BLOB.
- * @param name
- * @param label
- * @param format
- * @param value
- * @return
+ * \brief Allocates a new INDI / Nyx text.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format Payload format.
+ * @param size Size of the initial payload content.
+ * @param buff Pointer to the initial payload content.
+ * @return The new definition object.
+ * @note If a format ends with `.b`, its payload is automatically base64-encoded.
+ * @note If a format ends with `.z`, its payload is automatically zlib+base64-compressed.
  */
 
 nyx_dict_t *nyx_blob_def_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     __NULLABLE__ STR_t format,
-    STR_t value
+    __NULLABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2539,8 +2543,8 @@ nyx_dict_t *nyx_blob_def_new(
 
 bool nyx_blob_def_set(
     nyx_dict_t *def,
-    size_t size,
-    BUFF_t buff
+    __NULLABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2605,9 +2609,18 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @return
  */
 
+/**
+ * \brief Allocates a new Nyx Stream.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format Stream format.
+ * @return The new definition object.
+ */
+
 nyx_dict_t *nyx_stream_def_new(
     STR_t name,
-    __NULLABLE__ STR_t label
+    __NULLABLE__ STR_t label,
+    __NULLABLE__ STR_t format
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -26,7 +26,7 @@ static void debug_callback(nyx_object_t *object)
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
+nyx_dict_t *nyx_text_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -42,7 +42,7 @@ nyx_dict_t *nyx_text_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t value)
     nyx_dict_set(result, "@name", nyx_string_from(name));
     nyx_dict_set(result, "@label", nyx_string_from(label));
 
-    nyx_dict_set(result, "$", nyx_string_from(value));
+    nyx_text_def_set(result, value);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -110,8 +110,13 @@ nyx_dict_t *nyx_text_set_vector_new(const nyx_dict_t *vector)
 /* SETTER & GETTER                                                                                                    */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_text_def_set(nyx_dict_t *def, STR_t value)
+bool nyx_text_def_set(nyx_dict_t *def, __NULLABLE__ STR_t value)
 {
+    if(value == NULL)
+    {
+        value = "";
+    }
+
     return  nyx_dict_set(def, "$", nyx_string_from(value));
 }
 
