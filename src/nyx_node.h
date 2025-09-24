@@ -2512,15 +2512,15 @@ nyx_dict_t *nyx_switch_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx text.
+ * \brief Allocates a new INDI / Nyx BLOB.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Payload format.
  * @param size Size of the initial payload content.
  * @param buff Pointer to the initial payload content.
  * @return The new definition object.
- * @note If a format ends with `.b`, its payload is automatically base64-encoded.
- * @note If a format ends with `.z`, its payload is automatically zlib+base64-compressed.
+ * @note If a format ends with `.b`, the payload is automatically base64-encoded.
+ * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
 nyx_dict_t *nyx_blob_def_new(
