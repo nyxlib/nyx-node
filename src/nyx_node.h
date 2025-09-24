@@ -2013,15 +2013,15 @@ nyx_dict_t *nyx_number_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx number.
- * @param name
- * @param label
- * @param format
- * @param min
- * @param max
- * @param step
- * @param value
- * @return
+ * \brief Allocates a new INDI / Nyx `int32_t` number.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format C-like format of the value.
+ * @param min Range min, ignored if min == max.
+ * @param max Range max, ignored if min == max.
+ * @param step Step size, ignored if step == 0.
+ * @param value Initial `int32_t` value.
+ * @return The definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
@@ -2030,15 +2030,15 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t labe
 }
 
 /**
- * \brief Allocates a new INDI / Nyx number.
- * @param name
- * @param label
- * @param format
- * @param min
- * @param max
- * @param step
- * @param value
- * @return
+ * \brief Allocates a new INDI / Nyx `uint32_t` number.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format C-like format of the value.
+ * @param min Range min, ignored if min == max.
+ * @param max Range max, ignored if min == max.
+ * @param step Step size, ignored if step == 0.
+ * @param value Initial `uint32_t` value.
+ * @return The definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
@@ -2047,15 +2047,15 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t lab
 }
 
 /**
- * \brief Allocates a new INDI / Nyx number.
- * @param name
- * @param label
- * @param format
- * @param min
- * @param max
- * @param step
- * @param value
- * @return
+ * \brief Allocates a new INDI / Nyx `int64_t` number.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format C-like format of the value.
+ * @param min Range min, ignored if min == max.
+ * @param max Range max, ignored if min == max.
+ * @param step Step size, ignored if step == 0.
+ * @param value Initial `int64_t` value.
+ * @return The definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
@@ -2064,15 +2064,15 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t lab
 }
 
 /**
- * \brief Allocates a new INDI / Nyx number.
- * @param name
- * @param label
- * @param format
- * @param min
- * @param max
- * @param step
- * @param value
- * @return
+ * \brief Allocates a new INDI / Nyx `uint64_t` number.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format C-like format of the value.
+ * @param min Range min, ignored if min == max.
+ * @param max Range max, ignored if min == max.
+ * @param step Step size, ignored if step == 0.
+ * @param value Initial `uint64_t` value.
+ * @return The definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
@@ -2081,15 +2081,15 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t la
 }
 
 /**
- * \brief Allocates a new INDI / Nyx number.
- * @param name
- * @param label
- * @param format
- * @param min
- * @param max
- * @param step
- * @param value
- * @return
+ * \brief Allocates a new INDI / Nyx `double` number.
+ * @param name Definition name.
+ * @param label Definition label.
+ * @param format C-like format of the value.
+ * @param min Range min, ignored if min == max.
+ * @param max Range max, ignored if min == max.
+ * @param step Step size, ignored if step == 0.
+ * @param value Initial `double` value.
+ * @return The definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
