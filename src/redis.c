@@ -231,35 +231,29 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(nyx_node_t *node, STR_t device, STR_t stream, bool check, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(check)
+    if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
     {
-        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
-        {
-            nyx_dict_t *vector = *vector_ptr;
+        return false;
+    }
 
-            /*--------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* RETRIEVE INFORMATION                                                                                           */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-            STR_t vector_device = nyx_dict_get_string(vector, "@device");
-            STR_t vector_stream = nyx_dict_get_string(vector,  "@name" );
+    nyx_node_t *node = vector->base.node;
 
-            if(vector_device!= NULL && vector_stream != NULL && strcmp(vector_device, device) == 0 && strcmp(vector_stream, stream) == 0)
-            {
-                if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
-                {
-                    return false;
-                }
+    STR_t device = nyx_dict_get_string(vector, "@device");
+    STR_t stream = nyx_dict_get_string(vector,  "@name" );
 
-                break;
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
+    if(node == NULL || device == NULL || stream == NULL)
+    {
+        return false;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

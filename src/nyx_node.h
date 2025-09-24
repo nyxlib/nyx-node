@@ -2615,9 +2615,11 @@ nyx_dict_t *nyx_blob_def_new(
 /**
  * \brief Sets the new value of the provided definition object.
  * @param def The definition object.
- * @param size
- * @param buff
+ * @param size Size of the new payload content.
+ * @param buff Pointer to the new payload content.
  * @return \c true if the value was modified, \c false otherwise.
+ * @note If a format ends with `.b`, the payload is automatically base64-encoded.
+ * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
 bool nyx_blob_def_set(
@@ -2631,8 +2633,11 @@ bool nyx_blob_def_set(
 /**
  * \brief Gets the current value of the provided definition object.
  * @param def The definition object.
- * @param size
- * @param buff
+ * @param size Size of the current payload content.
+ * @param buff Pointer to current new payload content.
+ * @warning If `buff` is not `NULL`, it must be freed.
+ * @note If a format ends with `.b`, the payload is automatically base64-decoded.
+ * @note If a format ends with `.z`, the payload is automatically zlib+base64-uncompresses.
  */
 
 void nyx_blob_def_get(
@@ -2693,8 +2698,8 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @param name Definition name.
  * @param label Definition label.
  * @return The new definition object.
- * @note If the name ends with `.b`, the payload is automatically base64-encoded, see @ref nyx_node_t::nyx_stream_pub.
- * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed, see @ref nyx_node_t::nyx_stream_pub.
+ * @note If the name ends with `.b`, the payload is automatically base64-encoded, see @ref nyx_stream_pub.
+ * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed, see @ref nyx_stream_pub.
  */
 
 nyx_dict_t *nyx_stream_def_new(
@@ -2720,6 +2725,30 @@ nyx_dict_t *nyx_stream_def_vector_new(
     nyx_state_t state,
     nyx_dict_t *defs[],
     __NULLABLE__ const nyx_opts_t *opts
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
+ *
+ * @param vector The Nyx node.
+ * @param max_len Maximum number of entries to keep in the Redis stream.
+ * @param n_fields Number of field triplets (name, length, buffer).
+ * @param field_names Array of field names.
+ * @param field_sizes Array of field lengths.
+ * @param field_buffs Array of field buffers.
+ * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
+ * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
+ */
+
+bool nyx_stream_pub(
+    nyx_dict_t *vector,
+    size_t max_len,
+    __ZEROABLE__ size_t n_fields,
+    const str_t field_names[],
+    const size_t field_sizes[],
+    const buff_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2976,38 +3005,6 @@ void nyx_mqtt_pub(
     STR_t topic,
     __ZEROABLE__ size_t message_size,
     __NULLABLE__ BUFF_t message_buff
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_node_t
- * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
- *
- * @param node The Nyx node.
- * @param device The device name.
- * @param stream The stream name.
- * @param check If `true`, the stream is published only if it has been enabled.
- * @param max_len Maximum number of entries to keep in the Redis stream.
- * @param n_fields Number of field triplets (name, length, buffer).
- * @param field_names Array of field names.
- * @param field_sizes Array of field lengths.
- * @param field_buffs Array of field buffers.
- * @warning If `check` is `true`, the stream has to be declared via @ref nyx_stream_def_vector_new and registered via @ref nyx_node_initialize.
- * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
- * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
- */
-
-bool nyx_stream_pub(
-    nyx_node_t *node,
-    STR_t device,
-    STR_t stream,
-    bool check,
-    size_t max_len,
-    __ZEROABLE__ size_t n_fields,
-    const str_t field_names[],
-    const size_t field_sizes[],
-    const buff_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
