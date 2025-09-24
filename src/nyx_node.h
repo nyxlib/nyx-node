@@ -2600,8 +2600,8 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @param name Definition name.
  * @param label Definition label.
  * @return The new definition object.
- * @note If the name ends with `.b`, the payload is automatically base64-encoded, see @ref nyx_stream_pub.
- * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed, see @ref nyx_stream_pub.
+ * @note If the name ends with `.b`, the payload is automatically base64-encoded, see @ref nyx_node_t::nyx_stream_pub.
+ * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed, see @ref nyx_node_t::nyx_stream_pub.
  */
 
 nyx_dict_t *nyx_stream_def_new(
