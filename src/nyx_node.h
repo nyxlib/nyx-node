@@ -2075,7 +2075,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t la
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `double` value.
- * @return The definition object.
+ * @return The new definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
@@ -2227,7 +2227,7 @@ __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
  * @param perm
  * @param defs
  * @param opts
- * @return
+ * @return The new vector object.
  */
 
 nyx_dict_t *nyx_number_def_vector_new(
@@ -2307,7 +2307,7 @@ STR_t nyx_text_def_get(
  * @param perm
  * @param defs
  * @param opts
- * @return
+ * @return The new vector object.
  */
 
 nyx_dict_t *nyx_text_def_vector_new(
@@ -2386,7 +2386,7 @@ nyx_state_t nyx_light_def_get(
  * @param state
  * @param defs
  * @param opts
- * @return
+ * @return The new vector object.
  */
 
 nyx_dict_t *nyx_light_def_vector_new(
@@ -2466,7 +2466,7 @@ nyx_onoff_t nyx_switch_def_get(
  * @param rule
  * @param defs
  * @param opts
- * @return
+ * @return The new vector object.
  */
 
 nyx_dict_t *nyx_switch_def_vector_new(
@@ -2558,7 +2558,7 @@ void nyx_blob_def_get(
  * @param perm
  * @param defs
  * @param opts
- * @return
+ * @return The new vector object.
  */
 
 nyx_dict_t *nyx_blob_def_vector_new(
@@ -2618,7 +2618,7 @@ nyx_dict_t *nyx_stream_def_new(
  * @param state
  * @param defs
  * @param opts
- * @return
+ * @return The new vector object.
  */
 
 nyx_dict_t *nyx_stream_def_vector_new(
