@@ -127,12 +127,12 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 
 typedef enum nyx_log_level_e
 {
-    NYX_LOG_LEVEL_NONE    = 0,
-    NYX_LOG_LEVEL_FATAL   = 1,
-    NYX_LOG_LEVEL_ERROR   = 2,
-    NYX_LOG_LEVEL_INFO    = 3,
-    NYX_LOG_LEVEL_DEBUG   = 4,
-    NYX_LOG_LEVEL_VERBOSE = 5,
+    NYX_LOG_LEVEL_NONE    = 100,
+    NYX_LOG_LEVEL_FATAL   = 101,
+    NYX_LOG_LEVEL_ERROR   = 102,
+    NYX_LOG_LEVEL_INFO    = 103,
+    NYX_LOG_LEVEL_DEBUG   = 104,
+    NYX_LOG_LEVEL_VERBOSE = 105,
 
 } nyx_log_level_t;
 
@@ -391,12 +391,12 @@ __NULLABLE__ buff_t nyx_zlib_base64_inflate(
 
 typedef enum
 {
-    NYX_TYPE_NULL = 100,                                                                        //!< Null object.
-    NYX_TYPE_BOOLEAN = 101,                                                                     //!< Boolean object.
-    NYX_TYPE_NUMBER = 102,                                                                      //!< Number object.
-    NYX_TYPE_STRING = 103,                                                                      //!< String object.
-    NYX_TYPE_DICT = 104,                                                                        //!< Dict object.
-    NYX_TYPE_LIST = 105,                                                                        //!< List object.
+    NYX_TYPE_NULL = 200,                                                                        //!< Null object.
+    NYX_TYPE_BOOLEAN = 201,                                                                     //!< Boolean object.
+    NYX_TYPE_NUMBER = 202,                                                                      //!< Number object.
+    NYX_TYPE_STRING = 203,                                                                      //!< String object.
+    NYX_TYPE_DICT = 204,                                                                        //!< Dict object.
+    NYX_TYPE_LIST = 205,                                                                        //!< List object.
 
 } nyx_type_t;
 
@@ -1616,11 +1616,11 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
 
 typedef enum
 {
-    NYX_XML_ELEM,                                                                               //!< Element node.
-    NYX_XML_ATTR,                                                                               //!< Attribute node.
-    NYX_XML_COMMENT,                                                                            //!< Comment node.
-    NYX_XML_CDATA,                                                                              //!< CDATA content.
-    NYX_XML_TEXT,                                                                               //!< Text content.
+    NYX_XML_ELEM = 300,                                                                         //!< Element node.
+    NYX_XML_ATTR = 301,                                                                         //!< Attribute node.
+    NYX_XML_COMMENT = 302,                                                                      //!< Comment node.
+    NYX_XML_CDATA = 303,                                                                        //!< CDATA content.
+    NYX_XML_TEXT = 304,                                                                         //!< Text content.
 
 } nyx_xml_type_t;
 
@@ -1755,10 +1755,10 @@ __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
 
 typedef enum
 {
-    NYX_STATE_IDLE = 200,
-    NYX_STATE_OK = 201,
-    NYX_STATE_BUSY = 202,
-    NYX_STATE_ALERT = 203,
+    NYX_STATE_IDLE = 400,
+    NYX_STATE_OK = 401,
+    NYX_STATE_BUSY = 402,
+    NYX_STATE_ALERT = 403,
 
 } nyx_state_t;
 
@@ -1782,9 +1782,9 @@ nyx_state_t nyx_str_to_state(
 
 typedef enum
 {
-    NYX_PERM_RO = 300,
-    NYX_PERM_WO = 301,
-    NYX_PERM_RW = 302,
+    NYX_PERM_RO = 500,
+    NYX_PERM_WO = 501,
+    NYX_PERM_RW = 502,
 
 } nyx_perm_t;
 
@@ -1808,9 +1808,9 @@ nyx_perm_t nyx_str_to_perm(
 
 typedef enum
 {
-    NYX_RULE_ONE_OF_MANY = 400,
-    NYX_RULE_AT_MOST_ONE = 401,
-    NYX_RULE_ANY_OF_MANY = 402,
+    NYX_RULE_ONE_OF_MANY = 600,
+    NYX_RULE_AT_MOST_ONE = 601,
+    NYX_RULE_ANY_OF_MANY = 602,
 
 } nyx_rule_t;
 
@@ -1834,8 +1834,8 @@ nyx_rule_t nyx_str_to_rule(
 
 typedef enum
 {
-    NYX_ONOFF_ON = 500,
-    NYX_ONOFF_OFF = 501,
+    NYX_ONOFF_ON = 700,
+    NYX_ONOFF_OFF = 701,
 
 } nyx_onoff_t;
 
@@ -1859,9 +1859,9 @@ nyx_onoff_t nyx_str_to_onoff(
 
 typedef enum
 {
-    NYX_BLOB_NEVER = 600,
-    NYX_BLOB_ALSO = 601,
-    NYX_BLOB_ONLY = 602,
+    NYX_BLOB_NEVER = 800,
+    NYX_BLOB_ALSO = 801,
+    NYX_BLOB_ONLY = 802,
 
 } nyx_blob_t;
 
@@ -1885,9 +1885,9 @@ nyx_blob_t nyx_str_to_blob(
 
 typedef enum
 {
-    NYX_STREAM_NEVER = 700,
-    NYX_STREAM_ALSO = 701,
-    NYX_STREAM_ONLY = 702,
+    NYX_STREAM_NEVER = 900,
+    NYX_STREAM_ALSO = 901,
+    NYX_STREAM_ONLY = 902,
 
 } nyx_stream_t;
 
@@ -1927,11 +1927,11 @@ typedef struct
 
     enum
     {
-        NYX_VARIANT_TYPE_INT,
-        NYX_VARIANT_TYPE_UINT,
-        NYX_VARIANT_TYPE_LONG,
-        NYX_VARIANT_TYPE_ULONG,
-        NYX_VARIANT_TYPE_DOUBLE,
+        NYX_VARIANT_TYPE_INT = 1000,
+        NYX_VARIANT_TYPE_UINT = 1001,
+        NYX_VARIANT_TYPE_LONG = 1002,
+        NYX_VARIANT_TYPE_ULONG = 1003,
+        NYX_VARIANT_TYPE_DOUBLE = 1004,
 
     } type;
 
@@ -2722,8 +2722,8 @@ typedef struct nyx_node_s nyx_node_t;
 
 typedef enum
 {
-    NYX_EVENT_OPEN = 0,                                                                         //!< A connection is opened.
-    NYX_EVENT_MSG = 1,                                                                          //!< A message is received.
+    NYX_EVENT_OPEN = 1100,                                                                      //!< A connection is opened.
+    NYX_EVENT_MSG = 1101,                                                                       //!< A message is received.
 
 } nyx_event_t;
 
