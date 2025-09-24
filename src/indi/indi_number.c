@@ -43,11 +43,11 @@ nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t forma
     nyx_dict_set(result, "@label", nyx_string_from(label));
     nyx_dict_set(result, "@format", nyx_string_from(format));
 
-    nyx_dict_set(result, "@min", nyx_format_variant_to_string(format, min));
-    nyx_dict_set(result, "@max", nyx_format_variant_to_string(format, max));
-    nyx_dict_set(result, "@step", nyx_format_variant_to_string(format, step));
+    nyx_dict_set(result, "@min", internal_variant_to_string(format, min));
+    nyx_dict_set(result, "@max", internal_variant_to_string(format, max));
+    nyx_dict_set(result, "@step", internal_variant_to_string(format, step));
 
-    nyx_dict_set(result, "$", nyx_format_variant_to_string(format, value));
+    nyx_dict_set(result, "$", internal_variant_to_string(format, value));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -119,7 +119,7 @@ bool nyx_number_def_set(nyx_dict_t *def, nyx_variant_t value)
 {
     STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(def, "@format"));
 
-    nyx_string_t *string = nyx_format_variant_to_string(format, value);
+    nyx_string_t *string = internal_variant_to_string(format, value);
 
     return nyx_dict_set(def, "$", string);
 }
@@ -132,7 +132,7 @@ nyx_variant_t nyx_number_def_get(const nyx_dict_t *def)
 
     nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
 
-    return nyx_format_string_to_variant(format, string);
+    return internal_string_to_variant(format, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

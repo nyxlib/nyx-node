@@ -516,34 +516,34 @@ static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
                                                             {
                                                                 STR_t format = nyx_string_get((nyx_string_t *) format_string);
 
-                                                                nyx_variant_t old_val = nyx_format_string_to_variant(format, (nyx_string_t *) old_value);
-                                                                nyx_variant_t new_val = nyx_format_string_to_variant(format, (nyx_string_t *) new_value);
+                                                                nyx_variant_t old_val = internal_string_to_variant(format, (nyx_string_t *) old_value);
+                                                                nyx_variant_t new_val = internal_string_to_variant(format, (nyx_string_t *) new_value);
 
                                                                 switch(new_val.type)
                                                                 {
                                                                     case NYX_VARIANT_TYPE_INT:
                                                                         if((success = object2->in_callback._int == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val.value._int, old_val.value._int))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_format_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_UINT:
                                                                         if((success = object2->in_callback._uint == NULL || object2->in_callback._uint(vector, (nyx_dict_t *) object2, new_val.value._uint, old_val.value._uint))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_format_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_LONG:
                                                                         if((success = object2->in_callback._long == NULL || object2->in_callback._long(vector, (nyx_dict_t *) object2, new_val.value._long, old_val.value._long))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_format_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_ULONG:
                                                                         if((success = object2->in_callback._ulong == NULL || object2->in_callback._ulong(vector, (nyx_dict_t *) object2, new_val.value._ulong, old_val.value._ulong))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_format_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_DOUBLE:
                                                                         if((success = object2->in_callback._double == NULL || object2->in_callback._double(vector, (nyx_dict_t *) object2, new_val.value._double, old_val.value._double))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_format_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
                                                                         }
                                                                         break;
                                                                 }

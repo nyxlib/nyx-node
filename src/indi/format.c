@@ -331,7 +331,7 @@ static int snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
 /* FORMAT DOUBLE                                                                                                      */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_string_t *nyx_format_variant_to_string(STR_t format, nyx_variant_t value)
+nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
 {
     char conv;
     int lcnt, w, f;
@@ -375,7 +375,7 @@ nyx_string_t *nyx_format_variant_to_string(STR_t format, nyx_variant_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_variant_t nyx_format_string_to_variant(STR_t format, const nyx_string_t *value)
+nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value)
 {
     char conv;
     int lcnt;

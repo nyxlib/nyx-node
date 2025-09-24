@@ -1899,6 +1899,8 @@ typedef struct
 
 typedef struct
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     enum
     {
         NYX_VARIANT_TYPE_INT,
@@ -1909,6 +1911,8 @@ typedef struct
 
     } type;
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     union
     {
         int32_t _int;
@@ -1918,6 +1922,8 @@ typedef struct
         double _double;
 
     } value;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
 } nyx_variant_t;
 
@@ -1967,26 +1973,6 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
 {
     return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-nyx_string_t *nyx_format_variant_to_string(
-    STR_t format,
-    nyx_variant_t value
-);
-
-/**
- * @private
- */
-
-nyx_variant_t nyx_format_string_to_variant(
-    STR_t format,
-    const nyx_string_t *value
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
