@@ -1883,11 +1883,11 @@ nyx_stream_t nyx_str_to_stream(
 
 typedef struct
 {
-    __NULLABLE__ STR_t label;
-    __NULLABLE__ STR_t group;
-    __NULLABLE__ STR_t hints;
-    __NULLABLE__ double timeout;
-    __NULLABLE__ STR_t message;
+    __NULLABLE__ STR_t group;                                                                   //!< GUI tab name, "Main" by default.
+    __NULLABLE__ STR_t label;                                                                   //!< GUI label, `name` by default.
+    __NULLABLE__ STR_t hints;                                                                   //!< GUI markdown description.
+    __NULLABLE__ double timeout;                                                                //!< Worse-case time to affect, 0 default, N/A for ro [s].
+    __NULLABLE__ STR_t message;                                                                 //!< Commentary.
 
 } nyx_opts_t;
 
