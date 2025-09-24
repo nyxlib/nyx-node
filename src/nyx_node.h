@@ -1922,7 +1922,7 @@ nyx_stream_t nyx_str_to_stream(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing vector options.
+ * \brief Struct describing the options for INDI / Nyx vectors.
  */
 
 typedef struct
