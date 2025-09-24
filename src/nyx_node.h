@@ -2007,7 +2007,7 @@ nyx_dict_t *nyx_number_def_new(
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `int32_t` value.
- * @return The definition object.
+ * @return The new definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
@@ -2024,7 +2024,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t labe
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `uint32_t` value.
- * @return The definition object.
+ * @return The new definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
@@ -2041,7 +2041,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t lab
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `int64_t` value.
- * @return The definition object.
+ * @return The new definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
@@ -2058,7 +2058,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t lab
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `uint64_t` value.
- * @return The definition object.
+ * @return The new definition object.
  */
 
 __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
