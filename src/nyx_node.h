@@ -2613,14 +2613,14 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * \brief Allocates a new Nyx Stream.
  * @param name Definition name.
  * @param label Definition label.
- * @param format Stream format.
  * @return The new definition object.
+ * @note If the name ends with `.b`, the payload is automatically base64-encoded.
+ * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
 nyx_dict_t *nyx_stream_def_new(
     STR_t name,
-    __NULLABLE__ STR_t label,
-    __NULLABLE__ STR_t format
+    __NULLABLE__ STR_t label
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2915,8 +2915,8 @@ void nyx_mqtt_pub(
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
  * @warning If `check` is `true`, the stream has to be declared via @ref nyx_stream_def_vector_new and registered via @ref nyx_node_initialize.
- * @note If a field name ends with `.b`, its buffer is automatically base64-encoded.
- * @note If a field name ends with `.z`, its buffer is automatically zlib+base64-compressed.
+ * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
+ * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
 bool nyx_stream_pub(

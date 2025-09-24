@@ -380,7 +380,6 @@
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="label" type="xs:string" use="optional"/>
-      <xs:attribute name="format" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="setStreamVector">
@@ -410,7 +409,6 @@
   <xs:element name="oneStream">
     <xs:complexType mixed="true">
       <xs:attribute name="name" type="xs:string" use="required"/>
-      <xs:attribute name="format" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
   <!-- ************************************************************************************************************* -->

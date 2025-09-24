@@ -26,16 +26,11 @@ static void debug_callback(nyx_object_t *object)
 /* DEF                                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format)
+nyx_dict_t *nyx_stream_def_new(STR_t name, __NULLABLE__ STR_t label)
 {
     if(label == NULL || label[0] == '\0')
     {
         label = name;
-    }
-
-    if(format == NULL || format[0] == '\0')
-    {
-        format = "raw";
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -46,7 +41,6 @@ nyx_dict_t *nyx_stream_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE_
 
     nyx_dict_set(result, "@name", nyx_string_from(name));
     nyx_dict_set(result, "@label", nyx_string_from(label));
-    nyx_dict_set(result, "@format", nyx_string_from(format));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
