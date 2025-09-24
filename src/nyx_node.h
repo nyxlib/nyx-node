@@ -2732,7 +2732,7 @@ typedef void (* nyx_mqtt_handler_t)(
  * \brief Initializes the Nyx node.
  *
  * @param node_id Unique node identifier.
- * @param vectors Array of vectors.
+ * @param vectors Array of vectors with `ǸULL` sentinel.
  * @param indi_url Optional INDI URL (e.g. tcp://0.0.0.0:7625).
  * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
  * @param mqtt_username Optional MQTT username.
