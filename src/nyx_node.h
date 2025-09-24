@@ -1919,6 +1919,10 @@ nyx_stream_t nyx_str_to_stream(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Struct describing vector options.
+ */
+
 typedef struct
 {
     __NULLABLE__ STR_t group;                                                                   //!< GUI group membership, "Main" by default.
