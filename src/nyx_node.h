@@ -2249,7 +2249,7 @@ __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of definition with `NULL` sentinel.
+ * @param defs Array of definitions with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2329,7 +2329,7 @@ STR_t nyx_text_def_get(
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of definition with `NULL` sentinel.
+ * @param defs Array of definitions with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2408,7 +2408,7 @@ nyx_state_t nyx_light_def_get(
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
- * @param defs Array of definition with `NULL` sentinel.
+ * @param defs Array of definitions with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2488,7 +2488,7 @@ nyx_onoff_t nyx_switch_def_get(
  * @param state Vector state.
  * @param perm Vector permissions.
  * @param rule Vector rules.
- * @param defs Array of definition with `NULL` sentinel.
+ * @param defs Array of definitions with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2580,7 +2580,7 @@ void nyx_blob_def_get(
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of definition with `NULL` sentinel.
+ * @param defs Array of definitions with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2640,7 +2640,7 @@ nyx_dict_t *nyx_stream_def_new(
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
- * @param defs Array of definition with `NULL` sentinel.
+ * @param defs Array of definitions with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
