@@ -2221,12 +2221,12 @@ __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
 
 /**
  * \brief Allocates a new INDI / Nyx number vector.
- * @param device
- * @param name
- * @param state
- * @param perm
- * @param defs
- * @param opts
+ * @param device Device name.
+ * @param name Vector name.
+ * @param state Vector state.
+ * @param perm Vector permissions.
+ * @param defs Array of definition with `NULL` sentinel.
+ * @param opts Options (label, group, ...).
  * @return The new vector object.
  */
 
@@ -2301,12 +2301,12 @@ STR_t nyx_text_def_get(
 
 /**
  * \brief Allocates a new INDI / Nyx text vector.
- * @param device
- * @param name
- * @param state
- * @param perm
- * @param defs
- * @param opts
+ * @param device Device name.
+ * @param name Vector name.
+ * @param state Vector state.
+ * @param perm Vector permissions.
+ * @param defs Array of definition with `NULL` sentinel.
+ * @param opts Options (label, group, ...).
  * @return The new vector object.
  */
 
@@ -2381,11 +2381,11 @@ nyx_state_t nyx_light_def_get(
 
 /**
  * \brief Allocates a new INDI / Nyx light vector.
- * @param device
- * @param name
- * @param state
- * @param defs
- * @param opts
+ * @param device Device name.
+ * @param name Vector name.
+ * @param state Vector state.
+ * @param defs Array of definition with `NULL` sentinel.
+ * @param opts Options (label, group, ...).
  * @return The new vector object.
  */
 
@@ -2459,13 +2459,13 @@ nyx_onoff_t nyx_switch_def_get(
 
 /**
  * \brief Allocates a new INDI / Nyx switch vector.
- * @param device
- * @param name
- * @param state
- * @param perm
- * @param rule
- * @param defs
- * @param opts
+ * @param device Device name.
+ * @param name Vector name.
+ * @param state Vector state.
+ * @param perm Vector permissions.
+ * @param rule Vector rules.
+ * @param defs Array of definition with `NULL` sentinel.
+ * @param opts Options (label, group, ...).
  * @return The new vector object.
  */
 
@@ -2552,12 +2552,12 @@ void nyx_blob_def_get(
 
 /**
  * \brief Allocates a new INDI / Nyx BLOB vector.
- * @param device
- * @param name
- * @param state
- * @param perm
- * @param defs
- * @param opts
+ * @param device Device name.
+ * @param name Vector name.
+ * @param state Vector state.
+ * @param perm Vector permissions.
+ * @param defs Array of definition with `NULL` sentinel.
+ * @param opts Options (label, group, ...).
  * @return The new vector object.
  */
 
@@ -2613,11 +2613,11 @@ nyx_dict_t *nyx_stream_def_new(
 
 /**
  * \brief Allocates a new Nyx stream vector.
- * @param device
- * @param name
- * @param state
- * @param defs
- * @param opts
+ * @param device Device name.
+ * @param name Vector name.
+ * @param state Vector state.
+ * @param defs Array of definition with `NULL` sentinel.
+ * @param opts Options (label, group, ...).
  * @return The new vector object.
  */
 
