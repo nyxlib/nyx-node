@@ -412,7 +412,7 @@ struct nyx_dict_s;
 
 /**
  * @struct nyx_object_t
- * \brief Struct describing an JSON document.
+ * \brief Struct describing a JSON object.
  */
 
 typedef struct nyx_object_s
