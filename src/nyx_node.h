@@ -2103,9 +2103,9 @@ nyx_variant_t nyx_number_def_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `int32_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2115,9 +2115,9 @@ __INLINE__ bool nyx_number_def_set_int(nyx_dict_t *def, int32_t value)
 }
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `int32_t` value.
  */
 
 __INLINE__ int32_t nyx_number_def_get_int(const nyx_dict_t *def)
@@ -2126,9 +2126,9 @@ __INLINE__ int32_t nyx_number_def_get_int(const nyx_dict_t *def)
 }
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `uint32_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2138,9 +2138,9 @@ __INLINE__ bool nyx_number_def_set_uint(nyx_dict_t *def, uint32_t value)
 }
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `uint32_t` value.
  */
 
 __INLINE__ uint32_t nyx_number_def_get_uint(const nyx_dict_t *def)
@@ -2149,9 +2149,9 @@ __INLINE__ uint32_t nyx_number_def_get_uint(const nyx_dict_t *def)
 }
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `int64_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2161,9 +2161,9 @@ __INLINE__ bool nyx_number_def_set_long(nyx_dict_t *def, int64_t value)
 }
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `int64_t` value.
  */
 
 __INLINE__ int64_t nyx_number_def_get_long(const nyx_dict_t *def)
@@ -2172,9 +2172,9 @@ __INLINE__ int64_t nyx_number_def_get_long(const nyx_dict_t *def)
 }
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `uint64_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2184,9 +2184,9 @@ __INLINE__ bool nyx_number_def_set_ulong(nyx_dict_t *def, uint64_t value)
 }
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `uint64_t` value.
  */
 
 __INLINE__ uint64_t nyx_number_def_get_ulong(const nyx_dict_t *def)
@@ -2195,9 +2195,9 @@ __INLINE__ uint64_t nyx_number_def_get_ulong(const nyx_dict_t *def)
 }
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `double` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2207,9 +2207,9 @@ __INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
 }
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `double` value.
  */
 
 __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
