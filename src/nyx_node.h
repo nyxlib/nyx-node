@@ -412,6 +412,7 @@ struct nyx_dict_s;
 
 /**
  * @struct nyx_object_t
+ * \brief Struct describing an JSON document.
  */
 
 typedef struct nyx_object_s
@@ -1642,6 +1643,7 @@ typedef enum
 
 /**
  * @struct nyx_xmldoc_t
+ * \brief Struct describing an XML document.
  */
 
 typedef struct nyx_xmldoc_s
