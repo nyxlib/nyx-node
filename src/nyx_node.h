@@ -51,11 +51,11 @@ double nan(const char *tag);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef /*-*/ void *buff_t;
-typedef const void *BUFF_t;
+typedef /*-*/ void *buff_t;                                                                     //!< Alias for `void *`
+typedef const void *BUFF_t;                                                                     //!< Alias for `const void *`
 
-typedef /*-*/ char *str_t;
-typedef const char *STR_t;
+typedef /*-*/ char *str_t;                                                                     //!< Alias for `char *`
+typedef const char *STR_t;                                                                     //!< Alias for `const char *`
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
@@ -1887,7 +1887,7 @@ typedef struct
     __NULLABLE__ STR_t label;                                                                   //!< GUI label, device name by default.
     __NULLABLE__ STR_t hints;                                                                   //!< GUI Markdown description.
     __NULLABLE__ double timeout;                                                                //!< Worse-case time to affect, 0 default, N/A for ro [sec].
-    __NULLABLE__ STR_t message;                                                                 //!< Commentary.
+    __NULLABLE__ STR_t message;                                                                 //!< Free commentary.
 
 } nyx_opts_t;
 
