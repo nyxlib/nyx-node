@@ -168,7 +168,7 @@ void nyx_log(
 /**
  * \brief Logs a fatal message.
  *
- * @param fmt Format string (printf-style).
+ * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
 
@@ -178,7 +178,7 @@ void nyx_log(
 /**
  * \brief Logs an error message.
  *
- * @param fmt Format string (printf-style).
+ * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
 */
 
@@ -188,7 +188,7 @@ void nyx_log(
 /**
  * \brief Logs an info message.
  *
- * @param fmt Format string (printf-style).
+ * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
 
@@ -198,7 +198,7 @@ void nyx_log(
 /**
  * \brief Logs a debug message.
  *
- * @param fmt Format string (printf-style).
+ * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
 
@@ -208,7 +208,7 @@ void nyx_log(
 /**
  * \brief Logs a verbose message.
  *
- * @param fmt Format string (printf-style).
+ * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
 
