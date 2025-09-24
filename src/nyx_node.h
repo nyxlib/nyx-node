@@ -1187,6 +1187,10 @@ typedef struct nyx_dict_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Struct describing a JSON dict iterator.
+ */
+
 typedef struct
 {
     int idx;                                                                                    //!< ???
@@ -1409,6 +1413,10 @@ typedef struct nyx_list_s
 } nyx_list_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Struct describing a JSON list iterator.
+ */
 
 typedef struct
 {
