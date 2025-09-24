@@ -2274,10 +2274,10 @@ nyx_dict_t *nyx_text_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @param value
- * @return
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `STR_t` value.
+ * @return \c true if the value was modified, \c false otherwise.
  */
 
 bool nyx_text_def_set(
@@ -2288,9 +2288,9 @@ bool nyx_text_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `STR_t` value.
  */
 
 STR_t nyx_text_def_get(
@@ -2354,9 +2354,9 @@ nyx_dict_t *nyx_light_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `nyx_state_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2368,9 +2368,9 @@ bool nyx_light_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `nyx_state_t` value.
  */
 
 nyx_state_t nyx_light_def_get(
@@ -2432,9 +2432,9 @@ nyx_dict_t *nyx_switch_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @param value
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
+ * @param value The new `nyx_onoff_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2446,9 +2446,9 @@ bool nyx_switch_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
- * @return
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
+ * @return The current `nyx_onoff_t` value.
  */
 
 nyx_onoff_t nyx_switch_def_get(
@@ -2520,8 +2520,8 @@ nyx_dict_t *nyx_blob_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
+ * \brief Sets the new value of the provided definition object.
+ * @param def The definition object.
  * @param size
  * @param buff
  * @return \c true if the value was modified, \c false otherwise.
@@ -2536,8 +2536,8 @@ bool nyx_blob_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief .
- * @param def
+ * \brief Gets the current value of the provided definition object.
+ * @param def The definition object.
  * @param size
  * @param buff
  */
