@@ -1766,15 +1766,15 @@ __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief TODO.
+ * \brief Vector state.
  */
 
 typedef enum
 {
-    NYX_STATE_IDLE = 400,
-    NYX_STATE_OK = 401,
-    NYX_STATE_BUSY = 402,
-    NYX_STATE_ALERT = 403,
+    NYX_STATE_IDLE = 400,                                                                       //!< State is idle.
+    NYX_STATE_OK = 401,                                                                         //!< State is ok.
+    NYX_STATE_BUSY = 402,                                                                       //!< State is busy.
+    NYX_STATE_ALERT = 403,                                                                      //!< State is alert.
 
 } nyx_state_t;
 
@@ -1793,14 +1793,14 @@ nyx_state_t nyx_str_to_state(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief TODO.
+ * \brief Vector permission hint, with respect to client.
  */
 
 typedef enum
 {
-    NYX_PERM_RO = 500,
-    NYX_PERM_WO = 501,
-    NYX_PERM_RW = 502,
+    NYX_PERM_RO = 500,                                                                          //!< Read only.
+    NYX_PERM_WO = 501,                                                                          //!< Write only.
+    NYX_PERM_RW = 502,                                                                          //!< Read & write.
 
 } nyx_perm_t;
 
@@ -1819,14 +1819,14 @@ nyx_perm_t nyx_str_to_perm(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief TODO.
+ * \brief Switch vector rule hint.
  */
 
 typedef enum
 {
-    NYX_RULE_ONE_OF_MANY = 600,
-    NYX_RULE_AT_MOST_ONE = 601,
-    NYX_RULE_ANY_OF_MANY = 602,
+    NYX_RULE_ONE_OF_MANY = 600,                                                                 //!< Only one switch of many can be ON (e.g. radio buttons).
+    NYX_RULE_AT_MOST_ONE = 601,                                                                 //!< At most one switch can be ON, but all switches can be off.
+    NYX_RULE_ANY_OF_MANY = 602,                                                                 //!< Any number of switches can be ON (e.g. check boxes).
 
 } nyx_rule_t;
 
@@ -1845,13 +1845,13 @@ nyx_rule_t nyx_str_to_rule(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief TODO.
+ * \brief Switch state.
  */
 
 typedef enum
 {
-    NYX_ONOFF_ON = 700,
-    NYX_ONOFF_OFF = 701,
+    NYX_ONOFF_ON = 700,                                                                         //!< Switch is ON.
+    NYX_ONOFF_OFF = 701,                                                                        //!< Switch is OFF.
 
 } nyx_onoff_t;
 
