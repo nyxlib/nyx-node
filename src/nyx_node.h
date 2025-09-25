@@ -261,7 +261,7 @@ void nyx_generate_mac_addr(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Base64-encodes a buffer to a string.
+ * \brief Encodes a buffer using the base64 algorithm.
  *
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
@@ -278,7 +278,7 @@ __NULLABLE__ str_t nyx_base64_encode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Base64-encodes a string to a buffer.
+ * \brief Decodes a string using the base64 algorithm.
  *
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
@@ -295,7 +295,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib-compresses a buffer.
+ * \brief Compresses a buffer using the ZLib algorithm.
  *
  * \param result_buff Optional pointer to store the length of the uncompressed buffer.
  * \param size Size of the buffer to compressed.
@@ -312,7 +312,7 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib-uncompresses a buffer.
+ * \brief Uncompresses a buffer using the ZLib algorithm.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
  * \param size Size of the buffer to uncompress.
@@ -329,7 +329,7 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib+base64-compresses a buffer to a string.
+ * \brief Compresses a buffer using the ZLib+base64 algorithm.
  *
  * \param result_len Optional pointer to store the length of the uncompressed string.
  * \param size Size of the buffer to compress.
@@ -346,7 +346,7 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief ZLib+base64-uncompresses a string to a buffer.
+ * \brief Uncompresses a string using the ZLib+base64 algorithm.
  *
  * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
  * \param len Length of the string to uncompressed.
@@ -1897,75 +1897,6 @@ STR_t nyx_onoff_to_str(
 
 nyx_onoff_t nyx_str_to_onoff(
     STR_t onoff
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- * \brief BLOB state.
- */
-
-typedef enum
-{
-    NYX_BLOB_STATE_DISABLED = 800,                                                              //!< BLOBs are disabled (default).
-    NYX_BLOB_STATE_ENABLED = 801,                                                               //!< BLOBs are enabled.
-
-} nyx_blob_state_t;
-
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-STR_t nyx_blob_state_to_str(
-    nyx_blob_state_t blob
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-nyx_blob_state_t nyx_str_to_blob_state(
-    STR_t blob
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- * \brief Stream state.
- */
-
-typedef enum
-{
-    NYX_STREAM_STATE_DISABLED = 900,                                                            //!< Stream are disabled (default).
-    NYX_STREAM_STATE_ENABLED = 901,                                                             //!< Stream are enabled.
-
-} nyx_stream_state_t;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-STR_t nyx_stream_state_to_str(
-    nyx_stream_state_t stream
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-nyx_stream_state_t nyx_str_to_stream_state(
-    STR_t stream
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

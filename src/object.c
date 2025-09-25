@@ -183,7 +183,7 @@ buff_t nyx_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
 /* UTILITIES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_boolean_dup(bool b)
+str_t nyx_bool_dup(bool b)
 {
     str_t str;
 
@@ -205,7 +205,7 @@ __NULLABLE__ str_t nyx_double_dup(double d)
     {
         str_t str = nyx_memory_alloc(32 + 1);
 
-        snprintf(str, 32, "%lf", d);
+        snprintf(str, 32, "%f", d);
 
         return str;
     }

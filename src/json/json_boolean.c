@@ -62,7 +62,7 @@ bool nyx_boolean_set_alt(nyx_boolean_t *object, bool value, bool notify)
 
 str_t nyx_boolean_to_string(const nyx_boolean_t *object)
 {
-    return nyx_boolean_dup(object->value);
+    return nyx_bool_dup(object->value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
