@@ -1369,7 +1369,7 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *boolean = nyx_dict_get(object, key);
 
-    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_number_t *) boolean)
+    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_boolean_t *) boolean)
                                                                   : false
     ;
 }
@@ -1616,7 +1616,7 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, int idx)
 {
     nyx_object_t *boolean = nyx_list_get(object, idx);
 
-    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_number_get((nyx_boolean_t *) boolean)
+    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_boolean_t *) boolean)
                                                                   : false
     ;
 }
