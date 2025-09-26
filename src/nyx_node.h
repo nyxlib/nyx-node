@@ -230,7 +230,7 @@ void nyx_log(
  *
  * \param size Size of the buffer to hash.
  * \param buff Pointer to the buffer to hash.
- * \param seed Seed.
+ * \param seed Initial seed value.
  * \return The computed 32-bit hash.
  */
 
@@ -297,7 +297,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /**
  * \brief Compresses a buffer using the ZLib algorithm.
  *
- * \param result_buff Optional pointer to store the length of the uncompressed buffer.
+ * \param result_buff Optional pointer to store the size of the compressed buffer.
  * \param size Size of the buffer to compressed.
  * \param buff Pointer to the buffer to compressed.
  * \return The compressed buffer.
@@ -314,9 +314,9 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 /**
  * \brief Uncompresses a buffer using the ZLib algorithm.
  *
- * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
+ * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param size Size of the buffer to uncompress.
- * \param buff Input buffer to uncompress.
+ * \param buff Pointer to the buffer to uncompress.
  * \return The uncompressed buffer.
  */
 
@@ -331,7 +331,7 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
 /**
  * \brief Compresses a buffer using the ZLib+base64 algorithm.
  *
- * \param result_len Optional pointer to store the length of the uncompressed string.
+ * \param result_len Optional pointer to store the length of the compressed string.
  * \param size Size of the buffer to compress.
  * \param buff Pointer to the buffer to compress.
  * \return The compressed string.
@@ -348,9 +348,9 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
 /**
  * \brief Uncompresses a string using the ZLib+base64 algorithm.
  *
- * \param result_size Mandatory pointer to provide and store the size of the compressed buffer.
- * \param len Length of the string to uncompressed.
- * \param str Pointer to the string to uncompressed.
+ * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
+ * \param len Length of the string to uncompress.
+ * \param str Pointer to the string to uncompress.
  * \return The uncompressed buffer.
  */
 
@@ -2782,7 +2782,7 @@ typedef void (* nyx_mqtt_handler_t)(
 
 /**
  * @memberof nyx_node_t
- * \brief Initializes the Nyx node.
+ * \brief Initializes a new Nyx node.
  *
  * @param node_id Unique node identifier.
  * @param vectors Array of vectors with `ǸULL` sentinel.
@@ -2795,8 +2795,8 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param redis_username Optional Redis username.
  * @param redis_password Optional Redis password.
  * @param retry_ms Connect retry time [milliseconds].
- * @param enable_xml Enables the XML compatibility layer.
- * @return
+ * @param enable_xml Enables the XML messages.
+ * @return The new Nyx node.
  */
 
 __NULLABLE__ nyx_node_t *nyx_node_initialize(
@@ -2823,7 +2823,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
 
 /**
  * @memberof nyx_node_t
- * \brief Finalizes the Nyx node.
+ * \brief Finalizes a Nyx node.
  *
  * @param node The Nyx node.
  * @param free_vectors If `true`, the definition vectors are released.
