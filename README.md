@@ -2,15 +2,15 @@
 [![][License_mongoose img]][License_mongoose]
 [![][License_arduino img]][License_arduino]
 
-<a href="https://lpsc.in2p3.fr/" target="_blank"><img src="./images/logo_lpsc.svg" alt="LPSC" height="72" /></a>
+<a href="https://lpsc.in2p3.fr/" target="_blank"><img src="./docs/img/logo_lpsc.svg" alt="LPSC" height="72" /></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://www.in2p3.fr/" target="_blank"><img src="./images/logo_in2p3.svg" alt="IN2P3" height="72" /></a>
+<a href="https://www.in2p3.fr/" target="_blank"><img src="./docs/img/logo_in2p3.svg" alt="IN2P3" height="72" /></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://www.univ-grenoble-alpes.fr/" target="_blank"><img src="./images/logo_uga.svg" alt="UGA" height="72" /></a>
+<a href="https://www.univ-grenoble-alpes.fr/" target="_blank"><img src="./docs/img/logo_uga.svg" alt="UGA" height="72" /></a>
 
 # Nyx Node
 
-The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7](./spec/INDI.pdf), for controlling
+The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7](specs/INDI.pdf), for controlling
 astronomical hardware. It enhances INDI by supporting multiple independent nodes, each with its own embedded protocol
 stack. The nodes can communicate via an [MQTT](https://mqtt.org/) broker, a [Redis](https://redis.io/) cache (low
 latency streams) or directly over TCP, offering flexibility and scalability for distributed systems.

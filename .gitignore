@@ -2,6 +2,6 @@
 .idea
 .DS_Store
 
-/docs/
 /build/
+/docs/html/
 /cmake-build-*/
