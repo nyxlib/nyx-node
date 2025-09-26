@@ -2771,12 +2771,12 @@ typedef enum
 /**
  * \brief MQTT event handler.
  *
- * @param node The Nyx node.
- * @param event The event type.
- * @param topic_size The MQTT topic length.
- * @param topic_buff The MQTT topic buffer.
- * @param message_size The MQTT message length.
- * @param message_buff The MQTT message buffer.
+ * @param node Nyx node.
+ * @param event Event type.
+ * @param topic_size MQTT topic length.
+ * @param topic_buff MQTT topic buffer.
+ * @param message_size MQTT message length.
+ * @param message_buff MQTT message buffer.
  */
 
 typedef void (* nyx_mqtt_handler_t)(
