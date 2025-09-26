@@ -1365,6 +1365,26 @@ str_t nyx_dict_to_string(
  * @return
  */
 
+__INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
+{
+    nyx_object_t *boolean = nyx_dict_get(object, key);
+
+    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_number_t *) boolean)
+                                                                  : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
+ * \brief
+ *
+ * @param object
+ * @param key
+ * @return
+ */
+
 __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *number = nyx_dict_get(object, key);
@@ -1580,6 +1600,26 @@ size_t nyx_list_size(
 str_t nyx_list_to_string(
     const nyx_list_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_list_t
+ * \brief
+ *
+ * @param object
+ * @param idx
+ * @return
+ */
+
+__INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, int idx)
+{
+    nyx_object_t *boolean = nyx_list_get(object, idx);
+
+    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_number_get((nyx_boolean_t *) boolean)
+                                                                  : false
+    ;
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
