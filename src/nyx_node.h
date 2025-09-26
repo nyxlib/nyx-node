@@ -2773,7 +2773,7 @@ nyx_dict_t *nyx_message_new(
  * \brief Allocates a new INDI / Nyx `delete-property` message object.
  *
  * @param device Device name.
- * @param name Optional vector name (`NULL` = whole device).
+ * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human message.
  * @return The new `delete-property` message object.
  * @note Prefer using @ref nyx_node_send_del_property.
@@ -2916,7 +2916,7 @@ void nyx_node_poll(
  *
  * @param node Nyx node.
  * @param device Device name.
- * @param name Optional vector name (`NULL` = whole device).
+ * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human message.
  */
 
@@ -2935,7 +2935,7 @@ void nyx_node_enable(
  *
  * @param node Nyx node.
  * @param device Device name.
- * @param name Optional vector name (`NULL` = whole device).
+ * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human message.
  */
 
@@ -2973,7 +2973,7 @@ void nyx_node_send_message(
  *
  * @param node Nyx node.
  * @param device Device name.
- * @param name Optional vector name (`NULL` = whole device).
+ * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human message.
  */
 
