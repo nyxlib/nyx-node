@@ -2868,7 +2868,7 @@ void nyx_node_poll(
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` = whole device).
- * @param message Optional message content.
+ * @param message Optional human message.
  */
 
 void nyx_node_enable(
@@ -2887,7 +2887,7 @@ void nyx_node_enable(
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` = whole device).
- * @param message Optional message content.
+ * @param message Optional human message.
  */
 
 void nyx_node_disable(
