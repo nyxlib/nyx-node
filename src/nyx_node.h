@@ -584,6 +584,7 @@ str_t nyx_object_to_cstring(
 /** @}
   * @defgroup NULL_OBJECT JSON Null Object
   * @ingroup OBJECT
+  * JSON Null Object.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -638,6 +639,7 @@ str_t nyx_null_to_string(
 /** @}
   * @defgroup NUMBER_OBJECT JSON Number Object
   * @ingroup OBJECT
+  * JSON Number Object.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -757,6 +759,7 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 /** @}
   * @defgroup BOOLEAN_OBJECT JSON Boolean Object
   * @ingroup OBJECT
+  * JSON Boolean Object.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -876,6 +879,7 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 /** @}
   * @defgroup STRING_OBJECT JSON String Object
   * @ingroup OBJECT
+  * JSON String Object.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1168,6 +1172,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool bas
 /** @}
   * @defgroup DICT_OBJECT JSON Dict Object
   * @ingroup OBJECT
+  * JSON Dict Object.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1395,6 +1400,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 /** @}
   * @defgroup LIST_OBJECT JSON List Object
   * @ingroup OBJECT
+  * JSON List Object.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1721,8 +1727,8 @@ str_t nyx_xmldoc_to_string(
 /* TRANSFORM                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup TRANSFORM JSON <-> XML
-  * JSON <-> XML Nyx / INDI commands.
+  * @defgroup TRANSFORM JSON ↔ XML
+  * JSON ↔ XML Nyx / INDI commands.
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2000,8 +2006,9 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_NUMBER Nyx Number
+  * @defgroup NYX_NUMBER Nyx Number messages
   * @ingroup NYX
+  * Nyx Number messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2275,8 +2282,9 @@ nyx_dict_t *nyx_number_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_TEXT Nyx Text
+  * @defgroup NYX_TEXT Nyx Text messages
   * @ingroup NYX
+  * Nyx Text messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2355,8 +2363,9 @@ nyx_dict_t *nyx_text_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_LIGHT Nyx Light
+  * @defgroup NYX_LIGHT Nyx Light messages
   * @ingroup NYX
+  * Nyx Light messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2433,8 +2442,9 @@ nyx_dict_t *nyx_light_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_SWITCH Nyx Switch
+  * @defgroup NYX_SWITCH Nyx Switch messages
   * @ingroup NYX
+  * Nyx Switch messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2515,8 +2525,9 @@ nyx_dict_t *nyx_switch_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_BLOB Nyx BLOB
+  * @defgroup NYX_BLOB Nyx BLOB messages
   * @ingroup NYX
+  * Nyx BLOB messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2611,8 +2622,9 @@ nyx_dict_t *nyx_blob_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_STREAM Nyx Stream
+  * @defgroup NYX_STREAM Nyx Stream messages
   * @ingroup NYX
+  * Nyx Stream messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2694,8 +2706,9 @@ nyx_dict_t *nyx_stream_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_MESSAGE Nyx Message
+  * @defgroup NYX_MESSAGE Other Nyx messages
   * @ingroup NYX
+  * Other Nyx messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2706,6 +2719,7 @@ nyx_dict_t *nyx_stream_set_vector_new(
  * @param device Device name.
  * @param message Human message.
  * @return The new human message object.
+ * @note Prefer using @ref nyx_node_send_message.
  */
 
 nyx_dict_t *nyx_message_new(
@@ -2713,12 +2727,6 @@ nyx_dict_t *nyx_message_new(
     STR_t message
 );
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-/** @}
-  * @defgroup NYX_PROPERTY Nyx Property
-  * @ingroup NYX
-  * @{
-  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -2728,6 +2736,7 @@ nyx_dict_t *nyx_message_new(
  * @param name Optional vector name (`NULL` = whole device).
  * @param message Optional human message.
  * @return The new `delete-property` message object.
+ * @note Prefer using @ref nyx_node_send_del_property.
  */
 
 nyx_dict_t *nyx_del_property_new(
@@ -2901,6 +2910,7 @@ void nyx_node_disable(
 
 /**
  * @memberof nyx_node_t
+ * \anchor nyx_node_send_message
  * \brief Sends a human message to the clients.
  *
  * @param node Nyx node.
@@ -2918,6 +2928,7 @@ void nyx_node_send_message(
 
 /**
  * @memberof nyx_node_t
+ * \anchor nyx_node_send_del_property
  * \brief Sends a `del-property` message to the clients.
  *
  * @param node Nyx node.
