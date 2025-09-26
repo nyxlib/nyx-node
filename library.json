@@ -1,7 +1,7 @@
 {
     "name": "NyxNode",
     "version": "1.0.0",
-    "description": "Standalone Nyx / Indi node",
+    "description": "Standalone Nyx / INDI node",
     "authors": [
         {
             "name": "Jérôme ODIER",
