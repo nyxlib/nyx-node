@@ -36,7 +36,7 @@ if(ZLIB_FOUND)
     message(STATUS "Zlib found: ${ZLIB_INCLUDE_DIRS} ${ZLIB_LIBRARIES}")
 else()
     set(HAVE_ZLIB 0)
-    message(STATUS "Zlib not found -> building without compression support")
+    message(STATUS "Zlib not found -> building with minimal compression support")
 endif()
 
 ########################################################################################################################
@@ -94,6 +94,12 @@ set(SOURCE_FILES
 
 add_library(nyx-node-static STATIC ${SOURCE_FILES})
 
+target_include_directories(nyx-node-static
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/>
+    $<INSTALL_INTERFACE:include>
+)
+
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(nyx-node-static PRIVATE HAVE_MALLOC_SIZE)
 endif()
@@ -104,11 +110,10 @@ endif()
 
 if(HAVE_ZLIB)
     target_compile_definitions(nyx-node-static PRIVATE HAVE_ZLIB)
-    target_include_directories(nyx-node-static PRIVATE ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(nyx-node-static PRIVATE ${ZLIB_LIBRARIES} m)
+    target_link_libraries(nyx-node-static PUBLIC ZLIB::ZLIB m)
+else()
+    target_link_libraries(nyx-node-static PUBLIC m)
 endif()
-
-target_link_libraries(nyx-node-static PRIVATE m)
 
 set_target_properties(nyx-node-static PROPERTIES
     OUTPUT_NAME "nyx-node"
@@ -117,6 +122,12 @@ set_target_properties(nyx-node-static PROPERTIES
 ########################################################################################################################
 
 add_library(nyx-node-shared SHARED ${SOURCE_FILES})
+
+target_include_directories(nyx-node-shared
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/>
+    $<INSTALL_INTERFACE:include>
+)
 
 if(HAVE_MALLOC_SIZE)
     target_compile_definitions(nyx-node-shared PRIVATE HAVE_MALLOC_SIZE)
@@ -128,11 +139,10 @@ endif()
 
 if(HAVE_ZLIB)
     target_compile_definitions(nyx-node-shared PRIVATE HAVE_ZLIB)
-    target_include_directories(nyx-node-shared PRIVATE ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(nyx-node-shared PRIVATE ${ZLIB_LIBRARIES})
+    target_link_libraries(nyx-node-shared PUBLIC ZLIB::ZLIB m)
+else()
+    target_link_libraries(nyx-node-shared PUBLIC m)
 endif()
-
-target_link_libraries(nyx-node-shared PRIVATE m)
 
 set_target_properties(nyx-node-shared PROPERTIES
     OUTPUT_NAME "nyx-node"
