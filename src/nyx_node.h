@@ -2939,8 +2939,9 @@ void nyx_node_send_del_property(
  * @memberof nyx_node_t
  * \brief Subscribes to an MQTT topic (if MQTT enabled).
  *
- * @param node The Nyx node.
- * @param topic The MQTT topic.
+ * @param node Nyx node.
+ * @param topic MQTT topic.
+ * @note `mqtt_handler` has to be defined in @ref nyx_node_initialize.
  */
 
 void nyx_mqtt_sub(
@@ -2954,10 +2955,10 @@ void nyx_mqtt_sub(
  * @memberof nyx_node_t
  * \brief Publishes an MQTT message (if MQTT enabled).
  *
- * @param node The Nyx node.
- * @param topic The MQTT topic.
- * @param message_size The MQTT message length.
- * @param message_buff The MQTT message buffer.
+ * @param node Nyx node.
+ * @param topic MQTT topic.
+ * @param message_size MQTT message length.
+ * @param message_buff MQTT message buffer.
  */
 
 void nyx_mqtt_pub(

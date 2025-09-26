@@ -253,6 +253,8 @@ bool nyx_stream_pub(nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_t n_fi
 
     if(node == NULL || device == NULL || stream == NULL)
     {
+        NYX_LOG_ERROR("Stream vector not properly initialized");
+
         return false;
     }
 

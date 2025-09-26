@@ -11,30 +11,43 @@
 
 void nyx_mqtt_sub(nyx_node_t *node, STR_t topic)
 {
-    nyx_str_t _topic = nyx_str_s(topic);
+    if(node != NULL)
+    {
+        if(node->mqtt_handler == NULL)
+        {
+            NYX_LOG_ERROR("MQTT handler has not been set");
+        }
+        else
+        {
+            nyx_str_t _topic = nyx_str_s(topic);
 
-    internal_mqtt_sub(
-        node,
-        _topic
-    );
+            internal_mqtt_sub(
+                node,
+                _topic
+            );
+        }
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __ZEROABLE__ size_t message_size, __NULLABLE__ BUFF_t message_buff)
 {
-    nyx_str_t _topic = nyx_str_s(topic);
+    if(node != NULL)
+    {
+        nyx_str_t _topic = nyx_str_s(topic);
 
-    nyx_str_t _message = NYX_STR_S(
-        message_buff,
-        message_size
-    );
+        nyx_str_t _message = NYX_STR_S(
+            message_buff,
+            message_size
+        );
 
-    internal_mqtt_pub(
-        node,
-        _topic,
-        _message
-    );
+        internal_mqtt_pub(
+            node,
+            _topic,
+            _message
+        );
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
