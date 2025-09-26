@@ -2835,7 +2835,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
  * @memberof nyx_node_t
  * \brief Finalizes a Nyx node.
  *
- * @param node The Nyx node.
+ * @param node Nyx node.
  * @param free_vectors If `true`, the definition vectors are released.
  */
 

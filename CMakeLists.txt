@@ -8,7 +8,10 @@ project(nyx_node LANGUAGES C VERSION 1.0.0)
 
 set(CMAKE_C_STANDARD 99)
 
-add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -Wno-unused-function -O3)
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
+
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_SSI=0 -Wall -Wno-unknown-pragmas -Wno-unused-function)
 
 ########################################################################################################################
 
