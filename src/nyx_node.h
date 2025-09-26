@@ -489,7 +489,7 @@ typedef struct nyx_object_s
         struct nyx_object_s *object                                                             //!< This object.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
-    __NULLABLE__ void *ctx;                                                                     //!< Custom pointer for callbacks.
+    __NULLABLE__ void *ctx;                                                                     //!< User context pointer passed to callbacks.
 
 } nyx_object_t;
 
@@ -594,7 +594,7 @@ str_t nyx_object_to_cstring(
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< ???
+    nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
 } nyx_null_t;
 
@@ -648,9 +648,9 @@ str_t nyx_null_to_string(
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< ???
+    nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    double value;                                                                               //!< ???
+    double value;                                                                               //!< Number payload.
 
 } nyx_number_t;
 
@@ -767,9 +767,9 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< ???
+    nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    bool value;                                                                                 //!< ???
+    bool value;                                                                                 //!< Boolean payload.
 
 } nyx_boolean_t;
 
@@ -886,10 +886,10 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< ???
+    nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    size_t raw_size;                                                                            //!< ???
-    size_t length;                                                                              //!< ???
+    size_t raw_size;                                                                            //!< Raw payload size before encoding/compression.
+    size_t length;                                                                              //!< String length in bytes (UTF-8), excluding `NULL`.
     str_t value;                                                                                //!< ???
 
     bool dyn;                                                                                   //!< ???
@@ -1179,10 +1179,10 @@ __INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool bas
 
 typedef struct nyx_dict_s
 {
-    nyx_object_t base;                                                                          //!< ???
+    nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    struct nyx_dict_node_s *head;                                                               //!< ???
-    struct nyx_dict_node_s *tail;                                                               //!< ???
+    struct nyx_dict_node_s *head;                                                               //!< Linked list of key/value entries.
+    struct nyx_dict_node_s *tail;                                                               //!< Linked list of key/value entries.
 
 } nyx_dict_t;
 
@@ -1406,10 +1406,10 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 
 typedef struct nyx_list_s
 {
-    nyx_object_t base;                                                                          //!< ???
+    nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    struct nyx_list_node_s *head;                                                               //!< ???
-    struct nyx_list_node_s *tail;                                                               //!< ???
+    struct nyx_list_node_s *head;                                                               //!< Linked list of key/value entries.
+    struct nyx_list_node_s *tail;                                                               //!< Linked list of key/value entries.
 
 } nyx_list_t;
 
@@ -2701,10 +2701,11 @@ nyx_dict_t *nyx_stream_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx message.
- * @param device
- * @param message
- * @return
+ * \brief Allocates a new INDI / Nyx human message object.
+ *
+ * @param device Device name.
+ * @param message Human message.
+ * @return The new human message object.
  */
 
 nyx_dict_t *nyx_message_new(
@@ -2719,6 +2720,15 @@ nyx_dict_t *nyx_message_new(
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Allocates a new INDI / Nyx `delete-property` message object.
+ *
+ * @param device Device name.
+ * @param name Optional vector name (`NULL` = whole device).
+ * @param message Optional human message.
+ * @return The new `delete-property` message object.
+ */
 
 nyx_dict_t *nyx_del_property_new(
     STR_t device,
@@ -2853,11 +2863,11 @@ void nyx_node_poll(
 
 /**
  * @memberof nyx_node_t
- * \brief Enables a whole device or a definition vector.
+ * \brief Enables a device or a vector and notifies clients.
  *
- * @param node The Nyx node.
- * @param device The Nyx device name.
- * @param name Optional Nyx vector name.
+ * @param node Nyx node.
+ * @param device Device name.
+ * @param name Optional vector name (`NULL` = whole device).
  * @param message Optional message content.
  */
 
@@ -2872,11 +2882,11 @@ void nyx_node_enable(
 
 /**
  * @memberof nyx_node_t
- * \brief Disables a whole device or a definition vector.
+ * \brief Disables a device or a vector and notifies clients.
  *
- * @param node The Nyx node.
- * @param device The Nyx device name.
- * @param name Optional Nyx vector name.
+ * @param node Nyx node.
+ * @param device Device name.
+ * @param name Optional vector name (`NULL` = whole device).
  * @param message Optional message content.
  */
 
@@ -2891,11 +2901,11 @@ void nyx_node_disable(
 
 /**
  * @memberof nyx_node_t
- * \brief Sends a message to the clients.
+ * \brief Sends a human message to the clients.
  *
- * @param node The Nyx node.
- * @param device The Nyx device name.
- * @param message The message content.
+ * @param node Nyx node.
+ * @param device Device name.
+ * @param message Human message.
  */
 
 void nyx_node_send_message(
@@ -2908,7 +2918,26 @@ void nyx_node_send_message(
 
 /**
  * @memberof nyx_node_t
- * \brief If MQTT is enabled, subscribes to a topic.
+ * \brief Sends a `del-property` message to the clients.
+ *
+ * @param node Nyx node.
+ * @param device Device name.
+ * @param name Optional vector name (`NULL` = whole device).
+ * @param message Optional human message.
+ */
+
+void nyx_node_send_del_property(
+    nyx_node_t *node,
+    STR_t device,
+    __NULLABLE__ STR_t name,
+    __NULLABLE__ STR_t message
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_node_t
+ * \brief Subscribes to an MQTT topic (if MQTT enabled).
  *
  * @param node The Nyx node.
  * @param topic The MQTT topic.
@@ -2923,7 +2952,7 @@ void nyx_mqtt_sub(
 
 /**
  * @memberof nyx_node_t
- * \brief If MQTT is enabled, publishes a message to a topic.
+ * \brief Publishes an MQTT message (if MQTT enabled).
  *
  * @param node The Nyx node.
  * @param topic The MQTT topic.

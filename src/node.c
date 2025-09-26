@@ -1150,3 +1150,17 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+{
+    if(node != NULL)
+    {
+        nyx_dict_t *dict = nyx_del_property_new(device, name, message);
+
+        sub_object(node, (nyx_object_t *) dict);
+
+        nyx_dict_free(dict);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
