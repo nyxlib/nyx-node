@@ -10,7 +10,7 @@
 
 # Nyx Node
 
-The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7](specs/INDI.pdf), for controlling
+The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7](docs/specs/INDI.pdf), for controlling
 astronomical hardware. It enhances INDI by supporting multiple independent nodes, each with its own embedded protocol
 stack. The nodes can communicate via an [MQTT](https://mqtt.org/) broker, a [Redis](https://redis.io/) cache (low
 latency streams) or directly over TCP, offering flexibility and scalability for distributed systems.

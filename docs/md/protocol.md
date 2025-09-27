@@ -29,14 +29,16 @@ and its elements.
 
 Definitions exist for text, number, switch, light, and BLOB vectors (`defTextVector`, `defNumberVector`,
 `defSwitchVector`, `defLightVector`, `defBLOBVector`). Each element has a `name` and optional `label`. Numbers
-add display `format`, `min`, `max`, and `step`; switches can announce a UI `rule` such as `OneOfMany`.
+add display `format`, `min`, `max`, and `step`; switches can announce a UI `rule` such as `OneOfMany`, `AtMostOne`
+or `AnyOfMany`.
 
 ### State, permissions, and timeouts
 
 Every property carries a **state** among `Idle`, `Ok`, `Busy`, and `Alert`. Devices should also send human-readable
 messages and timestamps alongside state changes. Permissions are hints for clients: text and number vectors can be
-`ro`, `wo`, or `rw`; switches can be `ro` or `rw`; lights are read-only. The `timeout` value expresses the
-worst-case duration for the device to accomplish a change, allowing clients to reason about progress and failure.
+`ro` (read-only), `wo` (write-only), or `rw` (read-write); switches can be `ro` or `rw`; lights are `ro`. The
+`timeout`, in seconds, value expresses the worst-case duration for the device to accomplish a change, allowing
+clients to reason about progress and failure.
 
 ```xml
 <setLightVector device="Building" name="Security" state="Alert" timestamp="2002-03-13T16:06:20">
@@ -77,10 +79,10 @@ timestamped `message`. For rapidly changing values, devices should avoid floodin
 
 ### Transferring binary data (BLOBs)
 
-BLOB elements carry base64-encoded payloads with a `format` hint (e.g., `.fits` or `.fits.z`) and a decoded
-`size`. Because images can be large, clients control BLOB traffic per connection with `enableBLOB`:
-`Never` (default), `Also`, or `Only`. Intermediate servers must honor this flow control; individual device
-drivers always send their elements as needed.
+BLOB elements carry base64-encoded payloads with a `format` hint (e.g., `.fits` or `.fits.z`) and a decoded size.
+Clients control BLOB flow per connection with `enableBLOB`: `Never` disables all `setBLOB` messages on that
+connection, `Also` permits `setBLOB` messages alongside normal INDI traffic, and `Only` restricts the connection
+to `setBLOB` messages exclusively.
 
 ```xml
 <!-- Client opts in to receive BLOBs from this device -->
@@ -125,6 +127,6 @@ implementations.
 
 TODO
 
-## Nyx message grammar
+### Nyx message grammar
 
-\include ./specs/nyx.xsd
+\include ./docs/specs/nyx.xsd
