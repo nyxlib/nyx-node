@@ -2,17 +2,17 @@
 [![][License_mongoose img]][License_mongoose]
 [![][License_arduino img]][License_arduino]
 
-<a href="https://lpsc.in2p3.fr/" target="_blank"><img src="./docs/img/logo_lpsc.svg" alt="LPSC" height="72" /></a>
+<a href="https://lpsc.in2p3.fr/" target="_blank"><img src="../img/logo_lpsc.svg" alt="LPSC" height="72" /></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://www.in2p3.fr/" target="_blank"><img src="./docs/img/logo_in2p3.svg" alt="IN2P3" height="72" /></a>
+<a href="https://www.in2p3.fr/" target="_blank"><img src="../img/logo_in2p3.svg" alt="IN2P3" height="72" /></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://www.univ-grenoble-alpes.fr/" target="_blank"><img src="./docs/img/logo_uga.svg" alt="UGA" height="72" /></a>
+<a href="https://www.univ-grenoble-alpes.fr/" target="_blank"><img src="../img/logo_uga.svg" alt="UGA" height="72" /></a>
 
-# Nyx Node
+## Overview
 
 The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7](specs/INDI.pdf), for controlling
 astronomical hardware. It enhances INDI by supporting multiple independent nodes, each with its own embedded protocol
-stack. The nodes can communicate via an [MQTT](https://mqtt.org/) broker, a [Redis](https://redis.io/) cache (low
+stack. The nodes can communicate via an [MQTT](https://mqtt.org/) broker and a [Redis](https://redis.io/) cache (low
 latency streams) or directly over TCP, offering flexibility and scalability for distributed systems.
 
 The `Nyx Node` library is written in C99 and requires only a POSIX or Arduino environment, with no external
@@ -23,29 +23,11 @@ microcontrollers (ESP, Cortex-M, ...).
     <img src="https://nyxlib.org/user/pages/01.home/_callout/diagram.png" style="width:600px;" />
 </div> 
 
-# Build instructions
+## Author
 
-```bash
-mkdir build
-cd build
+[Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-cmake ..
-make
-sudo make install
-```
-
-# Home page and documentation
-
-Home page:
-* https://nyxlib.org/
-
-Documentation:
-* https://nyxlib.org/documentation/
-
-Developer
-=========
-
-* [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
+## Example
 
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
 [Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg

@@ -1,4 +1,4 @@
-# INDI Protocol
+# Nyx Protocol
 
 Each command between **Client** and **Device** specifies a **Device** name and **Property** name.
 The **Device** name serves as a logical grouping of several **Properties**. **Property** names must be
