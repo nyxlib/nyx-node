@@ -2754,11 +2754,11 @@ nyx_dict_t *nyx_stream_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx human message object.
+ * \brief Allocates a new INDI / Nyx human-oriented message object.
  *
  * @param device Device name.
- * @param message Human message.
- * @return The new human message object.
+ * @param message Human-oriented message.
+ * @return The new human-oriented message object.
  * @note Prefer using @ref nyx_node_send_message.
  */
 
@@ -2774,7 +2774,7 @@ nyx_dict_t *nyx_message_new(
  *
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
- * @param message Optional human message.
+ * @param message Optional human-oriented message.
  * @return The new `delete-property` message object.
  * @note Prefer using @ref nyx_node_send_del_property.
  */
@@ -2917,7 +2917,7 @@ void nyx_node_poll(
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
- * @param message Optional human message.
+ * @param message Optional human-oriented message.
  */
 
 void nyx_node_enable(
@@ -2936,7 +2936,7 @@ void nyx_node_enable(
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
- * @param message Optional human message.
+ * @param message Optional human-oriented message.
  */
 
 void nyx_node_disable(
@@ -2951,11 +2951,11 @@ void nyx_node_disable(
 /**
  * @memberof nyx_node_t
  * \anchor nyx_node_send_message
- * \brief Sends a human message to the clients.
+ * \brief Sends a human-oriented message to the clients.
  *
  * @param node Nyx node.
  * @param device Device name.
- * @param message Human message.
+ * @param message Human-oriented message.
  */
 
 void nyx_node_send_message(
@@ -2974,7 +2974,7 @@ void nyx_node_send_message(
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
- * @param message Optional human message.
+ * @param message Optional human-oriented message.
  */
 
 void nyx_node_send_del_property(

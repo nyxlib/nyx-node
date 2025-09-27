@@ -3,7 +3,7 @@
 This page describes the **Nyx protocol**, a thin and backward-compatible overlay on the **INDI protocol**. INDI was
 originally designed to control astronomical hardware but is quite generic. Nyx preserves the INDI property/state
 model and message semantics while modernizing transport and serialization. By default, Nyx exchanges **JSON** over
-an **MQTT broker**, with a 1:1 mapping to INDI’s XML messages. It can also speak the original **INDI XML** directly
+an **MQTT broker**, with a 1:1 mapping to INDI’s XML messages. It can also speak the original INDI XML directly
 over **TCP** for strict compatibility.
 
 In addition, Nyx introduces an **additional low-latency streaming system**, based on **Redis**, to deliver data
@@ -16,11 +16,10 @@ semantics, etc.), see the official [INDI.pdf](https://github.com/nyxlib/nyx-node
 
 ### Purpose and model
 
-INDI is a small, stateless, XML-based protocol to control devices through **properties**. A device exposes
+INDI is a small, stateless znd XML-based protocol to control devices through **properties**. A device exposes
 named properties (vectors of elements) and a client reads and changes them. Messages are **asynchronous**:
 there is no strict request/response pairing and participants must accept any valid message at any time.
-Malformed or unexpected input should be ignored rather than negotiated, which avoids protocol deadlocks
-and eases broadcasting and routing.
+Malformed or unexpected input should be ignored rather than negotiated.
 
 ### Discovery (introspection)
 
@@ -29,7 +28,10 @@ of one device, or one specific property. Devices answer with *definitions* that 
 and its elements.
 
 ```xml
-<!-- Client → Device: ask for properties -->
+<!-- Client → Device: ask for properties of everything -->
+<getProperties version="1.7"/>
+
+<!-- Client → Device: ask for properties of the "Mount" device -->
 <getProperties version="1.7" device="Mount"/>
 
 <!-- Device → Client: define a number vector with two elements -->
