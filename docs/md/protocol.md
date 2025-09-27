@@ -123,13 +123,6 @@ the requester, enabling coordination and higher-level behaviors.
 <getProperties device="Environment" name="Now"/>
 ```
 
-### Putting it together
-
-A typical session starts with discovery, proceeds with target-setting messages from the client, then continues
-with device updates that converge states from `Busy` to `Ok` or `Alert`. Timeouts, permissions, and messages
-provide the context needed for robust GUIs, automation, and scheduling without coupling clients to device-specific
-implementations.
-
 ## Nyx protocol
 
 TODO
