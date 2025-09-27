@@ -20,7 +20,7 @@ dependencies except optional ZLib support on POSIX. Its low footprint makes it s
 microcontrollers (ESP, Cortex-M, ...).
 
 <div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/nyx.svg" style="width:600px;" />
+    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.svg" style="width:600px;" />
 </div> 
 
 ## Author
