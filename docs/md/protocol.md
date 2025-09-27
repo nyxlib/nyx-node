@@ -1,6 +1,13 @@
-# Protocol description
+# Protocol
+
+This page describes the **Nyx protocol**, a thin and backward-compatible overlay on the **INDI protocol**. INDI was originally designed for astronomical hardware but is quite generic. Nyx preserves the INDI property/state model and message semantics while modernizing transport and serialization. By default, Nyx exchanges **JSON** over an **MQTT broker**, with a 1:1 mapping to INDI’s XML messages. It can also speak the original **INDI XML** directly over **TCP** for strict compatibility.
+
+In addition, Nyx introduces an **additional low-latency streaming system**, based on **Redis**, to deliver data streams to multiple clients.
 
 ## INDI protocol
+
+This section summarizes version 1.7 of the INDI protocol. For the normative specification (message grammar,
+semantics, etc.), see the official [INDI.pdf](https://github.com/nyxlib/nyx-node/blob/main/docs/specs/INDI.pdf).
 
 ### Purpose and model
 
