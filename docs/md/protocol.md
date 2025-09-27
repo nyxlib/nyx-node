@@ -1,83 +1,130 @@
-# Nyx Protocol
+# Protocol description
 
-Each command between **Client** and **Device** specifies a **Device** name and **Property** name.
-The **Device** name serves as a logical grouping of several **Properties**. **Property** names must be
-unique per **Device**, and a **Server** must report unique **Device** names to any one **Client**.
+## INDI protocol
 
-The **INDI protocol** does not have the notion of query and response. A sender does not save context
-when it sends a command and wait for a specific response. A command may be sent for which a
-complementary command back is likely but all **INDI participants** must always be prepared to receive
-any command at any time. There is no notion of meta-errors such as illegally formatted commands,
-inappropriate commands or problems with the underlying communication mechanism. The proper response to
-all unusual or unexpected input is expressly to ignore any such problems (although some form of logging
-outside the scope of INDI might be judicious). With these rules the **INDI protocol** is small and
-simple; defines-away the possibility of deadlocks at the protocol level; automatically accommodates
-broadcasting; permits flexible and transparent routing; and eliminates the need for complex sequencing
-and synchronization.
+### Purpose and model
 
-When a **Client** first starts up it knows nothing about the **Devices** and **Properties** it will
-control. It begins by connecting to a **Device** or **indiserver** and sending the **getProperties**
-command. This includes the protocol version and may include the name of a specific **Device** and
-**Property** if it is known by some other means. If no device is specified, then all devices are
-reported; if no name is specified, then all properties for the given device are reported. The **Device**
-then sends back one **deftype** element for each matching **Property** it offers for control, limited
-to the **Properties** of the specified **Device** if included. The **deftype** element shall always
-include all members of the vector for each **Property**.
+INDI is a small, stateless, XML-based protocol to control devices through **properties**. A device exposes
+named properties (vectors of elements) and a client reads and changes them. Messages are **asynchronous**:
+there is no strict request/response pairing and participants must accept any valid message at any time.
+Malformed or unexpected input should be ignored rather than negotiated, which avoids protocol deadlocks
+and eases broadcasting and routing.
 
-Note again that by sending a request for **Property** definitions the **Client** is not then waiting
-specifically for these definitions in reply. Nor is the **Device** obligated to supply these
-definitions in any order or particular time frame. The **Client** may learn of some **Properties**
-soon and perhaps others much later. The **Client** may also see messages for **Properties** about which
-it is as yet unaware in which case the **Client** silently ignores the message. Thus a **Client** must
-have the ability to dynamically expand its collection of **Properties** at any time and gracefully
-ignore unexpected information.
+### Discovery (introspection)
 
-To inform a **Device** of new target values for a **Property**, a **Client** sends one **newtype**
-element. The **Client** must send all members of **Number** and **Text** vectors, or may send just the
-members that change for other types. Before it does so, the **Client** sets its notion of the state of
-the **Property** to **Busy** and leaves it until told otherwise by the **Device**. A **Client** does
-not poll to see whether the current reported values happen to agree with what it last commanded and set
-its state back to **Ok** on its own. This policy allows the **Device** to decide how close is close
-enough. The **Device** will eventually send a state of **Ok** if and when the new values for the
-**Property** have been successfully accomplished according to the **Device’s** criteria, or send back
-**Alert** if they can not be accomplished with a message explaining why.
+A client begins by asking a device to describe itself. The client may request all devices, all properties
+of one device, or one specific property. Devices answer with *definitions* that fully describe each property
+and its elements.
 
-To inform a **Client** of new current values for a **Property** and their state, a **Device** sends one
-**settype** element. It is only required to send those members of the vector that have changed. In the
-case of **Properties** whose values change rapidly, the **Device** must insure that communication of
-the new values are not sent so often as to saturate the connection with the **Client**. For example, a
-socket implementation might send a new value only if writing to the socket descriptor would not block
-the process.
+```xml
+<!-- Client → Device: ask for properties -->
+<getProperties version="1.7" device="Mount"/>
 
-In order to allow for the likelyhood of requiring special efficiency considerations in the design of
-**Clients** to handle **BLOB Properties**, the element **enableBLOB** allows a **Client** to specify
-whether **setBLOB** elements will arrive on a given **INDI connection**. The **Client** may send this
-element with a value of **Only**, **Also** or **Never**. The default setting upon making a new
-connection is **Never** which means **setBLOB** elements will never be sent over said connection. If
-the **Client** sends **Only**, from then on only **setBLOB** elements shall be sent to the **Client**
-on said connection. If the **Client** sends **Also**, then all other elements may be sent as well. A
-**Client** may send the value of **Never** at any time to return to the default condition. This flow
-control facility allows a **Client** the opportunity, for example, to open a separate connection and
-create a separate processing thread dedicated to handling **BLOB** data. This behavior is only to be
-implemented in intermediate **INDI server** processes; individual **Device drivers** shall disregard
-**enableBLOB** and send all elements at will.
+<!-- Device → Client: define a number vector with two elements -->
+<defNumberVector device="Mount" name="EQUATORIALJ2000_COORD" state="Idle" perm="rw" timeout="50" label="J2000 Equatorial">
+  <defNumber name="RA"  label="RA H:M:S"  format="%11.8m" min="0"  max="24">0</defNumber>
+  <defNumber name="Dec" label="Dec D:M:S" format="%9.6m"  min="-90" max="90">0</defNumber>
+</defNumberVector>
+```
 
-A **Device** may send out a **message** either as part of another command or by itself. When sent alone
-a **message** may be associated with a specific **Device** or just to the **Client** in general.
-**Messages** are meant for human readers and should be sent by a **Device** whenever any significant
-event occurs or target is reached. The **INDI protocol** syntax provides a means for a **Device** to
-time stamp each **message** and is encouraged to do so to maintain consistent time across all its
-**Clients**. If the **Device** does not include a time stamp for some reason (such as if it is a very
-simple device without local time-keeping capability) the **Client** is encouraged to add its own time
-stamp.
+Definitions exist for text, number, switch, light, and BLOB vectors (`defTextVector`, `defNumberVector`,
+`defSwitchVector`, `defLightVector`, `defBLOBVector`). Each element has a `name` and optional `label`. Numbers
+add display `format`, `min`, `max`, and `step`; switches can announce a UI `rule` such as `OneOfMany`.
 
-A **Device** may tell a **Client** a given **Property** is no longer available by sending
-**delProperty**. If the command specifies only a **Device** without a **Property**, the **Client** must
-assume all the **Properties** for that **Device**, and indeed the **Device** itself, are no longer
-available.
+### State, permissions, and timeouts
 
-One **Device** may snoop the **Properties** of another **Device** by sending the **getProperties**
-command. The command may specify one **Device** and one **Property**, or all **Properties** for a
-**Device** or even all **Devices**, depending on whether the optional **device** and **name**
-attributes are given. Once specified, all messages from the matching **Devices** and **Properties**
-will be copied to the requesting **Device** as well.
+Every property carries a **state** among `Idle`, `Ok`, `Busy`, and `Alert`. Devices should also send human-readable
+messages and timestamps alongside state changes. Permissions are hints for clients: text and number vectors can be
+`ro`, `wo`, or `rw`; switches can be `ro` or `rw`; lights are read-only. The `timeout` value expresses the
+worst-case duration for the device to accomplish a change, allowing clients to reason about progress and failure.
+
+```xml
+<setLightVector device="Building" name="Security" state="Alert" timestamp="2002-03-13T16:06:20">
+  <oneLight name="Dock">Alert</oneLight>
+</setLightVector>
+```
+
+### Changing values (Client → Device)
+
+To change a property, the client sends a *target* message and immediately considers the property **Busy** until the
+device reports completion. For numbers and text, the client should send all elements; other types may carry only
+the changed members.
+
+```xml
+<!-- Set two numbers atomically -->
+<newNumberVector device="Mount" name="EQUATORIALJ2000_COORD">
+  <oneNumber name="RA">10:20:30</oneNumber>
+  <oneNumber name="Dec">-04:05:06</oneNumber>
+</newNumberVector>
+
+<!-- Select one binning option; the device enforces OneOfMany -->
+<newSwitchVector device="Camera" name="Binning">
+  <oneSwitch name="Two">On</oneSwitch>
+</newSwitchVector>
+```
+
+### Reporting values (Device → Client)
+
+Devices report current values with `setXXXVector` messages and may include a new `state`, `timeout`, and a
+timestamped `message`. For rapidly changing values, devices should avoid flooding slower clients.
+
+```xml
+<setSwitchVector device="Camera" name="Binning" state="Ok" timestamp="2002-03-13T16:04:02" message="Binning 2:1 selected">
+  <oneSwitch name="One">Off</oneSwitch>
+  <oneSwitch name="Two">On</oneSwitch>
+</setSwitchVector>
+```
+
+### Transferring binary data (BLOBs)
+
+BLOB elements carry base64-encoded payloads with a `format` hint (e.g., `.fits` or `.fits.z`) and a decoded
+`size`. Because images can be large, clients control BLOB traffic per connection with `enableBLOB`:
+`Never` (default), `Also`, or `Only`. Intermediate servers must honor this flow control; individual device
+drivers always send their elements as needed.
+
+```xml
+<!-- Client opts in to receive BLOBs from this device -->
+<enableBLOB device="Wonder Cam">Also</enableBLOB>
+
+<!-- Device sends a BLOB update -->
+<setBLOBVector device="Wonder Cam" name="Image" state="Ok" timestamp="2002-03-13T16:05:00">
+  <oneBLOB name="CCD1" size="16777216" format=".fits">BASE64…</oneBLOB>
+</setBLOBVector>
+```
+
+### Messages and deletions
+
+Devices can send human-oriented `message` elements, optionally tied to a device, to narrate progress or issues.
+They can also announce that a property—or an entire device—is no longer available with `delProperty`.
+
+```xml
+<message device="Camera" timestamp="2002-03-13T16:06:20" message="TEC is approaching target temperature"/>
+
+<delProperty device="FilterWheel" name="Filters" timestamp="2002-03-13T16:07:00" message="Wheel disconnected"/>
+```
+
+### Snooping other devices
+
+Any device—or client—may subscribe to messages about other devices and properties by issuing `getProperties`
+with `device` and optional `name`. From that point, matching `defXXX` and `setXXX` traffic is mirrored to
+the requester, enabling coordination and higher-level behaviors.
+
+```xml
+<!-- Start snooping the Environment.Now property -->
+<getProperties device="Environment" name="Now"/>
+```
+
+### Putting it together
+
+A typical session starts with discovery, proceeds with target-setting messages from the client, then continues
+with device updates that converge states from `Busy` to `Ok` or `Alert`. Timeouts, permissions, and messages
+provide the context needed for robust GUIs, automation, and scheduling without coupling clients to device-specific
+implementations.
+
+## Nyx protocol
+
+TODO
+
+## Nyx message grammar
+
+\include ./specs/nyx.xsd
