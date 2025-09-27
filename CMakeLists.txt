@@ -200,7 +200,15 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 
-    add_custom_command(TARGET docs PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docs/)
+    add_custom_command(TARGET docs POST_BUILD
+        COMMAND find ${CMAKE_CURRENT_SOURCE_DIR}/docs -type f -name "*.html" -exec sed -i "s/Topics/API/g" {} +
+        VERBATIM
+    )
+
+    add_custom_command(TARGET docs POST_BUILD
+        COMMAND find ${CMAKE_CURRENT_SOURCE_DIR}/docs -type f -name "*.js" -exec sed -i "s/Topics/API/g" {} +
+        VERBATIM
+    )
 
 else()
     message("Doxygen not installed")
