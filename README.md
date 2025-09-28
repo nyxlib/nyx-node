@@ -16,7 +16,7 @@ stack. Nodes can communicate via an [MQTT](https://mqtt.org/) broker, a [Redis](
 streams) or directly over TCP, offering flexibility and scalability for distributed systems.
 
 The `Nyx Node` library is written in C99 and requires only a POSIX or Arduino environment, with no external
-dependencies except optional ZLib support on POSIX. Its low footprint makes it suitable for deployment on
+dependencies except an optional ZLib support on POSIX. Its low footprint makes it suitable for deployment on
 microcontrollers (ESP, Cortex-M, ...).
 
 <div style="text-align: center;">
