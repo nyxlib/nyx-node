@@ -191,7 +191,7 @@ nyx_list_t *nyx_list_set_alt(nyx_list_t *object, size_t idx, buff_t value, bool 
 
     bool modified = true;
 
-    if(idx >= 0) for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -246,7 +246,7 @@ size_t nyx_list_size(const nyx_list_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL; node = node->next, result++);
+    for(node_t *node = object->head; node != NULL; node = node->next, result++) {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

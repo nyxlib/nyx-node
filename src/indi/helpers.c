@@ -210,7 +210,7 @@ STR_t nyx_stream_state_to_str(nyx_stream_state_t stream)
 nyx_stream_state_t nyx_str_to_stream_state(STR_t stream)
 {
     if(strcmp("Never", stream) == 0) {
-        return NYX_BLOB_STATE_DISABLED;
+        return NYX_STREAM_STATE_DISABLED;
     }
     if(strcmp("Also", stream) == 0
        ||

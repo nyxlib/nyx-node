@@ -353,7 +353,7 @@ __INLINE__ void enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool is_allowed(nyx_node_t *node, const nyx_dict_t *dict)
+static bool is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -380,7 +380,7 @@ static bool is_allowed(nyx_node_t *node, const nyx_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void set_properties(nyx_node_t *node, const nyx_dict_t *dict)
+static void set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 {
     if(!is_allowed(node, dict))
     {

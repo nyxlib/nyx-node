@@ -2726,7 +2726,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
  */
 
 bool nyx_stream_pub(
-    nyx_dict_t *vector,
+    const nyx_dict_t *vector,
     size_t max_len,
     __ZEROABLE__ size_t n_fields,
     const str_t field_names[],

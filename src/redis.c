@@ -161,7 +161,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
                &&
                field_buff != NULL
             ) {
-                int len = strlen(field_name);
+                size_t len = strlen(field_name);
 
                 /**/ if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'z')
                 {
@@ -231,7 +231,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */

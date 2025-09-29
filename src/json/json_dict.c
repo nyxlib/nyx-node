@@ -252,7 +252,7 @@ size_t nyx_dict_size(const nyx_dict_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL; node = node->next, result++);
+    for(node_t *node = object->head; node != NULL; node = node->next, result++) {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
