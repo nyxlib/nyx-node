@@ -1059,7 +1059,7 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 
 void nyx_node_ping(nyx_node_t *node)
 {
-    if (node != NULL)
+    if(node != NULL)
     {
         internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
 
