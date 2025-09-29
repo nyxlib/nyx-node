@@ -102,9 +102,12 @@ static void out_callback(nyx_object_t *object)
                 set_vector = nyx_stream_set_vector_new(vector);
             }
             else if(strcmp("defBLOBVector", tag) == 0) {
-                set_vector = nyx_blob_set_vector_new(vector);
 
-                if((set_vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
+                if((vector->base.flags & NYX_FLAGS_BLOB_MASK) == 0) {
+
+                    set_vector = nyx_blob_set_vector_new(vector);
+                }
+                else {
                     return;
                 }
             }
@@ -114,7 +117,11 @@ static void out_callback(nyx_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            sub_object(object->node, (nyx_object_t *) set_vector);
+            STR_t perm = nyx_dict_get_string(vector, "@perm");
+
+            bool is_not_wo = perm == NULL || strcmp(perm, "wo") != 0;
+
+            if(is_not_wo) sub_object(object->node, (nyx_object_t *) set_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
 

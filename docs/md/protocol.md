@@ -62,8 +62,8 @@ clients to reason about progress and failure.
 
 ### Numeric value format
 
-In INDI, numeric values  are carried as **strings** and may be **integer**, **real**, or **sexagesimal**. A property
-may specify either a standard C `printf` format or the INDI sexagesimal spec `%<w>.<f>m`, where`<w>` is the total
+Numeric values are carried as **strings** and may be **integer**, **real**, or **sexagesimal**. A property may
+specify either a standard C `printf` format or the INDI sexagesimal spec `%<w>.<f>m`, where`<w>` is the total
 number of characters and `<f>` the fraction style:
 ```
 <f>=9  →  :mm:ss.ss
@@ -81,7 +81,7 @@ For example:
 
 ### Changing values (Client → Device)
 
-To change a property, the client sends a *target* message and immediately considers the property **Busy** until the
+To change a property, the client sends a *target* message and immediately considers the property `Busy` until the
 device reports completion. For numbers and text, the client should send all elements; other types may carry only
 the changed members.
 
@@ -199,11 +199,14 @@ preserved). Values are strings by design; clients parse numbers where needed.
 }
 ```
 
+In any `defXXXVector` message, Nyx supports an optional `@hints` attribute carrying Markdown to describe the vector
+in the UI.
+
 ### Stream vectors
 
-Nyx introduces **Stream Vectors** to declare metadata that describes a vector of streams. The **stream payloads
-themselves are not carried in JSON messages**: they are delivered out‑of‑band via a low‑latency **Redis**
-cache/streaming server to multiple clients. This streaming layer is specific to Nyx and not part of INDI.
+Nyx adds a feature for describing **stream vectors** metadata. Stream payloads are not transported in JSON, a
+dedicated API delivers them to clients, using **Redis** for low-latency caching and streaming server. This
+capability is specific to Nyx and not part of INDI.
 
 ### Nyx message grammar
 
