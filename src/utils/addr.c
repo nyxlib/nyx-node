@@ -13,7 +13,11 @@
 
 void nyx_generate_mac_addr(uint8_t result_mac[6], uint8_t mac0, uint8_t mac1, STR_t node_id)
 {
-    uint32_t hash = nyx_hash32(node_id != NULL ? strlen(node_id) : 0x00000, node_id, 0xAABBCCDD);
+    size_t size = node_id != NULL ? strlen(node_id)
+                                  : 0x0000000000000
+    ;
+
+    uint32_t hash = nyx_hash32(size, node_id, 0xAABBCCDD);
 
     result_mac[0] = mac0;
     result_mac[1] = mac1;
