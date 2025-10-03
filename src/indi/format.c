@@ -357,7 +357,7 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
         {
             if((value.type == NYX_VARIANT_TYPE_INT    && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._int) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_UINT  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*--------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._uint) >= 0)
+               (value.type == NYX_VARIANT_TYPE_UINT   && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._uint) >= 0)
                ||
                (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && snprintf(buffer, sizeof(buffer), format, value.value._double) >= 0)
                ||
