@@ -2073,7 +2073,7 @@ nyx_dict_t *nyx_number_def_new(
  * \brief Allocates a new INDI / Nyx `int32_t` number.
  * @param name Definition name.
  * @param label Definition label.
- * @param format C-like format of the value.
+ * @param format Printf-style formatting string (%[flags][width]d).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
@@ -2090,7 +2090,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t labe
  * \brief Allocates a new INDI / Nyx `uint32_t` number.
  * @param name Definition name.
  * @param label Definition label.
- * @param format C-like format of the value.
+ * @param format Printf-style formatting string (%[flags][width]{uoxX}).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
@@ -2107,7 +2107,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t lab
  * \brief Allocates a new INDI / Nyx `int64_t` number.
  * @param name Definition name.
  * @param label Definition label.
- * @param format C-like format of the value.
+ * @param format Printf-style formatting string (%[flags][width]ld).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
@@ -2124,7 +2124,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t lab
  * \brief Allocates a new INDI / Nyx `uint64_t` number.
  * @param name Definition name.
  * @param label Definition label.
- * @param format C-like format of the value.
+ * @param format Printf-style formatting string (%[flags][width]l{uoxX}).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
@@ -2141,7 +2141,7 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t la
  * \brief Allocates a new INDI / Nyx `double` number.
  * @param name Definition name.
  * @param label Definition label.
- * @param format C-like format of the value.
+ * @param format Printf-style formatting string (%[flags][width]l?{fFeEgGaAm}).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
