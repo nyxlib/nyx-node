@@ -342,26 +342,26 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
     {
         /**/ if(lcnt == 1)
         {
-            if((value.type == NYX_VARIANT_TYPE_LONG   && (conv == 'd' /*----------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._long) >= 0)
+            if((value.type == NYX_VARIANT_TYPE_LONG   && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._long) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_ULONG  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._ulong) >= 0)
+               (value.type == NYX_VARIANT_TYPE_ULONG  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._ulong) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, value.value._double) >= 0)
+               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && snprintf(buffer, sizeof(buffer), format, value.value._double) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value.value._double) >= 0)
+               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value.value._double) >= 0)
             ) {
                 return nyx_string_from_dup(buffer);
             }
         }
         else if(lcnt == 0)
         {
-            if((value.type == NYX_VARIANT_TYPE_INT    && (conv == 'd' /*----------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._int) >= 0)
+            if((value.type == NYX_VARIANT_TYPE_INT    && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._int) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_UINT  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*--------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._uint) >= 0)
+               (value.type == NYX_VARIANT_TYPE_UINT  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*--------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._uint) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G') && snprintf(buffer, sizeof(buffer), format, value.value._double) >= 0)
+               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && snprintf(buffer, sizeof(buffer), format, value.value._double) >= 0)
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value.value._double) >= 0)
+               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && snprintm(buffer, sizeof(buffer), w, f, value.value._double) >= 0)
             ) {
                 return nyx_string_from_dup(buffer);
             }
@@ -420,12 +420,12 @@ nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value
 
         /*------------------------------------------------------------------------------------------------------------*/
         
-        if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G')
+        if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A')
         {
             return NYX_VARIANT_FROM_DOUBLE(strtod(value->value, NULL));
         }
 
-        if(conv == 'm' /*----------------------------------------------------------------------*/)
+        if(conv == 'm' /*----------------------------------------------------------------------------------------------------*/)
         {
             return NYX_VARIANT_FROM_DOUBLE(sextod(value->value));
         }
