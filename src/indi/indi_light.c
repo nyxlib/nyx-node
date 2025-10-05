@@ -11,7 +11,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void debug_callback(nyx_object_t *object)
+static void _debug_callback(nyx_object_t *object)
 {
     nyx_dict_t *dict = nyx_light_set_vector_new((nyx_dict_t *) object);
 
@@ -90,7 +90,7 @@ nyx_dict_t *nyx_light_def_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    result->base.out_callback = debug_callback;
+    result->base.out_callback = _debug_callback;
 
     return result;
 }
