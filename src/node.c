@@ -35,7 +35,7 @@ static const nyx_str_t SPECIAL_TOPICS[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void sub_object(struct nyx_node_s *node, const nyx_object_t *object)
+static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -72,7 +72,7 @@ static void sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void out_callback(nyx_object_t *object)
+static void _out_callback(nyx_object_t *object)
 {
     nyx_dict_t *vector = (nyx_dict_t *) object;
 
@@ -121,7 +121,7 @@ static void out_callback(nyx_object_t *object)
 
             bool is_not_wo = perm == NULL || strcmp(perm, "wo") != 0;
 
-            if(is_not_wo) sub_object(object->node, (nyx_object_t *) set_vector);
+            if(is_not_wo) _sub_object(object->node, (nyx_object_t *) set_vector);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -134,7 +134,7 @@ static void out_callback(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict)
+static void _get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
@@ -191,7 +191,7 @@ static void get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                sub_object(node, (nyx_object_t *) vector);
+                _sub_object(node, (nyx_object_t *) vector);
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -205,7 +205,7 @@ static void get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
+static int _get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 {
     if(client == NULL)
     {
@@ -237,11 +237,11 @@ static int get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t))
+static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t))
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int index = get_client_index(node, nyx_dict_get_string(dict, "@client"));
+    int index = _get_client_index(node, nyx_dict_get_string(dict, "@client"));
 
     if(index < 0)
     {
@@ -339,21 +339,21 @@ static void enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
+__INLINE__ void _enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state);
+    _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
+__INLINE__ void _enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state);
+    _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
+static bool _is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -380,9 +380,9 @@ static bool is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
+static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 {
-    if(!is_allowed(node, dict))
+    if(!_is_allowed(node, dict))
     {
         return;
     }
@@ -673,7 +673,7 @@ static void set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void process_message(nyx_node_t *node, nyx_object_t *object)
+static void _process_message(nyx_node_t *node, nyx_object_t *object)
 {
     if(object->type == NYX_TYPE_DICT)
     {
@@ -682,13 +682,13 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
         if(tag != NULL)
         {
             /**/ if(strcmp(tag, "getProperties") == 0) {
-                get_properties(node, (nyx_dict_t *) object);
+                _get_properties(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "enableBLOB") == 0) {
-                enable_blob(node, (nyx_dict_t *) object);
+                _enable_blob(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "enableStream") == 0) {
-                enable_stream(node, (nyx_dict_t *) object);
+                _enable_stream(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "newNumberVector") == 0
                     ||
@@ -700,7 +700,7 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
                     ||
                     strcmp(tag, "newBLOBVector") == 0
             ) {
-                set_properties(node, (nyx_dict_t *) object);
+                _set_properties(node, (nyx_dict_t *) object);
             }
         }
     }
@@ -708,7 +708,7 @@ static void process_message(nyx_node_t *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_str_t payload)
+static size_t _tcp_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_str_t payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* NYX_EVENT_MSG                                                                                                  */
@@ -732,7 +732,7 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, con
 
                     if(object != NULL)
                     {
-                        process_message(node, object);
+                        _process_message(node, object);
 
                         nyx_object_free(object);
                     }
@@ -756,7 +756,7 @@ static size_t internal_tcp_handler(nyx_node_t *node, nyx_event_t event_type, con
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_str_t event_topic, const nyx_str_t event_payload)
+static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_str_t event_topic, const nyx_str_t event_payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* NYX_EVENT_OPEN                                                                                                 */
@@ -797,7 +797,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, cons
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        get_properties(node, NULL);
+        _get_properties(node, NULL);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -848,7 +848,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, cons
 
                         if(object != NULL)
                         {
-                            process_message(node, object);
+                            _process_message(node, object);
 
                             nyx_object_free(object);
                         }
@@ -869,7 +869,7 @@ static void internal_mqtt_handler(nyx_node_t *node, nyx_event_t event_type, cons
 
                             if(object != NULL)
                             {
-                                process_message(node, object);
+                                _process_message(node, object);
 
                                 nyx_object_free(object);
                             }
@@ -943,7 +943,7 @@ nyx_node_t *nyx_node_initialize(
 
         vector->base.out_callback = /**/NULL/**/;
         nyx_dict_set(vector, "@client", nyx_string_from(node_id));
-        vector->base.out_callback = out_callback;
+        vector->base.out_callback = _out_callback;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -994,9 +994,9 @@ nyx_node_t *nyx_node_initialize(
 
     node->vectors = vectors;
 
-    node->tcp_handler = internal_tcp_handler;
-    node->mqtt_handler = internal_mqtt_handler;
-    node->user_mqtt_handler = /*--*/ mqtt_handler;
+    node->tcp_handler = _tcp_handler;
+    node->mqtt_handler = _mqtt_handler;
+    node->user_mqtt_handler = mqtt_handler;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* INITIALIZE STACK                                                                                               */
@@ -1069,7 +1069,7 @@ void nyx_node_ping(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message, nyx_onoff_t onoff)
+static void _device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message, nyx_onoff_t onoff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1112,7 +1112,7 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
                 case NYX_ONOFF_ON:
                     vector->base.flags &= ~NYX_FLAGS_DISABLED;
 
-                    sub_object(node, (nyx_object_t *) vector);
+                    _sub_object(node, (nyx_object_t *) vector);
                     break;
             }
 
@@ -1125,7 +1125,7 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
         {
             nyx_dict_t *del_property_new = nyx_del_property_new(device, name, message);
 
-            sub_object(node, (nyx_object_t *) del_property_new);
+            _sub_object(node, (nyx_object_t *) del_property_new);
 
             nyx_dict_free(del_property_new);
         }
@@ -1138,14 +1138,14 @@ static void device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name
 
 void nyx_node_enable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
 {
-    device_onoff(node, device, name, message, NYX_ONOFF_ON);
+    _device_onoff(node, device, name, message, NYX_ONOFF_ON);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_node_disable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
 {
-    device_onoff(node, device, name, message, NYX_ONOFF_OFF);
+    _device_onoff(node, device, name, message, NYX_ONOFF_OFF);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1156,7 +1156,7 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
     {
         nyx_dict_t *dict = nyx_message_new(device, message);
 
-        sub_object(node, (nyx_object_t *) dict);
+        _sub_object(node, (nyx_object_t *) dict);
 
         nyx_dict_free(dict);
     }
@@ -1170,7 +1170,7 @@ void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NULLABLE__ STR
     {
         nyx_dict_t *dict = nyx_del_property_new(device, name, message);
 
-        sub_object(node, (nyx_object_t *) dict);
+        _sub_object(node, (nyx_object_t *) dict);
 
         nyx_dict_free(dict);
     }
