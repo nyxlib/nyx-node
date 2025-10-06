@@ -1152,7 +1152,7 @@ void nyx_node_disable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, _
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
+void nyx_node_send_message(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t message)
 {
     if(node != NULL)
     {

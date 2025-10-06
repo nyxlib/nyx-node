@@ -2764,7 +2764,7 @@ nyx_dict_t *nyx_stream_set_vector_new(
 
 nyx_dict_t *nyx_message_new(
     STR_t device,
-    STR_t message
+    __NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2961,7 +2961,7 @@ void nyx_node_disable(
 void nyx_node_send_message(
     nyx_node_t *node,
     STR_t device,
-    STR_t message
+    __NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
