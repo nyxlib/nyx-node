@@ -2624,8 +2624,8 @@ bool nyx_blob_def_set(
 
 void nyx_blob_def_get(
     const nyx_dict_t *def,
-    size_t *size,
-    buff_t *buff
+    __NULLABLE__ size_t *size,
+    __NULLABLE__ buff_t *buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
