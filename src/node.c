@@ -455,6 +455,8 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                     nyx_object_t *object1;
                     nyx_object_t *object2;
 
+                    bool vector_modified = false;
+
                     uint32_t hash = nyx_hash32(strlen(tag2), tag2, 0);
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -636,6 +638,10 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                                                 }
 
                                                 /*--------------------------------------------------------------------*/
+
+                                                vector_modified = vector_modified || modified;
+
+                                                /*--------------------------------------------------------------------*/
                                             }
 
                                             /*------------------------------------------------------------------------*/
@@ -650,7 +656,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                     /*------------------------------------------------------------------------------------------------*/
 
-                    if(vector->base.in_callback._vector != NULL) vector->base.in_callback._vector(vector);
+                    if(vector->base.in_callback._vector != NULL) vector->base.in_callback._vector(vector, vector_modified);
 
                     nyx_object_notify(&vector->base);
 

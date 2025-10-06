@@ -19,7 +19,7 @@ static void signal_handler(int signo)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool on_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
+static bool def1_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
 {
     printf("ON button %s, modified: %s\n", nyx_onoff_to_str(new_value), old_value != new_value ? "true" : "false");
 
@@ -28,16 +28,20 @@ static bool on_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool off_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
+static bool def2_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
 {
     printf("OFF button %s, modified: %s\n", nyx_onoff_to_str(new_value), old_value != new_value ? "true" : "false");
 
-    if(old_value != new_value)
-    {
-        nyx_node_send_message(vector->base.node, "Test", "Hello World!");
-    }
-
     return true;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void switch_vector1_callback(nyx_dict_t *vector, bool modified)
+{
+    nyx_node_send_message(vector->base.node, "Test", modified ? "`vector1` modified"
+                                                                            : "`vector1` unmodified"
+    );
 }
 
 
@@ -113,8 +117,10 @@ int main()
         &opt
     );
 
-    def1->base.in_callback._int = on_callback;
-    def2->base.in_callback._int = off_callback;
+    def1->base.in_callback._int = def1_callback;
+    def2->base.in_callback._int = def2_callback;
+
+    switch_vector1->base.in_callback._vector = switch_vector1_callback;
 
     nyx_dict_t *def3 = nyx_switch_def_new("button3_a", "A", NYX_ONOFF_ON);
     nyx_dict_t *def4 = nyx_switch_def_new("button4_b", "B", NYX_ONOFF_OFF);

@@ -480,7 +480,8 @@ typedef struct nyx_object_s
         );
 
         __NULLABLE__ void (* _vector)(
-            struct nyx_dict_s *vector                                                           //!< The vector object.
+            struct nyx_dict_s *vector,                                                          //!< The vector object.
+            bool modified                                                                       //!< ???.
         );
 
     } in_callback;                                                                              //!< Callback triggered when the client modifies this object.
