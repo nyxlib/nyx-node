@@ -926,13 +926,21 @@ nyx_node_t *nyx_node_initialize(
     bool enable_xml
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* SET LOCALE                                                                                                     */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    setlocale(LC_NUMERIC, "C");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* ALLOCATE NODE                                                                                                  */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_node_t *node = nyx_memory_alloc(sizeof(nyx_node_t));
 
     memset(node, 0x00, sizeof(nyx_node_t));
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* PATH VECTORS                                                                                                   */
+    /* PATCH VECTORS                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(nyx_dict_t **vector_ptr = vectors; *vector_ptr != NULL; vector_ptr++)
@@ -942,7 +950,7 @@ nyx_node_t *nyx_node_initialize(
         /*------------------------------------------------------------------------------------------------------------*/
 
         vector->base.out_callback = /**/NULL/**/;
-        nyx_dict_set(vector, "@client", nyx_string_from(node_id));
+        nyx_dict_set_alt(vector, "@client", nyx_string_from(node_id), false);
         vector->base.out_callback = _out_callback;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -952,15 +960,13 @@ nyx_node_t *nyx_node_initialize(
         if(children != NULL && children->type == NYX_TYPE_LIST)
         {
             int idx;
-            nyx_object_t *object;
+            nyx_object_t *vector_def;
 
-            for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &object);)
+            for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &vector_def);)
             {
-                object->node = node;
+                vector_def->node = node;
             }
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
 
         vector->base.node = node;
 
@@ -999,16 +1005,10 @@ nyx_node_t *nyx_node_initialize(
     node->user_mqtt_handler = mqtt_handler;
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* INITIALIZE STACK                                                                                               */
+    /* INITIALIZE UNDERLYING STACK                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_node_stack_initialize(node, mqtt_username, mqtt_password, redis_username, redis_password, retry_ms);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* SET LOCALE                                                                                                     */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    setlocale(LC_NUMERIC, "C");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
