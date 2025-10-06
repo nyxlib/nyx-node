@@ -949,9 +949,7 @@ nyx_node_t *nyx_node_initialize(
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        vector->base.out_callback = /**/NULL/**/;
         nyx_dict_set_alt(vector, "@client", nyx_string_from(node_id), false);
-        vector->base.out_callback = _out_callback;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -964,9 +962,13 @@ nyx_node_t *nyx_node_initialize(
 
             for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &vector_def);)
             {
+                vector_def->out_callback = /**/ NULL /**/;
+
                 vector_def->node = node;
             }
         }
+
+        vector->base.out_callback = _out_callback;
 
         vector->base.node = node;
 
