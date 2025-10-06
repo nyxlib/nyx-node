@@ -153,7 +153,7 @@ int main()
 
     nyx_dict_t *number_vector1 = nyx_number_def_vector_new(
         "Test",
-        "number_vector1",
+        "number_vector",
         NYX_STATE_OK,
         NYX_PERM_RW,
         defs4,
