@@ -39,11 +39,8 @@ static bool def2_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, in
 
 static void switch_vector1_callback(nyx_dict_t *vector, bool modified)
 {
-    nyx_node_send_message(vector->base.node, "Test", modified ? "`vector1` modified"
-                                                                            : "`vector1` unmodified"
-    );
+    nyx_node_send_message(vector->base.node, "Test", modified ? "`vector1` modified" : "`vector1` unmodified");
 }
-
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
