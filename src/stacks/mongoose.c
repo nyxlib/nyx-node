@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <threads.h>
 
 #include "generated/mongoose.h"
 
@@ -18,6 +19,8 @@
 
 struct nyx_stack_s
 {
+    mtx_t lock;
+
     struct mg_mgr mgr;
 
     struct mg_connection *indi_connection;
@@ -368,6 +371,10 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    mtx_init(&stack->lock, mtx_plain);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     mg_mgr_init(&stack->mgr);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -386,6 +393,8 @@ void nyx_node_stack_initialize(
 
 void nyx_node_stack_finalize(nyx_node_t *node)
 {
+    mtx_destroy(&node->stack->lock);
+
     mg_mgr_free(&node->stack->mgr);
 
     nyx_memory_free(node->stack);
@@ -395,7 +404,30 @@ void nyx_node_stack_finalize(nyx_node_t *node)
 
 void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
-    mg_mgr_poll(&node->stack->mgr, timeout_ms);
+    if(node != NULL)
+    {
+        mg_mgr_poll(&node->stack->mgr, timeout_ms);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_lock(nyx_node_t *node)
+{
+    if(node != NULL)
+    {
+        mtx_lock(&node->stack->lock);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_unlock(nyx_node_t *node)
+{
+    if(node != NULL)
+    {
+        mtx_unlock(&node->stack->lock);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

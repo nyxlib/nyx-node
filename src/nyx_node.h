@@ -2897,6 +2897,28 @@ void nyx_node_finalize(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * \brief Locks the node's global mutex.
+ * @param node Nyx node.
+ */
+
+void nyx_node_lock(
+    nyx_node_t *node
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Unlocks the node's global mutex.
+ * @param node Nyx node.
+ */
+
+void nyx_node_unlock(
+    nyx_node_t *node
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * @memberof nyx_node_t
  * \brief Performs a single poll iteration.
  *
