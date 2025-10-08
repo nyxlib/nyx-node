@@ -19,7 +19,7 @@ static void signal_handler(int signo)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool def1_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
+static bool def1_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, int new_value, int old_value)
 {
     printf("ON button %s, modified: %s\n", nyx_onoff_to_str(new_value), old_value != new_value ? "true" : "false");
 
@@ -28,7 +28,7 @@ static bool def1_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, in
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool def2_callback(nyx_dict_t *vector, nyx_dict_t *def, int new_value, int old_value)
+static bool def2_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, int new_value, int old_value)
 {
     printf("OFF button %s, modified: %s\n", nyx_onoff_to_str(new_value), old_value != new_value ? "true" : "false");
 
@@ -47,7 +47,7 @@ static void switch_vector1_callback(nyx_dict_t *vector, bool modified)
 static nyx_dict_t *def11 = NULL;
 static nyx_dict_t *def12 = NULL;
 
-static int timer_thread(void *arg)
+static int timer_thread(__UNUSED__ void *arg)
 {
     struct timespec req = {0, 100000000}; // 100 ms
 
