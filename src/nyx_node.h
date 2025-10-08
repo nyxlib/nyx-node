@@ -2898,6 +2898,21 @@ void nyx_node_finalize(
 
 /**
  * @memberof nyx_node_t
+ * \brief Performs a single poll iteration.
+ *
+ * @param node The Nyx node.
+ * @param timeout_ms Timeout [milliseconds].
+ */
+
+void nyx_node_poll(
+    nyx_node_t *node,
+    int timeout_ms
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_node_t
  * \brief Locks the node's global mutex.
  * @param node Nyx node.
  */
@@ -2916,21 +2931,6 @@ void nyx_node_lock(
 
 void nyx_node_unlock(
     nyx_node_t *node
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_node_t
- * \brief Performs a single poll iteration.
- *
- * @param node The Nyx node.
- * @param timeout_ms Timeout [milliseconds].
- */
-
-void nyx_node_poll(
-    nyx_node_t *node,
-    int timeout_ms
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
