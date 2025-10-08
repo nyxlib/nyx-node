@@ -31,7 +31,7 @@ size_t malloc_usable_size(buff_t);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-static size_t used_mem = 0;
+static _Atomic size_t used_mem = 0;
 #endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -56,7 +56,7 @@ bool nyx_memory_finalize()
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
     if(atomic_load_explicit(&used_mem, memory_order_seq_cst) > 0)
     {
-        NYX_LOG_ERROR("Memory leak: %lz bytes", used_mem);
+        NYX_LOG_ERROR("Memory leak: %zu bytes", used_mem);
 
         return false;
     }
