@@ -2913,7 +2913,7 @@ void nyx_node_poll(
 
 /**
  * @memberof nyx_node_t
- * \brief Locks the node's global mutex. Can be used to synchronize property access.
+ * \brief Locks the node's global mutex. Can be used to synchronize property access in threads, timers, …
  * @param node Nyx node.
  */
 
@@ -2925,7 +2925,7 @@ void nyx_node_lock(
 
 /**
  * @memberof nyx_node_t
- * \brief Unlocks the node's global mutex. Can be used to synchronize property access.
+ * \brief Unlocks the node's global mutex. Can be used to synchronize property access in threads, timers, …
  * @param node Nyx node.
  */
 
