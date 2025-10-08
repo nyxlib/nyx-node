@@ -2897,6 +2897,7 @@ void nyx_node_finalize(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Locks the node's global mutex.
  * @param node Nyx node.
  */
@@ -2908,6 +2909,7 @@ void nyx_node_lock(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * \brief Unlocks the node's global mutex.
  * @param node Nyx node.
  */
