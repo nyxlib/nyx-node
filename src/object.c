@@ -31,7 +31,7 @@ size_t malloc_usable_size(buff_t);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-static _Atomic size_t used_mem = 0;
+static atomic_size_t used_mem = 0;
 #endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
