@@ -218,7 +218,7 @@ static int _get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(int i = 0; i < sizeof(node->client_hashes) / sizeof(uint32_t); i++)
+    for(size_t i = 0; i < sizeof(node->client_hashes) / sizeof(uint32_t); i++)
     {
         if(node->client_hashes[i] == 0x00
            ||
@@ -791,7 +791,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_st
 
     if(event_type == NYX_EVENT_OPEN)
     {
-        for(int i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(nyx_str_t); i++)
+        for(size_t i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(nyx_str_t); i++)
         {
             str_t topic = nyx_memory_alloc(SPECIAL_TOPICS[i].len + node->node_id.len + 2);
 

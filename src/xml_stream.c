@@ -49,7 +49,7 @@ static struct tag_s
 
 bool nyx_xml_stream_detect_opening_tag(nyx_xml_stream_t *xml_stream, size_t size, BUFF_t buff)
 {
-    for(int i = 0; i < TAG_DEF_NB; i++)
+    for(size_t i = 0; i < TAG_DEF_NB; i++)
     {
         STR_t p = memmem(buff, size, TAGS[i].s_tag_buff, TAGS[i].s_tag_size);
 
