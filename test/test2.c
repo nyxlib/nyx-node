@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <pthread.h>
+#include <threads.h>
 
 #include "../src/nyx_node.h"
 
@@ -44,24 +44,20 @@ static void switch_vector1_callback(nyx_dict_t *vector, bool modified)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int cnt = 0;
+static nyx_dict_t *def11 = NULL;
+static nyx_dict_t *def12 = NULL;
 
-bool state = false;
-
-nyx_dict_t *def11 = NULL;
-nyx_dict_t *def12 = NULL;
-
-void *timer_thread(void *arg)
+static int timer_thread(void *arg)
 {
     struct timespec req = {0, 100000000}; // 100 ms
 
-    while(s_signo == 0)
+    for(int phase = 0; s_signo == 0; phase++)
     {
         nanosleep(&req, NULL);
 
-        if(cnt++ == 20)
+        if((phase % 20) == 0)
         {
-            if(state)
+            if((phase / 20) & 1)
             {
                 nyx_light_def_set(def11, NYX_STATE_OK);
                 nyx_light_def_set(def12, NYX_STATE_ALERT);
@@ -71,14 +67,10 @@ void *timer_thread(void *arg)
                 nyx_light_def_set(def11, NYX_STATE_ALERT);
                 nyx_light_def_set(def12, NYX_STATE_OK);
             }
-
-            state = !state;
-
-            cnt = 0;
         }
     }
 
-    return NULL;
+    return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -202,7 +194,7 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    pthread_t tid;
+    thrd_t tid;
 
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
@@ -222,14 +214,18 @@ int main()
         true
     );
 
-    pthread_create(&tid, NULL, timer_thread, NULL);
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    thrd_create(&tid, timer_thread, NULL);
 
     while(s_signo == 0)
     {
         nyx_node_poll(node, 1000);
     }
 
-    pthread_join(tid, NULL);
+    thrd_join(tid, NULL);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_node_finalize(node, true);
 

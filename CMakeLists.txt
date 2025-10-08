@@ -6,8 +6,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(nyx_node LANGUAGES C VERSION 1.0.0)
 
-set(CMAKE_C_STANDARD 99)
-
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 
