@@ -10,7 +10,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 
-add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_SSI=0 -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-function -Wno-implicit-fallthrough)
+add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_SSI=0 -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-function)
 
 ########################################################################################################################
 

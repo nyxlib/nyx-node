@@ -49,9 +49,9 @@ uint32_t nyx_hash32(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff, uint32_t
 
     switch(size)
     {
-        case 3: h ^= ((uint32_t) data[2]) << 16;
-        case 2: h ^= ((uint32_t) data[1]) << 8;
-        case 1: h ^= ((uint32_t) data[0]) << 0;
+        case 3: h ^= ((uint32_t) data[2]) << 16;    /* fallthrough */
+        case 2: h ^= ((uint32_t) data[1]) << 8;     /* fallthrough */
+        case 1: h ^= ((uint32_t) data[0]) << 0;     /* fallthrough */
                 h *= MURMUR2_MAGIC;
         default:
             break;
