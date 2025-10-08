@@ -194,11 +194,6 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    thrd_t tid;
-
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
-
     nyx_node_t *node = nyx_node_initialize(
         "TOTO",
         vector_list,
@@ -215,6 +210,11 @@ int main()
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    thrd_t tid;
+
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
 
     thrd_create(&tid, timer_thread, NULL);
 
