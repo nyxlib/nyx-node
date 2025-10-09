@@ -2012,7 +2012,11 @@ typedef struct
 
 __INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
 {
+    #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_INT, {._int = value}};
+    #endif
 }
 
 /**
@@ -2021,7 +2025,11 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
 
 __INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
 {
+    #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_UINT, {._uint = value}};
+    #endif
 }
 
 /**
@@ -2030,7 +2038,11 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
 
 __INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
 {
+    #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_LONG, {._long = value}};
+    #endif
 }
 
 /**
@@ -2039,7 +2051,11 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
 
 __INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
 {
+    #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_ULONG, {._long = value}};
+    #endif
 }
 
 /**
@@ -2048,7 +2064,11 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
 
 __INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
 {
+    #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_DOUBLE, {._long = value}};
+    #endif
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
