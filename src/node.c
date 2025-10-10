@@ -824,7 +824,9 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_st
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        _get_properties_unsafe(node, NULL);
+        nyx_node_lock(node);
+        /**/    _get_properties_unsafe(node, NULL);
+        nyx_node_unlock(node);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

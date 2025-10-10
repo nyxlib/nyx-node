@@ -328,7 +328,7 @@ static int snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FORMAT DOUBLE                                                                                                      */
+/* NUMBER FORMATTER                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
