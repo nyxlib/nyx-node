@@ -8,6 +8,7 @@
 #include <math.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <locale.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -146,9 +147,7 @@ static double sextod(STR_t p)
     if(p == end1) {
         return NAN;
     }
-    else {
-        p = end1;
-    }
+    p = end1;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -168,9 +167,7 @@ static double sextod(STR_t p)
         if(p == end2) {
             return NAN;
         }
-        else {
-            p = end2;
-        }
+        p = end2;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -184,9 +181,7 @@ static double sextod(STR_t p)
         if(p == end3) {
             return NAN;
         }
-        else {
-            p = end3;
-        }
+        p = end3;
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -200,9 +195,7 @@ static double sextod(STR_t p)
         if(p == end4) {
             return NAN;
         }
-        else {
-            p = end4;
-        }
+        p = end4;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -340,6 +333,8 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
 
     if(_parse_format(&conv, &lcnt, &w, &f, format))
     {
+        setlocale(LC_NUMERIC, "C");
+
         /**/ if(lcnt == 1)
         {
             if((value.type == NYX_VARIANT_TYPE_LONG   && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && snprintf(buffer, sizeof(buffer), format, value.value._long) >= 0)
