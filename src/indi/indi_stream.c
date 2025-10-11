@@ -114,7 +114,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_
 
     if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
     {
-        return false;
+        return true; /* not an error */
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
