@@ -240,7 +240,9 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int index = _get_client_index(node, nyx_dict_get_string(dict, "@client"));
+    STR_t client = nyx_dict_get_string(dict, "@client");
+
+    int index = _get_client_index(node, client);
 
     if(index < 0)
     {
@@ -288,7 +290,7 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(tag2 == NULL || strcmp(tag2, tag) != 0)
+            if(tag2 != NULL && strcmp(tag2, tag) == 0)
             {
                 switch(value)
                 {
@@ -297,11 +299,11 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_BLOB_STATE_ENABLED:
-                        vector->base.flags |= (1U << (2 + 0 * 31 + index));
+                        vector->base.flags |= (1LU << (2 + 0 * 31 + index));
                         break;
 
                     case NYX_BLOB_STATE_DISABLED:
-                        vector->base.flags &= ~(1U << (2 + 0 * 31 + index));
+                        vector->base.flags &= ~(1LU << (2 + 0 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -309,11 +311,11 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                     /*------------------------------------------------------------------------------------------------*/
 
                     case NYX_STREAM_STATE_ENABLED:
-                        vector->base.flags |= (1U << (2 + 1 * 31 + index));
+                        vector->base.flags |= (1LU << (2 + 1 * 31 + index));
                         break;
 
                     case NYX_STREAM_STATE_DISABLED:
-                        vector->base.flags &= ~(1U << (2 + 1 * 31 + index));
+                        vector->base.flags &= ~(1LU << (2 + 1 * 31 + index));
                         break;
 
                     /*------------------------------------------------------------------------------------------------*/
