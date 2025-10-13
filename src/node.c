@@ -236,7 +236,7 @@ static int _get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t))
+static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int (* str_to_xxx)(STR_t), uint64_t mask)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -257,24 +257,24 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(device1 != NULL && value1 != NULL)
+    int value = str_to_xxx(value1);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
     {
-        int value = str_to_xxx(value1);
+        nyx_dict_t *vector = *vector_ptr;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
+        STR_t device2 = nyx_dict_get_string(vector, "@device");
+        STR_t name2 = nyx_dict_get_string(vector, "@name");
+        STR_t tag2 = nyx_dict_get_string(vector, "<>");
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(device1 != NULL)
         {
-            nyx_dict_t *vector = *vector_ptr;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            STR_t device2 = nyx_dict_get_string(vector, "@device");
-            STR_t name2 = nyx_dict_get_string(vector, "@name");
-            STR_t tag2 = nyx_dict_get_string(vector, "<>");
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
             if(device2 == NULL || strcmp(device1, device2) != 0)
             {
                 continue;
@@ -287,47 +287,53 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                     continue;
                 }
             }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(tag2 != NULL && strcmp(tag, tag2) == 0)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            switch(value)
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+                /* BLOB                                                                                               */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                case NYX_BLOB_STATE_ENABLED:
+                    vector->base.flags |= (1LU << (2 + 0 * 31 + index));
+                    break;
+
+                case NYX_BLOB_STATE_DISABLED:
+                    vector->base.flags &= ~(1LU << (2 + 0 * 31 + index));
+                    break;
+
+                /*----------------------------------------------------------------------------------------------------*/
+                /* STREAM                                                                                             */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                case NYX_STREAM_STATE_ENABLED:
+                    vector->base.flags |= (1LU << (2 + 1 * 31 + index));
+                    break;
+
+                case NYX_STREAM_STATE_DISABLED:
+                    vector->base.flags &= ~(1LU << (2 + 1 * 31 + index));
+                    break;
+
+                /*----------------------------------------------------------------------------------------------------*/
+                /* INTERNAL ERROR                                                                                     */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                default:
+                    NYX_LOG_FATAL("Internal error");
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(tag2 != NULL && strcmp(tag2, tag) == 0)
-            {
-                switch(value)
-                {
-                    /*------------------------------------------------------------------------------------------------*/
-                    /* BLOB                                                                                           */
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    case NYX_BLOB_STATE_ENABLED:
-                        vector->base.flags |= (1LU << (2 + 0 * 31 + index));
-                        break;
-
-                    case NYX_BLOB_STATE_DISABLED:
-                        vector->base.flags &= ~(1LU << (2 + 0 * 31 + index));
-                        break;
-
-                    /*------------------------------------------------------------------------------------------------*/
-                    /* STREAM                                                                                         */
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    case NYX_STREAM_STATE_ENABLED:
-                        vector->base.flags |= (1LU << (2 + 1 * 31 + index));
-                        break;
-
-                    case NYX_STREAM_STATE_DISABLED:
-                        vector->base.flags &= ~(1LU << (2 + 1 * 31 + index));
-                        break;
-
-                    /*------------------------------------------------------------------------------------------------*/
-                    /* INTERNAL ERROR                                                                                 */
-                    /*------------------------------------------------------------------------------------------------*/
-
-                    default:
-                        NYX_LOG_FATAL("Internal error");
-
-                    /*------------------------------------------------------------------------------------------------*/
-                }
-            }
+            NYX_LOG_INFO("%s:%s has been %s", device2, name2, (vector->base.flags & mask) == 0 ? "disabled" : "enabled");
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -342,14 +348,14 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
 __INLINE__ void _enable_blob_unsafe(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state);
+    _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state, NYX_FLAGS_BLOB_MASK);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __INLINE__ void _enable_stream_unsafe(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state);
+    _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state, NYX_FLAGS_STREAM_MASK);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
