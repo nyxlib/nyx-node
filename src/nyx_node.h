@@ -496,7 +496,7 @@ typedef struct nyx_object_s
         struct nyx_object_s *object                                                             //!< This object.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
-    __NULLABLE__ void *ctx;                                                                     //!< User context pointer passed to callbacks.
+    __NULLABLE__ void *ctx;                                                                     //!< User context pointer.
 
 } nyx_object_t;
 
