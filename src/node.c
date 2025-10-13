@@ -246,6 +246,8 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
     if(index < 0)
     {
+        NYX_LOG_ERROR("Too many connected clients");
+
         return;
     }
 
