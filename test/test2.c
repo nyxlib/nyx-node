@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <threads.h>
 
 #include "../src/nyx_node.h"
 
@@ -44,65 +43,57 @@ static void switch_vector1_callback(nyx_dict_t *vector, bool modified)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static int phase;
+
 static nyx_dict_t *def11 = NULL;
 static nyx_dict_t *def12 = NULL;
 
+static void timer1(__UNUSED__ void *arg)
+{
+    if((phase++) & 1)
+    {
+        nyx_light_def_set(def11, NYX_STATE_OK);
+        nyx_light_def_set(def12, NYX_STATE_ALERT);
+    }
+    else
+    {
+        nyx_light_def_set(def11, NYX_STATE_ALERT);
+        nyx_light_def_set(def12, NYX_STATE_OK);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static nyx_dict_t *stream_vector1;
 
-static int timer_thread(__UNUSED__ void *arg)
+static void timer2(__UNUSED__ void *arg)
 {
-    struct timespec req = {0, 10000000}; // 10 ms
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(int phase = 0; s_signo == 0; phase++)
+    nyx_dict_t *stream_vector1 = (nyx_dict_t *) arg;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    float samp_rate = 2000000.0f;
+    float frequency = 143050000.0f;
+    float samples[1024];
+
+    for(size_t i = 0; i < sizeof(samples) / sizeof(samples[0]); i++)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
+        float u = (float) rand() / (float) RAND_MAX;
 
-        nanosleep(&req, NULL);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if((phase % 200) == 0)
-        {
-            if((phase / 200) & 1)
-            {
-                nyx_light_def_set(def11, NYX_STATE_OK);
-                nyx_light_def_set(def12, NYX_STATE_ALERT);
-            }
-            else
-            {
-                nyx_light_def_set(def11, NYX_STATE_ALERT);
-                nyx_light_def_set(def12, NYX_STATE_OK);
-            }
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        float samp_rate = 2000000.0;
-        float frequency = 143050000.0;
-        float samples[1024];
-
-        for(size_t i = 0; i < sizeof(samples) / sizeof(samples[0]); i++)
-        {
-            float u = (float) rand() / (float) RAND_MAX;
-
-            samples[i] = -30.0f + u * 10.0f;
-        }
-
-        STR_t names[] = {"samp_rate", "frequency", "samples"};
-        size_t sizes[] = {sizeof(samp_rate), sizeof(frequency), sizeof(samples)};
-        BUFF_t buffs[] = {&samp_rate, &frequency, samples};
-
-        bool ok = nyx_stream_pub(stream_vector1, 100, 3, names, sizes, buffs);
-
-        if(!ok)
-        {
-            NYX_LOG_ERROR("Cannot publish stream...");
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        samples[i] = -30.0f + u * 5.0f;
     }
 
-    return 0;
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    STR_t names[] = {"samp_rate", "frequency", "samples"};
+    size_t sizes[] = {sizeof(samp_rate), sizeof(frequency), sizeof(samples)};
+    BUFF_t buffs[] = {&samp_rate, &frequency, samples};
+
+    nyx_stream_pub(stream_vector1, 100, 3, names, sizes, buffs);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -220,7 +211,7 @@ int main()
 
     nyx_dict_t *defs7[] = {def13, def14, def15, NULL};
 
-    /*------*/ stream_vector1 = nyx_stream_def_vector_new(
+    /*-------*/ stream_vector1 = nyx_stream_def_vector_new(
         "Test",
         "stream_vector",
         NYX_STATE_OK,
@@ -258,19 +249,16 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    thrd_t tid;
-
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    thrd_create(&tid, timer_thread, NULL);
+    nyx_node_add_timer(node, 1000, timer1, NULL);
+    nyx_node_add_timer(node, 100, timer2, NULL);
 
     while(s_signo == 0)
     {
-        nyx_node_poll(node, 1000);
+        nyx_node_poll(node, 50);
     }
-
-    thrd_join(tid, NULL);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

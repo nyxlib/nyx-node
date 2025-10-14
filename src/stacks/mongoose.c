@@ -9,7 +9,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <threads.h>
 
 #include "generated/mongoose.h"
 
@@ -19,8 +18,6 @@
 
 struct nyx_stack_s
 {
-    mtx_t lock;
-
     struct mg_mgr mgr;
 
     struct mg_connection *indi_connection;
@@ -369,10 +366,6 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mtx_init(&stack->lock, mtx_plain);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     mg_mgr_init(&stack->mgr);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -391,8 +384,6 @@ void nyx_node_stack_initialize(
 
 void nyx_node_stack_finalize(nyx_node_t *node)
 {
-    mtx_destroy(&node->stack->lock);
-
     mg_mgr_free(&node->stack->mgr);
 
     nyx_memory_free(node->stack);
@@ -410,22 +401,9 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_lock(nyx_node_t *node)
+void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
 {
-    if(node != NULL)
-    {
-        mtx_lock(&node->stack->lock);
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_node_unlock(nyx_node_t *node)
-{
-    if(node != NULL)
-    {
-        mtx_unlock(&node->stack->lock);
-    }
+    mg_timer_add(&node->stack->mgr, interval_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, callback, arg);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

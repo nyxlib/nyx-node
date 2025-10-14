@@ -2939,24 +2939,20 @@ void nyx_node_poll(
 
 /**
  * @memberof nyx_node_t
- * \brief Locks the node's global mutex. Can be used to synchronize property access in threads, timers, …
- * @param node Nyx node.
+ * \brief Add a new timer.
+ *
+ * @param node The Nyx node.
+ * @param interval_ms Interval [milliseconds].
+ * @param callback Callback to be invoked.
+ * @param arg Callback argument.
+ * @note All added timers are polled when @ref nyx_node_poll is called, and called if expired.
  */
 
-void nyx_node_lock(
-    nyx_node_t *node
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_node_t
- * \brief Unlocks the node's global mutex. Can be used to synchronize property access in threads, timers, …
- * @param node Nyx node.
- */
-
-void nyx_node_unlock(
-    nyx_node_t *node
+void nyx_node_add_timer(
+    nyx_node_t *node,
+    uint64_t interval_ms,
+    void(* callback)(void *),
+    void *arg
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

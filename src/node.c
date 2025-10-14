@@ -133,7 +133,7 @@ static void _out_callback(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _get_properties_unsafe(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict)
+static void _get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
@@ -348,14 +348,14 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void _enable_blob_unsafe(nyx_node_t *node, const nyx_dict_t *dict)
+__INLINE__ void _enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
 {
     _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state, NYX_FLAGS_BLOB_MASK);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void _enable_stream_unsafe(nyx_node_t *node, const nyx_dict_t *dict)
+__INLINE__ void _enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 {
     _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state, NYX_FLAGS_STREAM_MASK);
 }
@@ -399,7 +399,7 @@ static nyx_string_t OFF = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _set_properties_unsafe(const nyx_node_t *node, const nyx_dict_t *dict)
+static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 {
     if(!_is_allowed(node, dict))
     {
@@ -708,21 +708,15 @@ static void _process_message(nyx_node_t *node, nyx_object_t *object)
         {
             /**/ if(strcmp(tag, "getProperties") == 0)
             {
-                nyx_node_lock(node);
-                /**/    _get_properties_unsafe(node, (nyx_dict_t *) object);
-                nyx_node_unlock(node);
+                _get_properties(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "enableBLOB") == 0)
             {
-                nyx_node_lock(node);
-                /**/    _enable_blob_unsafe(node, (nyx_dict_t *) object);
-                nyx_node_unlock(node);
+                _enable_blob(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "enableStream") == 0)
             {
-                nyx_node_lock(node);
-                /**/    _enable_stream_unsafe(node, (nyx_dict_t *) object);
-                nyx_node_unlock(node);
+                _enable_stream(node, (nyx_dict_t *) object);
             }
             else if(strcmp(tag, "newNumberVector") == 0
                     ||
@@ -734,9 +728,7 @@ static void _process_message(nyx_node_t *node, nyx_object_t *object)
                     ||
                     strcmp(tag, "newBLOBVector") == 0
             ) {
-                nyx_node_lock(node);
-                /**/    _set_properties_unsafe(node, (nyx_dict_t *) object);
-                nyx_node_unlock(node);
+                _set_properties(node, (nyx_dict_t *) object);
             }
         }
     }
@@ -833,9 +825,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_st
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_node_lock(node);
-        /**/    _get_properties_unsafe(node, NULL);
-        nyx_node_unlock(node);
+        _get_properties(node, NULL);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
