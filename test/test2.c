@@ -211,7 +211,7 @@ int main()
 
     nyx_dict_t *defs7[] = {def13, def14, def15, NULL};
 
-    /*-------*/ stream_vector1 = nyx_stream_def_vector_new(
+    stream_vector1 = nyx_stream_def_vector_new(
         "Test",
         "stream_vector",
         NYX_STATE_OK,
