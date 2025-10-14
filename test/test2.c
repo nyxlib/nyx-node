@@ -43,7 +43,7 @@ static void switch_vector1_callback(nyx_dict_t *vector, bool modified)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int phase;
+static unsigned int phase = 0;
 
 static nyx_dict_t *def11 = NULL;
 static nyx_dict_t *def12 = NULL;
