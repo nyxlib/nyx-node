@@ -250,8 +250,6 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
     }
     else if(ev == MG_EV_READ)
     {
-        NYX_LOG_DEBUG("%lu READ Redis replied: %.*s\n", (int) connection->recv.len, (STR_t) connection->recv.buf);
-
         mg_iobuf_del(
             &connection->recv,
             0x0000000000000000,

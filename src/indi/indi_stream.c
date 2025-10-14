@@ -106,7 +106,7 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 /* PUBLISHER                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, __ZEROABLE__ size_t n_fields, const STR_t field_names[], const size_t field_sizes[], const BUFF_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */
