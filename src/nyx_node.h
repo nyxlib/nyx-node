@@ -2918,22 +2918,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
 void nyx_node_finalize(
     nyx_node_t *node,
     bool free_vectors
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_node_t
- * \brief Performs a single poll iteration.
- *
- * @param node The Nyx node.
- * @param timeout_ms Timeout [milliseconds].
- */
-
-void nyx_node_poll(
-    nyx_node_t *node,
-    int timeout_ms
-);
+    );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2953,6 +2938,21 @@ void nyx_node_add_timer(
     uint64_t interval_ms,
     void(* callback)(void *),
     void *arg
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_node_t
+ * \brief Performs a single poll iteration.
+ *
+ * @param node The Nyx node.
+ * @param timeout_ms Timeout [milliseconds].
+ */
+
+void nyx_node_poll(
+    nyx_node_t *node,
+    int timeout_ms
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

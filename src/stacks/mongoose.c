@@ -391,6 +391,16 @@ void nyx_node_stack_finalize(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
+{
+    if(node != NULL)
+    {
+        mg_timer_add(&node->stack->mgr, interval_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, callback, arg);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     if(node != NULL)
@@ -399,12 +409,6 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     }
 }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
-{
-    mg_timer_add(&node->stack->mgr, interval_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, callback, arg);
-}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 #endif
