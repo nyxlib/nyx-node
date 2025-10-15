@@ -102,9 +102,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
 {
     if(node->stack->mqtt_connection != NULL)
     {
-        struct mg_mqtt_opts opts;
-
-        memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
+        struct mg_mqtt_opts opts = {0};
 
         opts.topic = topic;
         ////.message = message;
@@ -120,9 +118,7 @@ void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t 
 {
     if(node->stack->mqtt_connection != NULL)
     {
-        struct mg_mqtt_opts opts;
-
-        memset(&opts, 0x00, sizeof(struct mg_mqtt_opts));
+        struct mg_mqtt_opts opts = {0};
 
         opts.topic = topic;
         opts.message = message;
