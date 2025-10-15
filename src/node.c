@@ -335,7 +335,7 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            NYX_LOG_INFO("%s:%s has been %s", device2, name2, (vector->base.flags & mask) == 0 ? "disabled" : "enabled");
+            NYX_LOG_DEBUG("%s:%s has been %s", device2, name2, (vector->base.flags & mask) == 0 ? "disabled" : "enabled");
 
             /*--------------------------------------------------------------------------------------------------------*/
         }

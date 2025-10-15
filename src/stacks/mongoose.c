@@ -7,6 +7,7 @@
 #if !defined(ARDUINO)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -154,6 +155,8 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
         NYX_LOG_INFO("%lu OPEN", connection->id);
 
         node->stack->indi_connection = connection;
+
+        ///_indi_auth(node, stack->indi_password);
     }
     else if(ev == MG_EV_CLOSE)
     {
@@ -168,6 +171,11 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
     else if(ev == MG_EV_READ)
     {
         size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, NYX_STR_S(connection->recv.buf, connection->recv.len));
+
+        if(consumed > connection->recv.len)
+        {
+            consumed = connection->recv.len;
+        }
 
         mg_iobuf_del(
             &connection->recv,
@@ -234,6 +242,8 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
         NYX_LOG_INFO("%lu OPEN", connection->id);
 
         node->stack->redis_connection = connection;
+
+        nyx_redis_auth(node, node->stack->redis_username, node->stack->redis_password);
     }
     else if(ev == MG_EV_CLOSE)
     {
@@ -278,8 +288,6 @@ static void retry_timer_handler(void *arg)
 
         if(stack->indi_connection != NULL)
         {
-            ///_indi_auth(node, stack->indi_password);
-
             NYX_LOG_INFO("INDI support is enabled");
         }
     }
@@ -319,8 +327,6 @@ static void retry_timer_handler(void *arg)
 
         if(stack->redis_connection != NULL)
         {
-            nyx_redis_auth(node, stack->redis_username, stack->redis_password);
-
             NYX_LOG_INFO("Redis support is enabled");
         }
     }

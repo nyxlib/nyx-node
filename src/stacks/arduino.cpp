@@ -539,6 +539,16 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
+{
+    if(node != NULL)
+    {
+        /* TODO */
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     auto stack = node->stack;
