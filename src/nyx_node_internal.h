@@ -478,19 +478,6 @@ void nyx_redis_auth(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(
-    nyx_node_t *node,
-    STR_t device,
-    STR_t stream,
-    size_t max_len,
-    __ZEROABLE__ size_t n_fields,
-    const STR_t field_names[],
-    const size_t field_sizes[],
-    const BUFF_t field_buffs[]
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 #ifndef ARDUINO
 #  pragma clang diagnostic pop
 #endif

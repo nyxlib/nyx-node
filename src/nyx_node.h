@@ -2738,7 +2738,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
  *
  * @param vector The Nyx node.
  * @param max_len Maximum number of entries to keep in the Redis stream.
- * @param n_fields Number of field triplets (length, buffer).
+ * @param n_fields Number of field doublets (length, buffer).
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
  * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
@@ -3056,6 +3056,36 @@ void nyx_mqtt_pub(
     STR_t topic,
     __ZEROABLE__ size_t message_size,
     __NULLABLE__ BUFF_t message_buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_node_t
+ * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
+ *
+ * @param node The Nyx node.
+ * @param device The device name.
+ * @param stream The stream name.
+ * @param max_len Maximum number of entries to keep in the Redis stream.
+ * @param n_fields Number of field triplets (name, length, buffer).
+ * @param field_names Array of field names.
+ * @param field_sizes Array of field lengths.
+ * @param field_buffs Array of field buffers.
+ * @note Prefer using @ref nyx_stream_pub.
+ * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
+ * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
+ */
+
+void nyx_redis_pub(
+    nyx_node_t *node,
+    STR_t device,
+    STR_t stream,
+    size_t max_len,
+    __ZEROABLE__ size_t n_fields,
+    const STR_t field_names[],
+    const size_t field_sizes[],
+    const BUFF_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
