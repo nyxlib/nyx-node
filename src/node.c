@@ -624,10 +624,10 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                                                         {
                                                             /*--------------------------------------------------------*/
 
-                                                            size_t src_len;
-                                                            buff_t src_str;
+                                                            size_t src_size;
+                                                            buff_t src_buff;
 
-                                                            nyx_string_get_buff((nyx_string_t *) new_value, &src_len, &src_str);
+                                                            nyx_string_get_buff((nyx_string_t *) new_value, &src_size, &src_buff);
 
                                                             /*--------------------------------------------------------*/
 
@@ -635,10 +635,10 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                                                             buff_t dst_buff;
 
                                                             if(internal_blob_is_compressed((nyx_dict_t *) object2)) {
-                                                                dst_buff = nyx_zlib_base64_inflate(&dst_size, src_len, src_str);
+                                                                dst_buff = nyx_zlib_base64_inflate(&dst_size, src_size, src_buff);
                                                             }
                                                             else {
-                                                                dst_buff = nyx_base64_decode(&dst_size, src_len, src_str);
+                                                                dst_buff = nyx_base64_decode(&dst_size, src_size, src_buff);
                                                             }
 
                                                             /*--------------------------------------------------------*/
