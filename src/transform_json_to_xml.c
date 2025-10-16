@@ -62,7 +62,7 @@ static nyx_xmldoc_t *transform(const nyx_object_t *dict) // NOLINT(misc-no-recur
 
         else if(strcmp(key, "children") == 0)
         {
-            int idx;
+            size_t idx;
 
             nyx_object_t *obj2;
 

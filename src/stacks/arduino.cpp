@@ -9,6 +9,8 @@
 
 #include <Arduino.h>
 #include <PubSubClient.h>
+#include <vector>
+#include <arduino-timer.h>
 
 #if defined(NYX_HAS_WIFI)
 #  if defined(ARDUINO_ARCH_ESP8266)
@@ -40,6 +42,38 @@ static DNSClient EthDNS;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static nyx_node_t *nyx_node = nullptr;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* TIMERS (LITE: ARDUINO-TIMER + TRAMPOLINE)                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static auto __nyx_timer = timer_create_default();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct nyx_timer_ctx_s
+{
+    void (* cb)(void *);
+    void *arg;
+}
+nyx_timer_ctx_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static bool __nyx_timer_trampoline(void *ctx)
+{
+    nyx_timer_ctx_t *p = (nyx_timer_ctx_t *) ctx;
+
+    p->cb(p->arg);
+
+    return true;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+static void ping_timer_handler(void *arg)
+{
+    nyx_node_ping((nyx_node_t *) arg);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -85,13 +119,15 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __ZEROABLE__ size_t recv_capa = 0x00000;
-    __ZEROABLE__ size_t recv_size = 0x00000;
-    __NULLABLE__ buff_t recv_buff = nullptr;
+    std::vector<uint8_t> recv_buff;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    unsigned long last_ping_ms = 0;
+    bool indi_server_started = false;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uint16_t mqtt_buf_estimate = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -100,7 +136,10 @@ struct nyx_stack_s
         tcp_server(),
         mqtt_client(tcp_client),
         indi_client(),
-        redis_client()
+        redis_client(),
+        recv_buff(),
+        indi_server_started(false),
+        mqtt_buf_estimate(0)
     {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -367,6 +406,10 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    stack->mqtt_buf_estimate = mqtt_estimate_buffer_size();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(node->indi_url != nullptr && node->indi_url[0] != '\0')
     {
         if(parse_host_port(node->indi_url, stack->indi_ip, stack->indi_port, 7624))
@@ -378,6 +421,9 @@ void nyx_node_stack_initialize(
                 stack->indi_ip[3],
                 stack->indi_port
             );
+
+            stack->recv_buff.clear();
+            stack->recv_buff.reserve(stack->mqtt_buf_estimate);
         }
         else
         {
@@ -396,7 +442,7 @@ void nyx_node_stack_initialize(
 
         if(parse_host_port(node->mqtt_url, ip, port, 1883))
         {
-            if(stack->mqtt_client.setBufferSize(mqtt_estimate_buffer_size()))
+            if(stack->mqtt_client.setBufferSize(stack->mqtt_buf_estimate))
             {
                 NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
@@ -405,6 +451,8 @@ void nyx_node_stack_initialize(
                 ).setServer(
                     ip, port
                 );
+
+                nyx_node_add_timer(node, NYX_PING_MS, ping_timer_handler, node);
             }
             else
             {
@@ -474,32 +522,55 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* EXPAND BUFFER IF NEEDED                                                                                        */
+    /* EXPAND BUFFER IF NEEDED (STEP)                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t required = stack->recv_size + available;
+    const size_t required = stack->recv_buff.size() + available;
 
-    if(required > stack->recv_capa)
+    if(required > stack->recv_buff.capacity())
     {
-        size_t new_capa = max(required, stack->recv_capa + grow_step);
+        size_t new_capa = stack->recv_buff.capacity() + grow_step;
 
-        stack->recv_buff = nyx_memory_realloc(stack->recv_buff, new_capa);
-        stack->recv_capa = new_capa;
+        if(new_capa < required)
+        {
+            new_capa = required;
+        }
+
+        std::vector<uint8_t> tmp;
+        tmp.reserve(new_capa);
+        tmp.insert(tmp.end(), stack->recv_buff.begin(), stack->recv_buff.end());
+        stack->recv_buff.swap(tmp);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CONSUME DATA                                                                                                   */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    stack->recv_size += stack->indi_client.read(static_cast<uint8_t *>(stack->recv_buff) + stack->recv_size, available);
+    size_t old_size = stack->recv_buff.size();
+
+    stack->recv_buff.resize(old_size + available);
+
+    size_t got = stack->indi_client.read(
+        static_cast<uint8_t *>(stack->recv_buff.data()) + old_size,
+        available
+    );
+
+    if(got < available)
+    {
+        stack->recv_buff.resize(old_size + got);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(stack->recv_size > 0)
+    if(!stack->recv_buff.empty())
     {
-        size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, NYX_STR_S(stack->recv_buff, stack->recv_size));
+        size_t consumed = node->tcp_handler(
+            node,
+            NYX_EVENT_MSG,
+            NYX_STR_S(reinterpret_cast<str_t>(stack->recv_buff.data()), stack->recv_buff.size())
+        );
 
-        if(consumed > stack->recv_size)
+        if(consumed > stack->recv_buff.size())
         {
             NYX_LOG_ERROR("Internal error: consumed > size");
 
@@ -508,30 +579,24 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 
         if(consumed > 0)
         {
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* SHIFT REMAINING DATA                                                                                   */
-            /*--------------------------------------------------------------------------------------------------------*/
+            stack->recv_buff.erase(
+                stack->recv_buff.begin(),
+                stack->recv_buff.begin() + static_cast<long>(consumed)
+            );
 
-            memmove(stack->recv_buff, static_cast<uint8_t *>(stack->recv_buff) + consumed, stack->recv_size -= consumed);
+            const size_t capa = stack->recv_buff.capacity();
+            const size_t size = stack->recv_buff.size();
 
-            /*--------------------------------------------------------------------------------------------------------*/
-            /* SHRINK BUFFER IF POSSIBLE                                                                              */
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const size_t shrink_threshold = stack->recv_capa / 2;
-
-            if(stack->recv_capa > grow_step && stack->recv_size < shrink_threshold)
+            if(capa > grow_step && size < (capa / 2))
             {
-                size_t new_capa = max(grow_step, static_cast<size_t>(static_cast<float>(stack->recv_size) * shrink_factor));
+                size_t new_capa = max(grow_step, static_cast<size_t>(static_cast<float>(size) * shrink_factor));
 
-                stack->recv_buff = nyx_memory_realloc(stack->recv_buff, new_capa);
-                stack->recv_capa = new_capa;
+                std::vector<uint8_t> tmp;
+                tmp.reserve(new_capa);
+                tmp.insert(tmp.end(), stack->recv_buff.begin(), stack->recv_buff.end());
+                stack->recv_buff.swap(tmp);
             }
-
-            /*--------------------------------------------------------------------------------------------------------*/
         }
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -541,9 +606,33 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
 
 void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
 {
-    if(node != NULL)
+    if(node != NULL && callback != NULL)
     {
-        /* TODO */
+        nyx_timer_ctx_t *ctx = (nyx_timer_ctx_t *) nyx_memory_alloc(sizeof(nyx_timer_ctx_t));
+
+        if(ctx == NULL)
+        {
+            NYX_LOG_ERROR("Cannot create timer: out of memory");
+
+            return;
+        }
+
+        ctx->cb  = callback;
+        ctx->arg = arg;
+
+        __nyx_timer.in(
+            0,
+            __nyx_timer_trampoline,
+            (void *) ctx
+        );
+
+        uint32_t ival = (uint32_t) (interval_ms > 0xFFFFFFFFULL ? 0xFFFFFFFFUL : interval_ms);
+
+        __nyx_timer.every(
+            ival,
+            __nyx_timer_trampoline,
+            (void *) ctx
+        );
     }
 }
 
@@ -554,39 +643,50 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     auto stack = node->stack;
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* TIMERS                                                                                                         */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    __nyx_timer.tick();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(node->indi_url != nullptr && node->indi_url[0] != '\0')
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        /* RECONNECT SERVER                                                                                           */
+        /* START SERVER ONCE                                                                                          */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!stack->tcp_server)
+        if(!stack->indi_server_started)
         {
             stack->tcp_server.begin(stack->indi_port);
+
+            stack->indi_server_started = true;
 
             NYX_LOG_INFO("INDI support is enabled");
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* ACCEPT CLIENT                                                                                              */
+        /* ACCEPT CLIENT (PORTABLE)                                                                                   */
         /*------------------------------------------------------------------------------------------------------------*/
 
         if(!stack->indi_client.connected())
         {
             #ifdef NYX_HAS_WIFI
-            WiFiClient new_client = stack->tcp_server.accept();
+            WiFiClient new_client = stack->tcp_server.available();
             #endif
 
             #ifdef NYX_HAS_ETHERNET
-            EthernetClient new_client = stack->tcp_server.accept();
+            EthernetClient new_client = stack->tcp_server.available();
             #endif
 
             if(new_client.connected())
             {
                 stack->indi_client = new_client;
+
+                stack->recv_buff.clear();
+                stack->recv_buff.reserve(stack->mqtt_buf_estimate);
             }
             else
             {
@@ -599,8 +699,6 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
         /*------------------------------------------------------------------------------------------------------------*/
 
         read_data(node, TCP_RECV_BUFF_GROW_STEP, TCP_RECV_BUFF_SHRINK_FACTOR);
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -610,10 +708,6 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 __mqtt:
     if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* RECONNECT CLIENT                                                                                           */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(!stack->mqtt_client.connected())
         {
             if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
@@ -628,37 +722,16 @@ __mqtt:
             }
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* TREATMENT                                                                                                  */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         stack->mqtt_client.loop();
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        unsigned long curr_ping_ms = millis();
-
-        if(stack->last_ping_ms <= curr_ping_ms - NYX_PING_MS)
-        {
-            stack->last_ping_ms = curr_ping_ms - 0x0000000UL;
-
-            nyx_node_ping(node);
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* REDIS                                                                                                           */
+    /* REDIS                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
 __redis:
     if(node->redis_url != nullptr && node->redis_url[0] != '\0')
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* RECONNECT CLIENT                                                                                           */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         if(!stack->redis_client.connected())
         {
             if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
@@ -673,13 +746,7 @@ __redis:
             }
         }
 
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* TREATMENT                                                                                                  */
-        /*------------------------------------------------------------------------------------------------------------*/
-
         /* NOTHING TO DO */
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -688,8 +755,6 @@ __redis:
 
 __delay:
     delay(timeout_ms);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

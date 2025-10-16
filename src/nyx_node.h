@@ -1199,7 +1199,7 @@ typedef struct nyx_dict_s
 
 typedef struct
 {
-    int idx;                                                                                    //!< ???
+    size_t idx;                                                                                 //!< ???
 
     nyx_type_t type;                                                                            //!< ???
 
@@ -1447,7 +1447,7 @@ typedef struct nyx_list_s
 
 typedef struct
 {
-    int idx;                                                                                    //!< ???
+    size_t idx;                                                                                 //!< ???
 
     nyx_type_t type;                                                                            //!< ???
 
@@ -1509,7 +1509,7 @@ void nyx_list_clear(
 
 void nyx_list_del(
     /*-*/ nyx_list_t *object,
-    int idx
+    size_t idx
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1526,7 +1526,7 @@ void nyx_list_del(
 
 bool nyx_list_iterate(
     nyx_list_iter_t *iter,
-    int *idx,
+    size_t *idx,
     nyx_object_t **object
 );
 
@@ -1543,7 +1543,7 @@ bool nyx_list_iterate(
 
 nyx_object_t *nyx_list_get(
     const nyx_list_t *object,
-    int idx
+    size_t idx
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1612,7 +1612,7 @@ str_t nyx_list_to_string(
  * @return
  */
 
-__INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, int idx)
+__INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *boolean = nyx_list_get(object, idx);
 
@@ -1632,7 +1632,7 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, int idx)
  * @return
  */
 
-__INLINE__ double nyx_list_get_number(const nyx_list_t *object, int idx)
+__INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *number = nyx_list_get(object, idx);
 
@@ -1652,7 +1652,7 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, int idx)
  * @return
  */
 
-__INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, int idx)
+__INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *string = nyx_list_get(object, idx);
 
@@ -2738,8 +2738,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
  *
  * @param vector The Nyx node.
  * @param max_len Maximum number of entries to keep in the Redis stream.
- * @param n_fields Number of field triplets (name, length, buffer).
- * @param field_names Array of field names.
+ * @param n_fields Number of field triplets (length, buffer).
  * @param field_sizes Array of field lengths.
  * @param field_buffs Array of field buffers.
  * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
@@ -2750,7 +2749,6 @@ bool nyx_stream_pub(
     const nyx_dict_t *vector,
     size_t max_len,
     __ZEROABLE__ size_t n_fields,
-    const STR_t field_names[],
     const size_t field_sizes[],
     const BUFF_t field_buffs[]
 );

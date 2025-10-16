@@ -83,11 +83,10 @@ static void timer2(__UNUSED__ void *arg)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    STR_t names[] = {"samp_rate", "frequency", "samples"};
     size_t sizes[] = {sizeof(samp_rate), sizeof(frequency), sizeof(samples)};
     BUFF_t buffs[] = {&samp_rate, &frequency, samples};
 
-    nyx_stream_pub(stream_vector1, 100, 3, names, sizes, buffs);
+    nyx_stream_pub(stream_vector1, 100, 3, sizes, buffs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }

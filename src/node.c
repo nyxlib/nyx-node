@@ -467,8 +467,8 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                    &&
                    strcmp(name1, name2) == 0
                 ) {
-                    int idx1;
-                    int idx2;
+                    size_t idx1;
+                    size_t idx2;
 
                     nyx_object_t *object1;
                     nyx_object_t *object2;
@@ -998,7 +998,8 @@ nyx_node_t *nyx_node_initialize(
 
         if(children != NULL && children->type == NYX_TYPE_LIST)
         {
-            int idx;
+            size_t idx;
+
             nyx_object_t *vector_def;
 
             for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &vector_def);)

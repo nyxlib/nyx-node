@@ -96,11 +96,11 @@ void nyx_list_clear(nyx_list_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_list_del(nyx_list_t *object, int idx)
+void nyx_list_del(nyx_list_t *object, size_t idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(idx >= 0) for(node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
+    for(node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -132,7 +132,7 @@ void nyx_list_del(nyx_list_t *object, int idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_list_iterate(nyx_list_iter_t *iter, int *idx, nyx_object_t **object)
+bool nyx_list_iterate(nyx_list_iter_t *iter, size_t *idx, nyx_object_t **object)
 {
     if(iter->type == NYX_TYPE_LIST && iter->head != NULL)
     {
@@ -155,11 +155,11 @@ bool nyx_list_iterate(nyx_list_iter_t *iter, int *idx, nyx_object_t **object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_object_t *nyx_list_get(const nyx_list_t *object, int idx)
+nyx_object_t *nyx_list_get(const nyx_list_t *object, size_t idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(idx >= 0) for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {

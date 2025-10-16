@@ -424,7 +424,7 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t o
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int idx;
+    size_t idx;
 
     nyx_object_t *object;
 
