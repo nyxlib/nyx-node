@@ -119,7 +119,7 @@ static bool fftsize_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static nyx_dict_t *stream_vector_signal = NULL;
+static nyx_dict_t *stream_vector = NULL;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -188,7 +188,7 @@ static void timer_stream(__UNUSED__ void *arg)
     size_t sizes[] = {sizeof(s_samp_rate), sizeof(s_frequency), n * sizeof(float)};
     BUFF_t buffs[] = {&s_samp_rate       , &s_frequency       , spectrum         };
 
-    nyx_stream_pub(stream_vector_signal, 100, 3, sizes, buffs);
+    nyx_stream_pub(stream_vector, 100, 3, sizes, buffs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -261,14 +261,14 @@ int main()
     freq->base.in_callback._double = freq_callback;
     power->base.in_callback._double = power_callback;
 
-    nyx_dict_t *defs_params1[] = {samp_rate, freq, power, NULL};
+    nyx_dict_t *defs_signal[] = {samp_rate, freq, power, NULL};
 
-    nyx_dict_t *params_vector1 = nyx_number_def_vector_new(
+    nyx_dict_t *signal_vector = nyx_number_def_vector_new(
         "Demo",
         "signal_params",
         NYX_STATE_OK,
         NYX_PERM_RW,
-        defs_params1,
+        defs_signal,
         &opt
     );
 
@@ -278,14 +278,14 @@ int main()
 
     fft_size->base.in_callback._uint = fftsize_callback;
 
-    nyx_dict_t *defs_params2[] = {fft_size, NULL};
+    nyx_dict_t *defs_fft[] = {fft_size, NULL};
 
-    nyx_dict_t *params_vector2 = nyx_number_def_vector_new(
+    nyx_dict_t *fft_vector = nyx_number_def_vector_new(
         "Demo",
         "fft_params",
         NYX_STATE_OK,
         NYX_PERM_RW,
-        defs_params2,
+        defs_fft,
         &opt
     );
 
@@ -298,9 +298,9 @@ int main()
         NULL,
     };
 
-    stream_vector_signal = nyx_stream_def_vector_new(
+    stream_vector = nyx_stream_def_vector_new(
         "Demo",
-        "spectrum_stream",
+        "spectrum",
         NYX_STATE_OK,
         defs_stream,
         &opt
@@ -311,9 +311,9 @@ int main()
     nyx_dict_t *vector_list[] = {
         run_vector,
         mode_vector,
-        params_vector1,
-        params_vector2,
-        stream_vector_signal,
+        signal_vector,
+        fft_vector,
+        stream_vector,
         NULL,
     };
 
