@@ -110,9 +110,9 @@ static bool power_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool fftsize_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, unsigned long new_value, __UNUSED__ unsigned long old_value)
+static bool fftsize_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, unsigned int new_value, __UNUSED__ unsigned int old_value)
 {
-    s_fft_size = (unsigned int) new_value;
+    s_fft_size = new_value;
 
     return true;
 }
@@ -274,9 +274,9 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *fft_size = nyx_number_def_new_ulong ("fft_size", "FFT size", "%lu", 1UL, 4096UL, 1UL, s_fft_size);
+    nyx_dict_t *fft_size = nyx_number_def_new_uint ("fft_size", "FFT size", "%lu", 1UL, 4096UL, 1UL, s_fft_size);
 
-    fft_size->base.in_callback._ulong = fftsize_callback;
+    fft_size->base.in_callback._uint = fftsize_callback;
 
     nyx_dict_t *defs_params2[] = {fft_size, NULL};
 
