@@ -897,11 +897,11 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__ZEROABLE__ size_t size, __NUL
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t text)
+__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t string)
 {
     return nyx_xmldoc_parse_buff(
-        strlen(text),
-        /*--*/(text)
+        strlen(string),
+        /*--*/(string)
     );
 }
 

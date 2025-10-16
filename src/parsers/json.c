@@ -747,11 +747,11 @@ __NULLABLE__ nyx_object_t *nyx_object_parse_buff(__ZEROABLE__ size_t size, __NUL
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t text)
+__NULLABLE__ nyx_object_t *nyx_object_parse(__NULLABLE__ STR_t string)
 {
     return nyx_object_parse_buff(
-        strlen(text),
-        /*--*/(text)
+        strlen(string),
+        /*--*/(string)
     );
 }
 
