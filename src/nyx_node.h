@@ -2739,7 +2739,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
  * @param vector The Nyx node.
  * @param max_len Maximum number of entries to keep in the Redis stream.
  * @param n_fields Number of field doublets (length, buffer).
- * @param field_sizes Array of field lengths.
+ * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
  * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
  * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
@@ -3070,7 +3070,7 @@ void nyx_mqtt_pub(
  * @param max_len Maximum number of entries to keep in the Redis stream.
  * @param n_fields Number of field triplets (name, length, buffer).
  * @param field_names Array of field names.
- * @param field_sizes Array of field lengths.
+ * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
  * @note Prefer using @ref nyx_stream_pub.
  * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
