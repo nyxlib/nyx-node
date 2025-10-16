@@ -227,7 +227,6 @@ void nyx_log(
 
 /**
  * \brief Hashes a buffer using the MurmurHash2 algorithm.
- *
  * \param size Size of the buffer to hash.
  * \param buff Pointer to the buffer to hash.
  * \param seed Initial seed value.
@@ -261,7 +260,6 @@ void nyx_generate_mac_addr(
 
 /**
  * \brief Encodes a buffer using the base64 algorithm.
- *
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
  * \param buff Pointer to the buffer to encode.
@@ -278,7 +276,6 @@ __NULLABLE__ str_t nyx_base64_encode(
 
 /**
  * \brief Decodes a string using the base64 algorithm.
- *
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
  * \param str Pointer to the string to decode.
@@ -295,7 +292,6 @@ __NULLABLE__ buff_t nyx_base64_decode(
 
 /**
  * \brief Compresses a buffer using the ZLib algorithm.
- *
  * \param result_buff Optional pointer to store the size of the compressed buffer.
  * \param size Size of the buffer to compressed.
  * \param buff Pointer to the buffer to compressed.
@@ -312,7 +308,6 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 
 /**
  * \brief Uncompresses a buffer using the ZLib algorithm.
- *
  * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param size Size of the buffer to uncompress.
  * \param buff Pointer to the buffer to uncompress.
@@ -329,7 +324,6 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
 
 /**
  * \brief Compresses a buffer using the ZLib+base64 algorithm.
- *
  * \param result_len Optional pointer to store the length of the compressed string.
  * \param size Size of the buffer to compress.
  * \param buff Pointer to the buffer to compress.
@@ -346,7 +340,6 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
 
 /**
  * \brief Uncompresses a string using the ZLib+base64 algorithm.
- *
  * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param len Length of the string to uncompress.
  * \param str Pointer to the string to uncompress.
@@ -498,7 +491,6 @@ typedef struct nyx_object_s
 /**
  * @memberof nyx_object_t
  * \brief Parses a JSON object from a string buffer.
- *
  * \param size String size.
  * \param buff String pointer.
  * \return The new JSON object.
@@ -512,8 +504,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse_buff(
 /**
  * @memberof nyx_object_t
  * \brief Parses a JSON object from a string.
- *
- * \param text String.
+ * \param string String.
  * \return The new JSON object.
  */
 
@@ -1652,7 +1643,6 @@ typedef struct nyx_xmldoc_s
 /**
  * @memberof nyx_xmldoc_t
  * \brief Parses an XML document from a string buffer.
- *
  * \param size String size.
  * \param buff String pointer.
  * \return The new XML document.
