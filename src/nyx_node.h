@@ -896,7 +896,7 @@ nyx_string_t *nyx_string_new();
 /**
  * @memberof nyx_string_t
  * \brief Frees memory of the provided JSON string object.
- * @param object The provided JSON string object.
+ * @param object JSON string object.
  */
 
 void nyx_string_free(
@@ -908,7 +908,7 @@ void nyx_string_free(
 /**
  * @memberof nyx_string_t
  * \brief Get the value of the provided JSON string object.
- * @param object JSON dict object.
+ * @param object JSON string object.
  * @return The value of the provided JSON string object.
  */
 
