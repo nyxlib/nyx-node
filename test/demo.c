@@ -274,7 +274,7 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *fft_size = nyx_number_def_new_ulong ("fft_size",  "FFT size", "%lu", 1UL, 4096UL, 1UL, s_fft_size);
+    nyx_dict_t *fft_size = nyx_number_def_new_ulong ("fft_size", "FFT size", "%lu", 1UL, 4096UL, 1UL, s_fft_size);
 
     fft_size->base.in_callback._ulong = fftsize_callback;
 
@@ -320,7 +320,7 @@ int main()
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_node_t *node = nyx_node_initialize(
-        "NYX_DEMO_SPECTRUM",
+        "NYX_DEMO",
         vector_list,
         "tcp://0.0.0.0:7625",
         getenv("MQTT_URL"),
