@@ -3027,7 +3027,7 @@ void nyx_node_send_del_property(
 
 /**
  * @memberof nyx_node_t
- * \brief Subscribes to an MQTT topic (if MQTT enabled).
+ * \brief If MQTT is enabled, subscribes to an MQTT topic.
  *
  * @param node Nyx node.
  * @param topic MQTT topic.
@@ -3043,7 +3043,7 @@ void nyx_mqtt_sub(
 
 /**
  * @memberof nyx_node_t
- * \brief Publishes an MQTT message (if MQTT enabled).
+ * \brief If MQTT is enabled, publishes an MQTT message.
  *
  * @param node Nyx node.
  * @param topic MQTT topic.
@@ -3072,7 +3072,7 @@ void nyx_mqtt_pub(
  * @param field_names Array of field names.
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
- * @note Prefer using @ref nyx_stream_pub.
+ * @warning Except if performance is critical, prefer using @ref nyx_stream_pub.
  * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
  * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
