@@ -138,7 +138,7 @@ static void gen_noise(float *dst, size_t n, float mean_db)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void gen_tone(float *dst, size_t n, float mean_db)
+static void gen_delta(float *dst, size_t n, float mean_db)
 {
     gen_noise(dst, n, mean_db);
 
@@ -179,7 +179,7 @@ static void timer_stream(__UNUSED__ void *arg)
     switch(s_mode)
     {
         case DEMO_MODE_NOISE: gen_noise(spectrum, n, s_power); break;
-        case DEMO_MODE_DELTA: gen_tone (spectrum, n, s_power); break;
+        case DEMO_MODE_DELTA: gen_delta (spectrum, n, s_power); break;
         default:              gen_comb (spectrum, n, s_power); break;
     }
 
