@@ -20,7 +20,7 @@ dependencies except an optional ZLib support on POSIX. Its low footprint makes i
 microcontrollers (ESP, Cortex-M, ...).
 
 <div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.svg" style="width:600px;" />
+    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.svg" style="width: 600px;" />
 </div> 
 
 ## Author
@@ -28,6 +28,10 @@ microcontrollers (ESP, Cortex-M, ...).
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
 ## Example
+
+<div style="text-align: center;">
+    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/demo.png" style="width: 600px;" />
+</div> 
 
 \include ./test/demo.c
 
