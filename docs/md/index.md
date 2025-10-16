@@ -27,11 +27,15 @@ microcontrollers (ESP, Cortex-M, ...).
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-## Example
+## Node demo
+
+### Interface:
 
 <div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/demo.png" style="width: 600px;" />
+    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/demo.png" style="width: 1250px;" />
 </div> 
+
+### Source code:
 
 \include ./test/demo.c
 
