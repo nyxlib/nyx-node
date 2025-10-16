@@ -3068,7 +3068,7 @@ void nyx_mqtt_pub(
  * @param device The device name.
  * @param stream The stream name.
  * @param max_len Maximum number of entries to keep in the Redis stream.
- * @param n_fields Number of field triplets (name, length, buffer).
+ * @param n_fields Number of field triplets (name, size, buffer).
  * @param field_names Array of field names.
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
