@@ -183,11 +183,8 @@ target_link_libraries(check_json nyx-node-static)
 add_executable(check_xml test/check_xml.c)
 target_link_libraries(check_xml nyx-node-static)
 
-add_executable(test1 test/test1.c)
-target_link_libraries(test1 nyx-node-static)
-
-add_executable(test2 test/test2.c)
-target_link_libraries(test2 nyx-node-static)
+add_executable(demo test/demo.c)
+target_link_libraries(demo nyx-node-static)
 
 ########################################################################################################################
 # DOCS                                                                                                                 #

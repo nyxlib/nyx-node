@@ -29,7 +29,7 @@ microcontrollers (ESP, Cortex-M, ...).
 
 ## Example
 
-\include ./test/test2.c
+\include ./test/demo.c
 
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
 [Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg
