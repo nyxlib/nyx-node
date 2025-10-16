@@ -20,6 +20,7 @@
         "*"
     ],
     "dependencies": {
-        "knolleary/PubSubClient": "^2.8"
+        "knolleary/PubSubClient": "^2.8",
+        "contrem/arduino-timer": "^1.2"
     }
 }

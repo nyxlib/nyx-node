@@ -23,11 +23,10 @@ nyx_string_t *nyx_string_new()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    object->raw_size = 0x00000000;
-    object->length = 0x00000000;
-    object->value = (str_t) "";
+    object->managed = false;
+    object->length = 0x00;
+    object->value = "";
 
-    object->dyn = false;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -38,7 +37,7 @@ nyx_string_t *nyx_string_new()
 
 void nyx_string_free(nyx_string_t *object)
 {
-    if(object->dyn)
+    if(object->managed)
     {
         nyx_memory_free(object->value);
     }
@@ -55,27 +54,14 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result_size, __NULLABLE__ buff_t *result_buff, bool base64_decode, bool uncompress)
+void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result_size, __NULLABLE__ buff_t *result_buff)
 {
-    if(result_size != NULL)
-    {
-        *result_size = object->raw_size;
+    if(result_size != NULL) {
+        *result_size = object->length;
     }
 
-    if(result_buff != NULL)
-    {
-        /**/ if(uncompress)
-        {
-            *result_buff = nyx_zlib_base64_inflate(result_size, object->length, object->value);
-        }
-        else if(base64_decode)
-        {
-            *result_buff = nyx_base64_decode(result_size, object->length, object->value);
-        }
-        else
-        {
-            *result_buff = object->value;
-        }
+    if(result_buff != NULL) {
+        *result_buff = object->value;
     }
 }
 
@@ -92,21 +78,19 @@ bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
 
     bool modified = strcmp(object->value, value) != 0;
 
-    if(modified || object->dyn == false)
+    if(modified || object->managed == false)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(object->dyn)
+        if(object->managed)
         {
             nyx_memory_free(object->value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->dyn = true;
-        object->raw_size = \
-        object->length = \
-        strlen(value);
+        object->managed = true;
+        object->length = strlen(value);
         object->value = nyx_string_dup(value);
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -137,21 +121,19 @@ bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
 
     bool modified = strcmp(object->value, value) != 0;
 
-    if(modified || object->dyn == true)
+    if(modified || object->managed == true)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(object->dyn)
+        if(object->managed)
         {
             nyx_memory_free(object->value);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->dyn = false;
-        object->raw_size = \
-        object->length = \
-        strlen(value);
+        object->managed = false;
+        object->length = strlen(value);
         object->value = (/**/str_t/**/) value;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -171,7 +153,7 @@ bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, bool base64_encode, bool compress, bool notify)
+bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, bool managed, bool notify)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -182,35 +164,16 @@ bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, boo
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(object->dyn)
+    if(object->managed)
     {
         nyx_memory_free(object->value);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    /**/ if(compress)
-    {
-        object->dyn = true;
-        object->raw_size = size;
-
-        object->value = nyx_zlib_base64_deflate(&object->length, size, buff);
-    }
-    else if(base64_encode)
-    {
-        object->dyn = true;
-        object->raw_size = size;
-
-        object->value = nyx_base64_encode(&object->length, size, buff);
-    }
-    else
-    {
-        object->dyn = false;
-        object->raw_size = size;
-
-        object->length = size;
-        object->value = (str_t) buff;
-    }
+    object->managed = /*---*/ managed;
+    object->length = /*---*/ size;
+    object->value = (str_t) buff;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -222,13 +185,6 @@ bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, boo
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return true;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-size_t nyx_string_raw_size(const nyx_string_t *object)
-{
-    return object->raw_size;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

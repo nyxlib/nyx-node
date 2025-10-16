@@ -124,14 +124,14 @@ bool nyx_blob_def_set(nyx_dict_t *def, __ZEROABLE__ size_t size, __NULLABLE__ BU
         buff = ("");
     }
 
-    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true, internal_blob_is_compressed(def)));
+    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_blob_def_get(const nyx_dict_t *def, __NULLABLE__ size_t *size, __NULLABLE__ buff_t *buff)
 {
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff, true, internal_blob_is_compressed(def));
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -899,11 +899,9 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    size_t raw_size;                                                                            //!< Raw payload size before encoding/compression.
+    bool managed;                                                                               //!< `True` if the value is freed with this object.
     size_t length;                                                                              //!< String length in bytes (UTF-8), excluding `NULL`.
     str_t value;                                                                                //!< ???
-
-    bool dyn;                                                                                   //!< ???
 
 } nyx_string_t;
 
@@ -954,9 +952,7 @@ STR_t nyx_string_get(
 void nyx_string_get_buff(
     const nyx_string_t *object,
     __NULLABLE__ size_t *result_size,
-    __NULLABLE__ buff_t *result_buff,
-    bool base64_decode,
-    bool compress
+    __NULLABLE__ buff_t *result_buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1021,8 +1017,7 @@ bool nyx_string_set_buff_alt(
     /*-*/ nyx_string_t *object,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff,
-    bool base64_encode,
-    bool compress,
+    bool managed,
     bool notify
 );
 
@@ -1033,14 +1028,13 @@ bool nyx_string_set_buff_alt(
  * @param object The provided JSON string object.
  * @param size The value size for the provided JSON string object.
  * @param buff The value buffer for the provided JSON string object.
- * @param base64_encode Indicates whether the buffer must be base64-encoded.
- * @param compress Indicates whether the buffer must be ZLib-compressed.
+ * @param managed `True` if the provided buffer is freed with this object.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool base64_encode, bool compress)
+__INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
 {
-    return nyx_string_set_buff_alt(object, size, buff, base64_encode, compress, true);
+    return nyx_string_set_buff_alt(object, size, buff, managed, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1141,20 +1135,19 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided argument (buffer reference or base64 encoding).
+ * \brief Returns a JSON string object holding the value of the provided argument (buffer reference).
  *
  * @param size The buffer size for the new JSON string object.
  * @param buff The buffer pointer for the new JSON string object.
- * @param base64_encode Indicates whether the buffer must be base64-encoded.
- * @param compress Indicates whether the buffer must be ZLib-compressed.
+ * @param managed `True` if the provided buffer is freed with this object.
  * @return The new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool base64_encode, bool compress)
+__INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool managed)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_buff(result, size, buff, base64_encode, compress);
+    nyx_string_set_buff(result, size, buff, managed);
 
     return result;
 }
@@ -2627,6 +2620,7 @@ nyx_dict_t *nyx_blob_def_new(
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
  * @return \c true if the value was modified, \c false otherwise.
+ * @note The provided buffer will be freed with this object.
  * @note If a format ends with `.b`, the payload is automatically base64-encoded.
  * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
  */

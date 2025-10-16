@@ -347,21 +347,52 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_inject_blob_info(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict)
+bool internal_blob_is_compressed(const nyx_dict_t *def)
+{
+    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+
+    return format != NULL && format->length > 2 && format->value[format->length - 2] == '.' && format->value[format->length - 1] == 'z';
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict, bool notify)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    internal_copy(dst_dict, src_dict, "@format", false);
+    internal_copy(dst_dict, src_dict, "@size", notify);
+    internal_copy(dst_dict, src_dict, "@format", notify);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_object_t *payload = nyx_dict_get(src_dict, "$");
+    nyx_object_t *src_payload = nyx_dict_get(src_dict, "$");
 
-    if(payload != NULL && payload->type == NYX_TYPE_STRING)
+    if(src_payload != NULL && src_payload->type == NYX_TYPE_STRING)
     {
-        double size = (double) nyx_string_raw_size((nyx_string_t *) payload);
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set_alt(dst_dict, "@size", nyx_number_from(size), false);
+        size_t src_size;
+        buff_t src_buff;
+
+        nyx_string_get_buff((nyx_string_t *) src_payload, &src_size, &src_buff);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        size_t dst_len;
+        str_t dst_str;
+
+        if(internal_blob_is_compressed(src_dict)) {
+            dst_str = nyx_zlib_base64_deflate(&dst_len, src_size, src_buff);
+        }
+        else {
+            dst_str = nyx_base64_encode(&dst_len, src_size, src_buff);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        nyx_dict_set_alt(dst_dict, "$", nyx_string_from_buff(dst_len, dst_str, true), notify);
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -413,12 +444,13 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t o
 
                 nyx_dict_set_alt(dst_dict, "<>", nyx_string_from(one_tag), false);
 
-                internal_copy(dst_dict, src_dict,   "$"  , false);
                 internal_copy(dst_dict, src_dict, "@name", false);
 
-                if(strcmp(one_tag, "oneBLOB") == 0)
-                {
-                    internal_inject_blob_info(dst_dict, src_dict);
+                if(strcmp(one_tag, "oneBLOB") == 0) {
+                    internal_copy_blob(dst_dict, src_dict, false);
+                }
+                else {
+                    internal_copy(dst_dict, src_dict, "$", false);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -433,15 +465,6 @@ nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t o
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool internal_blob_is_compressed(const nyx_dict_t *def)
-{
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
-
-    return format != NULL && format->raw_size > 2 && format->value[format->raw_size - 2] == '.' && format->value[format->raw_size - 1] == 'z';
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

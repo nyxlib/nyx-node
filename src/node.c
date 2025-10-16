@@ -391,10 +391,9 @@ static bool _is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 
 static nyx_string_t OFF = {
     .base = NYX_OBJECT(NYX_TYPE_STRING),
-    .raw_size = 0x003,
     .length = 0x003,
     .value = "Off",
-    .dyn = false,
+    .managed = false,
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -623,17 +622,37 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                     case 0x29BFE4D7:    // defBLOBVector
                                                         {
-                                                            size_t size;
-                                                            buff_t buff;
+                                                            /*--------------------------------------------------------*/
 
-                                                            bool compress = internal_blob_is_compressed((nyx_dict_t *) object2);
+                                                            size_t src_len;
+                                                            buff_t src_str;
 
-                                                            nyx_string_get_buff((nyx_string_t *) new_value, &size, &buff, true, compress);
+                                                            nyx_string_get_buff((nyx_string_t *) new_value, &src_len, &src_str);
 
-                                                            if((success = object2->in_callback._str == NULL || object2->in_callback._buffer(vector, (nyx_dict_t *) object2, size, buff)))
-                                                            {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff(size, buff, true, compress), false);
+                                                            /*--------------------------------------------------------*/
+
+                                                            size_t dst_size;
+                                                            buff_t dst_buff;
+
+                                                            if(internal_blob_is_compressed((nyx_dict_t *) object2)) {
+                                                                dst_buff = nyx_zlib_base64_inflate(&dst_size, src_len, src_str);
                                                             }
+                                                            else {
+                                                                dst_buff = nyx_base64_decode(&dst_size, src_len, src_str);
+                                                            }
+
+                                                            /*--------------------------------------------------------*/
+
+                                                            if((success = object2->in_callback._str == NULL || object2->in_callback._buffer(vector, (nyx_dict_t *) object2, dst_size, dst_buff)))
+                                                            {
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff(dst_size, dst_buff, true), false);
+                                                            }
+                                                            else
+                                                            {
+                                                                nyx_memory_free(dst_buff);
+                                                            }
+
+                                                            /*--------------------------------------------------------*/
                                                         }
 
                                                         break;
