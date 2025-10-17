@@ -29,7 +29,7 @@ microcontrollers (ESP, Cortex-M, ...).
 
 ## Nyx-Node demo
 
-Alternatively, https://github.com/nyxlib/nyx-demo-c and https://github.com/nyxlib/nyx-demo-c++ respectively describe
+Alternatively, https://github.com/nyxlib/nyx-demo-c and https://github.com/nyxlib/nyx-demo-cpp respectively describe
 how to develop similar C or C++ demos using [Nyx-Gen](https://github.com/nyxlib/nyx-gen/) and
 [Nyx-Assistant](https://github.com/nyxlib/nyx-assistant/).
 
