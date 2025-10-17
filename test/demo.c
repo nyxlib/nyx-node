@@ -83,7 +83,7 @@ static bool mode_comb_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool sr_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
+static bool samp_rate_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
 {
     s_samp_rate = (float) new_value;
 
@@ -92,7 +92,7 @@ static bool sr_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *pr
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool freq_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
+static bool frequency_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
 {
     s_frequency = (float) new_value;
 
@@ -254,14 +254,14 @@ int main()
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_t *samp_rate_prop = nyx_number_prop_new_double("samp_rate", "Sample rate [Hz]", "%.0f", 1000.0, 50000000.0, 1000.0, s_samp_rate);
-    nyx_dict_t *freq_prop = nyx_number_prop_new_double("frequency", "Frequency [Hz]", "%.0f", 1000000.0, 2000000000.0, 1000.0, s_frequency);
-    nyx_dict_t *power_prop = nyx_number_prop_new_double("power", "Power (dB)", "%.1f", -150.0, 20.0, 0.1, s_power);
+    nyx_dict_t *frequency_prop = nyx_number_prop_new_double("frequency", "Frequency [Hz]", "%.0f", 1000000.0, 2000000000.0, 1000.0, s_frequency);
+    nyx_dict_t *power_prop = nyx_number_prop_new_double("power", "Power (dB)", "%.1f", -150.0, 20.0, 1.0, s_power);
 
-    samp_rate_prop->base.in_callback._double = sr_callback;
-    freq_prop->base.in_callback._double = freq_callback;
+    samp_rate_prop->base.in_callback._double = samp_rate_callback;
+    frequency_prop->base.in_callback._double = frequency_callback;
     power_prop->base.in_callback._double = power_callback;
 
-    nyx_dict_t *signal_props[] = {samp_rate_prop, freq_prop, power_prop, NULL};
+    nyx_dict_t *signal_props[] = {samp_rate_prop, frequency_prop, power_prop, NULL};
 
     nyx_dict_t *signal_vector = nyx_number_vector_new(
         "Demo",
