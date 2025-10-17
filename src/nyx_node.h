@@ -2014,7 +2014,7 @@ nyx_dict_t *nyx_number_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx `int32_t` number.
+ * \brief Allocates a new INDI / Nyx `int32_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]d).
@@ -2031,7 +2031,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t lab
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `uint32_t` number.
+ * \brief Allocates a new INDI / Nyx `uint32_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]{uoxX}).
@@ -2048,7 +2048,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t la
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `int64_t` number.
+ * \brief Allocates a new INDI / Nyx `int64_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]ld).
@@ -2065,7 +2065,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t la
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `uint64_t` number.
+ * \brief Allocates a new INDI / Nyx `uint64_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]l{uoxX}).
@@ -2082,7 +2082,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t l
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `double` number.
+ * \brief Allocates a new INDI / Nyx `double` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]l?{fFeEgGaAm}).
@@ -2274,7 +2274,7 @@ nyx_dict_t *nyx_number_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx text.
+ * \brief Allocates a new INDI / Nyx text property.
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
@@ -2355,7 +2355,7 @@ nyx_dict_t *nyx_text_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx light.
+ * \brief Allocates a new INDI / Nyx light property.
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
@@ -2434,7 +2434,7 @@ nyx_dict_t *nyx_light_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx switch.
+ * \brief Allocates a new INDI / Nyx switch property.
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
@@ -2517,7 +2517,7 @@ nyx_dict_t *nyx_switch_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx BLOB.
+ * \brief Allocates a new INDI / Nyx BLOB property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Payload format.
