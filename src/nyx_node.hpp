@@ -35,9 +35,9 @@ public:
 
     virtual void glueInitialize() = 0;
 
-    virtual void initialize() = 0;
+    virtual void initialize(nyx_node_t *node) = 0;
 
-    virtual void finalize() = 0;
+    virtual void finalize(nyx_node_t *node) = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -137,9 +137,9 @@ public:
             true
         );
 
-        this->initialize();
+        for(const auto &uptr: this->m_devices) uptr->initialize(node);
         while(s_signo == 0) nyx_node_poll(node, this->nodeTimeoutMS());
-        this->finalize();
+        for(const auto &uptr: this->m_devices) uptr->finalize(node);
 
         nyx_node_finalize(node, true);
 
@@ -162,10 +162,6 @@ protected:
     /*----------------------------------------------------------------------------------------------------------------*/
 
     virtual void glueInitialize() = 0;
-
-    virtual void initialize() = 0;
-
-    virtual void finalize() = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
