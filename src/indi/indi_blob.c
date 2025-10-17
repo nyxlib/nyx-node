@@ -23,10 +23,10 @@ static void _debug_callback(nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF                                                                                                                */
+/* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format, __NULLABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+nyx_dict_t *nyx_blob_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format, __NULLABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -48,7 +48,7 @@ nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ 
     nyx_dict_set(result, "@label", nyx_string_from(label));
     nyx_dict_set(result, "@format", nyx_string_from(format));
 
-    nyx_blob_def_set(result, size, buff);
+    nyx_blob_prop_set(result, size, buff);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -56,10 +56,10 @@ nyx_dict_t *nyx_blob_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ 
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF VECTOR                                                                                                         */
+/* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_def_vector_new(
+nyx_dict_t *nyx_blob_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -109,14 +109,14 @@ nyx_dict_t *nyx_blob_def_vector_new(
 
 nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *vector)
 {
-    return internal_def_to_set(vector, "setBLOBVector", "oneBLOB");
+    return internal_prop_to_set_vector(vector, "setBLOBVector", "oneBLOB");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SETTER & GETTER                                                                                                    */
+/* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_blob_def_set(nyx_dict_t *def, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+bool nyx_blob_prop_set(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -124,14 +124,14 @@ bool nyx_blob_def_set(nyx_dict_t *def, __ZEROABLE__ size_t size, __NULLABLE__ BU
         buff = ("");
     }
 
-    return nyx_dict_set(def, "$", nyx_string_from_buff(size, buff, true));
+    return nyx_dict_set(prop, "$", nyx_string_from_buff(size, buff, true));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_blob_def_get(const nyx_dict_t *def, __NULLABLE__ size_t *size, __NULLABLE__ buff_t *buff)
+void nyx_blob_prop_get(const nyx_dict_t *prop, __NULLABLE__ size_t *size, __NULLABLE__ buff_t *buff)
 {
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(def, "$"), size, buff);
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(prop, "$"), size, buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

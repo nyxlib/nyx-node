@@ -270,7 +270,7 @@ bool internal_copy(
     bool notify
 );
 
-nyx_dict_t *internal_def_to_set(
+nyx_dict_t *internal_prop_to_set_vector(
     const nyx_dict_t *vector,
     STR_t set_tag,
     STR_t one_tag

@@ -38,7 +38,7 @@ static unsigned int s_fft_size = 512U;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool run_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, int new_value, __UNUSED__ int old_value)
+static bool run_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, int new_value, __UNUSED__ int old_value)
 {
     s_run = (nyx_onoff_t) new_value;
 
@@ -47,7 +47,7 @@ static bool run_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *d
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mode_noise_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, __UNUSED__ int new_value, __UNUSED__ int old_value)
+static bool mode_noise_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, __UNUSED__ int new_value, __UNUSED__ int old_value)
 {
     if(new_value == NYX_ONOFF_ON)
     {
@@ -59,7 +59,7 @@ static bool mode_noise_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_di
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mode_delta_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, __UNUSED__ int new_value, __UNUSED__ int old_value)
+static bool mode_delta_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, __UNUSED__ int new_value, __UNUSED__ int old_value)
 {
     if(new_value == NYX_ONOFF_ON)
     {
@@ -71,7 +71,7 @@ static bool mode_delta_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_di
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mode_comb_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, __UNUSED__ int new_value, __UNUSED__ int old_value)
+static bool mode_comb_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, __UNUSED__ int new_value, __UNUSED__ int old_value)
 {
     if(new_value == NYX_ONOFF_ON)
     {
@@ -83,7 +83,7 @@ static bool mode_comb_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool sr_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, double new_value, __UNUSED__ double old_value)
+static bool sr_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
 {
     s_samp_rate = (float) new_value;
 
@@ -92,7 +92,7 @@ static bool sr_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *de
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool freq_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, double new_value, __UNUSED__ double old_value)
+static bool freq_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
 {
     s_frequency = (float) new_value;
 
@@ -101,7 +101,7 @@ static bool freq_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool power_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, double new_value, __UNUSED__ double old_value)
+static bool power_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
 {
     s_power = (float) new_value;
 
@@ -110,7 +110,7 @@ static bool power_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool fftsize_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *def, unsigned int new_value, __UNUSED__ unsigned int old_value)
+static bool fftsize_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, unsigned int new_value, __UNUSED__ unsigned int old_value)
 {
     s_fft_size = new_value;
 
@@ -127,8 +127,8 @@ static void gen_noise(float *dst, size_t n, float mean_db)
 {
     for(size_t i = 0; i < n; i++)
     {
-        float u = (float) rand() / (float) RAND_MAX;
-        float v = (float) rand() / (float) RAND_MAX;
+        float u = (float) rand() / (float) RAND_MAX; // NOLINT(*-msc50-cpp)
+        float v = (float) rand() / (float) RAND_MAX; // NOLINT(*-msc50-cpp)
 
         float w = (u + v - 1.0f) * 6.0f;
 
@@ -179,8 +179,8 @@ static void timer_stream(__UNUSED__ void *arg)
     switch(s_mode)
     {
         case DEMO_MODE_NOISE: gen_noise(spectrum, n, s_power); break;
-        case DEMO_MODE_DELTA: gen_delta (spectrum, n, s_power); break;
-        default:              gen_comb (spectrum, n, s_power); break;
+        case DEMO_MODE_DELTA: gen_delta(spectrum, n, s_power); break;
+        default:              gen_comb(spectrum, n, s_power); break;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -213,96 +213,96 @@ int main()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *def_run = nyx_switch_def_new("run", "Run", NYX_ONOFF_OFF);
+    nyx_dict_t *run_prop = nyx_switch_prop_new("run", "Run", NYX_ONOFF_OFF);
 
-    def_run->base.in_callback._int = run_callback;
+    run_prop->base.in_callback._int = run_callback;
 
-    nyx_dict_t *defs_run[] = {def_run, NULL};
+    nyx_dict_t *run_props[] = {run_prop, NULL};
 
-    nyx_dict_t *run_vector = nyx_switch_def_vector_new(
+    nyx_dict_t *run_vector = nyx_switch_vector_new(
         "Demo",
         "run",
         NYX_STATE_OK,
         NYX_PERM_RW,
         NYX_RULE_AT_MOST_ONE,
-        defs_run,
+        run_props,
         &opt
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *def_mode_noise = nyx_switch_def_new("mode_noise", "Noise only", NYX_ONOFF_ON);
-    nyx_dict_t *def_mode_delta = nyx_switch_def_new("mode_delta", "Dirac delta", NYX_ONOFF_OFF);
-    nyx_dict_t *def_mode_comb = nyx_switch_def_new("mode_comb", "Dirac comb", NYX_ONOFF_OFF);
+    nyx_dict_t *mode_noise_prop = nyx_switch_prop_new("mode_noise", "Noise only", NYX_ONOFF_ON);
+    nyx_dict_t *mode_delta_prop = nyx_switch_prop_new("mode_delta", "Dirac delta", NYX_ONOFF_OFF);
+    nyx_dict_t *mode_comb_prop = nyx_switch_prop_new("mode_comb", "Dirac comb", NYX_ONOFF_OFF);
 
-    def_mode_noise->base.in_callback._int = mode_noise_callback;
-    def_mode_delta->base.in_callback._int = mode_delta_callback;
-    def_mode_comb->base.in_callback._int = mode_comb_callback;
+    mode_noise_prop->base.in_callback._int = mode_noise_callback;
+    mode_delta_prop->base.in_callback._int = mode_delta_callback;
+    mode_comb_prop->base.in_callback._int = mode_comb_callback;
 
-    nyx_dict_t *defs_mode[] = {def_mode_noise, def_mode_delta, def_mode_comb, NULL};
+    nyx_dict_t *mode_props[] = {mode_noise_prop, mode_delta_prop, mode_comb_prop, NULL};
 
-    nyx_dict_t *mode_vector = nyx_switch_def_vector_new(
+    nyx_dict_t *mode_vector = nyx_switch_vector_new(
         "Demo",
         "signal_mode",
         NYX_STATE_OK,
         NYX_PERM_RW,
         NYX_RULE_ONE_OF_MANY,
-        defs_mode,
+        mode_props,
         &opt
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *samp_rate = nyx_number_def_new_double("samp_rate", "Sample rate [Hz]", "%.0f", 1000.0, 50000000.0, 1000.0, s_samp_rate);
-    nyx_dict_t *freq = nyx_number_def_new_double("frequency", "Frequency [Hz]", "%.0f", 1000000.0, 2000000000.0, 1000.0, s_frequency);
-    nyx_dict_t *power = nyx_number_def_new_double("power", "Power (dB)", "%.1f", -150.0, 20.0, 0.1, s_power);
+    nyx_dict_t *samp_rate_prop = nyx_number_prop_new_double("samp_rate", "Sample rate [Hz]", "%.0f", 1000.0, 50000000.0, 1000.0, s_samp_rate);
+    nyx_dict_t *freq_prop = nyx_number_prop_new_double("frequency", "Frequency [Hz]", "%.0f", 1000000.0, 2000000000.0, 1000.0, s_frequency);
+    nyx_dict_t *power_prop = nyx_number_prop_new_double("power", "Power (dB)", "%.1f", -150.0, 20.0, 0.1, s_power);
 
-    samp_rate->base.in_callback._double = sr_callback;
-    freq->base.in_callback._double = freq_callback;
-    power->base.in_callback._double = power_callback;
+    samp_rate_prop->base.in_callback._double = sr_callback;
+    freq_prop->base.in_callback._double = freq_callback;
+    power_prop->base.in_callback._double = power_callback;
 
-    nyx_dict_t *defs_signal[] = {samp_rate, freq, power, NULL};
+    nyx_dict_t *signal_props[] = {samp_rate_prop, freq_prop, power_prop, NULL};
 
-    nyx_dict_t *signal_vector = nyx_number_def_vector_new(
+    nyx_dict_t *signal_vector = nyx_number_vector_new(
         "Demo",
         "signal_params",
         NYX_STATE_OK,
         NYX_PERM_RW,
-        defs_signal,
+        signal_props,
         &opt
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *fft_size = nyx_number_def_new_uint ("fft_size", "FFT size", "%lu", 1UL, 4096UL, 1UL, s_fft_size);
+    nyx_dict_t *fft_size_prop = nyx_number_prop_new_uint("fft_size", "FFT size", "%u", 1U, 4096U, 1U, s_fft_size);
 
-    fft_size->base.in_callback._uint = fftsize_callback;
+    fft_size_prop->base.in_callback._uint = fftsize_callback;
 
-    nyx_dict_t *defs_fft[] = {fft_size, NULL};
+    nyx_dict_t *fft_props[] = {fft_size_prop, NULL};
 
-    nyx_dict_t *fft_vector = nyx_number_def_vector_new(
+    nyx_dict_t *fft_vector = nyx_number_vector_new(
         "Demo",
         "fft_params",
         NYX_STATE_OK,
         NYX_PERM_RW,
-        defs_fft,
+        fft_props,
         &opt
     );
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_t *defs_stream[] = {
-        nyx_stream_def_new("samp_rate", "Sample rate [Hz]"),
-        nyx_stream_def_new("frequency", "Frequency [Hz]"),
-        nyx_stream_def_new("samples", "Samples"),
+    nyx_dict_t *spectrum_props[] = {
+        nyx_stream_prop_new("samp_rate", "Sample rate [Hz]"),
+        nyx_stream_prop_new("frequency", "Frequency [Hz]"),
+        nyx_stream_prop_new("samples", "Samples"),
         NULL,
     };
 
-    stream_vector = nyx_stream_def_vector_new(
+    stream_vector = nyx_stream_vector_new(
         "Demo",
         "spectrum",
         NYX_STATE_OK,
-        defs_stream,
+        spectrum_props,
         &opt
     );
 

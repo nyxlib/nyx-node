@@ -400,7 +400,7 @@ static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *internal_def_to_set(const nyx_dict_t *vector, STR_t set_tag, STR_t one_tag)
+nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag, STR_t one_tag)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -23,10 +23,10 @@ static void _debug_callback(nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF                                                                                                                */
+/* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_switch_def_new(STR_t name, __NULLABLE__ STR_t label, nyx_onoff_t value)
+nyx_dict_t *nyx_switch_prop_new(STR_t name, __NULLABLE__ STR_t label, nyx_onoff_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -50,10 +50,10 @@ nyx_dict_t *nyx_switch_def_new(STR_t name, __NULLABLE__ STR_t label, nyx_onoff_t
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF VECTOR                                                                                                         */
+/* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_switch_def_vector_new(
+nyx_dict_t *nyx_switch_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -105,23 +105,23 @@ nyx_dict_t *nyx_switch_def_vector_new(
 
 nyx_dict_t *nyx_switch_set_vector_new(const nyx_dict_t *vector)
 {
-    return internal_def_to_set(vector, "setSwitchVector", "oneSwitch");
+    return internal_prop_to_set_vector(vector, "setSwitchVector", "oneSwitch");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SETTER & GETTER                                                                                                    */
+/* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_switch_def_set(nyx_dict_t *def, nyx_onoff_t value)
+bool nyx_switch_prop_set(nyx_dict_t *prop, nyx_onoff_t value)
 {
-    return nyx_dict_set(def, "$", nyx_string_from(nyx_onoff_to_str(value)));
+    return nyx_dict_set(prop, "$", nyx_string_from(nyx_onoff_to_str(value)));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_onoff_t nyx_switch_def_get(const nyx_dict_t *def)
+nyx_onoff_t nyx_switch_prop_get(const nyx_dict_t *prop)
 {
-    return nyx_str_to_onoff(nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$")));
+    return nyx_str_to_onoff(nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$")));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -23,10 +23,10 @@ static void _debug_callback(nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF                                                                                                                */
+/* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_def_new(STR_t name, __NULLABLE__ STR_t label)
+nyx_dict_t *nyx_stream_prop_new(STR_t name, __NULLABLE__ STR_t label)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -48,10 +48,10 @@ nyx_dict_t *nyx_stream_def_new(STR_t name, __NULLABLE__ STR_t label)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF VECTOR                                                                                                         */
+/* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_def_vector_new(
+nyx_dict_t *nyx_stream_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -99,7 +99,7 @@ nyx_dict_t *nyx_stream_def_vector_new(
 
 nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 {
-    return internal_def_to_set(vector, "setStreamVector", "oneStream");
+    return internal_prop_to_set_vector(vector, "setStreamVector", "oneStream");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -141,14 +141,14 @@ static bool _get_field_names(STR_t field_names[], size_t n_fields, const nyx_dic
                 }
                 else
                 {
-                    NYX_LOG_ERROR("Invalid vector definition");
+                    NYX_LOG_ERROR("Invalid stream property");
 
                     return false;
                 }
             }
             else
             {
-                NYX_LOG_ERROR("Invalid vector definition");
+                NYX_LOG_ERROR("Invalid stream property");
 
                 return false;
             }
@@ -158,7 +158,7 @@ static bool _get_field_names(STR_t field_names[], size_t n_fields, const nyx_dic
     }
     else
     {
-        NYX_LOG_ERROR("Invalid vector");
+        NYX_LOG_ERROR("Invalid stream vector");
 
         return false;
     }

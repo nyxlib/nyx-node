@@ -23,10 +23,10 @@ static void _debug_callback(nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF                                                                                                                */
+/* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, nyx_variant_t min, nyx_variant_t max, nyx_variant_t step, nyx_variant_t value)
+nyx_dict_t *nyx_number_prop_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, nyx_variant_t min, nyx_variant_t max, nyx_variant_t step, nyx_variant_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -55,10 +55,10 @@ nyx_dict_t *nyx_number_def_new(STR_t name, __NULLABLE__ STR_t label, STR_t forma
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF VECTOR                                                                                                         */
+/* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_def_vector_new(
+nyx_dict_t *nyx_number_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -103,34 +103,34 @@ nyx_dict_t *nyx_number_def_vector_new(
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SET VECTOR                                                                                                         */
+/* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *vector)
 {
-    return internal_def_to_set(vector, "setNumberVector", "oneNumber");
+    return internal_prop_to_set_vector(vector, "setNumberVector", "oneNumber");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SETTER & GETTER                                                                                                    */
+/* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_number_def_set(nyx_dict_t *def, nyx_variant_t value)
+bool nyx_number_prop_set(nyx_dict_t *prop, nyx_variant_t value)
 {
-    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(def, "@format"));
+    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
 
     nyx_string_t *string = internal_variant_to_string(format, value);
 
-    return nyx_dict_set(def, "$", string);
+    return nyx_dict_set(prop, "$", string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_variant_t nyx_number_def_get(const nyx_dict_t *def)
+nyx_variant_t nyx_number_prop_get(const nyx_dict_t *prop)
 {
-    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(def, "@format"));
+    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
 
-    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(def, "$");
+    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(prop, "$");
 
     return internal_string_to_variant(format, string);
 }

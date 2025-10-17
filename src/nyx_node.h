@@ -424,49 +424,49 @@ typedef struct nyx_object_s
 
         __NULLABLE__ bool (* _int)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             int new_value,                                                                      //!< New value.
             int old_value                                                                       //!< Old value.
         );
 
         __NULLABLE__ bool (* _uint)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             unsigned int new_value,                                                             //!< New value.
             unsigned int old_value                                                              //!< Old value.
         );
 
         __NULLABLE__ bool (* _long)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             long new_value,                                                                     //!< New value.
             long old_value                                                                      //!< Old value.
         );
 
         __NULLABLE__ bool (* _ulong)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             unsigned long new_value,                                                            //!< New value.
             unsigned long old_value                                                             //!< Old value.
         );
 
         __NULLABLE__ bool (* _double)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             double new_value,                                                                   //!< New value.
             double old_value                                                                    //!< Old value.
         );
 
         __NULLABLE__ bool (* _str)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             STR_t new_value,                                                                    //!< New value.
             STR_t old_value                                                                     //!< Old value.
         );
 
         __NULLABLE__ bool (* _buffer)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
-            struct nyx_dict_s *def,                                                             //!< Def object.
+            struct nyx_dict_s *prop,                                                            //!< Property object.
             size_t size,                                                                        //!< Size of the new buffer.
             BUFF_t buff                                                                         //!< Pointer to the new buffer.
         );
@@ -2001,7 +2001,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
  * @private
  */
 
-nyx_dict_t *nyx_number_def_new(
+nyx_dict_t *nyx_number_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     STR_t format,
@@ -2022,12 +2022,12 @@ nyx_dict_t *nyx_number_def_new(
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `int32_t` value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
+__INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
 {
-    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
+    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
 }
 
 /**
@@ -2039,12 +2039,12 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_int(STR_t name,__NULLABLE__ STR_t labe
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `uint32_t` value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
+__INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
 {
-    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
+    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
 }
 
 /**
@@ -2056,12 +2056,12 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_uint(STR_t name,__NULLABLE__ STR_t lab
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `int64_t` value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
+__INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
 {
-    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
+    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
 }
 
 /**
@@ -2073,12 +2073,12 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_long(STR_t name,__NULLABLE__ STR_t lab
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `uint64_t` value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
+__INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
 {
-    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
+    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
 }
 
 /**
@@ -2090,12 +2090,12 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_ulong(STR_t name,__NULLABLE__ STR_t la
  * @param max Range max, ignored if min == max.
  * @param step Step size, ignored if step == 0.
  * @param value Initial `double` value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
+__INLINE__ nyx_dict_t *nyx_number_prop_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
 {
-    return nyx_number_def_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
+    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2103,133 +2103,133 @@ __INLINE__ nyx_dict_t *nyx_number_def_new_double(STR_t name,__NULLABLE__ STR_t l
 /** @private
  */
 
-bool nyx_number_def_set(
-    nyx_dict_t *def,
+bool nyx_number_prop_set(
+    nyx_dict_t *prop,
     nyx_variant_t value
 );
 
 /** @private
  */
 
-nyx_variant_t nyx_number_def_get(
-    const nyx_dict_t *def
+nyx_variant_t nyx_number_prop_get(
+    const nyx_dict_t *prop
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `int32_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_number_def_set_int(nyx_dict_t *def, int32_t value)
+__INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
 {
-    return nyx_number_def_set(def, NYX_VARIANT_FROM_INT(value));
+    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_INT(value));
 }
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `int32_t` value.
  */
 
-__INLINE__ int32_t nyx_number_def_get_int(const nyx_dict_t *def)
+__INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
 {
-    return nyx_number_def_get(def).value._int;
+    return nyx_number_prop_get(prop).value._int;
 }
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `uint32_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_number_def_set_uint(nyx_dict_t *def, uint32_t value)
+__INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
 {
-    return nyx_number_def_set(def, NYX_VARIANT_FROM_UINT(value));
+    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_UINT(value));
 }
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `uint32_t` value.
  */
 
-__INLINE__ uint32_t nyx_number_def_get_uint(const nyx_dict_t *def)
+__INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
 {
-    return nyx_number_def_get(def).value._uint;
+    return nyx_number_prop_get(prop).value._uint;
 }
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `int64_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_number_def_set_long(nyx_dict_t *def, int64_t value)
+__INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
 {
-    return nyx_number_def_set(def, NYX_VARIANT_FROM_LONG(value));
+    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_LONG(value));
 }
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `int64_t` value.
  */
 
-__INLINE__ int64_t nyx_number_def_get_long(const nyx_dict_t *def)
+__INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
 {
-    return nyx_number_def_get(def).value._long;
+    return nyx_number_prop_get(prop).value._long;
 }
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `uint64_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_number_def_set_ulong(nyx_dict_t *def, uint64_t value)
+__INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
 {
-    return nyx_number_def_set(def, NYX_VARIANT_FROM_ULONG(value));
+    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_ULONG(value));
 }
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `uint64_t` value.
  */
 
-__INLINE__ uint64_t nyx_number_def_get_ulong(const nyx_dict_t *def)
+__INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
 {
-    return nyx_number_def_get(def).value._ulong;
+    return nyx_number_prop_get(prop).value._ulong;
 }
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `double` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_number_def_set_double(nyx_dict_t *def, double value)
+__INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
 {
-    return nyx_number_def_set(def, NYX_VARIANT_FROM_DOUBLE(value));
+    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_DOUBLE(value));
 }
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `double` value.
  */
 
-__INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
+__INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
 {
-    return nyx_number_def_get(def).value._double;
+    return nyx_number_prop_get(prop).value._double;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2240,12 +2240,12 @@ __INLINE__ double nyx_number_def_get_double(const nyx_dict_t *def)
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of definitions with `NULL` sentinel.
+ * @param defs Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
 
-nyx_dict_t *nyx_number_def_vector_new(
+nyx_dict_t *nyx_number_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -2278,10 +2278,10 @@ nyx_dict_t *nyx_number_set_vector_new(
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-nyx_dict_t *nyx_text_def_new(
+nyx_dict_t *nyx_text_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     __NULLABLE__ STR_t value
@@ -2290,27 +2290,27 @@ nyx_dict_t *nyx_text_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `STR_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-bool nyx_text_def_set(
-    nyx_dict_t *def,
+bool nyx_text_prop_set(
+    nyx_dict_t *prop,
     __NULLABLE__ STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `STR_t` value.
  */
 
-STR_t nyx_text_def_get(
-    const nyx_dict_t *def
+STR_t nyx_text_prop_get(
+    const nyx_dict_t *prop
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2321,12 +2321,12 @@ STR_t nyx_text_def_get(
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of definitions with `NULL` sentinel.
+ * @param defs Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
 
-nyx_dict_t *nyx_text_def_vector_new(
+nyx_dict_t *nyx_text_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -2359,10 +2359,10 @@ nyx_dict_t *nyx_text_set_vector_new(
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-nyx_dict_t *nyx_light_def_new(
+nyx_dict_t *nyx_light_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     nyx_state_t value
@@ -2371,27 +2371,27 @@ nyx_dict_t *nyx_light_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `nyx_state_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-bool nyx_light_def_set(
-    nyx_dict_t *def,
+bool nyx_light_prop_set(
+    nyx_dict_t *prop,
     nyx_state_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `nyx_state_t` value.
  */
 
-nyx_state_t nyx_light_def_get(
-    const nyx_dict_t *def
+nyx_state_t nyx_light_prop_get(
+    const nyx_dict_t *prop
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2401,12 +2401,12 @@ nyx_state_t nyx_light_def_get(
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
- * @param defs Array of definitions with `NULL` sentinel.
+ * @param defs Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
 
-nyx_dict_t *nyx_light_def_vector_new(
+nyx_dict_t *nyx_light_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -2438,10 +2438,10 @@ nyx_dict_t *nyx_light_set_vector_new(
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
- * @return The new definition object.
+ * @return The new property object.
  */
 
-nyx_dict_t *nyx_switch_def_new(
+nyx_dict_t *nyx_switch_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     nyx_onoff_t value
@@ -2450,27 +2450,27 @@ nyx_dict_t *nyx_switch_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param value The new `nyx_onoff_t` value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-bool nyx_switch_def_set(
-    nyx_dict_t *def,
+bool nyx_switch_prop_set(
+    nyx_dict_t *prop,
     nyx_onoff_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @return The current `nyx_onoff_t` value.
  */
 
-nyx_onoff_t nyx_switch_def_get(
-    const nyx_dict_t *def
+nyx_onoff_t nyx_switch_prop_get(
+    const nyx_dict_t *prop
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2482,12 +2482,12 @@ nyx_onoff_t nyx_switch_def_get(
  * @param state Vector state.
  * @param perm Vector permissions.
  * @param rule Vector rules.
- * @param defs Array of definitions with `NULL` sentinel.
+ * @param defs Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
 
-nyx_dict_t *nyx_switch_def_vector_new(
+nyx_dict_t *nyx_switch_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -2523,12 +2523,12 @@ nyx_dict_t *nyx_switch_set_vector_new(
  * @param format Payload format.
  * @param size Size of the initial payload content.
  * @param buff Pointer to the initial payload content.
- * @return The new definition object.
+ * @return The new property object.
  * @note If a format ends with `.b`, the payload is automatically base64-encoded.
  * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
-nyx_dict_t *nyx_blob_def_new(
+nyx_dict_t *nyx_blob_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     __NULLABLE__ STR_t format,
@@ -2539,8 +2539,8 @@ nyx_dict_t *nyx_blob_def_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided definition object.
- * @param def Definition object.
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2549,8 +2549,8 @@ nyx_dict_t *nyx_blob_def_new(
  * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
-bool nyx_blob_def_set(
-    nyx_dict_t *def,
+bool nyx_blob_prop_set(
+    nyx_dict_t *prop,
     __NULLABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -2558,8 +2558,8 @@ bool nyx_blob_def_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided definition object.
- * @param def Definition object.
+ * \brief Gets the current value of the provided property object.
+ * @param prop Property object.
  * @param size Size of the current payload content.
  * @param buff Pointer to current new payload content.
  * @warning If `buff` is not `NULL`, it must be freed.
@@ -2567,8 +2567,8 @@ bool nyx_blob_def_set(
  * @note If a format ends with `.z`, the payload is automatically zlib+base64-uncompresses.
  */
 
-void nyx_blob_def_get(
-    const nyx_dict_t *def,
+void nyx_blob_prop_get(
+    const nyx_dict_t *prop,
     __NULLABLE__ size_t *size,
     __NULLABLE__ buff_t *buff
 );
@@ -2581,12 +2581,12 @@ void nyx_blob_def_get(
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of definitions with `NULL` sentinel.
+ * @param defs Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
 
-nyx_dict_t *nyx_blob_def_vector_new(
+nyx_dict_t *nyx_blob_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -2618,12 +2618,12 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * \brief Allocates a new Nyx Stream.
  * @param name Definition name.
  * @param label Definition label.
- * @return The new definition object.
+ * @return The new property object.
  * @note If the name ends with `.b`, the payload is automatically base64-encoded, see @ref nyx_stream_pub.
  * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed, see @ref nyx_stream_pub.
  */
 
-nyx_dict_t *nyx_stream_def_new(
+nyx_dict_t *nyx_stream_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label
 );
@@ -2635,12 +2635,12 @@ nyx_dict_t *nyx_stream_def_new(
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
- * @param defs Array of definitions with `NULL` sentinel.
+ * @param defs Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
 
-nyx_dict_t *nyx_stream_def_vector_new(
+nyx_dict_t *nyx_stream_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -2815,7 +2815,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
  * @memberof nyx_node_t
  * \brief Finalizes a Nyx node.
  * @param node Nyx node.
- * @param free_vectors If `true`, the definition vectors are released.
+ * @param free_vectors If `true`, the vectors are released.
  */
 
 void nyx_node_finalize(

@@ -23,10 +23,10 @@ static void _debug_callback(nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF                                                                                                                */
+/* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_text_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t value)
+nyx_dict_t *nyx_text_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -42,7 +42,7 @@ nyx_dict_t *nyx_text_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ 
     nyx_dict_set(result, "@name", nyx_string_from(name));
     nyx_dict_set(result, "@label", nyx_string_from(label));
 
-    nyx_text_def_set(result, value);
+    nyx_text_prop_set(result, value);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -50,10 +50,10 @@ nyx_dict_t *nyx_text_def_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ 
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* DEF VECTOR                                                                                                         */
+/* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_text_def_vector_new(
+nyx_dict_t *nyx_text_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
@@ -103,28 +103,28 @@ nyx_dict_t *nyx_text_def_vector_new(
 
 nyx_dict_t *nyx_text_set_vector_new(const nyx_dict_t *vector)
 {
-    return internal_def_to_set(vector, "setTextVector", "oneText");
+    return internal_prop_to_set_vector(vector, "setTextVector", "oneText");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* SETTER & GETTER                                                                                                    */
+/* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_text_def_set(nyx_dict_t *def, __NULLABLE__ STR_t value)
+bool nyx_text_prop_set(nyx_dict_t *prop, __NULLABLE__ STR_t value)
 {
     if(value == NULL)
     {
         value = "";
     }
 
-    return  nyx_dict_set(def, "$", nyx_string_from(value));
+    return  nyx_dict_set(prop, "$", nyx_string_from(value));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-STR_t nyx_text_def_get(const nyx_dict_t *def)
+STR_t nyx_text_prop_get(const nyx_dict_t *prop)
 {
-    return nyx_string_get((nyx_string_t *) nyx_dict_get(def, "$"));
+    return nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$"));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
