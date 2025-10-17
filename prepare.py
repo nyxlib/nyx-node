@@ -51,7 +51,7 @@ def download_doxygen_awesome():
 
         if response.status_code == 200:
 
-            with open(f'.doxygen/{filename}', 'wt') as f:
+            with open(f'docs/{filename}', 'wt') as f:
 
                 f.write(response.content.decode('UTF-8').replace('--content-maxwidth: 1050px;', '--content-maxwidth: 1250px;'))
 
