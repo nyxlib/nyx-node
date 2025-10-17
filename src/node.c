@@ -73,10 +73,10 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 static void _out_callback(nyx_object_t *object)
 {
-    nyx_dict_t *vector = (nyx_dict_t *) object;
-
-    if((vector->base.flags & NYX_FLAGS_DISABLED) == 0)
+    if(object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
     {
+        nyx_dict_t *vector = (nyx_dict_t *) object;
+
         STR_t tag = nyx_dict_get_string(vector, "<>");
 
         if(tag != NULL)
