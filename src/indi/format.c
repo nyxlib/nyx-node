@@ -41,13 +41,13 @@ static bool _parse_format(char *result_conv, int *result_lcnt, int *result_w, in
     bool have_w = false;
     bool have_f = false;
 
-    while(isdigit((unsigned char) *p)) { w = (w * 10) + (int) (*p++ - '0'); have_w = true; }
+    while(isdigit((unsigned char) *p)) { w = (w * 10) + (*p++ - '0'); have_w = true; }
 
     if(*p == '.')
     {
         p++;
 
-        while(isdigit((unsigned char) *p)) { f = (f * 10) + (int) (*p++ - '0'); have_f = true; }
+        while(isdigit((unsigned char) *p)) { f = (f * 10) + (*p++ - '0'); have_f = true; }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

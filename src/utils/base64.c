@@ -49,7 +49,7 @@ str_t nyx_base64_encode(__NULLABLE__ size_t *result_len, __ZEROABLE__ size_t siz
 
     size_t len = 4 * ((size + 2) / 3);
 
-    str_t str = (str_t) nyx_memory_alloc(len + 1);
+    str_t str = nyx_memory_alloc(len + 1);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -145,7 +145,7 @@ buff_t nyx_base64_decode(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t l
 
     size_t size = (len / 4) * 3 - pad;
 
-    buff_t buff = (buff_t) nyx_memory_alloc(size + 1);
+    buff_t buff = nyx_memory_alloc(size + 1);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

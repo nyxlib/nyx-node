@@ -31,13 +31,13 @@ buff_t nyx_zlib_deflate(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t si
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uLongf comp_size = compressBound((uLong) size);
+    uLongf comp_size = compressBound(size);
 
-    Bytef *comp_buff = (Bytef *) nyx_memory_alloc((size_t) comp_size);
+    Bytef *comp_buff = nyx_memory_alloc(comp_size);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int ret = compress2(comp_buff, &comp_size, (const Bytef *) buff, (uLong) size, Z_BEST_COMPRESSION);
+    int ret = compress2(comp_buff, &comp_size, buff, size, Z_BEST_COMPRESSION);
 
     if(ret != Z_OK)
     {
@@ -86,13 +86,13 @@ buff_t nyx_zlib_inflate(__NOTNULL__ size_t *result_size, __ZEROABLE__ size_t siz
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uLongf uncomp_size = (uLongf) *result_size;
+    uLongf uncomp_size = *result_size;
 
-    Bytef *uncomp_buff = (Bytef *) nyx_memory_alloc(*result_size);
+    Bytef *uncomp_buff = nyx_memory_alloc(*result_size);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int ret = uncompress(uncomp_buff, &uncomp_size, (const Bytef *) buff, (uLong) size);
+    int ret = uncompress(uncomp_buff, &uncomp_size, buff, size);
 
     if(ret != Z_OK)
     {

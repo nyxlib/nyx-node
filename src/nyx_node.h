@@ -292,14 +292,14 @@ __NULLABLE__ buff_t nyx_base64_decode(
 
 /**
  * \brief Compresses a buffer using the ZLib algorithm.
- * \param result_buff Optional pointer to store the size of the compressed buffer.
+ * \param result_size Optional pointer to store the size of the compressed buffer.
  * \param size Size of the buffer to compressed.
  * \param buff Pointer to the buffer to compressed.
  * \return The compressed buffer.
  */
 
 __NULLABLE__ buff_t nyx_zlib_deflate(
-    __NULLABLE__ size_t *result_buff,
+    __NULLABLE__ size_t *result_size,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );

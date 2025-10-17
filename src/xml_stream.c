@@ -13,9 +13,9 @@
 
 #define TAG(s_tag, e_tag) {                     \
             .s_tag_size = sizeof(s_tag) - 1,    \
-            .s_tag_buff = s_tag,                \
+            .s_tag_buff = (s_tag),              \
             .e_tag_size = sizeof(e_tag) - 1,    \
-            .e_tag_buff = e_tag,                \
+            .e_tag_buff = (e_tag),              \
         }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -13,7 +13,7 @@
 
 nyx_xmldoc_t *nyx_xmldoc_new(nyx_xml_type_t type)
 {
-    nyx_xmldoc_t *result = (nyx_xmldoc_t *) nyx_memory_alloc(sizeof(nyx_xmldoc_t));
+    nyx_xmldoc_t *result = nyx_memory_alloc(sizeof(nyx_xmldoc_t));
 
     memset(result, 0x00, sizeof(nyx_xmldoc_t));
 
