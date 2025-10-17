@@ -27,7 +27,7 @@ microcontrollers (ESP, Cortex-M, ...).
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-## Node demo
+## Nyx-Node demo
 
 ### Interface
 
