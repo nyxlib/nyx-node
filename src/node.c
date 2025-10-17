@@ -391,9 +391,9 @@ static bool _is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 
 static nyx_string_t OFF = {
     .base = NYX_OBJECT(NYX_TYPE_STRING),
+    .managed = false,
     .length = 0x003,
     .value = "Off",
-    .managed = false,
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
