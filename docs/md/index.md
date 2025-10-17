@@ -29,13 +29,15 @@ microcontrollers (ESP, Cortex-M, ...).
 
 ## Node demo
 
+### Interface
+
 Resulting interface as displayed in Nyx-Dashboard:
 
 <div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/demo.png" style="width: 1250px;" />
 </div> 
 
-Source code:
+### Source code
 
 \include ./test/demo.c
 
