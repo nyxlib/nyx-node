@@ -55,6 +55,30 @@ nyx_dict_t *nyx_number_prop_new(STR_t name, __NULLABLE__ STR_t label, STR_t form
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* PROP SETTER & GETTER                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_number_prop_set(nyx_dict_t *prop, nyx_variant_t value)
+{
+    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
+
+    nyx_string_t *string = internal_variant_to_string(format, value);
+
+    return nyx_dict_set(prop, "$", string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_variant_t nyx_number_prop_get(const nyx_dict_t *prop)
+{
+    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
+
+    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(prop, "$");
+
+    return internal_string_to_variant(format, string);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -109,30 +133,6 @@ nyx_dict_t *nyx_number_vector_new(
 nyx_dict_t *nyx_number_set_vector_new(const nyx_dict_t *vector)
 {
     return internal_prop_to_set_vector(vector, "setNumberVector", "oneNumber");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* PROP SETTER & GETTER                                                                                               */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_number_prop_set(nyx_dict_t *prop, nyx_variant_t value)
-{
-    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
-
-    nyx_string_t *string = internal_variant_to_string(format, value);
-
-    return nyx_dict_set(prop, "$", string);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_variant_t nyx_number_prop_get(const nyx_dict_t *prop)
-{
-    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
-
-    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(prop, "$");
-
-    return internal_string_to_variant(format, string);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

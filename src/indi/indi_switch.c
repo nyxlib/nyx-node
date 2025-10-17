@@ -50,6 +50,22 @@ nyx_dict_t *nyx_switch_prop_new(STR_t name, __NULLABLE__ STR_t label, nyx_onoff_
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* PROP SETTER & GETTER                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_switch_prop_set(nyx_dict_t *prop, nyx_onoff_t value)
+{
+    return nyx_dict_set(prop, "$", nyx_string_from(nyx_onoff_to_str(value)));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_onoff_t nyx_switch_prop_get(const nyx_dict_t *prop)
+{
+    return nyx_str_to_onoff(nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$")));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -106,22 +122,6 @@ nyx_dict_t *nyx_switch_vector_new(
 nyx_dict_t *nyx_switch_set_vector_new(const nyx_dict_t *vector)
 {
     return internal_prop_to_set_vector(vector, "setSwitchVector", "oneSwitch");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* PROP SETTER & GETTER                                                                                               */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_switch_prop_set(nyx_dict_t *prop, nyx_onoff_t value)
-{
-    return nyx_dict_set(prop, "$", nyx_string_from(nyx_onoff_to_str(value)));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_onoff_t nyx_switch_prop_get(const nyx_dict_t *prop)
-{
-    return nyx_str_to_onoff(nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$")));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

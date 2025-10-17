@@ -56,6 +56,28 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* PROP SETTER & GETTER                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_blob_prop_set(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+{
+    if(size == 0x00 || buff == NULL)
+    {
+        size = 0x00;
+        buff = ("");
+    }
+
+    return nyx_dict_set(prop, "$", nyx_string_from_buff(size, buff, true));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_blob_prop_get(const nyx_dict_t *prop, __NULLABLE__ size_t *size, __NULLABLE__ buff_t *buff)
+{
+    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(prop, "$"), size, buff);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -110,28 +132,6 @@ nyx_dict_t *nyx_blob_vector_new(
 nyx_dict_t *nyx_blob_set_vector_new(const nyx_dict_t *vector)
 {
     return internal_prop_to_set_vector(vector, "setBLOBVector", "oneBLOB");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* PROP SETTER & GETTER                                                                                               */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_blob_prop_set(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
-{
-    if(size == 0x00 || buff == NULL)
-    {
-        size = 0x00;
-        buff = ("");
-    }
-
-    return nyx_dict_set(prop, "$", nyx_string_from_buff(size, buff, true));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_blob_prop_get(const nyx_dict_t *prop, __NULLABLE__ size_t *size, __NULLABLE__ buff_t *buff)
-{
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(prop, "$"), size, buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

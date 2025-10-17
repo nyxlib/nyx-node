@@ -50,6 +50,22 @@ nyx_dict_t *nyx_light_prop_new(STR_t name, __NULLABLE__ STR_t label, nyx_state_t
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* PROP SETTER & GETTER                                                                                               */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_light_prop_set(nyx_dict_t *prop, nyx_state_t value)
+{
+    return nyx_dict_set(prop, "$", nyx_string_from(nyx_state_to_str(value)));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+nyx_state_t nyx_light_prop_get(const nyx_dict_t *prop)
+{
+    return nyx_str_to_state(nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$")));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VECTOR                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -102,22 +118,6 @@ nyx_dict_t *nyx_light_vector_new(
 nyx_dict_t *nyx_light_set_vector_new(const nyx_dict_t *vector)
 {
     return internal_prop_to_set_vector(vector, "setLightVector", "oneLight");
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* PROP SETTER & GETTER                                                                                               */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_light_prop_set(nyx_dict_t *prop, nyx_state_t value)
-{
-    return nyx_dict_set(prop, "$", nyx_string_from(nyx_state_to_str(value)));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-nyx_state_t nyx_light_prop_get(const nyx_dict_t *prop)
-{
-    return nyx_str_to_state(nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$")));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
