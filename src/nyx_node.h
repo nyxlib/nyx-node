@@ -2543,10 +2543,6 @@ nyx_dict_t *nyx_blob_prop_new(
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
- * @return \c true if the value was modified, \c false otherwise.
- * @note The provided buffer will be freed with this object.
- * @note If a format ends with `.b`, the payload is automatically base64-encoded.
- * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
 bool nyx_blob_prop_set(
@@ -2562,9 +2558,6 @@ bool nyx_blob_prop_set(
  * @param prop Property object.
  * @param size Size of the current payload content.
  * @param buff Pointer to current new payload content.
- * @warning If `buff` is not `NULL`, it must be freed.
- * @note If a format ends with `.b`, the payload is automatically base64-decoded.
- * @note If a format ends with `.z`, the payload is automatically zlib+base64-uncompresses.
  */
 
 void nyx_blob_prop_get(
@@ -2657,8 +2650,6 @@ nyx_dict_t *nyx_stream_vector_new(
  * @param n_fields Number of field doublets (length, buffer).
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
- * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
- * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
  */
 
 bool nyx_stream_pub(
