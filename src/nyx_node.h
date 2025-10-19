@@ -180,7 +180,7 @@ void nyx_set_log_level(
  * @private
  */
 
-void nyx_log(
+void __attribute__((format(printf, 5, 6))) nyx_log(
     nyx_log_level_t level,
     STR_t file,
     STR_t func,
