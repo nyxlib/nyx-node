@@ -1024,6 +1024,24 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
+ * \brief Returns a JSON string object holding the value of the provided string (string duplication).
+ * @param value Value for the new JSON string object.
+ * @return The new JSON string object.
+ */
+
+__INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
+{
+    nyx_string_t *result = nyx_string_new();
+
+    nyx_string_set(result, nyx_string_dup(value), true);
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
  * \brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
@@ -1062,24 +1080,6 @@ __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string (string duplication).
- * @param value Value for the new JSON string object.
- * @return The new JSON string object.
- */
-
-__INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
-{
-    nyx_string_t *result = nyx_string_new();
-
-    nyx_string_set(result, nyx_string_dup(value), true);
-
-    return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_string_t
  * \brief Returns a JSON string object holding the value of the provided buffer (managed reference).
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
@@ -1096,7 +1096,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
     return result;
 }
 
-    /*--------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_string_t
