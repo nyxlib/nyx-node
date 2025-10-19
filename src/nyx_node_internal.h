@@ -34,13 +34,10 @@ extern "C" {
     bool b
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 __NULLABLE__ str_t nyx_double_dup(
     double d
-);
-
-__NULLABLE__ str_t nyx_string_ndup(
-    __NULLABLE__ STR_t s,
-    __ZEROABLE__ size_t n
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -129,13 +126,19 @@ typedef struct
 
 nyx_string_builder_t *nyx_string_builder_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_string_builder_free(
     /*-*/ nyx_string_builder_t *sb
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_string_builder_clear(
     /*-*/ nyx_string_builder_t *sb
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_string_builder_append_n(
     /*-*/ nyx_string_builder_t *sb,
@@ -144,17 +147,25 @@ void nyx_string_builder_append_n(
     bool xml
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 size_t nyx_string_builder_length(
     const nyx_string_builder_t *sb
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 size_t nyx_string_builder_clength(
     const nyx_string_builder_t *sb
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 str_t nyx_string_builder_to_string(
     const nyx_string_builder_t *sb
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 str_t nyx_string_builder_to_cstring(
     const nyx_string_builder_t *sb
@@ -254,10 +265,14 @@ int internal_get_timestamp(
     str_t str
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void internal_set_opts(
     /*--------*/ /*-*/ nyx_dict_t *dict,
     __NULLABLE__ const nyx_opts_t *opts
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 bool internal_copy(
     /*-*/ nyx_dict_t *dst,
@@ -266,11 +281,15 @@ bool internal_copy(
     bool notify
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 nyx_dict_t *internal_prop_to_set_vector(
     const nyx_dict_t *vector,
     STR_t set_tag,
     STR_t one_tag
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 bool internal_blob_is_compressed(
     const nyx_dict_t *def
@@ -282,6 +301,8 @@ nyx_string_t *internal_variant_to_string(
     STR_t format,
     nyx_variant_t value
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_variant_t internal_string_to_variant(
     STR_t format,
@@ -299,9 +320,13 @@ typedef enum
 
 } nyx_blob_state_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_blob_state_to_str(
     nyx_blob_state_t blob
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_blob_state_t nyx_str_to_blob_state(
     STR_t blob
@@ -318,9 +343,13 @@ typedef enum
 
 } nyx_stream_state_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_stream_state_to_str(
     nyx_stream_state_t stream
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_stream_state_t nyx_str_to_stream_state(
     STR_t stream
@@ -354,6 +383,8 @@ bool nyx_xml_stream_detect_opening_tag(
     size_t size,
     BUFF_t buff
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 bool nyx_xml_stream_detect_closing_tag(
     nyx_xml_stream_t *xml_stream,
@@ -425,16 +456,22 @@ void internal_indi_pub(
     const nyx_str_t message
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void internal_mqtt_sub(
     /*-*/ nyx_node_t *node,
     const nyx_str_t topic
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_mqtt_pub(
     /*-*/ nyx_node_t *node,
     const nyx_str_t topic,
     const nyx_str_t message
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_redis_pub(
     /*-*/ nyx_node_t *node,
@@ -457,6 +494,8 @@ void nyx_node_stack_initialize(
     __NULLABLE__ STR_t redis_password,
     int retry_ms
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_node_stack_finalize(
     nyx_node_t *node

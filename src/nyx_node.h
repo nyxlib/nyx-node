@@ -128,6 +128,17 @@ __NULLABLE__ str_t nyx_string_dup(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Similar to libc strndup.
+ */
+
+__NULLABLE__ str_t nyx_string_ndup(
+    __NULLABLE__ STR_t s,
+    __ZEROABLE__ size_t n
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
@@ -190,6 +201,8 @@ void nyx_log(
 #define NYX_LOG_FATAL(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(1)
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Logs an error message.
  * @param fmt Printf-style formatting string.
@@ -198,6 +211,8 @@ void nyx_log(
 
 #define NYX_LOG_ERROR(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Logs an info message.
@@ -208,6 +223,8 @@ void nyx_log(
 #define NYX_LOG_INFO(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_INFO, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Logs a debug message.
  * @param fmt Printf-style formatting string.
@@ -216,6 +233,8 @@ void nyx_log(
 
 #define NYX_LOG_DEBUG(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_DEBUG, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Logs a verbose message.
@@ -512,6 +531,8 @@ __NULLABLE__ nyx_object_t *nyx_object_parse_buff(
     __NULLABLE__ BUFF_t buff
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_object_t
  * @brief Parses a JSON object from a C string.
@@ -608,6 +629,8 @@ typedef struct
 
 nyx_null_t *nyx_null_new();
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_null_t
  * @brief Frees memory of the provided JSON null object.
@@ -617,6 +640,8 @@ nyx_null_t *nyx_null_new();
 void nyx_null_free(
     /*-*/ nyx_null_t *object
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_null_t
@@ -699,6 +724,8 @@ bool nyx_number_set_alt(
     double value,
     bool notify
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_number_t
@@ -813,6 +840,8 @@ bool nyx_boolean_set_alt(
     bool value,
     bool notify
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_boolean_t
@@ -942,6 +971,8 @@ bool nyx_string_set_alt(
     bool managed,
     bool notify
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_string_t
@@ -1683,6 +1714,8 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
     __NULLABLE__ BUFF_t buff
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @memberof nyx_xmldoc_t
  * @brief Parses an XML document from a C string.
@@ -1966,6 +1999,8 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
     #endif
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -1978,6 +2013,8 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
     return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_UINT, {._uint = value}};
     #endif
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @private
@@ -1992,6 +2029,8 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
     #endif
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @private
  */
@@ -2004,6 +2043,8 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
     return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
     #endif
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @private
@@ -2060,6 +2101,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t lab
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Allocates a new INDI / Nyx `uint32_t` number property.
  * @param name Definition name.
@@ -2076,6 +2119,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t la
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Allocates a new INDI / Nyx `int64_t` number property.
@@ -2094,6 +2139,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t la
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Allocates a new INDI / Nyx `uint64_t` number property.
  * @param name Definition name.
@@ -2110,6 +2157,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t l
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Allocates a new INDI / Nyx `double` number property.
@@ -2138,6 +2187,8 @@ bool nyx_number_prop_set(
     nyx_variant_t value
 );
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /** @private
  */
 
@@ -2159,6 +2210,8 @@ __INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_INT(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
@@ -2169,6 +2222,8 @@ __INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._int;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Sets the new value of the provided property object.
@@ -2182,6 +2237,8 @@ __INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_UINT(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
@@ -2192,6 +2249,8 @@ __INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._uint;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Sets the new value of the provided property object.
@@ -2205,6 +2264,8 @@ __INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_LONG(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
@@ -2215,6 +2276,8 @@ __INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._long;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Sets the new value of the provided property object.
@@ -2228,6 +2291,8 @@ __INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_ULONG(value));
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
@@ -2238,6 +2303,8 @@ __INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._ulong;
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Sets the new value of the provided property object.
@@ -2250,6 +2317,8 @@ __INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
 {
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_DOUBLE(value));
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @brief Gets the current value of the provided property object.
