@@ -566,7 +566,7 @@ str_t nyx_object_to_string(
 
 /**
  * @memberof nyx_object_t
- * \brief Returns a C/C++ string representing the provided JSON object.
+ * \brief Returns a C string representing the provided JSON object.
  * @param object JSON object.
  * @return The string representing the provided JSON object.
  */
@@ -1015,7 +1015,7 @@ str_t nyx_string_to_string(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a C/C++ string representing the provided JSON string object.
+ * \brief Returns a C string representing the provided JSON string object.
  * @param object JSON string object.
  * @return The string representing the provided JSON string object.
  */
@@ -1031,7 +1031,7 @@ str_t nyx_string_to_cstring(
  * \brief Returns a JSON string object holding the value of the provided string (managed duplication).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The duplicated C/C++ string is **freed** with this object.
+ * @note The duplicated C string is **freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
@@ -1050,7 +1050,7 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
  * \brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided C/C++ string is **freed** with this object.
+ * @note The provided C string is **freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
@@ -1069,7 +1069,7 @@ __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
  * \brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided C/C++ string is **not freed** with this object.
+ * @note The provided C string is **not freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
@@ -1318,10 +1318,10 @@ str_t nyx_dict_to_string(
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a boolean entry.
+ * \brief Gets a boolean value for the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return
+ * @return The related boolean value or `NULL`.
  */
 
 __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
@@ -1337,10 +1337,10 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a number entry.
+ * \brief Gets a number value for the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return
+ * @return The related number value or `NULL`.
  */
 
 __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
@@ -1356,10 +1356,10 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a string entry.
+ * \brief Gets a C string value for the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return
+ * @return The related C string value or `NULL`.
  */
 
 __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
@@ -1567,10 +1567,10 @@ str_t nyx_list_to_string(
 
 /**
  * @memberof nyx_list_t
- * \brief Gets a boolean entry.
+ * \brief Gets a boolean value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return
+ * @return The related boolean value or `NULL`.
  */
 
 __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
@@ -1586,10 +1586,10 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * \brief Gets a number entry.
+ * \brief Gets a number value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return
+ * @return The related number value or `NULL`.
  */
 
 __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
@@ -1605,10 +1605,10 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * \brief Gets a string entry.
+ * \brief Gets a C string value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return
+ * @return The related C string value or `NULL`.
  */
 
 __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
@@ -2308,7 +2308,7 @@ nyx_dict_t *nyx_number_set_vector_new(
  * @param label Definition label.
  * @param value Initial value.
  * @return The new property object.
- * @note The C/C++ string is duplicated.
+ * @note The C string is duplicated.
  */
 
 nyx_dict_t *nyx_text_prop_new(
@@ -2324,7 +2324,7 @@ nyx_dict_t *nyx_text_prop_new(
  * @param prop Property object.
  * @param value The new `STR_t` value.
  * @return \c true if the value was modified, \c false otherwise.
- * @note The C/C++ string is duplicated.
+ * @note The C string is duplicated.
  */
 
 bool nyx_text_prop_set(
