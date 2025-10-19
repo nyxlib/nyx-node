@@ -593,7 +593,7 @@ str_t nyx_object_to_cstring(
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< Common object header for JSON values.
+    nyx_object_t base;                                                                          //!< Common object header for JSON objects.
 
 } nyx_null_t;
 
@@ -646,7 +646,7 @@ str_t nyx_null_to_string(
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< Common object header for JSON values.
+    nyx_object_t base;                                                                          //!< Common object header for JSON objects.
 
     double value;                                                                               //!< Number payload.
 
@@ -761,7 +761,7 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< Common object header for JSON values.
+    nyx_object_t base;                                                                          //!< Common object header for JSON objects.
 
     bool value;                                                                                 //!< Boolean payload.
 
@@ -875,7 +875,7 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 
 typedef struct
 {
-    nyx_object_t base;                                                                          //!< Common object header for JSON values.
+    nyx_object_t base;                                                                          //!< Common object header for JSON objects.
 
     bool managed;                                                                               //!< `true` if the value is freed with this object.
     size_t length;                                                                              //!< C string length excluding `NULL`.
@@ -1140,7 +1140,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff
 
 typedef struct nyx_dict_s
 {
-    nyx_object_t base;                                                                          //!< Common object header for JSON values.
+    nyx_object_t base;                                                                          //!< Common object header for JSON objects.
 
     struct nyx_dict_node_s *head;                                                               //!< Linked list of key/value entries.
     struct nyx_dict_node_s *tail;                                                               //!< Linked list of key/value entries.
@@ -1390,7 +1390,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 
 typedef struct nyx_list_s
 {
-    nyx_object_t base;                                                                          //!< Common object header for JSON values.
+    nyx_object_t base;                                                                          //!< Common object header for JSON objects.
 
     struct nyx_list_node_s *head;                                                               //!< Linked list of key/value entries.
     struct nyx_list_node_s *tail;                                                               //!< Linked list of key/value entries.
