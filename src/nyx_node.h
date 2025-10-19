@@ -878,8 +878,8 @@ typedef struct
     nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
     bool managed;                                                                               //!< `true` if the value is freed with this object.
-    size_t length;                                                                              //!< String length in bytes (UTF-8), excluding `NULL`.
-    str_t value;                                                                                //!< ???
+    size_t length;                                                                              //!< C string length excluding `NULL`.
+    str_t value;                                                                                //!< C string (UTF-8) payload.
 
 } nyx_string_t;
 
