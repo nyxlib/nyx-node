@@ -1024,7 +1024,7 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string (string duplication).
+ * \brief Returns a JSON string object holding the value of the provided string (managed duplication).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
  */
