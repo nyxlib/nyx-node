@@ -943,7 +943,7 @@ bool nyx_string_set_alt(
  * \brief Set the value of the provided JSON string object.
  * @param object JSON string object.
  * @param value Value for the provided JSON string object.
- * @param managed `True` if the provided buffer is freed with this object.
+ * @param managed If `True`, the provided buffer is freed with this object.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -972,7 +972,7 @@ bool nyx_string_set_buff_alt(
  * @param object JSON string object.
  * @param size Value size for the provided JSON string object.
  * @param buff Value buffer for the provided JSON string object.
- * @param managed `True` if the provided buffer is freed with this object.
+ * @param managed If `True`, the provided buffer is freed with this object.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2548,6 +2548,7 @@ nyx_dict_t *nyx_switch_set_vector_new(
  * @param format Payload format.
  * @param size Size of the initial payload content.
  * @param buff Pointer to the initial payload content.
+ * @param managed If `True`, the provided buffer is freed with this object.
  * @return The new property object.
  * @note If a format ends with `.b`, the payload is automatically base64-encoded.
  * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
@@ -2558,7 +2559,8 @@ nyx_dict_t *nyx_blob_prop_new(
     __NULLABLE__ STR_t label,
     __NULLABLE__ STR_t format,
     __NULLABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+    __NULLABLE__ BUFF_t buff,
+    bool managed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

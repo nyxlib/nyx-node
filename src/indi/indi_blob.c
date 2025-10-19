@@ -26,7 +26,7 @@ static void _debug_callback(nyx_object_t *object)
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format, __NULLABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+nyx_dict_t *nyx_blob_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__ STR_t format, __NULLABLE__ size_t size, __NULLABLE__ BUFF_t buff, bool managed)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -48,7 +48,12 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__
     nyx_dict_set(result, "@label", nyx_string_from_dup(label));
     nyx_dict_set(result, "@format", nyx_string_from_dup(format));
 
-    nyx_blob_prop_set(result, size, buff);
+    if(managed) {
+        nyx_blob_prop_set_managed(result, size, buff);
+    }
+    else {
+        nyx_blob_prop_set_unmanaged(result, size, buff);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
