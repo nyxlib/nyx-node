@@ -597,7 +597,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._double == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_dup(nyx_state_to_str(new_val)), false);
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(nyx_state_to_str(new_val), false), false);
                                                             }
                                                         }
 
@@ -612,7 +612,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._double == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_dup(nyx_onoff_to_str(new_val)), false);
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from(nyx_onoff_to_str(new_val), false), false);
                                                             }
                                                         }
 
