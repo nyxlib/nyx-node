@@ -1318,7 +1318,7 @@ str_t nyx_dict_to_string(
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a boolean value for the provided key.
+ * \brief Gets a boolean value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The related boolean value or `NULL`.
@@ -1337,7 +1337,7 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a number value for the provided key.
+ * \brief Gets a number value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The related number value or `NULL`.
@@ -1356,7 +1356,7 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a C string value for the provided key.
+ * \brief Gets a C string value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The related C string value or `NULL`.
