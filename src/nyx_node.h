@@ -1027,6 +1027,7 @@ str_t nyx_string_to_cstring(
  * \brief Returns a JSON string object holding the value of the provided string (managed duplication).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
+ * @note The duplicated C/C++ string is freed with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
