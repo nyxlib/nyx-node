@@ -1270,7 +1270,7 @@ nyx_object_t *nyx_dict_get(
 bool nyx_dict_set_alt(
     /*-*/ nyx_dict_t *object,
     STR_t key,
-    buff_t value,
+    void *value,
     bool notify
 );
 
@@ -1283,7 +1283,7 @@ bool nyx_dict_set_alt(
  * @return
  */
 
-__INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, buff_t value)
+__INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 {
     return nyx_dict_set_alt(object, key, value, true);
 }
@@ -1520,7 +1520,7 @@ nyx_object_t *nyx_list_get(
 nyx_list_t *nyx_list_set_alt(
     /*-*/ nyx_list_t *object,
     size_t idx,
-    buff_t value,
+    void *value,
     bool notify
 );
 
@@ -1532,7 +1532,7 @@ nyx_list_t *nyx_list_set_alt(
  * @return
  */
 
-__INLINE__ bool nyx_list_push(nyx_list_t *object, buff_t value)
+__INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
 {
     return nyx_list_set_alt(object, -1, value, true);
 }
