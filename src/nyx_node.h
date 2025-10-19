@@ -879,7 +879,7 @@ typedef struct
 
     bool managed;                                                                               //!< `true` if the value is freed with this object.
     size_t length;                                                                              //!< C string length excluding `NULL`.
-    str_t value;                                                                                //!< C string (UTF-8) payload.
+    str_t value;                                                                                //!< C string payload.
 
 } nyx_string_t;
 
