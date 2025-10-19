@@ -1215,11 +1215,20 @@ void nyx_dict_del(
 
 /**
  * @memberof nyx_dict_t
- * \brief
- * @param iter
- * @param key
- * @param object
- * @return
+ * \brief Iterates over a JSON dict.
+ * @param iter List iterator.
+ * @param key Pointer to the current element index.
+ * @param object Pointer to the current element object.
+ * @code
+ *   STR_t key;
+ *
+ *   nyx_object_t *object;
+ *
+ *   for(nyx_list_iter_t iter = NYX_DICT_ITER(list); nyx_dict_iterate(&iter, &key, &object);)
+ *   {
+ *       ...
+ *   }
+ * @endcode
  */
 
 bool nyx_dict_iterate(
@@ -1451,11 +1460,20 @@ void nyx_list_del(
 
 /**
  * @memberof nyx_list_t
- * \brief
- * @param iter
- * @param idx
- * @param object
- * @return
+ * \brief Iterates over a JSON list.
+ * @param iter List iterator.
+ * @param idx Pointer to the current element index.
+ * @param object Pointer to the current element object.
+ * @code
+ *   size_t idx;
+ *
+ *   nyx_object_t *object;
+ *
+ *   for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &object);)
+ *   {
+ *       ...
+ *   }
+ * @endcode
  */
 
 bool nyx_list_iterate(
