@@ -278,7 +278,7 @@ void nyx_generate_mac_addr(
  */
 
 __NULLABLE__ str_t nyx_base64_encode(
-    __ZEROABLE__ size_t *result_len,
+    __NULLABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -294,7 +294,7 @@ __NULLABLE__ str_t nyx_base64_encode(
  */
 
 __NULLABLE__ buff_t nyx_base64_decode(
-    __ZEROABLE__ size_t *result_size,
+    __NULLABLE__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str
 );
@@ -310,7 +310,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
  */
 
 __NULLABLE__ buff_t nyx_zlib_deflate(
-    __ZEROABLE__ size_t *result_size,
+    __NULLABLE__ size_t *result_size,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -319,10 +319,10 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 
 /**
  * @brief Decompresses a buffer using the ZLib algorithm.
- * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
- * \param size Size of the buffer to uncompress.
- * \param buff Pointer to the buffer to uncompress.
- * \return The uncompressed buffer.
+ * \param result_size Mandatory pointer to provide and store the size of the decompressed buffer.
+ * \param size Size of the buffer to decompress.
+ * \param buff Pointer to the buffer to decompress.
+ * \return The decompressed buffer.
  */
 
 __NULLABLE__ buff_t nyx_zlib_inflate(
@@ -342,7 +342,7 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
  */
 
 __NULLABLE__ str_t nyx_zlib_base64_deflate(
-    __ZEROABLE__ size_t *result_len,
+    __NULLABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -351,10 +351,10 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
 
 /**
  * @brief Decompresses a string using the ZLib+Base64 algorithm.
- * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
- * \param len Length of the string to uncompress.
- * \param str Pointer to the string to uncompress.
- * \return The uncompressed buffer.
+ * \param result_size Mandatory pointer to provide and store the size of the decompressed buffer.
+ * \param len Length of the string to decompress.
+ * \param str Pointer to the string to decompress.
+ * \return The decompressed buffer.
  */
 
 __NULLABLE__ buff_t nyx_zlib_base64_inflate(
@@ -926,7 +926,7 @@ STR_t nyx_string_get(
 
 void nyx_string_get_buff(
     const nyx_string_t *object,
-    __ZEROABLE__ size_t *result_size,
+    __NULLABLE__ size_t *result_size,
     __NULLABLE__ buff_t *result_buff
 );
 
@@ -1742,7 +1742,7 @@ __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Convert an JSON Nyx / INDI command to the XML one.
+ * @brief Convert a JSON Nyx / INDI command to the XML one.
  * @param object JSON Nyx / INDI command.
  * @return The generated XML Nyx / INDI command.
  */
@@ -1911,7 +1911,7 @@ typedef struct
     __NULLABLE__ STR_t label;                                                                   //!< GUI label, device name by default.
     __NULLABLE__ STR_t hints;                                                                   //!< GUI Markdown description.
     __NULLABLE__ STR_t message;                                                                 //!< Free comment.
-    __ZEROABLE__ double timeout;                                                                //!< Worse-case time [sec] to apply, 0 by default, N/A for RO.
+    __ZEROABLE__ double timeout;                                                                //!< Worst-case time [sec] to apply, 0 by default, N/A for RO.
 
 } nyx_opts_t;
 
@@ -2613,7 +2613,7 @@ bool nyx_blob_prop_set_unmanaged(
 
 void nyx_blob_prop_get(
     const nyx_dict_t *prop,
-    __ZEROABLE__ size_t *size,
+    __NULLABLE__ size_t *size,
     __NULLABLE__ buff_t *buff
 );
 
