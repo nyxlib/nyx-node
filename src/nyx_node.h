@@ -1024,17 +1024,17 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string.
+ * \brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
- * @param managed `True` if the provided buffer is freed with this object.
  * @return The new JSON string object.
+ * @note The provided C string is freed with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from(STR_t value, bool managed)
+__INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set(result, value, managed);
+    nyx_string_set(result, value, true);
 
     return result;
 }
@@ -1046,13 +1046,14 @@ __INLINE__ nyx_string_t *nyx_string_from(STR_t value, bool managed)
  * \brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
+ * @note The provided C string is not freed with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
+__INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set(result, /*----------*/(value), false);
+    nyx_string_set(result, value, false);
 
     return result;
 }
