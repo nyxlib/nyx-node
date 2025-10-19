@@ -1210,9 +1210,9 @@ void nyx_dict_clear(
 
 /**
  * @memberof nyx_dict_t
- * \brief
- * @param object
- * @param key
+ * \brief Deletes the entry of the provided key.
+ * @param object JSON dict object.
+ * @param key Key.
  */
 
 void nyx_dict_del(
@@ -1460,7 +1460,7 @@ void nyx_list_clear(
 
 /**
  * @memberof nyx_list_t
- * \brief
+ * \brief Deletes the entry at the provided index.
  * @param object JSON list object.
  * @param idx Index.
  */
