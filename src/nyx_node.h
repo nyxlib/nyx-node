@@ -1160,8 +1160,13 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_DICT_ITER(object) \
-                ((nyx_dict_iter_t) {.idx = 0, .type = ((nyx_dict_t *) (object))->base.type, .head = ((nyx_dict_t *) (object))->head})
+/**
+ * \brief Initializes a JSON dict iterator.
+ * @param dict JSON dict.
+ */
+
+#define NYX_DICT_ITER(dict) \
+                ((nyx_dict_iter_t) {.idx = 0, .type = ((nyx_dict_t *) (dict))->base.type, .head = ((nyx_dict_t *) (dict))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1405,8 +1410,13 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_LIST_ITER(object) \
-                ((nyx_list_iter_t) {.idx = 0, .type = ((nyx_list_t *) (object))->base.type, .head = ((nyx_list_t *) (object))->head})
+/**
+ * \brief Initializes a JSON list iterator.
+ * @param list JSON list.
+ */
+
+#define NYX_LIST_ITER(list) \
+                ((nyx_list_iter_t) {.idx = 0, .type = ((nyx_list_t *) (list))->base.type, .head = ((nyx_list_t *) (list))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
