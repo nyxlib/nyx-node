@@ -76,7 +76,7 @@ typedef const char *STR_t;                                                      
  * @brief Initialize the memory subsystem.
  */
 
-void nyx_memory_initialize();
+void nyx_memory_initialize(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -84,7 +84,7 @@ void nyx_memory_initialize();
  * @brief Finalize the memory subsystem.
  */
 
-bool nyx_memory_finalize();
+bool nyx_memory_finalize(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -627,7 +627,7 @@ typedef struct
  * @return The new JSON null.
  */
 
-nyx_null_t *nyx_null_new();
+nyx_null_t *nyx_null_new(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -686,7 +686,7 @@ typedef struct
  * @return The new JSON number.
  */
 
-nyx_number_t *nyx_number_new();
+nyx_number_t *nyx_number_new(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -802,7 +802,7 @@ typedef struct
  * @return The new JSON boolean.
  */
 
-nyx_boolean_t *nyx_boolean_new();
+nyx_boolean_t *nyx_boolean_new(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -920,7 +920,7 @@ typedef struct
  * @return The new JSON string.
  */
 
-nyx_string_t *nyx_string_new();
+nyx_string_t *nyx_string_new(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1210,7 +1210,7 @@ typedef struct
  * @return The new JSON dict.
  */
 
-nyx_dict_t *nyx_dict_new();
+nyx_dict_t *nyx_dict_new(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1458,7 +1458,7 @@ typedef struct
  * @return The new JSON list.
  */
 
-nyx_list_t *nyx_list_new();
+nyx_list_t *nyx_list_new(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
