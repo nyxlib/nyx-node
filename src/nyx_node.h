@@ -1251,8 +1251,8 @@ bool nyx_dict_iterate(
 /**
  * @memberof nyx_dict_t
  * \brief
- * @param object
- * @param key
+ * @param object JSON dict object.
+ * @param key Key.
  * @return
  */
 
@@ -1277,8 +1277,8 @@ bool nyx_dict_set_alt(
 /**
  * @memberof nyx_dict_t
  * \brief
- * @param object
- * @param key
+ * @param object JSON dict object.
+ * @param key Key.
  * @param value
  * @return
  */
@@ -1318,9 +1318,9 @@ str_t nyx_dict_to_string(
 
 /**
  * @memberof nyx_dict_t
- * \brief
- * @param object
- * @param key
+ * \brief Gets a boolean entry.
+ * @param object JSON dict object.
+ * @param key Key.
  * @return
  */
 
@@ -1337,9 +1337,9 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief
- * @param object
- * @param key
+ * \brief Gets a number entry.
+ * @param object JSON dict object.
+ * @param key Key.
  * @return
  */
 
@@ -1356,9 +1356,9 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief
- * @param object
- * @param key
+ * \brief Gets a string entry.
+ * @param object JSON dict object.
+ * @param key Key.
  * @return
  */
 
@@ -1461,8 +1461,8 @@ void nyx_list_clear(
 /**
  * @memberof nyx_list_t
  * \brief
- * @param object
- * @param idx
+ * @param object JSON list object.
+ * @param idx Index.
  */
 
 void nyx_list_del(
@@ -1501,7 +1501,7 @@ bool nyx_list_iterate(
 /**
  * @memberof nyx_list_t
  * \brief
- * @param object
+ * @param object JSON list object.
  * @param idx
  * @return
  */
@@ -1527,7 +1527,7 @@ nyx_list_t *nyx_list_set_alt(
 /**
  * @memberof nyx_list_t
  * \brief
- * @param object
+ * @param object JSON list object.
  * @param value
  * @return
  */
@@ -1567,9 +1567,9 @@ str_t nyx_list_to_string(
 
 /**
  * @memberof nyx_list_t
- * \brief
- * @param object
- * @param idx
+ * \brief Gets a boolean entry.
+ * @param object JSON list object.
+ * @param idx Index.
  * @return
  */
 
@@ -1586,9 +1586,9 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * \brief
- * @param object
- * @param idx
+ * \brief Gets a number entry.
+ * @param object JSON list object.
+ * @param idx Index.
  * @return
  */
 
@@ -1605,9 +1605,9 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * \brief
- * @param object
- * @param idx
+ * \brief Gets a string entry.
+ * @param object JSON list object.
+ * @param idx Index.
  * @return
  */
 
