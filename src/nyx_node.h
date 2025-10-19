@@ -991,7 +991,7 @@ __INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t bu
  * @memberof nyx_string_t
  * \brief Returns the length of the provided JSON string object.
  * @param object JSON string object.
- * @return
+ * @return The length of the provided JSON string object.
  */
 
 size_t nyx_string_length(
