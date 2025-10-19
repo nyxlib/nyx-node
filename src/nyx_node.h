@@ -1256,7 +1256,7 @@ void nyx_dict_del(
  * @memberof nyx_dict_t
  * @brief Iterates over a JSON dict.
  * @param iter List iterator.
- * @param key Pointer to the current element index.
+ * @param key Pointer to the current element key.
  * @param object Pointer to the current JSON object.
  * @code
  *   STR_t key;
@@ -1759,9 +1759,9 @@ str_t nyx_xmldoc_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Convert an XML Nyx / INDI command to the JSON one.
+ * @brief Converts an XML Nyx / INDI command to the JSON one.
  * @param xmldoc XML Nyx / INDI command.
- * @return The generated JSON Nyx / INDI command.
+ * @return The corresponding JSON Nyx / INDI command.
  */
 
 __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
@@ -1771,9 +1771,9 @@ __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Convert a JSON Nyx / INDI command to the XML one.
+ * @brief Converts a JSON Nyx / INDI command to the XML one.
  * @param object JSON Nyx / INDI command.
- * @return The generated XML Nyx / INDI command.
+ * @return The corresponding XML Nyx / INDI command.
  */
 
 __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
