@@ -2700,6 +2700,7 @@ nyx_dict_t *nyx_stream_vector_new(
  * @param n_fields Number of field doublets (length, buffer).
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
+ * @return `true` if the entry has been published.
  */
 
 bool nyx_stream_pub(
