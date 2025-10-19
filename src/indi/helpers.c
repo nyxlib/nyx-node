@@ -390,7 +390,7 @@ static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict,
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set_alt(dst_dict, "$", nyx_string_from_buff(dst_len, dst_str, true), notify);
+        nyx_dict_set_alt(dst_dict, "$", nyx_string_from_buff_managed(dst_len, dst_str), notify);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

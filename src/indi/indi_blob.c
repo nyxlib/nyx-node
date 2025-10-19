@@ -67,7 +67,7 @@ bool nyx_blob_prop_set(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ 
         buff = ("");
     }
 
-    return nyx_dict_set(prop, "$", nyx_string_from_buff(size, buff, true));
+    return nyx_dict_set(prop, "$", nyx_string_from_buff_unmanaged(size, buff));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

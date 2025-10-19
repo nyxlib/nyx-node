@@ -645,7 +645,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._str == NULL || object2->in_callback._buffer(vector, (nyx_dict_t *) object2, dst_size, dst_buff)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff(dst_size, dst_buff, true), false);
+                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff_managed(dst_size, dst_buff), false);
                                                             }
                                                             else
                                                             {

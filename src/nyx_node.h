@@ -1046,7 +1046,7 @@ __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
  * \brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided C string is not freed with this object.
+ * @note The provided C string is **not** freed with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
@@ -1080,18 +1080,38 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided buffer.
+ * \brief Returns a JSON string object holding the value of the provided buffer (managed reference).
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
- * @param managed `True` if the provided buffer is freed with this object.
  * @return The new JSON string object.
+ * @note The provided C string is freed with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool managed)
+__INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_buff(result, size, buff, managed);
+    nyx_string_set_buff(result, size, buff, true);
+
+    return result;
+}
+
+    /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
+ * \brief Returns a JSON string object holding the value of the provided buffer (unmanaged reference).
+ * @param size Buffer size for the new JSON string object.
+ * @param buff Buffer pointer for the new JSON string object.
+ * @return The new JSON string object.
+ * @note The provided C string is **not** freed with this object.
+ */
+
+__INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff)
+{
+    nyx_string_t *result = nyx_string_new();
+
+    nyx_string_set_buff(result, size, buff, false);
 
     return result;
 }
