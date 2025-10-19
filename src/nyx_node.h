@@ -1517,7 +1517,7 @@ nyx_object_t *nyx_list_get(
  * @private
  */
 
-bool nyx_list_push_alt(
+bool nyx_list_set_alt(
     /*-*/ nyx_list_t *object,
     size_t idx,
     void *value,
@@ -1534,7 +1534,7 @@ bool nyx_list_push_alt(
 
 __INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
 {
-    return nyx_list_push_alt(object, -1, value, true);
+    return nyx_list_set_alt(object, -1, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

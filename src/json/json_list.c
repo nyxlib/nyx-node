@@ -174,7 +174,7 @@ nyx_object_t *nyx_list_get(const nyx_list_t *object, size_t idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_list_push_alt(nyx_list_t *object, size_t idx, void *value, bool notify)
+bool nyx_list_set_alt(nyx_list_t *object, size_t idx, void *value, bool notify)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
