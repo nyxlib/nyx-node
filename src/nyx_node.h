@@ -73,7 +73,7 @@ typedef const char *STR_t;                                                      
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Initialize the memory subsystem.
+ * @brief Initialize the memory subsystem.
  */
 
 void nyx_memory_initialize();
@@ -81,7 +81,7 @@ void nyx_memory_initialize();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Finalize the memory subsystem.
+ * @brief Finalize the memory subsystem.
  */
 
 bool nyx_memory_finalize();
@@ -89,7 +89,7 @@ bool nyx_memory_finalize();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc free except that it returns the amount of memory freed.
+ * @brief Similar to libc free except that it returns the amount of memory freed.
  */
 
 __ZEROABLE__ size_t nyx_memory_free(
@@ -99,7 +99,7 @@ __ZEROABLE__ size_t nyx_memory_free(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc malloc except that a memory overflow causes the node to stop.
+ * @brief Similar to libc malloc except that a memory overflow causes the node to stop.
  */
 
 __NULLABLE__ buff_t nyx_memory_alloc(
@@ -109,7 +109,7 @@ __NULLABLE__ buff_t nyx_memory_alloc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc realloc except that a memory overflow causes the node to stop.
+ * @brief Similar to libc realloc except that a memory overflow causes the node to stop.
  */
 
 __NULLABLE__ buff_t nyx_memory_realloc(
@@ -120,7 +120,7 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Similar to libc strdup.
+ * @brief Similar to libc strdup.
  */
 
 __NULLABLE__ str_t nyx_string_dup(
@@ -138,7 +138,7 @@ __NULLABLE__ str_t nyx_string_dup(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Nyx log levels.
+ * @brief Nyx log levels.
  */
 
 typedef enum nyx_log_level_e
@@ -155,7 +155,7 @@ typedef enum nyx_log_level_e
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the log level threshold.
+ * @brief Sets the log level threshold.
  * @param level Log level threshold.
  */
 
@@ -181,16 +181,17 @@ void nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Logs a fatal message.
+ * @brief Logs a fatal message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
+ * @warning This macro never returns.
  */
 
 #define NYX_LOG_FATAL(fmt, ...) \
             do { nyx_log(NYX_LOG_LEVEL_FATAL, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(1)
 
 /**
- * \brief Logs an error message.
+ * @brief Logs an error message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
 */
@@ -199,7 +200,7 @@ void nyx_log(
             do { nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 /**
- * \brief Logs an info message.
+ * @brief Logs an info message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
@@ -208,7 +209,7 @@ void nyx_log(
             do { nyx_log(NYX_LOG_LEVEL_INFO, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 /**
- * \brief Logs a debug message.
+ * @brief Logs a debug message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
@@ -217,7 +218,7 @@ void nyx_log(
             do { nyx_log(NYX_LOG_LEVEL_DEBUG, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 /**
- * \brief Logs a verbose message.
+ * @brief Logs a verbose message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
@@ -236,7 +237,7 @@ void nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Hashes a buffer using the MurmurHash2 algorithm.
+ * @brief Hashes a buffer using the MurmurHash2 algorithm.
  * \param size Size of the buffer to hash.
  * \param buff Pointer to the buffer to hash.
  * \param seed Initial seed value.
@@ -252,7 +253,7 @@ uint32_t nyx_hash32(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Generates a MAC address based on a node identifier.
+ * @brief Generates a MAC address based on a node identifier.
  * @param result_mac Output array to store the generated MAC address.
  * @param mac0 First fixed byte of the MAC address.
  * @param mac1 Second fixed byte of the MAC address.
@@ -269,7 +270,7 @@ void nyx_generate_mac_addr(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Encodes a buffer using the Base64 algorithm.
+ * @brief Encodes a buffer using the Base64 algorithm.
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
  * \param buff Pointer to the buffer to encode.
@@ -285,7 +286,7 @@ __NULLABLE__ str_t nyx_base64_encode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Decodes a string using the Base64 algorithm.
+ * @brief Decodes a string using the Base64 algorithm.
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
  * \param str Pointer to the string to decode.
@@ -301,7 +302,7 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Compresses a buffer using the ZLib algorithm.
+ * @brief Compresses a buffer using the ZLib algorithm.
  * \param result_size Optional pointer to store the size of the compressed buffer.
  * \param size Size of the buffer to compress.
  * \param buff Pointer to the buffer to compress.
@@ -317,7 +318,7 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Decompresses a buffer using the ZLib algorithm.
+ * @brief Decompresses a buffer using the ZLib algorithm.
  * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param size Size of the buffer to uncompress.
  * \param buff Pointer to the buffer to uncompress.
@@ -333,7 +334,7 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Compresses a buffer using the ZLib+Base64 algorithm.
+ * @brief Compresses a buffer using the ZLib+Base64 algorithm.
  * \param result_len Optional pointer to store the length of the compressed string.
  * \param size Size of the buffer to compress.
  * \param buff Pointer to the buffer to compress.
@@ -349,7 +350,7 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Decompresses a string using the ZLib+Base64 algorithm.
+ * @brief Decompresses a string using the ZLib+Base64 algorithm.
  * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param len Length of the string to uncompress.
  * \param str Pointer to the string to uncompress.
@@ -388,7 +389,7 @@ __NULLABLE__ buff_t nyx_zlib_base64_inflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief JSON object types.
+ * @brief JSON object types.
  */
 
 typedef enum
@@ -414,7 +415,7 @@ struct nyx_dict_s;
 
 /**
  * @struct nyx_object_t
- * \brief Struct describing a JSON object.
+ * @brief Struct describing a JSON object.
  */
 
 typedef struct nyx_object_s
@@ -500,7 +501,7 @@ typedef struct nyx_object_s
 
 /**
  * @memberof nyx_object_t
- * \brief Parses a JSON object from a string buffer.
+ * @brief Parses a JSON object from a string buffer.
  * \param size String size.
  * \param buff String pointer.
  * \return The new JSON object.
@@ -513,7 +514,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse_buff(
 
 /**
  * @memberof nyx_object_t
- * \brief Parses a JSON object from a C string.
+ * @brief Parses a JSON object from a C string.
  * \param string C string.
  * \return The new JSON object.
  */
@@ -526,7 +527,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
 
 /**
  * @memberof nyx_object_t
- * \brief Frees memory of the provided JSON object.
+ * @brief Frees memory of the provided JSON object.
  * @param object JSON document.
  */
 
@@ -538,7 +539,7 @@ void nyx_object_free(
 
 /**
  * @memberof nyx_object_t
- * \brief Compares two JSON objects.
+ * @brief Compares two JSON objects.
  * @param object1 First JSON object.
  * @param object2 Second JSON object.
  * @return `true` if the objects are equal, and `false` if not.
@@ -553,7 +554,7 @@ bool nyx_object_equal(
 
 /**
  * @memberof nyx_object_t
- * \brief Returns a string representing the provided JSON object.
+ * @brief Returns a string representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
  */
@@ -566,7 +567,7 @@ str_t nyx_object_to_string(
 
 /**
  * @memberof nyx_object_t
- * \brief Returns a C string representing the provided JSON object.
+ * @brief Returns a C string representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
  */
@@ -587,7 +588,7 @@ str_t nyx_object_to_cstring(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing a JSON null value.
+ * @brief Struct describing a JSON null value.
  */
 
 typedef struct
@@ -600,7 +601,7 @@ typedef struct
 
 /**
  * @memberof nyx_null_t
- * \brief Allocates a new JSON null object.
+ * @brief Allocates a new JSON null object.
  *
  * @return The new JSON null.
  */
@@ -609,7 +610,7 @@ nyx_null_t *nyx_null_new();
 
 /**
  * @memberof nyx_null_t
- * \brief Frees memory of the provided JSON null object.
+ * @brief Frees memory of the provided JSON null object.
  * @param object JSON null object.
  */
 
@@ -619,7 +620,7 @@ void nyx_null_free(
 
 /**
  * @memberof nyx_null_t
- * \brief Returns a string representing the provided JSON null object.
+ * @brief Returns a string representing the provided JSON null object.
  * @param object JSON null object.
  * @return A newly allocated string that represents the provided JSON null object.
  */
@@ -640,7 +641,7 @@ str_t nyx_null_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing a JSON number.
+ * @brief Struct describing a JSON number.
  */
 
 typedef struct
@@ -655,7 +656,7 @@ typedef struct
 
 /**
  * @memberof nyx_number_t
- * \brief Allocates a new JSON number object.
+ * @brief Allocates a new JSON number object.
  *
  * @return The new JSON number.
  */
@@ -666,7 +667,7 @@ nyx_number_t *nyx_number_new();
 
 /**
  * @memberof nyx_number_t
- * \brief Frees memory of the provided JSON number object.
+ * @brief Frees memory of the provided JSON number object.
  * @param object JSON number object.
  */
 
@@ -678,7 +679,7 @@ void nyx_number_free(
 
 /**
  * @memberof nyx_number_t
- * \brief Get the value of the provided JSON number object.
+ * @brief Get the value of the provided JSON number object.
  * @param object JSON number object.
  * @return Value of the provided JSON number object.
  */
@@ -701,7 +702,7 @@ bool nyx_number_set_alt(
 
 /**
  * @memberof nyx_number_t
- * \brief Set the value of the provided JSON number object.
+ * @brief Set the value of the provided JSON number object.
  * @param object JSON number object.
  * @param value Value for the provided JSON number object.
  * @return \c true if the value was modified, \c false otherwise.
@@ -716,7 +717,7 @@ __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
 
 /**
  * @memberof nyx_number_t
- * \brief Returns a string representing the provided JSON number object.
+ * @brief Returns a string representing the provided JSON number object.
  * @param object JSON number object.
  * @return A newly allocated string that represents the provided JSON number object.
  */
@@ -729,7 +730,7 @@ str_t nyx_number_to_string(
 
 /**
  * @memberof nyx_number_t
- * \brief Returns a JSON number object holding the value of the provided argument.
+ * @brief Returns a JSON number object holding the value of the provided argument.
  * @param value Value for the new JSON number object.
  * @return The new JSON number object.
  */
@@ -755,7 +756,7 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing a JSON boolean.
+ * @brief Struct describing a JSON boolean.
  */
 
 typedef struct
@@ -770,7 +771,7 @@ typedef struct
 
 /**
  * @memberof nyx_boolean_t
- * \brief Allocates a new JSON boolean object.
+ * @brief Allocates a new JSON boolean object.
  * @return The new JSON boolean.
  */
 
@@ -780,7 +781,7 @@ nyx_boolean_t *nyx_boolean_new();
 
 /**
  * @memberof nyx_boolean_t
- * \brief Frees memory of the provided JSON boolean object.
+ * @brief Frees memory of the provided JSON boolean object.
  * @param object JSON boolean object.
  */
 
@@ -792,7 +793,7 @@ void nyx_boolean_free(
 
 /**
  * @memberof nyx_boolean_t
- * \brief Get the value of the provided JSON boolean object.
+ * @brief Get the value of the provided JSON boolean object.
  * @param object JSON boolean object.
  * @return The value of the provided JSON boolean object.
  */
@@ -815,7 +816,7 @@ bool nyx_boolean_set_alt(
 
 /**
  * @memberof nyx_boolean_t
- * \brief Set the value of the provided JSON boolean object.
+ * @brief Set the value of the provided JSON boolean object.
  * @param object JSON boolean object.
  * @param value Value for the provided JSON boolean object.
  * @return \c true if the value was modified, \c false otherwise.
@@ -830,7 +831,7 @@ __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
 
 /**
  * @memberof nyx_boolean_t
- * \brief Returns a string representing the provided JSON boolean object.
+ * @brief Returns a string representing the provided JSON boolean object.
  * @param object JSON boolean object.
  * @return A newly allocated string that represents the provided JSON boolean object.
  */
@@ -843,7 +844,7 @@ str_t nyx_boolean_to_string(
 
 /**
  * @memberof nyx_boolean_t
- * \brief Returns a JSON boolean object holding the value of the provided argument.
+ * @brief Returns a JSON boolean object holding the value of the provided argument.
  * @param value Value for the new JSON boolean object.
  * @return The new JSON boolean object.
  */
@@ -869,7 +870,7 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing a JSON string.
+ * @brief Struct describing a JSON string.
  */
 
 typedef struct
@@ -886,7 +887,7 @@ typedef struct
 
 /**
  * @memberof nyx_string_t
- * \brief Allocates a new JSON string object.
+ * @brief Allocates a new JSON string object.
  * @return The new JSON string.
  */
 
@@ -896,7 +897,7 @@ nyx_string_t *nyx_string_new();
 
 /**
  * @memberof nyx_string_t
- * \brief Frees memory of the provided JSON string object.
+ * @brief Frees memory of the provided JSON string object.
  * @param object JSON string object.
  */
 
@@ -908,7 +909,7 @@ void nyx_string_free(
 
 /**
  * @memberof nyx_string_t
- * \brief Get the value of the provided JSON string object.
+ * @brief Get the value of the provided JSON string object.
  * @param object JSON string object.
  * @return The value of the provided JSON string object.
  */
@@ -944,7 +945,7 @@ bool nyx_string_set_alt(
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object.
+ * @brief Set the value of the provided JSON string object.
  * @param object JSON string object.
  * @param value Value for the provided JSON string object.
  * @param managed If `true`, the provided buffer is freed with this object.
@@ -972,7 +973,7 @@ bool nyx_string_set_buff_alt(
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object.
+ * @brief Set the value of the provided JSON string object.
  * @param object JSON string object.
  * @param size Value size for the provided JSON string object.
  * @param buff Value buffer for the provided JSON string object.
@@ -989,7 +990,7 @@ __INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t bu
 
 /**
  * @memberof nyx_string_t
- * \brief Returns the length of the provided JSON string object.
+ * @brief Returns the length of the provided JSON string object.
  * @param object JSON string object.
  * @return The length of the provided JSON string object.
  */
@@ -1002,7 +1003,7 @@ size_t nyx_string_length(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a string representing the provided JSON string object.
+ * @brief Returns a string representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
  */
@@ -1015,7 +1016,7 @@ str_t nyx_string_to_string(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a C string representing the provided JSON string object.
+ * @brief Returns a C string representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
  */
@@ -1028,7 +1029,7 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string (managed duplication).
+ * @brief Returns a JSON string object holding the value of the provided string (managed duplication).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
  * @note The duplicated C string is **freed** with this object.
@@ -1047,7 +1048,7 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string (managed reference).
+ * @brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
  * @note The provided C string is **freed** with this object.
@@ -1066,7 +1067,7 @@ __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
+ * @brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
  * @note The provided C string is **not freed** with this object.
@@ -1085,7 +1086,7 @@ __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided buffer (managed reference).
+ * @brief Returns a JSON string object holding the value of the provided buffer (managed reference).
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
  * @return The new JSON string object.
@@ -1105,7 +1106,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided buffer (unmanaged reference).
+ * @brief Returns a JSON string object holding the value of the provided buffer (unmanaged reference).
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
  * @return The new JSON string object.
@@ -1134,7 +1135,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff
 
 /**
  * @struct nyx_dict_t
- * \brief Struct describing a JSON dict.
+ * @brief Struct describing a JSON dict.
  */
 
 typedef struct nyx_dict_s
@@ -1149,7 +1150,7 @@ typedef struct nyx_dict_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing a JSON dict iterator.
+ * @brief Struct describing a JSON dict iterator.
  */
 
 typedef struct
@@ -1165,7 +1166,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Initializes a JSON dict iterator.
+ * @brief Initializes a JSON dict iterator.
  * @param dict JSON dict.
  */
 
@@ -1176,7 +1177,7 @@ typedef struct
 
 /**
  * @memberof nyx_dict_t
- * \brief Allocates a new JSON dict object.
+ * @brief Allocates a new JSON dict object.
  * @return The new JSON dict.
  */
 
@@ -1186,7 +1187,7 @@ nyx_dict_t *nyx_dict_new();
 
 /**
  * @memberof nyx_dict_t
- * \brief Frees memory of the provided JSON dict object.
+ * @brief Frees memory of the provided JSON dict object.
  * @param object JSON dict object.
  */
 
@@ -1198,7 +1199,7 @@ void nyx_dict_free(
 
 /**
  * @memberof nyx_dict_t
- * \brief Clears the content of the provided JSON dict object.
+ * @brief Clears the content of the provided JSON dict object.
  * @param object JSON dict object.
  */
 
@@ -1210,7 +1211,7 @@ void nyx_dict_clear(
 
 /**
  * @memberof nyx_dict_t
- * \brief Deletes the entry of the provided key.
+ * @brief Deletes the entry of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  */
@@ -1224,7 +1225,7 @@ void nyx_dict_del(
 
 /**
  * @memberof nyx_dict_t
- * \brief Iterates over a JSON dict.
+ * @brief Iterates over a JSON dict.
  * @param iter List iterator.
  * @param key Pointer to the current element index.
  * @param object Pointer to the current JSON object.
@@ -1250,7 +1251,7 @@ bool nyx_dict_iterate(
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets the JSON object of the provided key.
+ * @brief Gets the JSON object of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The JSON object of the provided key or `NULL`.
@@ -1276,7 +1277,7 @@ bool nyx_dict_set_alt(
 
 /**
  * @memberof nyx_dict_t
- * \brief Adds a JSON object in the provided JSON dict object.
+ * @brief Adds a JSON object in the provided JSON dict object.
  * @param object JSON dict object.
  * @param key Key.
  * @param value JSON object to be added.
@@ -1292,7 +1293,7 @@ __INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets the number of items in the provided JSON dict object.
+ * @brief Gets the number of items in the provided JSON dict object.
  * @param object JSON dict object.
  * @return The number of items in the provided JSON dict object.
  */
@@ -1305,7 +1306,7 @@ size_t nyx_dict_size(
 
 /**
  * @memberof nyx_dict_t
- * \brief Returns a string representing the provided JSON dict object.
+ * @brief Returns a string representing the provided JSON dict object.
  * @param object JSON dict object.
  * @return A newly allocated string that represents the provided JSON dict object.
  */
@@ -1318,7 +1319,7 @@ str_t nyx_dict_to_string(
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a boolean value of the provided key.
+ * @brief Gets a boolean value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The related boolean value or `false` if absent or wrong type.
@@ -1337,7 +1338,7 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a number value of the provided key.
+ * @brief Gets a number value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The related number value or `NaN` if absent or wrong type.
@@ -1356,7 +1357,7 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * \brief Gets a C string value of the provided key.
+ * @brief Gets a C string value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
  * @return The related C string value or `NULL` if absent or wrong type.
@@ -1384,7 +1385,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 
 /**
  * @struct nyx_list_t
- * \brief Struct describing a JSON list.
+ * @brief Struct describing a JSON list.
  */
 
 typedef struct nyx_list_s
@@ -1399,7 +1400,7 @@ typedef struct nyx_list_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing a JSON list iterator.
+ * @brief Struct describing a JSON list iterator.
  */
 
 typedef struct
@@ -1415,7 +1416,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Initializes a JSON list iterator.
+ * @brief Initializes a JSON list iterator.
  * @param list JSON list.
  */
 
@@ -1426,7 +1427,7 @@ typedef struct
 
 /**
  * @memberof nyx_list_t
- * \brief Allocates a new JSON list.
+ * @brief Allocates a new JSON list.
  * @return The new JSON list.
  */
 
@@ -1436,7 +1437,7 @@ nyx_list_t *nyx_list_new();
 
 /**
  * @memberof nyx_list_t
- * \brief Frees memory of the provided JSON list object.
+ * @brief Frees memory of the provided JSON list object.
  * @param object JSON list object.
  */
 
@@ -1448,7 +1449,7 @@ void nyx_list_free(
 
 /**
  * @memberof nyx_list_t
- * \brief Clears the content of the provided JSON list object.
+ * @brief Clears the content of the provided JSON list object.
  * @param object JSON list object.
  */
 
@@ -1460,7 +1461,7 @@ void nyx_list_clear(
 
 /**
  * @memberof nyx_list_t
- * \brief Deletes the entry at the provided index.
+ * @brief Deletes the entry at the provided index.
  * @param object JSON list object.
  * @param idx Index.
  */
@@ -1474,7 +1475,7 @@ void nyx_list_del(
 
 /**
  * @memberof nyx_list_t
- * \brief Iterates over a JSON list.
+ * @brief Iterates over a JSON list.
  * @param iter List iterator.
  * @param idx Pointer to the current element index.
  * @param object Pointer to the current JSON object.
@@ -1500,7 +1501,7 @@ bool nyx_list_iterate(
 
 /**
  * @memberof nyx_list_t
- * \brief Gets the JSON object at the provided index.
+ * @brief Gets the JSON object at the provided index.
  * @param object JSON list object.
  * @param idx Index.
  * @return The JSON object at the provided index or `NULL`.
@@ -1526,7 +1527,7 @@ bool nyx_list_set_alt(
 
 /**
  * @memberof nyx_list_t
- * \brief Pushes a JSON object in the provided JSON list object.
+ * @brief Pushes a JSON object in the provided JSON list object.
  * @param object JSON list object.
  * @param value JSON object to be added.
  * @return `true` if the value was modified, `false` otherwise.
@@ -1534,14 +1535,14 @@ bool nyx_list_set_alt(
 
 __INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
 {
-    return nyx_list_set_alt(object, -1, value, true);
+    return nyx_list_set_alt(object, (size_t) -1, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_list_t
- * \brief Gets the number of items in the provided JSON list object.
+ * @brief Gets the number of items in the provided JSON list object.
  * @param object JSON list object.
  * @return The number of items in the provided JSON list object.
  */
@@ -1554,7 +1555,7 @@ size_t nyx_list_size(
 
 /**
  * @memberof nyx_list_t
- * \brief Returns a string representing the provided JSON list object.
+ * @brief Returns a string representing the provided JSON list object.
  * @param object JSON list object.
  * @return A newly allocated string that represents the provided JSON list object.
  */
@@ -1567,7 +1568,7 @@ str_t nyx_list_to_string(
 
 /**
  * @memberof nyx_list_t
- * \brief Gets a boolean value at the provided index.
+ * @brief Gets a boolean value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
  * @return The related boolean value or `false` if absent or wrong type.
@@ -1586,7 +1587,7 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * \brief Gets a number value at the provided index.
+ * @brief Gets a number value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
  * @return The related number value or `NaN` if absent or wrong type.
@@ -1605,7 +1606,7 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * \brief Gets a C string value at the provided index.
+ * @brief Gets a C string value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
  * @return The related C string value or `NULL` if absent or wrong type.
@@ -1631,7 +1632,7 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief XML node types.
+ * @brief XML node types.
  */
 
 typedef enum
@@ -1648,7 +1649,7 @@ typedef enum
 
 /**
  * @struct nyx_xmldoc_t
- * \brief Struct describing an XML document.
+ * @brief Struct describing an XML document.
  */
 
 typedef struct nyx_xmldoc_s
@@ -1671,7 +1672,7 @@ typedef struct nyx_xmldoc_s
 
 /**
  * @memberof nyx_xmldoc_t
- * \brief Parses an XML document from a string buffer.
+ * @brief Parses an XML document from a string buffer.
  * \param size String size.
  * \param buff String pointer.
  * \return The new XML document.
@@ -1684,7 +1685,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
 
 /**
  * @memberof nyx_xmldoc_t
- * \brief Parses an XML document from a C string.
+ * @brief Parses an XML document from a C string.
  * \param string C string.
  * \return The new XML document.
  */
@@ -1697,7 +1698,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
 
 /**
  * @memberof nyx_xmldoc_t
- * \brief Frees memory of the provided XML document.
+ * @brief Frees memory of the provided XML document.
  * @param xmldoc The provided XML document.
  */
 
@@ -1709,7 +1710,7 @@ void nyx_xmldoc_free(
 
 /**
  * @memberof nyx_xmldoc_t
- * \brief Returns a string representing the provided XML document.
+ * @brief Returns a string representing the provided XML document.
  * @param xmldoc XML document.
  * @return A newly allocated string that represents the provided XML document.
  */
@@ -1729,7 +1730,7 @@ str_t nyx_xmldoc_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Convert an XML Nyx / INDI command to the JSON one.
+ * @brief Convert an XML Nyx / INDI command to the JSON one.
  * @param xmldoc XML Nyx / INDI command.
  * @return The generated JSON Nyx / INDI command.
  */
@@ -1741,7 +1742,7 @@ __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Convert an JSON Nyx / INDI command to the XML one.
+ * @brief Convert an JSON Nyx / INDI command to the XML one.
  * @param object JSON Nyx / INDI command.
  * @return The generated XML Nyx / INDI command.
  */
@@ -1765,7 +1766,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Vector state hint.
+ * @brief Vector state hint.
  */
 
 typedef enum
@@ -1800,7 +1801,7 @@ nyx_state_t nyx_str_to_state(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Vector permission hint.
+ * @brief Vector permission hint.
  */
 
 typedef enum
@@ -1834,7 +1835,7 @@ nyx_perm_t nyx_str_to_perm(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Switch vector rule hint.
+ * @brief Switch vector rule hint.
  */
 
 typedef enum
@@ -1868,7 +1869,7 @@ nyx_rule_t nyx_str_to_rule(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Switch state.
+ * @brief Switch state.
  */
 
 typedef enum
@@ -1901,7 +1902,7 @@ nyx_onoff_t nyx_str_to_onoff(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Struct describing the options for INDI / Nyx vectors.
+ * @brief Struct describing the options for INDI / Nyx vectors.
  */
 
 typedef struct
@@ -2043,7 +2044,7 @@ nyx_dict_t *nyx_number_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx `int32_t` number property.
+ * @brief Allocates a new INDI / Nyx `int32_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]d).
@@ -2060,7 +2061,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t lab
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `uint32_t` number property.
+ * @brief Allocates a new INDI / Nyx `uint32_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]{uoxX}).
@@ -2077,7 +2078,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t la
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `int64_t` number property.
+ * @brief Allocates a new INDI / Nyx `int64_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]ld).
@@ -2094,7 +2095,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t la
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `uint64_t` number property.
+ * @brief Allocates a new INDI / Nyx `uint64_t` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]l{uoxX}).
@@ -2111,7 +2112,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t l
 }
 
 /**
- * \brief Allocates a new INDI / Nyx `double` number property.
+ * @brief Allocates a new INDI / Nyx `double` number property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Printf-style formatting string (%[flags][width]l?{fFeEgGaAm}).
@@ -2147,7 +2148,7 @@ nyx_variant_t nyx_number_prop_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `int32_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2159,7 +2160,7 @@ __INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
 }
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `int32_t` value.
  */
@@ -2170,7 +2171,7 @@ __INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
 }
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `uint32_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2182,7 +2183,7 @@ __INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
 }
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `uint32_t` value.
  */
@@ -2193,7 +2194,7 @@ __INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
 }
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `int64_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2205,7 +2206,7 @@ __INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
 }
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `int64_t` value.
  */
@@ -2216,7 +2217,7 @@ __INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
 }
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `uint64_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2228,7 +2229,7 @@ __INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
 }
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `uint64_t` value.
  */
@@ -2239,7 +2240,7 @@ __INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
 }
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `double` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2251,7 +2252,7 @@ __INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
 }
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `double` value.
  */
@@ -2264,7 +2265,7 @@ __INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx number vector.
+ * @brief Allocates a new INDI / Nyx number vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2303,7 +2304,7 @@ nyx_dict_t *nyx_number_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx text property.
+ * @brief Allocates a new INDI / Nyx text property.
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
@@ -2320,7 +2321,7 @@ nyx_dict_t *nyx_text_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `STR_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2335,7 +2336,7 @@ bool nyx_text_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `STR_t` value.
  */
@@ -2347,7 +2348,7 @@ STR_t nyx_text_prop_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx text vector.
+ * @brief Allocates a new INDI / Nyx text vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2386,7 +2387,7 @@ nyx_dict_t *nyx_text_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx light property.
+ * @brief Allocates a new INDI / Nyx light property.
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
@@ -2402,7 +2403,7 @@ nyx_dict_t *nyx_light_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `nyx_state_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2416,7 +2417,7 @@ bool nyx_light_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `nyx_state_t` value.
  */
@@ -2428,7 +2429,7 @@ nyx_state_t nyx_light_prop_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx light vector.
+ * @brief Allocates a new INDI / Nyx light vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2465,7 +2466,7 @@ nyx_dict_t *nyx_light_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx switch property.
+ * @brief Allocates a new INDI / Nyx switch property.
  * @param name Definition name.
  * @param label Definition label.
  * @param value Initial value.
@@ -2481,7 +2482,7 @@ nyx_dict_t *nyx_switch_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value The new `nyx_onoff_t` value.
  * @return \c true if the value was modified, \c false otherwise.
@@ -2495,7 +2496,7 @@ bool nyx_switch_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @return The current `nyx_onoff_t` value.
  */
@@ -2507,7 +2508,7 @@ nyx_onoff_t nyx_switch_prop_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx switch vector.
+ * @brief Allocates a new INDI / Nyx switch vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2548,7 +2549,7 @@ nyx_dict_t *nyx_switch_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx BLOB property.
+ * @brief Allocates a new INDI / Nyx BLOB property.
  * @param name Definition name.
  * @param label Definition label.
  * @param format Payload format.
@@ -2572,7 +2573,7 @@ nyx_dict_t *nyx_blob_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
@@ -2588,7 +2589,7 @@ bool nyx_blob_prop_set_managed(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Sets the new value of the provided property object.
+ * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
@@ -2604,7 +2605,7 @@ bool nyx_blob_prop_set_unmanaged(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Gets the current value of the provided property object.
+ * @brief Gets the current value of the provided property object.
  * @param prop Property object.
  * @param size Size of the current payload content.
  * @param buff Pointer to current new payload content.
@@ -2619,7 +2620,7 @@ void nyx_blob_prop_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx BLOB vector.
+ * @brief Allocates a new INDI / Nyx BLOB vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2658,7 +2659,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new Nyx Stream.
+ * @brief Allocates a new Nyx Stream.
  * @param name Definition name.
  * @param label Definition label.
  * @return The new property object.
@@ -2674,7 +2675,7 @@ nyx_dict_t *nyx_stream_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new Nyx stream vector.
+ * @brief Allocates a new Nyx stream vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2694,7 +2695,7 @@ nyx_dict_t *nyx_stream_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
+ * @brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
  * @param vector Nyx stream vector.
  * @param max_len Maximum number of entries to keep in the Redis stream.
  * @param n_fields Number of field doublets (length, buffer).
@@ -2731,7 +2732,7 @@ nyx_dict_t *nyx_stream_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx human-oriented message object.
+ * @brief Allocates a new INDI / Nyx human-oriented message object.
  * @param device Device name.
  * @param message Human-oriented message.
  * @return The new human-oriented message object.
@@ -2746,7 +2747,7 @@ nyx_dict_t *nyx_message_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Allocates a new INDI / Nyx `delete-property` message object.
+ * @brief Allocates a new INDI / Nyx `delete-property` message object.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human-oriented message.
@@ -2772,7 +2773,7 @@ nyx_dict_t *nyx_del_property_new(
 
 /**
  * @struct nyx_node_t
- * \brief Opaque struct describing a Nyx node.
+ * @brief Opaque struct describing a Nyx node.
  */
 
 typedef struct nyx_node_s nyx_node_t;
@@ -2780,7 +2781,7 @@ typedef struct nyx_node_s nyx_node_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Nyx TCP or MQTT event type.
+ * @brief Nyx TCP or MQTT event type.
  */
 
 typedef enum
@@ -2793,7 +2794,7 @@ typedef enum
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief MQTT event handler.
+ * @brief MQTT event handler.
  * @param node Nyx node.
  * @param event Event type.
  * @param topic_size MQTT topic length.
@@ -2815,7 +2816,7 @@ typedef void (* nyx_mqtt_handler_t)(
 
 /**
  * @memberof nyx_node_t
- * \brief Allocates and initializes a new Nyx node.
+ * @brief Allocates and initializes a new Nyx node.
  * @param node_id Unique node identifier.
  * @param vectors Array of vectors with `ǸULL` sentinel.
  * @param indi_url Optional INDI URL (e.g. tcp://0.0.0.0:7625).
@@ -2855,7 +2856,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
 
 /**
  * @memberof nyx_node_t
- * \brief Finalizes a Nyx node.
+ * @brief Finalizes a Nyx node.
  * @param node Nyx node.
  * @param free_vectors If `true`, the vectors are released.
  */
@@ -2869,7 +2870,7 @@ void nyx_node_finalize(
 
 /**
  * @memberof nyx_node_t
- * \brief Add a new timer.
+ * @brief Add a new timer.
  * @param node Nyx node.
  * @param interval_ms Interval [milliseconds].
  * @param callback Callback to be invoked.
@@ -2888,7 +2889,7 @@ void nyx_node_add_timer(
 
 /**
  * @memberof nyx_node_t
- * \brief Performs a single poll iteration.
+ * @brief Performs a single poll iteration.
  * @param node Nyx node.
  * @param timeout_ms Timeout [milliseconds].
  */
@@ -2902,7 +2903,7 @@ void nyx_node_poll(
 
 /**
  * @memberof nyx_node_t
- * \brief Enables a device or a vector and notifies clients.
+ * @brief Enables a device or a vector and notifies clients.
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
@@ -2920,7 +2921,7 @@ void nyx_node_enable(
 
 /**
  * @memberof nyx_node_t
- * \brief Disables a device or a vector and notifies clients.
+ * @brief Disables a device or a vector and notifies clients.
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
@@ -2939,7 +2940,7 @@ void nyx_node_disable(
 /**
  * @memberof nyx_node_t
  * \anchor nyx_node_send_message
- * \brief Sends a human-oriented message to the clients.
+ * @brief Sends a human-oriented message to the clients.
  * @param node Nyx node.
  * @param device Device name.
  * @param message Human-oriented message.
@@ -2956,7 +2957,7 @@ void nyx_node_send_message(
 /**
  * @memberof nyx_node_t
  * \anchor nyx_node_send_del_property
- * \brief Sends a `del-property` message to the clients.
+ * @brief Sends a `del-property` message to the clients.
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
@@ -2974,7 +2975,7 @@ void nyx_node_send_del_property(
 
 /**
  * @memberof nyx_node_t
- * \brief If MQTT is enabled, subscribes to an MQTT topic.
+ * @brief If MQTT is enabled, subscribes to an MQTT topic.
  * @param node Nyx node.
  * @param topic MQTT topic.
  * @note `mqtt_handler` has to be defined in @ref nyx_node_initialize.
@@ -2989,7 +2990,7 @@ void nyx_mqtt_sub(
 
 /**
  * @memberof nyx_node_t
- * \brief If MQTT is enabled, publishes an MQTT message.
+ * @brief If MQTT is enabled, publishes an MQTT message.
  * @param node Nyx node.
  * @param topic MQTT topic.
  * @param message_size MQTT message length.
@@ -3007,7 +3008,7 @@ void nyx_mqtt_pub(
 
 /**
  * @memberof nyx_node_t
- * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
+ * @brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
  * @param node Nyx node.
  * @param device Device name.
  * @param stream Stream name.
