@@ -134,7 +134,7 @@ void nyx_list_del(nyx_list_t *object, size_t idx)
 
 bool nyx_list_iterate(nyx_list_iter_t *iter, size_t *idx, nyx_object_t **object)
 {
-    if(iter->type == NYX_TYPE_LIST && iter->head != NULL)
+    if(iter->head != NULL)
     {
         if(idx != NULL) {
             *idx = iter->idx;

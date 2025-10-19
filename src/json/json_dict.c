@@ -138,7 +138,7 @@ void nyx_dict_del(nyx_dict_t *object, STR_t key)
 
 bool nyx_dict_iterate(nyx_dict_iter_t *iter, STR_t *key, nyx_object_t **object)
 {
-    if(iter->type == NYX_TYPE_DICT && iter->head != NULL)
+    if(iter->head != NULL)
     {
         if(key != NULL) {
             *key = iter->head->key;

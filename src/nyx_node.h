@@ -1186,11 +1186,9 @@ typedef struct nyx_dict_s
 
 typedef struct
 {
-    size_t idx;                                                                                 //!< ???
+    size_t idx;                                                                                 //!< Current zero-based iteration index.
 
-    nyx_type_t type;                                                                            //!< ???
-
-    struct nyx_dict_node_s *head;                                                               //!< ???
+    struct nyx_dict_node_s *head;                                                               //!< Next JSON object to visit.
 
 } nyx_dict_iter_t;
 
@@ -1202,7 +1200,7 @@ typedef struct
  */
 
 #define NYX_DICT_ITER(dict) \
-                ((nyx_dict_iter_t) {.idx = 0, .type = ((nyx_dict_t *) (dict))->base.type, .head = ((nyx_dict_t *) (dict))->head})
+                ((nyx_dict_iter_t) {.idx = 0, .head = ((nyx_dict_t *) (dict))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1436,11 +1434,9 @@ typedef struct nyx_list_s
 
 typedef struct
 {
-    size_t idx;                                                                                 //!< ???
+    size_t idx;                                                                                 //!< Current zero-based iteration index.
 
-    nyx_type_t type;                                                                            //!< ???
-
-    struct nyx_list_node_s *head;                                                               //!< ???
+    struct nyx_list_node_s *head;                                                               //!< Next JSON object to visit.
 
 } nyx_list_iter_t;
 
@@ -1452,7 +1448,7 @@ typedef struct
  */
 
 #define NYX_LIST_ITER(list) \
-                ((nyx_list_iter_t) {.idx = 0, .type = ((nyx_list_t *) (list))->base.type, .head = ((nyx_list_t *) (list))->head})
+                ((nyx_list_iter_t) {.idx = 0, .head = ((nyx_list_t *) (list))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
