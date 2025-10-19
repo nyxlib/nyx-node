@@ -277,7 +277,7 @@ void nyx_generate_mac_addr(
  */
 
 __NULLABLE__ str_t nyx_base64_encode(
-    __NULLABLE__ size_t *result_len,
+    __ZEROABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -293,7 +293,7 @@ __NULLABLE__ str_t nyx_base64_encode(
  */
 
 __NULLABLE__ buff_t nyx_base64_decode(
-    __NULLABLE__ size_t *result_size,
+    __ZEROABLE__ size_t *result_size,
     __ZEROABLE__ size_t len,
     __NULLABLE__ STR_t str
 );
@@ -303,13 +303,13 @@ __NULLABLE__ buff_t nyx_base64_decode(
 /**
  * \brief Compresses a buffer using the ZLib algorithm.
  * \param result_size Optional pointer to store the size of the compressed buffer.
- * \param size Size of the buffer to compressed.
- * \param buff Pointer to the buffer to compressed.
+ * \param size Size of the buffer to compress.
+ * \param buff Pointer to the buffer to compress.
  * \return The compressed buffer.
  */
 
 __NULLABLE__ buff_t nyx_zlib_deflate(
-    __NULLABLE__ size_t *result_size,
+    __ZEROABLE__ size_t *result_size,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -341,7 +341,7 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
  */
 
 __NULLABLE__ str_t nyx_zlib_base64_deflate(
-    __NULLABLE__ size_t *result_len,
+    __ZEROABLE__ size_t *result_len,
     __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
@@ -925,7 +925,7 @@ STR_t nyx_string_get(
 
 void nyx_string_get_buff(
     const nyx_string_t *object,
-    __NULLABLE__ size_t *result_size,
+    __ZEROABLE__ size_t *result_size,
     __NULLABLE__ buff_t *result_buff
 );
 
@@ -1233,7 +1233,7 @@ void nyx_dict_del(
  *
  *   nyx_object_t *object;
  *
- *   for(nyx_dict_iter_t iter = NYX_DICT_ITER(list); nyx_dict_iterate(&iter, &key, &object);)
+ *   for(nyx_dict_iter_t iter = NYX_DICT_ITER(dict); nyx_dict_iterate(&iter, &key, &object);)
  *   {
  *       ...
  *   }
@@ -1321,7 +1321,7 @@ str_t nyx_dict_to_string(
  * \brief Gets a boolean value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return The related boolean value or `false`.
+ * @return The related boolean value or `false` if absent or wrong type.
  */
 
 __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
@@ -1340,7 +1340,7 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
  * \brief Gets a number value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return The related number value or `NaN`.
+ * @return The related number value or `NaN` if absent or wrong type.
  */
 
 __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
@@ -1359,7 +1359,7 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
  * \brief Gets a C string value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return The related C string value or `NULL`.
+ * @return The related C string value or `NULL` if absent or wrong type.
  */
 
 __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
@@ -1449,7 +1449,7 @@ void nyx_list_free(
 /**
  * @memberof nyx_list_t
  * \brief Clears the content of the provided JSON list object.
- * @param object JSON dict object.
+ * @param object JSON list object.
  */
 
 void nyx_list_clear(
@@ -1570,7 +1570,7 @@ str_t nyx_list_to_string(
  * \brief Gets a boolean value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return The related boolean value or `false`.
+ * @return The related boolean value or `false` if absent or wrong type.
  */
 
 __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
@@ -1589,7 +1589,7 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
  * \brief Gets a number value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return The related number value or `NaN`.
+ * @return The related number value or `NaN` if absent or wrong type.
  */
 
 __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
@@ -1608,7 +1608,7 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
  * \brief Gets a C string value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return The related C string value or `NULL`.
+ * @return The related C string value or `NULL` if absent or wrong type.
  */
 
 __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
@@ -1910,7 +1910,7 @@ typedef struct
     __NULLABLE__ STR_t label;                                                                   //!< GUI label, device name by default.
     __NULLABLE__ STR_t hints;                                                                   //!< GUI Markdown description.
     __NULLABLE__ STR_t message;                                                                 //!< Free comment.
-    __ZEROABLE__ double timeout;                                                                //!< Worse-case time [sec] to affect, 0 by default, N/A for RO.
+    __ZEROABLE__ double timeout;                                                                //!< Worse-case time [sec] to apply, 0 by default, N/A for RO.
 
 } nyx_opts_t;
 
@@ -2564,7 +2564,7 @@ nyx_dict_t *nyx_blob_prop_new(
     STR_t name,
     __NULLABLE__ STR_t label,
     __NULLABLE__ STR_t format,
-    __NULLABLE__ size_t size,
+    __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff,
     bool managed
 );
@@ -2581,7 +2581,7 @@ nyx_dict_t *nyx_blob_prop_new(
 
 bool nyx_blob_prop_set_managed(
     nyx_dict_t *prop,
-    __NULLABLE__ size_t size,
+    __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
 
@@ -2597,7 +2597,7 @@ bool nyx_blob_prop_set_managed(
 
 bool nyx_blob_prop_set_unmanaged(
     nyx_dict_t *prop,
-    __NULLABLE__ size_t size,
+    __ZEROABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
 );
 
@@ -2612,7 +2612,7 @@ bool nyx_blob_prop_set_unmanaged(
 
 void nyx_blob_prop_get(
     const nyx_dict_t *prop,
-    __NULLABLE__ size_t *size,
+    __ZEROABLE__ size_t *size,
     __NULLABLE__ buff_t *buff
 );
 
@@ -2695,7 +2695,7 @@ nyx_dict_t *nyx_stream_vector_new(
 
 /**
  * \brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
- * @param vector Nyx node.
+ * @param vector Nyx stream vector.
  * @param max_len Maximum number of entries to keep in the Redis stream.
  * @param n_fields Number of field doublets (length, buffer).
  * @param field_sizes Array of field sizes.
