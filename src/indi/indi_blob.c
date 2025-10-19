@@ -59,7 +59,20 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__
 /* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_blob_prop_set(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+bool nyx_blob_prop_set_managed(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+{
+    if(size == 0x00 || buff == NULL)
+    {
+        size = 0x00;
+        buff = ("");
+    }
+
+    return nyx_dict_set(prop, "$", nyx_string_from_buff_managed(size, buff));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_blob_prop_set_unmanaged(nyx_dict_t *prop, __ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {

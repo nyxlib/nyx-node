@@ -1027,7 +1027,7 @@ str_t nyx_string_to_cstring(
  * \brief Returns a JSON string object holding the value of the provided string (managed duplication).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The duplicated C/C++ string is freed with this object.
+ * @note The duplicated C/C++ string is **freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
@@ -1046,7 +1046,7 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
  * \brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided C/C++ string is freed with this object.
+ * @note The provided C/C++ string is **freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
@@ -1065,7 +1065,7 @@ __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
  * \brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided C/C++ string is **not** freed with this object.
+ * @note The provided C/C++ string is **not freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
@@ -1085,7 +1085,7 @@ __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided buffer is freed with this object.
+ * @note The provided buffer is **freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
@@ -1105,7 +1105,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
  * @return The new JSON string object.
- * @note The provided buffer is **not** freed with this object.
+ * @note The provided buffer is **not freed** with this object.
  */
 
 __INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff)
@@ -2568,10 +2568,26 @@ nyx_dict_t *nyx_blob_prop_new(
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
- * @note The provided buffer is **not** freed with this object.
+ * @note The provided buffer is **freed** with this object.
  */
 
-bool nyx_blob_prop_set(
+bool nyx_blob_prop_set_managed(
+    nyx_dict_t *prop,
+    __NULLABLE__ size_t size,
+    __NULLABLE__ BUFF_t buff
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * \brief Sets the new value of the provided property object.
+ * @param prop Property object.
+ * @param size Size of the new payload content.
+ * @param buff Pointer to the new payload content.
+ * @note The provided buffer is **not freed** with this object.
+ */
+
+bool nyx_blob_prop_set_unmanaged(
     nyx_dict_t *prop,
     __NULLABLE__ size_t size,
     __NULLABLE__ BUFF_t buff
