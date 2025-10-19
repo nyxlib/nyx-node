@@ -119,6 +119,10 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * \brief Similar to libc strdup.
+ */
+
 __NULLABLE__ str_t nyx_string_dup(
     __NULLABLE__ STR_t s
 );
