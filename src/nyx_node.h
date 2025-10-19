@@ -1250,10 +1250,10 @@ bool nyx_dict_iterate(
 
 /**
  * @memberof nyx_dict_t
- * \brief
+ * \brief Gets the JSON object of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return
+ * @return The JSON object of the provided key or `NULL`.
  */
 
 nyx_object_t *nyx_dict_get(
@@ -1500,10 +1500,10 @@ bool nyx_list_iterate(
 
 /**
  * @memberof nyx_list_t
- * \brief
+ * \brief Gets the JSON object at the provided index.
  * @param object JSON list object.
- * @param idx
- * @return
+ * @param idx Index.
+ * @return The JSON object at the provided index or `NULL`.
  */
 
 nyx_object_t *nyx_list_get(
