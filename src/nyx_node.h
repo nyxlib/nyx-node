@@ -1276,11 +1276,11 @@ bool nyx_dict_set_alt(
 
 /**
  * @memberof nyx_dict_t
- * \brief
+ * \brief Adds a JSON object in the provided JSON dict object.
  * @param object JSON dict object.
  * @param key Key.
- * @param value
- * @return
+ * @param value JSON object to be added.
+ * @return The provided JSON dict object.
  */
 
 __INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
@@ -1526,10 +1526,10 @@ nyx_list_t *nyx_list_set_alt(
 
 /**
  * @memberof nyx_list_t
- * \brief
+ * \brief Pushes a JSON object in the provided JSON list object.
  * @param object JSON list object.
- * @param value
- * @return
+ * @param value JSON object to be added.
+ * @return The provided JSON list object.
  */
 
 __INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
