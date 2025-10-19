@@ -229,7 +229,7 @@ void nyx_log(
 /* UTILITIES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup Utilities
+  * @defgroup UTILITIES Utilities
   * Utilities.
   * @{
   */
@@ -252,7 +252,7 @@ uint32_t nyx_hash32(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Generates a MAC address based on a node identifier.
+ * \brief Generates a MAC address based on a node identifier.
  * @param result_mac Output array to store the generated MAC address.
  * @param mac0 First fixed byte of the MAC address.
  * @param mac1 Second fixed byte of the MAC address.
@@ -269,7 +269,7 @@ void nyx_generate_mac_addr(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Encodes a buffer using the base64 algorithm.
+ * \brief Encodes a buffer using the Base64 algorithm.
  * \param result_len Optional pointer to store the length of the encoded string.
  * \param size Size of the buffer to encode.
  * \param buff Pointer to the buffer to encode.
@@ -285,7 +285,7 @@ __NULLABLE__ str_t nyx_base64_encode(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Decodes a string using the base64 algorithm.
+ * \brief Decodes a string using the Base64 algorithm.
  * \param result_size Optional pointer to store the size of the decoded buffer.
  * \param len Length of the string to decode.
  * \param str Pointer to the string to decode.
@@ -317,7 +317,7 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Uncompresses a buffer using the ZLib algorithm.
+ * \brief Decompresses a buffer using the ZLib algorithm.
  * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param size Size of the buffer to uncompress.
  * \param buff Pointer to the buffer to uncompress.
@@ -333,7 +333,7 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Compresses a buffer using the ZLib+base64 algorithm.
+ * \brief Compresses a buffer using the ZLib+Base64 algorithm.
  * \param result_len Optional pointer to store the length of the compressed string.
  * \param size Size of the buffer to compress.
  * \param buff Pointer to the buffer to compress.
@@ -349,7 +349,7 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * \brief Uncompresses a string using the ZLib+base64 algorithm.
+ * \brief Decompresses a string using the ZLib+Base64 algorithm.
  * \param result_size Mandatory pointer to provide and store the size of the uncompressed buffer.
  * \param len Length of the string to uncompress.
  * \param str Pointer to the string to uncompress.
@@ -513,8 +513,8 @@ __NULLABLE__ nyx_object_t *nyx_object_parse_buff(
 
 /**
  * @memberof nyx_object_t
- * \brief Parses a JSON object from a string.
- * \param string String.
+ * \brief Parses a JSON object from a C string.
+ * \param string C string.
  * \return The new JSON object.
  */
 
@@ -555,7 +555,7 @@ bool nyx_object_equal(
  * @memberof nyx_object_t
  * \brief Returns a string representing the provided JSON object.
  * @param object JSON object.
- * @return The string representing the provided JSON object.
+ * @return A newly allocated string that represents the provided JSON object.
  */
 
 str_t nyx_object_to_string(
@@ -568,7 +568,7 @@ str_t nyx_object_to_string(
  * @memberof nyx_object_t
  * \brief Returns a C string representing the provided JSON object.
  * @param object JSON object.
- * @return The string representing the provided JSON object.
+ * @return A newly allocated string that represents the provided JSON object.
  */
 
 str_t nyx_object_to_cstring(
@@ -621,7 +621,7 @@ void nyx_null_free(
  * @memberof nyx_null_t
  * \brief Returns a string representing the provided JSON null object.
  * @param object JSON null object.
- * @return The string representing the provided JSON null object.
+ * @return A newly allocated string that represents the provided JSON null object.
  */
 
 str_t nyx_null_to_string(
@@ -718,7 +718,7 @@ __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
  * @memberof nyx_number_t
  * \brief Returns a string representing the provided JSON number object.
  * @param object JSON number object.
- * @return The string representing the provided JSON number object.
+ * @return A newly allocated string that represents the provided JSON number object.
  */
 
 str_t nyx_number_to_string(
@@ -832,7 +832,7 @@ __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
  * @memberof nyx_boolean_t
  * \brief Returns a string representing the provided JSON boolean object.
  * @param object JSON boolean object.
- * @return The string representing the provided JSON boolean object.
+ * @return A newly allocated string that represents the provided JSON boolean object.
  */
 
 str_t nyx_boolean_to_string(
@@ -876,7 +876,7 @@ typedef struct
 {
     nyx_object_t base;                                                                          //!< Common object header for JSON values.
 
-    bool managed;                                                                               //!< `True` if the value is freed with this object.
+    bool managed;                                                                               //!< `true` if the value is freed with this object.
     size_t length;                                                                              //!< String length in bytes (UTF-8), excluding `NULL`.
     str_t value;                                                                                //!< ???
 
@@ -947,7 +947,7 @@ bool nyx_string_set_alt(
  * \brief Set the value of the provided JSON string object.
  * @param object JSON string object.
  * @param value Value for the provided JSON string object.
- * @param managed If `True`, the provided buffer is freed with this object.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -976,7 +976,7 @@ bool nyx_string_set_buff_alt(
  * @param object JSON string object.
  * @param size Value size for the provided JSON string object.
  * @param buff Value buffer for the provided JSON string object.
- * @param managed If `True`, the provided buffer is freed with this object.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -1004,7 +1004,7 @@ size_t nyx_string_length(
  * @memberof nyx_string_t
  * \brief Returns a string representing the provided JSON string object.
  * @param object JSON string object.
- * @return The string representing the provided JSON string object.
+ * @return A newly allocated string that represents the provided JSON string object.
  */
 
 str_t nyx_string_to_string(
@@ -1017,7 +1017,7 @@ str_t nyx_string_to_string(
  * @memberof nyx_string_t
  * \brief Returns a C string representing the provided JSON string object.
  * @param object JSON string object.
- * @return The string representing the provided JSON string object.
+ * @return A newly allocated string that represents the provided JSON string object.
  */
 
 str_t nyx_string_to_cstring(
@@ -1233,7 +1233,7 @@ void nyx_dict_del(
  *
  *   nyx_object_t *object;
  *
- *   for(nyx_list_iter_t iter = NYX_DICT_ITER(list); nyx_dict_iterate(&iter, &key, &object);)
+ *   for(nyx_dict_iter_t iter = NYX_DICT_ITER(list); nyx_dict_iterate(&iter, &key, &object);)
  *   {
  *       ...
  *   }
@@ -1280,7 +1280,7 @@ bool nyx_dict_set_alt(
  * @param object JSON dict object.
  * @param key Key.
  * @param value JSON object to be added.
- * @return The provided JSON dict object.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
@@ -1307,7 +1307,7 @@ size_t nyx_dict_size(
  * @memberof nyx_dict_t
  * \brief Returns a string representing the provided JSON dict object.
  * @param object JSON dict object.
- * @return The string representing the provided JSON dict object.
+ * @return A newly allocated string that represents the provided JSON dict object.
  */
 
 str_t nyx_dict_to_string(
@@ -1321,7 +1321,7 @@ str_t nyx_dict_to_string(
  * \brief Gets a boolean value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return The related boolean value or `NULL`.
+ * @return The related boolean value or `false`.
  */
 
 __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
@@ -1340,7 +1340,7 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
  * \brief Gets a number value of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return The related number value or `NULL`.
+ * @return The related number value or `NaN`.
  */
 
 __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
@@ -1517,7 +1517,7 @@ nyx_object_t *nyx_list_get(
  * @private
  */
 
-nyx_list_t *nyx_list_set_alt(
+bool nyx_list_push_alt(
     /*-*/ nyx_list_t *object,
     size_t idx,
     void *value,
@@ -1529,12 +1529,12 @@ nyx_list_t *nyx_list_set_alt(
  * \brief Pushes a JSON object in the provided JSON list object.
  * @param object JSON list object.
  * @param value JSON object to be added.
- * @return The provided JSON list object.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
 {
-    return nyx_list_set_alt(object, -1, value, true);
+    return nyx_list_push_alt(object, -1, value, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1556,7 +1556,7 @@ size_t nyx_list_size(
  * @memberof nyx_list_t
  * \brief Returns a string representing the provided JSON list object.
  * @param object JSON list object.
- * @return The string representing the provided JSON list object.
+ * @return A newly allocated string that represents the provided JSON list object.
  */
 
 str_t nyx_list_to_string(
@@ -1570,7 +1570,7 @@ str_t nyx_list_to_string(
  * \brief Gets a boolean value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return The related boolean value or `NULL`.
+ * @return The related boolean value or `false`.
  */
 
 __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
@@ -1589,7 +1589,7 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
  * \brief Gets a number value at the provided index.
  * @param object JSON list object.
  * @param idx Index.
- * @return The related number value or `NULL`.
+ * @return The related number value or `NaN`.
  */
 
 __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
@@ -1684,8 +1684,8 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
 
 /**
  * @memberof nyx_xmldoc_t
- * \brief Parses an XML document from a string.
- * \param string string.
+ * \brief Parses an XML document from a C string.
+ * \param string C string.
  * \return The new XML document.
  */
 
@@ -1711,7 +1711,7 @@ void nyx_xmldoc_free(
  * @memberof nyx_xmldoc_t
  * \brief Returns a string representing the provided XML document.
  * @param xmldoc XML document.
- * @return The string representing the provided XML document.
+ * @return A newly allocated string that represents the provided XML document.
  */
 
 str_t nyx_xmldoc_to_string(
@@ -2000,7 +2000,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
     #else
-    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_ULONG, {._long = value}};
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
     #endif
 }
 
@@ -2013,7 +2013,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
     #else
-    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_DOUBLE, {._long = value}};
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
     #endif
 }
 
@@ -2554,10 +2554,10 @@ nyx_dict_t *nyx_switch_set_vector_new(
  * @param format Payload format.
  * @param size Size of the initial payload content.
  * @param buff Pointer to the initial payload content.
- * @param managed If `True`, the provided buffer is freed with this object.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return The new property object.
- * @note If a format ends with `.b`, the payload is automatically base64-encoded.
- * @note If a format ends with `.z`, the payload is automatically zlib+base64-compressed.
+ * @note If a format ends with `.b`, the payload is automatically Base64-encoded.
+ * @note If a format ends with `.z`, the payload is automatically ZLib+Base64-compressed.
  */
 
 nyx_dict_t *nyx_blob_prop_new(
@@ -2662,8 +2662,8 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @param name Definition name.
  * @param label Definition label.
  * @return The new property object.
- * @note If the name ends with `.b`, the payload is automatically base64-encoded, see @ref nyx_stream_pub.
- * @note If the name ends with `.z`, the payload is automatically zlib+base64-compressed, see @ref nyx_stream_pub.
+ * @note If the name ends with `.b`, the payload is automatically Base64-encoded, see @ref nyx_stream_pub.
+ * @note If the name ends with `.z`, the payload is automatically ZLib+Base64-compressed, see @ref nyx_stream_pub.
  */
 
 nyx_dict_t *nyx_stream_prop_new(
@@ -3017,8 +3017,8 @@ void nyx_mqtt_pub(
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
  * @warning Except if performance is critical, prefer using @ref nyx_stream_pub.
- * @note If a field name ends with `.b`, the payload is automatically base64-encoded.
- * @note If a field name ends with `.z`, the payload is automatically zlib+base64-compressed.
+ * @note If a field name ends with `.b`, the payload is automatically Base64-encoded.
+ * @note If a field name ends with `.z`, the payload is automatically ZLib+Base64-compressed.
  */
 
 void nyx_redis_pub(
