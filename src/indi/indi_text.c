@@ -37,10 +37,10 @@ nyx_dict_t *nyx_text_prop_new(STR_t name, __NULLABLE__ STR_t label, __NULLABLE__
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set(result, "<>", nyx_string_from("defText"));
+    nyx_dict_set(result, "<>", nyx_string_from_dup("defText"));
 
-    nyx_dict_set(result, "@name", nyx_string_from(name));
-    nyx_dict_set(result, "@label", nyx_string_from(label));
+    nyx_dict_set(result, "@name", nyx_string_from_dup(name));
+    nyx_dict_set(result, "@label", nyx_string_from_dup(label));
 
     nyx_text_prop_set(result, value);
 
@@ -60,7 +60,7 @@ bool nyx_text_prop_set(nyx_dict_t *prop, __NULLABLE__ STR_t value)
         value = "";
     }
 
-    return  nyx_dict_set(prop, "$", nyx_string_from(value));
+    return  nyx_dict_set(prop, "$", nyx_string_from_dup(value));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -90,18 +90,18 @@ nyx_dict_t *nyx_text_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from("defTextVector"));
+    nyx_dict_set(result, "<>", nyx_string_from_dup("defTextVector"));
 
     nyx_dict_set(result, "children", children);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "@client", nyx_string_from("unknown"));
-    nyx_dict_set(result, "@device", nyx_string_from(device));
-    nyx_dict_set(result, "@name", nyx_string_from(name));
+    nyx_dict_set(result, "@client", nyx_string_from_dup("unknown"));
+    nyx_dict_set(result, "@device", nyx_string_from_dup(device));
+    nyx_dict_set(result, "@name", nyx_string_from_dup(name));
 
-    nyx_dict_set(result, "@state", nyx_string_from(nyx_state_to_str(state)));
-    nyx_dict_set(result, "@perm", nyx_string_from(nyx_perm_to_str(perm)));
+    nyx_dict_set(result, "@state", nyx_string_from_dup(nyx_state_to_str(state)));
+    nyx_dict_set(result, "@perm", nyx_string_from_dup(nyx_perm_to_str(perm)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

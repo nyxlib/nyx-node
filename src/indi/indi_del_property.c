@@ -24,20 +24,20 @@ nyx_dict_t *nyx_del_property_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from("delProperty"));
+    nyx_dict_set(result, "<>", nyx_string_from_dup("delProperty"));
 
-    nyx_dict_set(result, "@client", nyx_string_from("unknown"));
-    nyx_dict_set(result, "@device", nyx_string_from(device));
-    nyx_dict_set(result, "@timestamp", nyx_string_from(timestamp));
+    nyx_dict_set(result, "@client", nyx_string_from_dup("unknown"));
+    nyx_dict_set(result, "@device", nyx_string_from_dup(device));
+    nyx_dict_set(result, "@timestamp", nyx_string_from_dup(timestamp));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(name != NULL) {
-        nyx_dict_set(result, "@name", nyx_string_from(name));
+        nyx_dict_set(result, "@name", nyx_string_from_dup(name));
     }
 
     if(message != NULL) {
-        nyx_dict_set(result, "@message", nyx_string_from(message));
+        nyx_dict_set(result, "@message", nyx_string_from_dup(message));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

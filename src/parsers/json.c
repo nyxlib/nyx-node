@@ -448,9 +448,9 @@ static nyx_string_t *json_parse_string(json_parser_t *parser)
 
     str_t value = PEEK().value;
 
-    nyx_string_t *result = nyx_string_from(/**/(value)); // NOLINT(*-err34-c)
+    nyx_string_t *result = nyx_string_from(/**/(value), true); // NOLINT(*-err34-c)
 
-    nyx_memory_free(value);
+    // don't free de string
 
     NEXT();
 

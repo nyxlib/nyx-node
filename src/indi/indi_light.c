@@ -37,12 +37,12 @@ nyx_dict_t *nyx_light_prop_new(STR_t name, __NULLABLE__ STR_t label, nyx_state_t
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set(result, "<>", nyx_string_from("defLight"));
+    nyx_dict_set(result, "<>", nyx_string_from_dup("defLight"));
 
-    nyx_dict_set(result, "@name", nyx_string_from(name));
-    nyx_dict_set(result, "@label", nyx_string_from(label));
+    nyx_dict_set(result, "@name", nyx_string_from_dup(name));
+    nyx_dict_set(result, "@label", nyx_string_from_dup(label));
 
-    nyx_dict_set(result, "$", nyx_string_from(nyx_state_to_str(value)));
+    nyx_dict_set(result, "$", nyx_string_from_dup(nyx_state_to_str(value)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -55,7 +55,7 @@ nyx_dict_t *nyx_light_prop_new(STR_t name, __NULLABLE__ STR_t label, nyx_state_t
 
 bool nyx_light_prop_set(nyx_dict_t *prop, nyx_state_t value)
 {
-    return nyx_dict_set(prop, "$", nyx_string_from(nyx_state_to_str(value)));
+    return nyx_dict_set(prop, "$", nyx_string_from_dup(nyx_state_to_str(value)));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -84,17 +84,17 @@ nyx_dict_t *nyx_light_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from("defLightVector"));
+    nyx_dict_set(result, "<>", nyx_string_from_dup("defLightVector"));
 
     nyx_dict_set(result, "children", children);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "@client", nyx_string_from("unknown"));
-    nyx_dict_set(result, "@device", nyx_string_from(device));
-    nyx_dict_set(result, "@name", nyx_string_from(name));
+    nyx_dict_set(result, "@client", nyx_string_from_dup("unknown"));
+    nyx_dict_set(result, "@device", nyx_string_from_dup(device));
+    nyx_dict_set(result, "@name", nyx_string_from_dup(name));
 
-    nyx_dict_set(result, "@state", nyx_string_from(nyx_state_to_str(state)));
+    nyx_dict_set(result, "@state", nyx_string_from_dup(nyx_state_to_str(state)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

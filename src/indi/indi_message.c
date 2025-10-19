@@ -28,12 +28,12 @@ nyx_dict_t *nyx_message_new(STR_t device, __NULLABLE__ STR_t message)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from("message"));
+    nyx_dict_set(result, "<>", nyx_string_from_dup("message"));
 
-    nyx_dict_set(result, "@client", nyx_string_from("unknown"));
-    nyx_dict_set(result, "@device", nyx_string_from(device));
-    nyx_dict_set(result, "@message", nyx_string_from(message));
-    nyx_dict_set(result, "@timestamp", nyx_string_from(timestamp));
+    nyx_dict_set(result, "@client", nyx_string_from_dup("unknown"));
+    nyx_dict_set(result, "@device", nyx_string_from_dup(device));
+    nyx_dict_set(result, "@message", nyx_string_from_dup(message));
+    nyx_dict_set(result, "@timestamp", nyx_string_from_dup(timestamp));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

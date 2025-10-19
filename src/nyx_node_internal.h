@@ -38,10 +38,6 @@ __NULLABLE__ str_t nyx_double_dup(
     double d
 );
 
-__NULLABLE__ str_t nyx_string_dup(
-    __NULLABLE__ STR_t s
-);
-
 __NULLABLE__ str_t nyx_string_ndup(
     __NULLABLE__ STR_t s,
     __ZEROABLE__ size_t n

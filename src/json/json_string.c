@@ -67,7 +67,7 @@ void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
+bool nyx_string_set_alt(nyx_string_t *object, STR_t value, bool manage, bool notify)
 {
     if(value == NULL)
     {
@@ -89,52 +89,9 @@ bool nyx_string_set_dup_alt(nyx_string_t *object, STR_t value, bool notify)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->managed = true;
+        object->managed = /*--*/ manage;
         object->length = strlen(value);
-        object->value = nyx_string_dup(value);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(notify && modified)
-        {
-            nyx_object_notify(&object->base);
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        return modified;
-    }
-
-    return false;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_string_set_ref_alt(nyx_string_t *object, STR_t value, bool notify)
-{
-    if(value == NULL)
-    {
-        NYX_LOG_ERROR("Null string not allowed");
-
-        return false;
-    }
-
-    bool modified = strcmp(object->value, value) != 0;
-
-    if(modified || object->managed == true)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(object->managed)
-        {
-            nyx_memory_free(object->value);
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        object->managed = false;
-        object->length = strlen(value);
-        object->value = (/**/str_t/**/) value;
+        object->value = (str_t) value;
 
         /*------------------------------------------------------------------------------------------------------------*/
 

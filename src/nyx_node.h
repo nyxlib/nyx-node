@@ -118,6 +118,12 @@ __NULLABLE__ buff_t nyx_memory_realloc(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+__NULLABLE__ str_t nyx_string_dup(
+    __NULLABLE__ STR_t s
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
@@ -925,48 +931,25 @@ void nyx_string_get_buff(
  * @private
  */
 
-bool nyx_string_set_dup_alt(
+bool nyx_string_set_alt(
     /*-*/ nyx_string_t *object,
     STR_t value,
+    bool managed,
     bool notify
 );
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object (string duplication).
+ * \brief Set the value of the provided JSON string object.
  * @param object JSON string object.
  * @param value Value for the provided JSON string object.
+ * @param managed `True` if the provided buffer is freed with this object.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
-__INLINE__ bool nyx_string_set_dup(nyx_string_t *object, STR_t value)
+__INLINE__ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
 {
-    return nyx_string_set_dup_alt(object, value, true);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-bool nyx_string_set_ref_alt(
-    /*-*/ nyx_string_t *object,
-    STR_t value,
-    bool notify
-);
-
-/**
- * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object (string reference).
- * @param object JSON string object.
- * @param value Value for the provided JSON string object.
- * @return \c true if the value was modified, \c false otherwise.
- */
-
-__INLINE__ bool nyx_string_set_ref(nyx_string_t *object, STR_t value)
-{
-    return nyx_string_set_ref_alt(object, value, true);
+    return nyx_string_set_alt(object, value, managed, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -985,7 +968,7 @@ bool nyx_string_set_buff_alt(
 
 /**
  * @memberof nyx_string_t
- * \brief Set the value of the provided JSON string object (buffer reference or base64 encoding).
+ * \brief Set the value of the provided JSON string object.
  * @param object JSON string object.
  * @param size Value size for the provided JSON string object.
  * @param buff Value buffer for the provided JSON string object.
@@ -997,19 +980,6 @@ __INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t bu
 {
     return nyx_string_set_buff_alt(object, size, buff, managed, true);
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_string_t
- * \brief Returns the raw size (before base64-encoding or compressing) of JSON string object.
- * @param object JSON string object.
- * @return
- */
-
-size_t nyx_string_raw_size(
-    const nyx_string_t *object
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1054,16 +1024,17 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided argument (string duplication).
+ * \brief Returns a JSON string object holding the value of the provided string (duplication).
  * @param value Value for the new JSON string object.
+ * @param managed `True` if the provided buffer is freed with this object.
  * @return The new JSON string object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
+__INLINE__ nyx_string_t *nyx_string_from(STR_t value, bool managed)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_dup(result, value);
+    nyx_string_set(result, value, managed);
 
     return result;
 }
@@ -1072,7 +1043,7 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided argument (string reference).
+ * \brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
  */
@@ -1081,7 +1052,7 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_ref(result, value);
+    nyx_string_set(result, /*----------*/(value), false);
 
     return result;
 }
@@ -1090,7 +1061,25 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided argument (buffer reference).
+ * \brief Returns a JSON string object holding the value of the provided string.
+ * @param value Value for the new JSON string object.
+ * @return The new JSON string object.
+ */
+
+__INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
+{
+    nyx_string_t *result = nyx_string_new();
+
+    nyx_string_set(result, nyx_string_dup(value), true);
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_string_t
+ * \brief Returns a JSON string object holding the value of the provided buffer.
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
  * @param managed `True` if the provided buffer is freed with this object.
@@ -1105,20 +1094,6 @@ __INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool man
 
     return result;
 }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * \brief Alias to @ref nyx_string_set_dup.
- */
-
-#define nyx_string_set nyx_string_set_dup
-
-/**
- * \brief Alias to @ref nyx_string_from_dup.
- */
-
-#define nyx_string_from nyx_string_from_dup
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* DICT                                                                                                               */

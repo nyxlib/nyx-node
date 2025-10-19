@@ -254,7 +254,7 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_STRING:
-                return nyx_dict_set_alt(dst, key, nyx_string_from(nyx_string_get((nyx_string_t *) src_object)), notify);
+                return nyx_dict_set_alt(dst, key, nyx_string_from_dup(nyx_string_get((nyx_string_t *) src_object)), notify);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -302,7 +302,7 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
 
     internal_get_timestamp(sizeof(timestamp), timestamp);
 
-    nyx_dict_set(dict, "@timestamp", nyx_string_from(timestamp));
+    nyx_dict_set(dict, "@timestamp", nyx_string_from_dup(timestamp));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -320,15 +320,15 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
         /*------------------------------------------------------------------------------------------------------------*/
 
         if(opts->label != NULL) {
-            nyx_dict_set(dict, "@label", nyx_string_from(opts->label));
+            nyx_dict_set(dict, "@label", nyx_string_from_dup(opts->label));
         }
 
         if(opts->hints != NULL) {
-            nyx_dict_set(dict, "@hints", nyx_string_from(opts->hints));
+            nyx_dict_set(dict, "@hints", nyx_string_from_dup(opts->hints));
         }
 
         if(opts->message != NULL) {
-            nyx_dict_set(dict, "@message", nyx_string_from(opts->message));
+            nyx_dict_set(dict, "@message", nyx_string_from_dup(opts->message));
         }
 
         if(opts->timeout > 0.00) {
@@ -340,7 +340,7 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(dict, "@group", nyx_string_from(group));
+    nyx_dict_set(dict, "@group", nyx_string_from_dup(group));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -410,7 +410,7 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from(set_tag));
+    nyx_dict_set(result, "<>", nyx_string_from_dup(set_tag));
 
     internal_copy(result, vector, "@client", false);
     internal_copy(result, vector, "@device", false);
@@ -442,7 +442,7 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_dict_set_alt(dst_dict, "<>", nyx_string_from(one_tag), false);
+                nyx_dict_set_alt(dst_dict, "<>", nyx_string_from_dup(one_tag), false);
 
                 internal_copy(dst_dict, src_dict, "@name", false);
 
