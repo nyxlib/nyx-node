@@ -2730,6 +2730,7 @@ nyx_dict_t *nyx_stream_set_vector_new(
  * @param device Device name.
  * @param message Human-oriented message.
  * @return The new human-oriented message object.
+ * @note The C/C++ string is duplicated.
  * @note Prefer using @ref nyx_node_send_message.
  */
 
@@ -2746,6 +2747,7 @@ nyx_dict_t *nyx_message_new(
  * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human-oriented message.
  * @return The new `delete-property` message object.
+ * @note The C/C++ string is duplicated.
  * @note Prefer using @ref nyx_node_send_del_property.
  */
 
