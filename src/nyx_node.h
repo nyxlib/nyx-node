@@ -2304,6 +2304,7 @@ nyx_dict_t *nyx_number_set_vector_new(
  * @param label Definition label.
  * @param value Initial value.
  * @return The new property object.
+ * @note The C/C++ string is duplicated.
  */
 
 nyx_dict_t *nyx_text_prop_new(
@@ -2319,6 +2320,7 @@ nyx_dict_t *nyx_text_prop_new(
  * @param prop Property object.
  * @param value The new `STR_t` value.
  * @return \c true if the value was modified, \c false otherwise.
+ * @note The C/C++ string is duplicated.
  */
 
 bool nyx_text_prop_set(
