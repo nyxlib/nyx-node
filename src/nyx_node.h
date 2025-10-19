@@ -1024,7 +1024,7 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string (duplication).
+ * \brief Returns a JSON string object holding the value of the provided string.
  * @param value Value for the new JSON string object.
  * @param managed `True` if the provided buffer is freed with this object.
  * @return The new JSON string object.
@@ -1061,7 +1061,7 @@ __INLINE__ nyx_string_t *nyx_string_from_ref(STR_t value)
 
 /**
  * @memberof nyx_string_t
- * \brief Returns a JSON string object holding the value of the provided string.
+ * \brief Returns a JSON string object holding the value of the provided string (string duplication).
  * @param value Value for the new JSON string object.
  * @return The new JSON string object.
  */
