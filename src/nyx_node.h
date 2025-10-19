@@ -1227,7 +1227,7 @@ void nyx_dict_del(
  * \brief Iterates over a JSON dict.
  * @param iter List iterator.
  * @param key Pointer to the current element index.
- * @param object Pointer to the current element object.
+ * @param object Pointer to the current JSON object.
  * @code
  *   STR_t key;
  *
@@ -1477,7 +1477,7 @@ void nyx_list_del(
  * \brief Iterates over a JSON list.
  * @param iter List iterator.
  * @param idx Pointer to the current element index.
- * @param object Pointer to the current element object.
+ * @param object Pointer to the current JSON object.
  * @code
  *   size_t idx;
  *
