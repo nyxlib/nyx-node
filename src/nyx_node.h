@@ -439,14 +439,20 @@ struct nyx_dict_s;
 
 typedef struct nyx_object_s
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
     uint64_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX definitions.
 
     nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     __NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
 
     __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     union {
 
@@ -508,11 +514,17 @@ typedef struct nyx_object_s
 
     } in_callback;                                                                              //!< Callback triggered when the client modifies this object.
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     __NULLABLE__ void (* out_callback)(
         struct nyx_object_s *object                                                             //!< This object.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     __NULLABLE__ void *ctx;                                                                     //!< User context pointer.
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
 } nyx_object_t;
 
@@ -563,7 +575,7 @@ void nyx_object_free(
  * @brief Compares two JSON objects.
  * @param object1 First JSON object.
  * @param object2 Second JSON object.
- * @return `true` if the objects are equal, and `false` if not.
+ * @return `true` if the objects are equal, `false` otherwise.
  */
 
 bool nyx_object_equal(
@@ -735,7 +747,7 @@ bool nyx_number_set_alt(
  * @brief Set the value of the provided JSON number object.
  * @param object JSON number object.
  * @param value Value for the provided JSON number object.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
@@ -852,7 +864,7 @@ bool nyx_boolean_set_alt(
  * @brief Set the value of the provided JSON boolean object.
  * @param object JSON boolean object.
  * @param value Value for the provided JSON boolean object.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
@@ -985,7 +997,7 @@ bool nyx_string_set_alt(
  * @param object JSON string object.
  * @param value Value for the provided JSON string object.
  * @param managed If `true`, the provided buffer is freed with this object.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
@@ -1014,7 +1026,7 @@ bool nyx_string_set_buff_alt(
  * @param size Value size for the provided JSON string object.
  * @param buff Value buffer for the provided JSON string object.
  * @param managed If `true`, the provided buffer is freed with this object.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
@@ -1265,6 +1277,7 @@ void nyx_dict_del(
  * @param iter List iterator.
  * @param key Pointer to the current element key.
  * @param object Pointer to the current JSON object.
+ * @return `true` while elements remain, `false` otherwise.
  * @code
  *   STR_t key;
  *
@@ -1364,10 +1377,10 @@ str_t nyx_dict_to_string(
 
 __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 {
-    nyx_object_t *boolean = nyx_dict_get(object, key);
+    nyx_object_t *value = nyx_dict_get(object, key);
 
-    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_boolean_t *) boolean)
-                                                                  : false
+    return (value != NULL && value->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_boolean_t *) value)
+                                                              : false
     ;
 }
 
@@ -1383,10 +1396,10 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 
 __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 {
-    nyx_object_t *number = nyx_dict_get(object, key);
+    nyx_object_t *value = nyx_dict_get(object, key);
 
-    return (number != NULL && number->type == NYX_TYPE_NUMBER) ? nyx_number_get((nyx_number_t *) number)
-                                                               : nan("1")
+    return (value != NULL && value->type == NYX_TYPE_NUMBER) ? nyx_number_get((nyx_number_t *) value)
+                                                             : nan("1")
     ;
 }
 
@@ -1402,10 +1415,10 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 
 __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 {
-    nyx_object_t *string = nyx_dict_get(object, key);
+    nyx_object_t *value = nyx_dict_get(object, key);
 
-    return (string != NULL && string->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) string)
-                                                               : NULL
+    return (value != NULL && value->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) value)
+                                                             : NULL
     ;
 }
 
@@ -1514,6 +1527,7 @@ void nyx_list_del(
  * @param iter List iterator.
  * @param idx Pointer to the current element index.
  * @param object Pointer to the current JSON object.
+ * @return `true` while elements remain, `false` otherwise.
  * @code
  *   size_t idx;
  *
@@ -2208,7 +2222,7 @@ nyx_variant_t nyx_number_prop_get(
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
@@ -2235,7 +2249,7 @@ __INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
@@ -2262,7 +2276,7 @@ __INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
@@ -2289,7 +2303,7 @@ __INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
@@ -2316,7 +2330,7 @@ __INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
@@ -2399,7 +2413,7 @@ nyx_dict_t *nyx_text_prop_new(
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  * @note The provided C string is duplicated.
  */
 
@@ -2481,7 +2495,7 @@ nyx_dict_t *nyx_light_prop_new(
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 bool nyx_light_prop_set(
@@ -2560,7 +2574,7 @@ nyx_dict_t *nyx_switch_prop_new(
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
- * @return \c true if the value was modified, \c false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 bool nyx_switch_prop_set(
@@ -2652,6 +2666,7 @@ nyx_dict_t *nyx_blob_prop_new(
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
+ * @return `true` if the value was modified, `false` otherwise.
  * @note The provided buffer is **freed** with this object.
  */
 
@@ -2668,6 +2683,7 @@ bool nyx_blob_prop_set_managed(
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
+ * @return `true` if the value was modified, `false` otherwise.
  * @note The provided buffer is **not freed** with this object.
  */
 
