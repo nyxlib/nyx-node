@@ -549,7 +549,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
 /**
  * @memberof nyx_object_t
  * @brief Frees memory of the provided JSON object.
- * @param object JSON document.
+ * @param object JSON object.
  */
 
 void nyx_object_free(
@@ -609,7 +609,7 @@ str_t nyx_object_to_cstring(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Struct describing a JSON null value.
+ * @brief Struct describing a JSON null object.
  */
 
 typedef struct
@@ -624,7 +624,7 @@ typedef struct
  * @memberof nyx_null_t
  * @brief Allocates a new JSON null object.
  *
- * @return The new JSON null.
+ * @return The new JSON null object.
  */
 
 nyx_null_t *nyx_null_new(void);
@@ -666,7 +666,7 @@ str_t nyx_null_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Struct describing a JSON number.
+ * @brief Struct describing a JSON number object.
  */
 
 typedef struct
@@ -683,7 +683,7 @@ typedef struct
  * @memberof nyx_number_t
  * @brief Allocates a new JSON number object.
  *
- * @return The new JSON number.
+ * @return The new JSON number object.
  */
 
 nyx_number_t *nyx_number_new(void);
@@ -783,7 +783,7 @@ __INLINE__ nyx_number_t *nyx_number_from(double value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Struct describing a JSON boolean.
+ * @brief Struct describing a JSON boolean object.
  */
 
 typedef struct
@@ -799,7 +799,7 @@ typedef struct
 /**
  * @memberof nyx_boolean_t
  * @brief Allocates a new JSON boolean object.
- * @return The new JSON boolean.
+ * @return The new JSON boolean object.
  */
 
 nyx_boolean_t *nyx_boolean_new(void);
@@ -899,7 +899,7 @@ __INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Struct describing a JSON string.
+ * @brief Struct describing a JSON string object.
  */
 
 typedef struct
@@ -917,7 +917,7 @@ typedef struct
 /**
  * @memberof nyx_string_t
  * @brief Allocates a new JSON string object.
- * @return The new JSON string.
+ * @return The new JSON string object.
  */
 
 nyx_string_t *nyx_string_new(void);
@@ -1166,7 +1166,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff
 
 /**
  * @struct nyx_dict_t
- * @brief Struct describing a JSON dict.
+ * @brief Struct describing a JSON dict object.
  */
 
 typedef struct nyx_dict_s
@@ -1207,7 +1207,7 @@ typedef struct
 /**
  * @memberof nyx_dict_t
  * @brief Allocates a new JSON dict object.
- * @return The new JSON dict.
+ * @return The new JSON dict object.
  */
 
 nyx_dict_t *nyx_dict_new(void);
@@ -1254,7 +1254,7 @@ void nyx_dict_del(
 
 /**
  * @memberof nyx_dict_t
- * @brief Iterates over a JSON dict.
+ * @brief Iterates over a JSON dict object.
  * @param iter List iterator.
  * @param key Pointer to the current element key.
  * @param object Pointer to the current JSON object.
@@ -1414,7 +1414,7 @@ __INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 
 /**
  * @struct nyx_list_t
- * @brief Struct describing a JSON list.
+ * @brief Struct describing a JSON list object.
  */
 
 typedef struct nyx_list_s
@@ -1444,7 +1444,7 @@ typedef struct
 
 /**
  * @brief Initializes a JSON list iterator.
- * @param list JSON list.
+ * @param list JSON list object.
  */
 
 #define NYX_LIST_ITER(list) \
@@ -1502,7 +1502,7 @@ void nyx_list_del(
 
 /**
  * @memberof nyx_list_t
- * @brief Iterates over a JSON list.
+ * @brief Iterates over a JSON list object.
  * @param iter List iterator.
  * @param idx Pointer to the current element index.
  * @param object Pointer to the current JSON object.
