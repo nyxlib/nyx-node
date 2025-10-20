@@ -578,6 +578,7 @@ bool nyx_object_equal(
  * @brief Returns a string representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
+ * @note Must be freed.
  */
 
 str_t nyx_object_to_string(
@@ -591,6 +592,7 @@ str_t nyx_object_to_string(
  * @brief Returns a C string representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
+ * @note Must be freed.
  */
 
 str_t nyx_object_to_cstring(
@@ -648,6 +650,7 @@ void nyx_null_free(
  * @brief Returns a string representing the provided JSON null object.
  * @param object JSON null object.
  * @return A newly allocated string that represents the provided JSON null object.
+ * @note Must be freed.
  */
 
 str_t nyx_null_to_string(
@@ -747,6 +750,7 @@ __INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
  * @brief Returns a string representing the provided JSON number object.
  * @param object JSON number object.
  * @return A newly allocated string that represents the provided JSON number object.
+ * @note Must be freed.
  */
 
 str_t nyx_number_to_string(
@@ -863,6 +867,7 @@ __INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
  * @brief Returns a string representing the provided JSON boolean object.
  * @param object JSON boolean object.
  * @return A newly allocated string that represents the provided JSON boolean object.
+ * @note Must be freed.
  */
 
 str_t nyx_boolean_to_string(
@@ -1037,6 +1042,7 @@ size_t nyx_string_length(
  * @brief Returns a string representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
+ * @note Must be freed.
  */
 
 str_t nyx_string_to_string(
@@ -1050,6 +1056,7 @@ str_t nyx_string_to_string(
  * @brief Returns a C string representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
+ * @note Must be freed.
  */
 
 str_t nyx_string_to_cstring(
@@ -1338,6 +1345,7 @@ size_t nyx_dict_size(
  * @brief Returns a string representing the provided JSON dict object.
  * @param object JSON dict object.
  * @return A newly allocated string that represents the provided JSON dict object.
+ * @note Must be freed.
  */
 
 str_t nyx_dict_to_string(
@@ -1585,6 +1593,7 @@ size_t nyx_list_size(
  * @brief Returns a string representing the provided JSON list object.
  * @param object JSON list object.
  * @return A newly allocated string that represents the provided JSON list object.
+ * @note Must be freed.
  */
 
 str_t nyx_list_to_string(
@@ -1742,6 +1751,7 @@ void nyx_xmldoc_free(
  * @brief Returns a string representing the provided XML document.
  * @param xmldoc XML document.
  * @return A newly allocated string that represents the provided XML document.
+ * @note Must be freed.
  */
 
 str_t nyx_xmldoc_to_string(
@@ -2211,7 +2221,7 @@ __INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `int32_t` value.
+ * @return The current value.
  */
 
 __INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
@@ -2238,7 +2248,7 @@ __INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `uint32_t` value.
+ * @return The current value.
  */
 
 __INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
@@ -2265,7 +2275,7 @@ __INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `int64_t` value.
+ * @return The current value.
  */
 
 __INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
@@ -2292,7 +2302,7 @@ __INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `uint64_t` value.
+ * @return The current value.
  */
 
 __INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
@@ -2319,7 +2329,7 @@ __INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `double` value.
+ * @return The current value.
  */
 
 __INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
@@ -2403,7 +2413,7 @@ bool nyx_text_prop_set(
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `STR_t` value.
+ * @return The current value.
  */
 
 STR_t nyx_text_prop_get(
@@ -2484,7 +2494,7 @@ bool nyx_light_prop_set(
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `nyx_state_t` value.
+ * @return The current value.
  */
 
 nyx_state_t nyx_light_prop_get(
@@ -2563,7 +2573,7 @@ bool nyx_switch_prop_set(
 /**
  * @brief Gets the current value of the provided property object.
  * @param prop Property object.
- * @return The current `nyx_onoff_t` value.
+ * @return The current value.
  */
 
 nyx_onoff_t nyx_switch_prop_get(
