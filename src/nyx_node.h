@@ -2777,6 +2777,7 @@ nyx_dict_t *nyx_stream_vector_new(
  * @param field_sizes Array of field sizes, on entry per property in the vector.
  * @param field_buffs Array of field buffers, on entry per property in the vector.
  * @return `true` if the provided fields match with the vector content.
+ * @anchor nyx_stream_pub
  */
 
 bool nyx_stream_pub(
@@ -3014,11 +3015,11 @@ void nyx_node_disable(
 
 /**
  * @memberof nyx_node_t
- * \anchor nyx_node_send_message
  * @brief Sends a human-oriented message to the clients.
  * @param node Nyx node.
  * @param device Device name.
  * @param message Human-oriented message.
+ * @anchor nyx_node_send_message
  */
 
 void nyx_node_send_message(
@@ -3031,12 +3032,12 @@ void nyx_node_send_message(
 
 /**
  * @memberof nyx_node_t
- * \anchor nyx_node_send_del_property
  * @brief Sends a `del-property` message to the clients.
  * @param node Nyx node.
  * @param device Device name.
  * @param name Optional vector name (`NULL` ≡ whole device).
  * @param message Optional human-oriented message.
+ * @anchor nyx_node_send_del_property
  */
 
 void nyx_node_send_del_property(
