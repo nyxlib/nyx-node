@@ -195,7 +195,7 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
  * @brief Logs a fatal message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
- * @warning This macro never returns.
+ * @warning This macro never returns and stops the node.
  */
 
 #define NYX_LOG_FATAL(fmt, ...) \
