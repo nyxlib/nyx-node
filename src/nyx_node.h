@@ -575,7 +575,7 @@ bool nyx_object_equal(
 
 /**
  * @memberof nyx_object_t
- * @brief Returns a string representing the provided JSON object.
+ * @brief Returns a string, with special character escaping, representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
  * @note Must be freed.
@@ -589,7 +589,7 @@ str_t nyx_object_to_string(
 
 /**
  * @memberof nyx_object_t
- * @brief Returns a C string representing the provided JSON object.
+ * @brief Returns a C string, without special character escaping, representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
  * @note Must be freed.
@@ -1039,7 +1039,7 @@ size_t nyx_string_length(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a string representing the provided JSON string object.
+ * @brief Returns a C string, with special character escaping, representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
  * @note Must be freed.
@@ -1053,7 +1053,7 @@ str_t nyx_string_to_string(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a C string representing the provided JSON string object.
+ * @brief Returns a C string, without special character escaping, representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
  * @note Must be freed.
