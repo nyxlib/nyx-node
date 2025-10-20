@@ -2082,8 +2082,8 @@ nyx_dict_t *nyx_number_prop_new(
 
 /**
  * @brief Allocates a new INDI / Nyx `int32_t` number property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param format Printf-style formatting string (%[flags][width]d).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
@@ -2101,8 +2101,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t lab
 
 /**
  * @brief Allocates a new INDI / Nyx `uint32_t` number property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param format Printf-style formatting string (%[flags][width]{uoxX}).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
@@ -2120,8 +2120,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t la
 
 /**
  * @brief Allocates a new INDI / Nyx `int64_t` number property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param format Printf-style formatting string (%[flags][width]ld).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
@@ -2139,8 +2139,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t la
 
 /**
  * @brief Allocates a new INDI / Nyx `uint64_t` number property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param format Printf-style formatting string (%[flags][width]l{uoxX}).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
@@ -2158,8 +2158,8 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t l
 
 /**
  * @brief Allocates a new INDI / Nyx `double` number property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param format Printf-style formatting string (%[flags][width]l?{fFeEgGaAm}).
  * @param min Range min, ignored if min == max.
  * @param max Range max, ignored if min == max.
@@ -2370,8 +2370,8 @@ nyx_dict_t *nyx_number_set_vector_new(
 
 /**
  * @brief Allocates a new INDI / Nyx text property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param value Initial value.
  * @return The new property object.
  * @note The C string is duplicated.
@@ -2453,8 +2453,8 @@ nyx_dict_t *nyx_text_set_vector_new(
 
 /**
  * @brief Allocates a new INDI / Nyx light property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param value Initial value.
  * @return The new property object.
  */
@@ -2532,8 +2532,8 @@ nyx_dict_t *nyx_light_set_vector_new(
 
 /**
  * @brief Allocates a new INDI / Nyx switch property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param value Initial value.
  * @return The new property object.
  */
@@ -2615,8 +2615,8 @@ nyx_dict_t *nyx_switch_set_vector_new(
 
 /**
  * @brief Allocates a new INDI / Nyx BLOB property.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @param format Payload format.
  * @param size Size of the initial payload content.
  * @param buff Pointer to the initial payload content.
@@ -2725,8 +2725,8 @@ nyx_dict_t *nyx_blob_set_vector_new(
 
 /**
  * @brief Allocates a new Nyx Stream.
- * @param name Definition name.
- * @param label Definition label.
+ * @param name Property name.
+ * @param label Property label.
  * @return The new property object.
  * @note If the name ends with `.b`, the payload is automatically Base64-encoded, see @ref nyx_stream_pub.
  * @note If the name ends with `.z`, the payload is automatically ZLib+Base64-compressed, see @ref nyx_stream_pub.
