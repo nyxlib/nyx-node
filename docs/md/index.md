@@ -27,24 +27,6 @@ microcontrollers (ESP, Cortex-M, ...).
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-## Nyx-Node demo
-
-Alternatively, https://github.com/nyxlib/nyx-demo-c and https://github.com/nyxlib/nyx-demo-cpp respectively describe
-how to develop similar C or C++ demos using [Nyx-Gen](https://github.com/nyxlib/nyx-gen/) and
-[Nyx-Assistant](https://github.com/nyxlib/nyx-assistant/).
-
-### Interface
-
-Resulting interface as displayed in Nyx-Dashboard:
-
-<div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/demo.png" style="width: 1250px;" />
-</div> 
-
-### Source code
-
-\include ./test/demo.c
-
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
 [Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg
 

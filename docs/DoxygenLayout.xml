@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doxygenlayout version="1.0">
+    <navindex>
+        <tab type="mainpage" visible="yes" title="Main Page" />
+
+        <tab type="user" url="md_docs_2md_2protocol.html" title="Protocol" />
+
+        <tab type="user" url="md_docs_2md_2demo.html" title="Demo" />
+
+        <tab type="topics" visible="yes" title="C API" />
+
+        <tab type="filelist" visible="yes" title="Files" />
+    </navindex>
+</doxygenlayout>
