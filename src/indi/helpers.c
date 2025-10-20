@@ -319,19 +319,19 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(opts->label != NULL) {
+        if(opts->label != NULL && opts->label[0] != '\0') {
             nyx_dict_set(dict, "@label", nyx_string_from_dup(opts->label));
         }
 
-        if(opts->hints != NULL) {
+        if(opts->hints != NULL && opts->hints[0] != '\0') {
             nyx_dict_set(dict, "@hints", nyx_string_from_dup(opts->hints));
         }
 
-        if(opts->message != NULL) {
+        if(opts->message != NULL && opts->message[0] != '\0') {
             nyx_dict_set(dict, "@message", nyx_string_from_dup(opts->message));
         }
 
-        if(opts->timeout > 0.00) {
+        if(opts->timeout > 0.0000000000000000000000000000000) {
             nyx_dict_set(dict, "@timeout", nyx_number_from(opts->timeout));
         }
 
