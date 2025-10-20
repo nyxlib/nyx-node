@@ -396,13 +396,13 @@ __NULLABLE__ buff_t nyx_zlib_base64_inflate(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_DISABLED    ((uint64_t) 0x0000000000000001U)                                  //!< Flag indicating that the object is disabled.
+#define NYX_FLAGS_DISABLED    ((uint64_t) 0x0000000000000001U)                                  // Flag indicating that the object is disabled.
 /* 0b0000000000000000000000000000000_0000000000000000000000000000000_01 */
 
-#define NYX_FLAGS_BLOB_MASK   ((uint64_t) 0x00000001FFFFFFFCU)                                  //!< Mask indicating the Nyx blob emission per client.
+#define NYX_FLAGS_BLOB_MASK   ((uint64_t) 0x00000001FFFFFFFCU)                                  // Mask indicating the Nyx blob emission per client.
 /* 0b0000000000000000000000000000000_1111111111111111111111111111111_00 */
 
-#define NYX_FLAGS_STREAM_MASK ((uint64_t) 0xFFFFFFFE00000000U)                                  //!< Mask indicating the Nyx stream emission per client.
+#define NYX_FLAGS_STREAM_MASK ((uint64_t) 0xFFFFFFFE00000000U)                                  // Mask indicating the Nyx stream emission per client.
 /* 0b1111111111111111111111111111111_0000000000000000000000000000000_00 */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
