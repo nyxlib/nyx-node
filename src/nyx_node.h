@@ -1946,8 +1946,8 @@ nyx_onoff_t nyx_str_to_onoff(
 
 typedef struct
 {
-    __NULLABLE__ STR_t group;                                                                   //!< GUI group membership, "Main" by default.
-    __NULLABLE__ STR_t label;                                                                   //!< GUI label, device name by default.
+    __NULLABLE__ STR_t group;                                                                   //!< GUI group membership, if `NULL`, replaced by "Main".
+    __NULLABLE__ STR_t label;                                                                   //!< GUI label, if `NULL`, replaced by the device name.
     __NULLABLE__ STR_t hints;                                                                   //!< GUI Markdown description.
     __NULLABLE__ STR_t message;                                                                 //!< Free comment.
     __ZEROABLE__ double timeout;                                                                //!< Worst-case time [sec] to apply, 0 by default, N/A for RO.
