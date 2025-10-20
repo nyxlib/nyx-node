@@ -1306,7 +1306,7 @@ bool nyx_dict_set_alt(
 
 /**
  * @memberof nyx_dict_t
- * @brief Adds a JSON object in the provided JSON dict object.
+ * @brief Sets a JSON object in the provided JSON dict object.
  * @param object JSON dict object.
  * @param key Key.
  * @param value JSON object to be added.
