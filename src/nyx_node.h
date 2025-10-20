@@ -2762,11 +2762,11 @@ nyx_dict_t *nyx_stream_vector_new(
 /**
  * @brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
  * @param vector Nyx stream vector.
- * @param max_len Maximum number of entries to keep in the Redis stream.
- * @param n_fields Number of field doublets (length, buffer).
- * @param field_sizes Array of field sizes.
- * @param field_buffs Array of field buffers.
- * @return `true` if the entry has been published.
+ * @param max_len Maximum number of entries to keep in the stream.
+ * @param n_fields Number of field doublets (size, buffer), must be number of properties in the vector.
+ * @param field_sizes Array of field sizes, on entry per property in the vector.
+ * @param field_buffs Array of field buffers, on entry per property in the vector.
+ * @return `true` if the provided fields match with the vector content.
  */
 
 bool nyx_stream_pub(
@@ -3077,7 +3077,7 @@ void nyx_mqtt_pub(
  * @param node Nyx node.
  * @param device Device name.
  * @param stream Stream name.
- * @param max_len Maximum number of entries to keep in the Redis stream.
+ * @param max_len Maximum number of entries to keep in the stream.
  * @param n_fields Number of field triplets (name, size, buffer).
  * @param field_names Array of field names.
  * @param field_sizes Array of field sizes.
