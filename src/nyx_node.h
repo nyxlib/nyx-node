@@ -2197,7 +2197,7 @@ nyx_variant_t nyx_number_prop_get(
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `int32_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2224,7 +2224,7 @@ __INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `uint32_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2251,7 +2251,7 @@ __INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `int64_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2278,7 +2278,7 @@ __INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `uint64_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2305,7 +2305,7 @@ __INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `double` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2388,7 +2388,7 @@ nyx_dict_t *nyx_text_prop_new(
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `STR_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  * @note The C string is duplicated.
  */
@@ -2470,7 +2470,7 @@ nyx_dict_t *nyx_light_prop_new(
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `nyx_state_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
@@ -2549,7 +2549,7 @@ nyx_dict_t *nyx_switch_prop_new(
 /**
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
- * @param value The new `nyx_onoff_t` value.
+ * @param value New value.
  * @return \c true if the value was modified, \c false otherwise.
  */
 
