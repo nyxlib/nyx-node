@@ -2950,7 +2950,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
  * @memberof nyx_node_t
  * @brief Finalizes a Nyx node.
  * @param node Nyx node.
- * @param free_vectors If `true`, the vectors are released.
+ * @param free_vectors If `true`, the previously registered vectors are freed.
  */
 
 void nyx_node_finalize(
