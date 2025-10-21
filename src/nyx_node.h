@@ -2648,8 +2648,7 @@ nyx_dict_t *nyx_switch_set_vector_new(
  * @param buff Pointer to the initial payload content.
  * @param managed If `true`, the provided buffer is freed with this object.
  * @return The new property object.
- * @note If a format ends with `.b`, the payload is automatically Base64-encoded.
- * @note If a format ends with `.z`, the payload is automatically ZLib+Base64-compressed.
+ * @note If a format ends with `.z`, the payload is automatically ZLib+Base64-compressed, otherwise, the payload is automatically Base64-encoded.
  */
 
 nyx_dict_t *nyx_blob_prop_new(
