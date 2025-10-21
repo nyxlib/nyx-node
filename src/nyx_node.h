@@ -1200,7 +1200,6 @@ typedef struct nyx_dict_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @memberof nyx_dict_t
  * @brief Struct describing a JSON dict iterator.
  */
 
@@ -1215,7 +1214,6 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @memberof nyx_dict_t
  * @brief Initializes a JSON dict iterator.
  * @param dict JSON dict.
  */
@@ -1452,7 +1450,6 @@ typedef struct nyx_list_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @memberof nyx_list_t
  * @brief Struct describing a JSON list iterator.
  */
 
@@ -1467,7 +1464,6 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @memberof nyx_list_t
  * @brief Initializes a JSON list iterator.
  * @param list JSON list object.
  */
@@ -1686,6 +1682,7 @@ __INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_xmldoc_t
  * @brief XML node types.
  */
 
@@ -2878,7 +2875,7 @@ typedef struct nyx_node_s nyx_node_t;
 
 /**
  * @memberof nyx_node_t
- * @brief Nyx TCP or MQTT event type.
+ * @brief TCP or MQTT event type.
  */
 
 typedef enum
