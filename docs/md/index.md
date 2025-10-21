@@ -15,7 +15,7 @@ astronomical hardware. It enhances INDI by supporting multiple independent nodes
 stack. Nodes can communicate via an [MQTT](https://mqtt.org/) broker, a [Redis](https://redis.io/) cache (data streams)
 or directly over TCP, offering flexibility and scalability for distributed systems.
 
-The `Nyx Node` library is written in C99 and requires only a POSIX or Arduino environment, with no external
+The `Nyx Node` library is written in C11 and requires only a POSIX or Arduino environment, with no external
 dependencies except an optional ZLib support on POSIX. Its low footprint makes it suitable for deployment on
 microcontrollers (ESP, Cortex-M, ...).
 
