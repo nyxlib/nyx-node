@@ -2882,7 +2882,7 @@ typedef enum
     NYX_NODE_EVENT_OPEN = 1100,                                                                      //!< A connection is opened.
     NYX_NODE_EVENT_MSG = 1101,                                                                       //!< A message is received.
 
-} nyx_node_event_t;
+} nyx_event_type_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2890,7 +2890,7 @@ typedef enum
  * @memberof nyx_node_t
  * @brief MQTT event handler.
  * @param node Nyx node.
- * @param event Event type.
+ * @param event_type Event type.
  * @param topic_size MQTT topic length.
  * @param topic_buff MQTT topic buffer.
  * @param message_size MQTT message length.
@@ -2899,7 +2899,7 @@ typedef enum
 
 typedef void (* nyx_mqtt_handler_t)(
     nyx_node_t *node,
-    nyx_node_event_t event,
+    nyx_event_type_t event_type,
     size_t topic_size,
     BUFF_t topic_buff,
     size_t message_size,
