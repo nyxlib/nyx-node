@@ -17,8 +17,8 @@ jobs:
 
             -   name: Install dependencies
                 run: |
-                    apt update
-                    apt install gcc bash make cmake rsync doxygen graphviz openssh-client
+                    apt-get update
+                    apt-get install -y gcc bash make cmake rsync doxygen graphviz openssh-client
 
             -   name: Build project
                 shell: bash
