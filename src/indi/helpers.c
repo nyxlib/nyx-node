@@ -331,7 +331,7 @@ void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
             nyx_dict_set(dict, "@message", nyx_string_from_dup(opts->message));
         }
 
-        if(opts->timeout > 0.0000000000000000000000000000000) {
+        if(opts->timeout > 0.000000000000000000000000000000) {
             nyx_dict_set(dict, "@timeout", nyx_number_from(opts->timeout));
         }
 
