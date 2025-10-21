@@ -21,10 +21,10 @@ void nyx_generate_mac_addr(uint8_t result_mac[6], uint8_t mac0, uint8_t mac1, ST
 
     result_mac[0] = mac0;
     result_mac[1] = mac1;
-    result_mac[2] = (hash >> 24) & 0xFF;
-    result_mac[3] = (hash >> 16) & 0xFF;
-    result_mac[4] = (hash >> 8) & 0xFF;
-    result_mac[5] = (hash >> 0) & 0xFF;
+    result_mac[2] = (uint8_t) ((hash >> 24) & 0xFF);
+    result_mac[3] = (uint8_t) ((hash >> 16) & 0xFF);
+    result_mac[4] = (uint8_t) ((hash >> 8) & 0xFF);
+    result_mac[5] = (uint8_t) ((hash >> 0) & 0xFF);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

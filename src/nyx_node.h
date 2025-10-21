@@ -154,12 +154,13 @@ __NULLABLE__ str_t nyx_string_ndup(
 
 typedef enum nyx_log_level_e
 {
-    NYX_LOG_LEVEL_NONE    = 100,
-    NYX_LOG_LEVEL_FATAL   = 101,
-    NYX_LOG_LEVEL_ERROR   = 102,
-    NYX_LOG_LEVEL_INFO    = 103,
-    NYX_LOG_LEVEL_DEBUG   = 104,
-    NYX_LOG_LEVEL_VERBOSE = 105,
+    NYX_LOG_LEVEL_NONE  = 100,
+    NYX_LOG_LEVEL_FATAL = 101,
+    NYX_LOG_LEVEL_ERROR = 102,
+    NYX_LOG_LEVEL_WARN  = 103,
+    NYX_LOG_LEVEL_INFO  = 104,
+    NYX_LOG_LEVEL_DEBUG = 105,
+    NYX_LOG_LEVEL_TRACE = 106,
 
 } nyx_log_level_t;
 
@@ -2943,7 +2944,7 @@ __NULLABLE__ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     /**/
-    int retry_ms,
+    uint64_t retry_ms,
     bool enable_xml
 );
 

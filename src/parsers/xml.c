@@ -94,7 +94,7 @@ static bool xmlcpy(str_t p, STR_t s, STR_t e)
         {
             s++;
 
-            size_t size = e - s;
+            size_t size = (size_t) e - (size_t) s;
 
             /**/ if(size >= 3 && strncmp(s, "lt;", 3) == 0)
             {
@@ -436,7 +436,7 @@ _text:
         STR_t s = start + 1;
         STR_t e =  end  - 1;
 
-        size_t length = e - s;
+        size_t length = (size_t) e - (size_t) s;
 
         str_t p = parser->curr_token.value = nyx_memory_alloc(length + 1);
 
@@ -456,7 +456,7 @@ _text:
         STR_t s = start;
         STR_t e =  end ;
 
-        size_t length = e - s;
+        size_t length = (size_t) e - (size_t) s;
 
         if(length > 0)
         {

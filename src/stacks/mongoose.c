@@ -345,7 +345,7 @@ void nyx_node_stack_initialize(
     __NULLABLE__ STR_t mqtt_password,
     __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
-    int retry_ms
+    uint64_t retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 

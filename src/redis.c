@@ -53,7 +53,7 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLAB
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t cmd_size = snprintf(
+            size_t cmd_size = (size_t) snprintf(
                 /*--*/(cmd_buff),
                 sizeof(cmd_buff),
                 "*3\r\n"
@@ -81,7 +81,7 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLAB
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t cmd_size = snprintf(
+            size_t cmd_size = (size_t) snprintf(
                 /*--*/(cmd_buff),
                 sizeof(cmd_buff),
                 "*2\r\n"
@@ -126,7 +126,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t header_size = snprintf(
+    size_t header_size = (size_t) snprintf(
         /*--*/(header_buff),
         sizeof(header_buff),
         "*%zu\r\n"
@@ -206,7 +206,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            header_size = snprintf(
+            header_size = (size_t) snprintf(
                 /*--*/(header_buff),
                 sizeof(header_buff),
                 "$%zu\r\n%s\r\n"

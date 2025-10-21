@@ -969,7 +969,7 @@ nyx_node_t *nyx_node_initialize(
     __NULLABLE__ STR_t redis_username,
     __NULLABLE__ STR_t redis_password,
     /**/
-    int retry_ms,
+    uint64_t retry_ms,
     bool enable_xml
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -15,7 +15,7 @@ int nyx_unicode_to_utf8(str_t result, uint32_t unicode_char)
 
     /**/ if(unicode_char <= 0x7F)
     {
-        *up = unicode_char;
+        *up = unicode_char & 0xFF;
         return 1;
     }
     else if(unicode_char <= 0x7FF)

@@ -23,12 +23,14 @@ STR_t nyx_log_level_to_str(nyx_log_level_t level)
             return "FATAL";
         case NYX_LOG_LEVEL_ERROR:
             return "ERROR";
+        case NYX_LOG_LEVEL_WARN:
+            return "WARN";
         case NYX_LOG_LEVEL_INFO:
             return "INFO";
         case NYX_LOG_LEVEL_DEBUG:
             return "DEBUG";
-        case NYX_LOG_LEVEL_VERBOSE:
-            return "VERBOSE";
+        case NYX_LOG_LEVEL_TRACE:
+            return "TRACE";
     }
 
     return "???";
