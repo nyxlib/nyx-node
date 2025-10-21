@@ -3113,8 +3113,9 @@ void nyx_mqtt_pub(
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
  * @warning Except if performance is critical, prefer using @ref nyx_stream_pub.
+ * @note If a field name ends with `.z`, the payload is automatically ZLib compressed.
  * @note If a field name ends with `.b`, the payload is automatically Base64-encoded.
- * @note If a field name ends with `.z`, the payload is automatically ZLib+Base64-compressed.
+ * @note If a field name ends with `.zb`, the payload is automatically ZLib+Base64-compressed.
  */
 
 void nyx_redis_pub(

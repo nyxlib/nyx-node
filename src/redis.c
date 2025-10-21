@@ -172,7 +172,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
             ) {
                 size_t len = strlen(field_name);
 
-                /**/ if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'z')
+                /**/ if(len > 3 && field_name[len - 3] == '.' && field_name[len - 2] == 'z' && field_name[len - 1] == 'b')
                 {
                     value_buff = nyx_zlib_base64_deflate(&value_size, field_size, field_buff);
 
@@ -183,6 +183,14 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
                 else if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'b')
                 {
                     value_buff = nyx_base64_encode(&value_size, field_size, field_buff);
+
+                    field_name = field_name + 1;
+
+                    allocated = true;
+                }
+                else if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'z')
+                {
+                    value_buff = nyx_zlib_deflate(&value_size, field_size, field_buff);
 
                     field_name = field_name + 1;
 
