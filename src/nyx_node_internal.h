@@ -433,13 +433,13 @@ struct nyx_node_s
 
     size_t (* tcp_handler)(
         struct nyx_node_s *node,
-        nyx_event_t event_type,
+        nyx_node_event_t event_type,
         const nyx_str_t payload
     );
 
     void (* mqtt_handler)(
         struct nyx_node_s *node,
-        nyx_event_t event_type,
+        nyx_node_event_t event_type,
         const nyx_str_t topic,
         const nyx_str_t payload
     );

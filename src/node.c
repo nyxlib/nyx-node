@@ -755,13 +755,13 @@ static void _process_message(nyx_node_t *node, nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t _tcp_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_str_t payload)
+static size_t _tcp_handler(nyx_node_t *node, nyx_node_event_t event_type, const nyx_str_t payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* NYX_EVENT_MSG                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(event_type == NYX_EVENT_MSG)
+    if(event_type == NYX_NODE_EVENT_MSG)
     {
         nyx_xml_stream_t xml_stream = NYX_XML_STREAM();
 
@@ -803,13 +803,13 @@ static size_t _tcp_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_str_t event_topic, const nyx_str_t event_payload)
+static void _mqtt_handler(nyx_node_t *node, nyx_node_event_t event_type, const nyx_str_t event_topic, const nyx_str_t event_payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* NYX_EVENT_OPEN                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(event_type == NYX_EVENT_OPEN)
+    if(event_type == NYX_NODE_EVENT_OPEN)
     {
         for(size_t i = 0; i < sizeof(SPECIAL_TOPICS) / sizeof(nyx_str_t); i++)
         {
@@ -836,7 +836,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_st
         {
             node->user_mqtt_handler(
                 node,
-                NYX_EVENT_OPEN,
+                NYX_NODE_EVENT_OPEN,
                 0x00, NULL,
                 0x00, NULL
             );
@@ -853,7 +853,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_st
 	/* NYX_EVENT_MSG                                                                                                  */
 	/*----------------------------------------------------------------------------------------------------------------*/
 
-    else if(event_type == NYX_EVENT_MSG)
+    else if(event_type == NYX_NODE_EVENT_MSG)
     {
         if(event_topic.len > 0 && event_topic.buf != NULL)
         {
@@ -934,7 +934,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_t event_type, const nyx_st
 
                         node->user_mqtt_handler(
                             node,
-                            NYX_EVENT_MSG,
+                            NYX_NODE_EVENT_MSG,
                             event_topic.len,
                             event_topic.buf,
                             event_payload.len,

@@ -166,7 +166,7 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
     }
     else if(ev == MG_EV_READ)
     {
-        size_t consumed = node->tcp_handler(node, NYX_EVENT_MSG, NYX_STR_S(connection->recv.buf, connection->recv.len));
+        size_t consumed = node->tcp_handler(node, NYX_NODE_EVENT_MSG, NYX_STR_S(connection->recv.buf, connection->recv.len));
 
         if(consumed > connection->recv.len)
         {
@@ -209,7 +209,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
         node->mqtt_handler(
             node,
-            NYX_EVENT_OPEN,
+            NYX_NODE_EVENT_OPEN,
             node->node_id,
             node->node_id
         );
@@ -220,7 +220,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
         node->mqtt_handler(
             node,
-            NYX_EVENT_MSG,
+            NYX_NODE_EVENT_MSG,
             message->topic,
             message->data
         );
