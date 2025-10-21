@@ -19,17 +19,17 @@ The `Nyx Node` library is written in C11 and requires only a POSIX or Arduino en
 dependencies except an optional ZLib support on POSIX. Its low footprint makes it suitable for deployment on
 microcontrollers (ESP, Cortex-M, ...).
 
-# Typical architecture
+## Typical architecture
 
 <div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.svg" style="width: 600px;" />
 </div> 
 
-# Author
+## Author
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-# A bit of history
+## A bit of history
 
 In Greek mythology, Nyx is the goddess and personification of the night.
 
