@@ -1200,6 +1200,7 @@ typedef struct nyx_dict_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_dict_t
  * @brief Struct describing a JSON dict iterator.
  */
 
@@ -1214,6 +1215,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_dict_t
  * @brief Initializes a JSON dict iterator.
  * @param dict JSON dict.
  */
@@ -1450,6 +1452,7 @@ typedef struct nyx_list_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_list_t
  * @brief Struct describing a JSON list iterator.
  */
 
@@ -1464,6 +1467,7 @@ typedef struct
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_list_t
  * @brief Initializes a JSON list iterator.
  * @param list JSON list object.
  */
