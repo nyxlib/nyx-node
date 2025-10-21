@@ -175,7 +175,7 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
 
         mg_iobuf_del(
             &connection->recv,
-            0x00000000,
+            0x0000000000,
             consumed
         );
     }

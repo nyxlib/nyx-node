@@ -86,10 +86,11 @@ set(SOURCE_FILES
     src/xml_stream.c
     src/transform_json_to_xml.c
     src/transform_xml_to_json.c
-    src/node.c
     #
     src/mqtt.c
     src/redis.c
+    #
+    src/node.c
 )
 
 ########################################################################################################################
