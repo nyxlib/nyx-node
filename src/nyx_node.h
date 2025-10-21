@@ -2755,8 +2755,9 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @param name Property name.
  * @param label Property label.
  * @return The new property object.
+ * @note If the name ends with `.z`, the payload is automatically ZLib-compressed, see @ref nyx_stream_pub.
  * @note If the name ends with `.b`, the payload is automatically Base64-encoded, see @ref nyx_stream_pub.
- * @note If the name ends with `.z`, the payload is automatically ZLib+Base64-compressed, see @ref nyx_stream_pub.
+ * @note If the name ends with `.zb`, the payload is automatically ZLib+Base64-compressed, see @ref nyx_stream_pub.
  */
 
 nyx_dict_t *nyx_stream_prop_new(
