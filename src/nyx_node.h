@@ -2359,7 +2359,7 @@ __INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of properties with `NULL` sentinel.
+ * @param props Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2369,7 +2369,7 @@ nyx_dict_t *nyx_number_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_perm_t perm,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const nyx_opts_t *opts
 );
 
@@ -2442,7 +2442,7 @@ STR_t nyx_text_prop_get(
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of properties with `NULL` sentinel.
+ * @param props Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2452,7 +2452,7 @@ nyx_dict_t *nyx_text_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_perm_t perm,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const nyx_opts_t *opts
 );
 
@@ -2522,7 +2522,7 @@ nyx_state_t nyx_light_prop_get(
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
- * @param defs Array of properties with `NULL` sentinel.
+ * @param props Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2531,7 +2531,7 @@ nyx_dict_t *nyx_light_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const nyx_opts_t *opts
 );
 
@@ -2603,7 +2603,7 @@ nyx_onoff_t nyx_switch_prop_get(
  * @param state Vector state.
  * @param perm Vector permissions.
  * @param rule Vector rules.
- * @param defs Array of properties with `NULL` sentinel.
+ * @param props Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2614,7 +2614,7 @@ nyx_dict_t *nyx_switch_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_rule_t rule,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const  nyx_opts_t *opts
 );
 
@@ -2716,7 +2716,7 @@ void nyx_blob_prop_get(
  * @param name Vector name.
  * @param state Vector state.
  * @param perm Vector permissions.
- * @param defs Array of properties with `NULL` sentinel.
+ * @param props Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2726,7 +2726,7 @@ nyx_dict_t *nyx_blob_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_perm_t perm,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const nyx_opts_t *opts
 );
 
@@ -2770,7 +2770,7 @@ nyx_dict_t *nyx_stream_prop_new(
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
- * @param defs Array of properties with `NULL` sentinel.
+ * @param props Array of properties with `NULL` sentinel.
  * @param opts Options (group, label, hints, timeout, message).
  * @return The new vector object.
  */
@@ -2779,7 +2779,7 @@ nyx_dict_t *nyx_stream_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const nyx_opts_t *opts
 );
 

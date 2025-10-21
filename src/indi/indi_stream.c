@@ -55,7 +55,7 @@ nyx_dict_t *nyx_stream_vector_new(
     STR_t device,
     STR_t name,
     nyx_state_t state,
-    nyx_dict_t *defs[],
+    nyx_dict_t *props[],
     __NULLABLE__ const nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -84,7 +84,7 @@ nyx_dict_t *nyx_stream_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(; *defs != NULL; defs++) nyx_list_push(children, *defs);
+    for(; *props != NULL; props++) nyx_list_push(children, *props);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
