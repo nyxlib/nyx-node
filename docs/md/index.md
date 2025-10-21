@@ -25,11 +25,11 @@ microcontrollers (ESP, Cortex-M, ...).
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.svg" style="width: 600px;" />
 </div> 
 
-## Author
+# Author
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-## A bit of history
+# A bit of history
 
 In Greek mythology, Nyx is the goddess and personification of the night.
 
