@@ -328,7 +328,7 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
         reinterpret_cast<size_t>(size),
     };
 
-    nyx_node->mqtt_handler(nyx_node, NYX_EVENT_MSG, nyx_str_s(topic), message);
+    nyx_node->mqtt_handler(nyx_node, NYX_NODE_EVENT_MSG, nyx_str_s(topic), message);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -566,7 +566,7 @@ static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
     {
         size_t consumed = node->tcp_handler(
             node,
-            NYX_EVENT_MSG,
+            NYX_NODE_EVENT_MSG,
             NYX_STR_S(reinterpret_cast<str_t>(stack->recv_buff.data()), stack->recv_buff.size())
         );
 

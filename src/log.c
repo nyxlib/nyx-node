@@ -20,17 +20,17 @@ STR_t nyx_log_level_to_str(nyx_log_level_t level)
         case NYX_LOG_LEVEL_NONE:
             return "NONE";
         case NYX_LOG_LEVEL_FATAL:
-            return "FATAL";
+            return "\033[91;1mFATAL\033[0m";
         case NYX_LOG_LEVEL_ERROR:
-            return "ERROR";
+            return "\033[91;1mERROR\033[0m";
         case NYX_LOG_LEVEL_WARN:
-            return "WARN";
+            return "\033[93;1mWARN\033[0m";
         case NYX_LOG_LEVEL_INFO:
-            return "INFO";
+            return "\033[32mINFO\033[0m";
         case NYX_LOG_LEVEL_DEBUG:
-            return "DEBUG";
+            return "\033[34mDEBUG\033[0m";
         case NYX_LOG_LEVEL_TRACE:
-            return "TRACE";
+            return "\033[36mTRACE\033[0m";
     }
 
     return "???";

@@ -758,7 +758,7 @@ static void _process_message(nyx_node_t *node, nyx_object_t *object)
 static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const nyx_str_t payload)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* NYX_EVENT_MSG                                                                                                  */
+    /* NYX_NODE_EVENT_MSG                                                                                             */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(event_type == NYX_NODE_EVENT_MSG)
@@ -850,7 +850,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
     }
 
 	/*----------------------------------------------------------------------------------------------------------------*/
-	/* NYX_EVENT_MSG                                                                                                  */
+	/* NYX_NODE_EVENT_MSG                                                                                             */
 	/*----------------------------------------------------------------------------------------------------------------*/
 
     else if(event_type == NYX_NODE_EVENT_MSG)
