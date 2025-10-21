@@ -53,7 +53,7 @@ Documentation:
 In Greek mythology, Nyx is the goddess and personification of the night.
 
 <div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.png" style="width: 300px;" />
+    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.png" style="width: 600px;" />
 </div>
 
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
