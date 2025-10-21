@@ -9,7 +9,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         container:
-            image: alpine:latest
+            image: ubuntu:24.04
 
         steps:
             -   name: Checkout repository
@@ -17,8 +17,8 @@ jobs:
 
             -   name: Install dependencies
                 run: |
-                    apk update
-                    apk add --no-cache gcc bash make cmake rsync doxygen graphviz musl-dev openssh-client
+                    apt update
+                    apt install gcc bash make cmake rsync doxygen graphviz openssh-client
 
             -   name: Build project
                 shell: bash
