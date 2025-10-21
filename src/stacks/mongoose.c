@@ -386,9 +386,12 @@ void nyx_node_stack_initialize(
 
 void nyx_node_stack_finalize(nyx_node_t *node)
 {
-    mg_mgr_free(&node->stack->mgr);
+    if(node != NULL)
+    {
+        mg_mgr_free(&node->stack->mgr);
 
-    nyx_memory_free(node->stack);
+        nyx_memory_free(node->stack);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
