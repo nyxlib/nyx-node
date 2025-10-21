@@ -10,7 +10,7 @@
 
 # Overview
 
-The `Nyx Node` project introduces a protocol, backward-compatible with [INDI 1.7](specs/INDI.pdf), for controlling
+The `Nyx` project introduces a protocol, backward-compatible with [INDI 1.7](specs/INDI.pdf), for controlling
 astronomical hardware. It enhances INDI by supporting multiple independent nodes, each with its own embedded protocol
 stack. Nodes can communicate via an [MQTT](https://mqtt.org/) broker, a [Redis](https://redis.io/) cache (data streams)
 or directly over TCP, offering flexibility and scalability for distributed systems.
@@ -26,6 +26,14 @@ microcontrollers (ESP, Cortex-M, ...).
 ## Author
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
+
+## A bit of history
+
+In Greek mythology, Nyx is the goddess and personification of the night.
+
+<div style="text-align: center;">
+    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.png" style="width: 600px;" />
+</div>
 
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
 [Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg
