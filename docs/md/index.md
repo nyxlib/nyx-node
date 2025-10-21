@@ -19,6 +19,8 @@ The `Nyx Node` library is written in C99 and requires only a POSIX or Arduino en
 dependencies except an optional ZLib support on POSIX. Its low footprint makes it suitable for deployment on
 microcontrollers (ESP, Cortex-M, ...).
 
+# Typical architecture
+
 <div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.svg" style="width: 600px;" />
 </div> 
