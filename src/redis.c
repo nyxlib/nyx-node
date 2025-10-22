@@ -172,7 +172,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
             ) {
                 size_t len = strlen(field_name);
 
-                /**/ if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'z')
+                if(len > 2 && field_name[len - 2] == '.' && field_name[len - 1] == 'z')
                 {
                     value_buff = nyx_zlib_deflate(&value_size, field_size, field_buff);
 
