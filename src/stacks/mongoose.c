@@ -360,8 +360,8 @@ void nyx_node_stack_initialize(
 
     stack->mqtt_opts.client_id = node->node_id;
 
-    stack->mqtt_opts.clean = true;
     stack->mqtt_opts.version = 0x04;
+    stack->mqtt_opts.clean = true;
 
     stack->redis_username = redis_username;
     stack->redis_password = redis_password;

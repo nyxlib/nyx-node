@@ -50,10 +50,10 @@ double nan(const char *tag);
             /* do nothing */
 
 #define __NYX_UNUSED__ \
-            __attribute__((unused))
+            __attribute__ ((unused))
 
 #define __NYX_INLINE__ \
-            __attribute__((always_inline)) static inline
+            __attribute__ ((always_inline)) static inline
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* MEMORY                                                                                                             */
