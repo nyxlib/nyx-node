@@ -40,19 +40,19 @@ double nan(const char *tag);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define __NOTNULL__ \
+#define __NYX_NOTNULL__ \
             /* do nothing */
 
-#define __NULLABLE__ \
+#define __NYX_NULLABLE__ \
             /* do nothing */
 
-#define __ZEROABLE__ \
+#define __NYX_ZEROABLE__ \
             /* do nothing */
 
-#define __UNUSED__ \
+#define __NYX_UNUSED__ \
             __attribute__((unused))
 
-#define __INLINE__ \
+#define __NYX_INLINE__ \
             __attribute__((always_inline)) static inline
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -92,8 +92,8 @@ bool nyx_memory_finalize(void);
  * @brief Similar to libc free except that it returns the amount of memory freed.
  */
 
-__ZEROABLE__ size_t nyx_memory_free(
-    __NULLABLE__ buff_t buff
+__NYX_ZEROABLE__ size_t nyx_memory_free(
+    __NYX_NULLABLE__ buff_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -102,8 +102,8 @@ __ZEROABLE__ size_t nyx_memory_free(
  * @brief Similar to libc malloc except that a memory overflow causes the node to stop.
  */
 
-__NULLABLE__ buff_t nyx_memory_alloc(
-    __ZEROABLE__ size_t size
+__NYX_NULLABLE__ buff_t nyx_memory_alloc(
+    __NYX_ZEROABLE__ size_t size
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -112,9 +112,9 @@ __NULLABLE__ buff_t nyx_memory_alloc(
  * @brief Similar to libc realloc except that a memory overflow causes the node to stop.
  */
 
-__NULLABLE__ buff_t nyx_memory_realloc(
-    __NULLABLE__ buff_t buff,
-    __ZEROABLE__ size_t size
+__NYX_NULLABLE__ buff_t nyx_memory_realloc(
+    __NYX_NULLABLE__ buff_t buff,
+    __NYX_ZEROABLE__ size_t size
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -123,8 +123,8 @@ __NULLABLE__ buff_t nyx_memory_realloc(
  * @brief Similar to libc strdup.
  */
 
-__NULLABLE__ str_t nyx_string_dup(
-    __NULLABLE__ STR_t s
+__NYX_NULLABLE__ str_t nyx_string_dup(
+    __NYX_NULLABLE__ STR_t s
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -133,9 +133,9 @@ __NULLABLE__ str_t nyx_string_dup(
  * @brief Similar to libc strndup.
  */
 
-__NULLABLE__ str_t nyx_string_ndup(
-    __NULLABLE__ STR_t s,
-    __ZEROABLE__ size_t n
+__NYX_NULLABLE__ str_t nyx_string_ndup(
+    __NYX_NULLABLE__ STR_t s,
+    __NYX_ZEROABLE__ size_t n
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -265,8 +265,8 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
  */
 
 uint32_t nyx_hash32(
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff,
     uint32_t seed
 );
 
@@ -297,10 +297,10 @@ void nyx_generate_mac_addr(
  * \return The encoded string.
  */
 
-__NULLABLE__ str_t nyx_base64_encode(
-    __NULLABLE__ size_t *result_len,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+__NYX_NULLABLE__ str_t nyx_base64_encode(
+    __NYX_NULLABLE__ size_t *result_len,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -313,10 +313,10 @@ __NULLABLE__ str_t nyx_base64_encode(
  * \return The decoded buffer.
  */
 
-__NULLABLE__ buff_t nyx_base64_decode(
-    __NULLABLE__ size_t *result_size,
-    __ZEROABLE__ size_t len,
-    __NULLABLE__ STR_t str
+__NYX_NULLABLE__ buff_t nyx_base64_decode(
+    __NYX_NULLABLE__ size_t *result_size,
+    __NYX_ZEROABLE__ size_t len,
+    __NYX_NULLABLE__ STR_t str
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -329,10 +329,10 @@ __NULLABLE__ buff_t nyx_base64_decode(
  * \return The compressed buffer.
  */
 
-__NULLABLE__ buff_t nyx_zlib_deflate(
-    __NULLABLE__ size_t *result_size,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+__NYX_NULLABLE__ buff_t nyx_zlib_deflate(
+    __NYX_NULLABLE__ size_t *result_size,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -345,10 +345,10 @@ __NULLABLE__ buff_t nyx_zlib_deflate(
  * \return The decompressed buffer.
  */
 
-__NULLABLE__ buff_t nyx_zlib_inflate(
-    __NOTNULL__ size_t *result_size,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+__NYX_NULLABLE__ buff_t nyx_zlib_inflate(
+    __NYX_NOTNULL__ size_t *result_size,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -361,10 +361,10 @@ __NULLABLE__ buff_t nyx_zlib_inflate(
  * \return The compressed string.
  */
 
-__NULLABLE__ str_t nyx_zlib_base64_deflate(
-    __NULLABLE__ size_t *result_len,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+__NYX_NULLABLE__ str_t nyx_zlib_base64_deflate(
+    __NYX_NULLABLE__ size_t *result_len,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -377,10 +377,10 @@ __NULLABLE__ str_t nyx_zlib_base64_deflate(
  * \return The decompressed buffer.
  */
 
-__NULLABLE__ buff_t nyx_zlib_base64_inflate(
-    __NOTNULL__ size_t *result_size,
-    __ZEROABLE__ size_t len,
-    __NULLABLE__ STR_t str
+__NYX_NULLABLE__ buff_t nyx_zlib_base64_inflate(
+    __NYX_NOTNULL__ size_t *result_size,
+    __NYX_ZEROABLE__ size_t len,
+    __NYX_NULLABLE__ STR_t str
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -449,66 +449,66 @@ typedef struct nyx_object_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
+    __NYX_NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
 
-    __NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
+    __NYX_NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     union {
 
-        __NULLABLE__ void *_ptr;                                                                //!< Untyped pointer.
+        __NYX_NULLABLE__ void *_ptr;                                                                //!< Untyped pointer.
 
-        __NULLABLE__ bool (* _int)(
+        __NYX_NULLABLE__ bool (* _int)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             int new_value,                                                                      //!< New value.
             int old_value                                                                       //!< Old value.
         );
 
-        __NULLABLE__ bool (* _uint)(
+        __NYX_NULLABLE__ bool (* _uint)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             unsigned int new_value,                                                             //!< New value.
             unsigned int old_value                                                              //!< Old value.
         );
 
-        __NULLABLE__ bool (* _long)(
+        __NYX_NULLABLE__ bool (* _long)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             long new_value,                                                                     //!< New value.
             long old_value                                                                      //!< Old value.
         );
 
-        __NULLABLE__ bool (* _ulong)(
+        __NYX_NULLABLE__ bool (* _ulong)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             unsigned long new_value,                                                            //!< New value.
             unsigned long old_value                                                             //!< Old value.
         );
 
-        __NULLABLE__ bool (* _double)(
+        __NYX_NULLABLE__ bool (* _double)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             double new_value,                                                                   //!< New value.
             double old_value                                                                    //!< Old value.
         );
 
-        __NULLABLE__ bool (* _str)(
+        __NYX_NULLABLE__ bool (* _str)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             STR_t new_value,                                                                    //!< New value.
             STR_t old_value                                                                     //!< Old value.
         );
 
-        __NULLABLE__ bool (* _buffer)(
+        __NYX_NULLABLE__ bool (* _buffer)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.
             struct nyx_dict_s *prop,                                                            //!< Property object.
             size_t size,                                                                        //!< Size of the new buffer.
             BUFF_t buff                                                                         //!< Pointer to the new buffer.
         );
 
-        __NULLABLE__ void (* _vector)(
+        __NYX_NULLABLE__ void (* _vector)(
             struct nyx_dict_s *vector,                                                          //!< Vector object.
             bool modified                                                                       //!< Indicates whether the vector has been modified.
         );
@@ -517,13 +517,13 @@ typedef struct nyx_object_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NULLABLE__ void (* out_callback)(
+    __NYX_NULLABLE__ void (* out_callback)(
         struct nyx_object_s *object                                                             //!< This object.
     );                                                                                          //!< Callback triggered when the server modifies this object.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NULLABLE__ void *ctx;                                                                     //!< User context pointer.
+    __NYX_NULLABLE__ void *ctx;                                                                     //!< User context pointer.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -539,9 +539,9 @@ typedef struct nyx_object_s
  * \return The new JSON object.
  */
 
-__NULLABLE__ nyx_object_t *nyx_object_parse_buff(
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+__NYX_NULLABLE__ nyx_object_t *nyx_object_parse_buff(
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -553,8 +553,8 @@ __NULLABLE__ nyx_object_t *nyx_object_parse_buff(
  * \return The new JSON object.
  */
 
-__NULLABLE__ nyx_object_t *nyx_object_parse(
-    __NULLABLE__ STR_t string
+__NYX_NULLABLE__ nyx_object_t *nyx_object_parse(
+    __NYX_NULLABLE__ STR_t string
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -566,7 +566,7 @@ __NULLABLE__ nyx_object_t *nyx_object_parse(
  */
 
 void nyx_object_free(
-    __NULLABLE__ nyx_object_t *object
+    __NYX_NULLABLE__ nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -580,8 +580,8 @@ void nyx_object_free(
  */
 
 bool nyx_object_equal(
-    __NULLABLE__ const nyx_object_t *object1,
-    __NULLABLE__ const nyx_object_t *object2
+    __NYX_NULLABLE__ const nyx_object_t *object1,
+    __NYX_NULLABLE__ const nyx_object_t *object2
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -595,7 +595,7 @@ bool nyx_object_equal(
  */
 
 str_t nyx_object_to_string(
-    __NULLABLE__ const nyx_object_t *object
+    __NYX_NULLABLE__ const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -609,7 +609,7 @@ str_t nyx_object_to_string(
  */
 
 str_t nyx_object_to_cstring(
-    __NULLABLE__ const nyx_object_t *object
+    __NYX_NULLABLE__ const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -751,7 +751,7 @@ bool nyx_number_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
+__NYX_INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
 {
     return nyx_number_set_alt(object, value, true);
 }
@@ -779,7 +779,7 @@ str_t nyx_number_to_string(
  * @return The new JSON number object.
  */
 
-__INLINE__ nyx_number_t *nyx_number_from(double value)
+__NYX_INLINE__ nyx_number_t *nyx_number_from(double value)
 {
     nyx_number_t *result = nyx_number_new();
 
@@ -868,7 +868,7 @@ bool nyx_boolean_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
+__NYX_INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
 {
     return nyx_boolean_set_alt(object, value, true);
 }
@@ -896,7 +896,7 @@ str_t nyx_boolean_to_string(
  * @return The new JSON boolean object.
  */
 
-__INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
+__NYX_INLINE__ nyx_boolean_t *nyx_boolean_from(bool value)
 {
     nyx_boolean_t *result = nyx_boolean_new();
 
@@ -973,8 +973,8 @@ STR_t nyx_string_get(
 
 void nyx_string_get_buff(
     const nyx_string_t *object,
-    __NULLABLE__ size_t *result_size,
-    __NULLABLE__ buff_t *result_buff
+    __NYX_NULLABLE__ size_t *result_size,
+    __NYX_NULLABLE__ buff_t *result_buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1001,7 +1001,7 @@ bool nyx_string_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
+__NYX_INLINE__ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
 {
     return nyx_string_set_alt(object, value, managed, true);
 }
@@ -1014,8 +1014,8 @@ __INLINE__ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
 
 bool nyx_string_set_buff_alt(
     /*-*/ nyx_string_t *object,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff,
     bool managed,
     bool notify
 );
@@ -1030,7 +1030,7 @@ bool nyx_string_set_buff_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
+__NYX_INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
 {
     return nyx_string_set_buff_alt(object, size, buff, managed, true);
 }
@@ -1086,7 +1086,7 @@ str_t nyx_string_to_cstring(
  * @note The duplicated C string is **freed** with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -1105,7 +1105,7 @@ __INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
  * @note The provided C string is **freed** with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -1124,7 +1124,7 @@ __INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
  * @note The provided C string is **not freed** with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -1144,7 +1144,7 @@ __INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
  * @note The provided buffer is **freed** with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -1164,7 +1164,7 @@ __INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
  * @note The provided buffer is **not freed** with this object.
  */
 
-__INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -1334,7 +1334,7 @@ bool nyx_dict_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
+__NYX_INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 {
     return nyx_dict_set_alt(object, key, value, true);
 }
@@ -1376,7 +1376,7 @@ str_t nyx_dict_to_string(
  * @return The related boolean value or `false` if absent or wrong type.
  */
 
-__INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
+__NYX_INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *value = nyx_dict_get(object, key);
 
@@ -1395,7 +1395,7 @@ __INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
  * @return The related number value or `NaN` if absent or wrong type.
  */
 
-__INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
+__NYX_INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *value = nyx_dict_get(object, key);
 
@@ -1414,7 +1414,7 @@ __INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
  * @return The related C string value or `NULL` if absent or wrong type.
  */
 
-__INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
+__NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *value = nyx_dict_get(object, key);
 
@@ -1583,7 +1583,7 @@ bool nyx_list_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
+__NYX_INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
 {
     return nyx_list_set_alt(object, (size_t) -1, value, true);
 }
@@ -1625,7 +1625,7 @@ str_t nyx_list_to_string(
  * @return The related boolean value or `false` if absent or wrong type.
  */
 
-__INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
+__NYX_INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *boolean = nyx_list_get(object, idx);
 
@@ -1644,7 +1644,7 @@ __INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
  * @return The related number value or `NaN` if absent or wrong type.
  */
 
-__INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
+__NYX_INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *number = nyx_list_get(object, idx);
 
@@ -1663,7 +1663,7 @@ __INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
  * @return The related C string value or `NULL` if absent or wrong type.
  */
 
-__INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
+__NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *string = nyx_list_get(object, idx);
 
@@ -1730,9 +1730,9 @@ typedef struct nyx_xmldoc_s
  * \return The new XML document.
  */
 
-__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+__NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1744,8 +1744,8 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(
  * \return The new XML document.
  */
 
-__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
-    __NULLABLE__ STR_t string
+__NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
+    __NYX_NULLABLE__ STR_t string
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1757,7 +1757,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
  */
 
 void nyx_xmldoc_free(
-    __NULLABLE__ nyx_xmldoc_t *xmldoc
+    __NYX_NULLABLE__ nyx_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1790,8 +1790,8 @@ str_t nyx_xmldoc_to_string(
  * @return The corresponding JSON Nyx / INDI command.
  */
 
-__NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
-    __NULLABLE__ const nyx_xmldoc_t *xmldoc
+__NYX_NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
+    __NYX_NULLABLE__ const nyx_xmldoc_t *xmldoc
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1802,8 +1802,8 @@ __NULLABLE__ nyx_object_t *nyx_xmldoc_to_object(
  * @return The corresponding XML Nyx / INDI command.
  */
 
-__NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
-    __NULLABLE__ const nyx_object_t *object
+__NYX_NULLABLE__ nyx_xmldoc_t *nyx_object_to_xmldoc(
+    __NYX_NULLABLE__ const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1962,11 +1962,11 @@ nyx_onoff_t nyx_str_to_onoff(
 
 typedef struct
 {
-    __NULLABLE__ STR_t group;                                                                   //!< GUI group membership, if `NULL`, replaced by "Main".
-    __NULLABLE__ STR_t label;                                                                   //!< GUI label, if `NULL`, replaced by the device name.
-    __NULLABLE__ STR_t hints;                                                                   //!< GUI Markdown description.
-    __NULLABLE__ STR_t message;                                                                 //!< Free comment.
-    __ZEROABLE__ double timeout;                                                                //!< Worst-case time [sec] to apply, 0 by default, N/A for RO.
+    __NYX_NULLABLE__ STR_t group;                                                                   //!< GUI group membership, if `NULL`, replaced by "Main".
+    __NYX_NULLABLE__ STR_t label;                                                                   //!< GUI label, if `NULL`, replaced by the device name.
+    __NYX_NULLABLE__ STR_t hints;                                                                   //!< GUI Markdown description.
+    __NYX_NULLABLE__ STR_t message;                                                                 //!< Free comment.
+    __NYX_ZEROABLE__ double timeout;                                                                //!< Worst-case time [sec] to apply, 0 by default, N/A for RO.
 
 } nyx_opts_t;
 
@@ -2012,7 +2012,7 @@ typedef struct
  * @private
  */
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
 {
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = value}};
@@ -2027,7 +2027,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
  * @private
  */
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
 {
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = value}};
@@ -2042,7 +2042,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
  * @private
  */
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
 {
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = value}};
@@ -2057,7 +2057,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
  * @private
  */
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
 {
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
@@ -2072,7 +2072,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
  * @private
  */
 
-__INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
 {
     #ifndef __cplusplus
     return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
@@ -2096,7 +2096,7 @@ __INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
 
 nyx_dict_t *nyx_number_prop_new(
     STR_t name,
-    __NULLABLE__ STR_t label,
+    __NYX_NULLABLE__ STR_t label,
     STR_t format,
     nyx_variant_t min,
     nyx_variant_t max,
@@ -2118,7 +2118,7 @@ nyx_dict_t *nyx_number_prop_new(
  * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
+__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
 }
@@ -2137,7 +2137,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NULLABLE__ STR_t lab
  * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
+__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
 }
@@ -2156,7 +2156,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NULLABLE__ STR_t la
  * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
+__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
 }
@@ -2175,7 +2175,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NULLABLE__ STR_t la
  * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
+__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
 }
@@ -2194,7 +2194,7 @@ __INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NULLABLE__ STR_t l
  * @return The new property object.
  */
 
-__INLINE__ nyx_dict_t *nyx_number_prop_new_double(STR_t name,__NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
+__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_double(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
 {
     return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
 }
@@ -2227,7 +2227,7 @@ nyx_variant_t nyx_number_prop_get(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
+__NYX_INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
 {
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_INT(value));
 }
@@ -2240,7 +2240,7 @@ __INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
  * @return The current value.
  */
 
-__INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
+__NYX_INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._int;
 }
@@ -2254,7 +2254,7 @@ __INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
+__NYX_INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
 {
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_UINT(value));
 }
@@ -2267,7 +2267,7 @@ __INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
  * @return The current value.
  */
 
-__INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
+__NYX_INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._uint;
 }
@@ -2281,7 +2281,7 @@ __INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
+__NYX_INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
 {
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_LONG(value));
 }
@@ -2294,7 +2294,7 @@ __INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
  * @return The current value.
  */
 
-__INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
+__NYX_INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._long;
 }
@@ -2308,7 +2308,7 @@ __INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
+__NYX_INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
 {
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_ULONG(value));
 }
@@ -2321,7 +2321,7 @@ __INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
  * @return The current value.
  */
 
-__INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
+__NYX_INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._ulong;
 }
@@ -2335,7 +2335,7 @@ __INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
+__NYX_INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
 {
     return nyx_number_prop_set(prop, NYX_VARIANT_FROM_DOUBLE(value));
 }
@@ -2348,7 +2348,7 @@ __INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
  * @return The current value.
  */
 
-__INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
+__NYX_INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
 {
     return nyx_number_prop_get(prop).value._double;
 }
@@ -2372,7 +2372,7 @@ nyx_dict_t *nyx_number_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *props[],
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2405,8 +2405,8 @@ nyx_dict_t *nyx_number_set_vector_new(
 
 nyx_dict_t *nyx_text_prop_new(
     STR_t name,
-    __NULLABLE__ STR_t label,
-    __NULLABLE__ STR_t value
+    __NYX_NULLABLE__ STR_t label,
+    __NYX_NULLABLE__ STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2421,7 +2421,7 @@ nyx_dict_t *nyx_text_prop_new(
 
 bool nyx_text_prop_set(
     nyx_dict_t *prop,
-    __NULLABLE__ STR_t value
+    __NYX_NULLABLE__ STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2455,7 +2455,7 @@ nyx_dict_t *nyx_text_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *props[],
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2487,7 +2487,7 @@ nyx_dict_t *nyx_text_set_vector_new(
 
 nyx_dict_t *nyx_light_prop_new(
     STR_t name,
-    __NULLABLE__ STR_t label,
+    __NYX_NULLABLE__ STR_t label,
     nyx_state_t value
 );
 
@@ -2534,7 +2534,7 @@ nyx_dict_t *nyx_light_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_dict_t *props[],
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2566,7 +2566,7 @@ nyx_dict_t *nyx_light_set_vector_new(
 
 nyx_dict_t *nyx_switch_prop_new(
     STR_t name,
-    __NULLABLE__ STR_t label,
+    __NYX_NULLABLE__ STR_t label,
     nyx_onoff_t value
 );
 
@@ -2617,7 +2617,7 @@ nyx_dict_t *nyx_switch_vector_new(
     nyx_perm_t perm,
     nyx_rule_t rule,
     nyx_dict_t *props[],
-    __NULLABLE__ const  nyx_opts_t *opts
+    __NYX_NULLABLE__ const  nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2653,10 +2653,10 @@ nyx_dict_t *nyx_switch_set_vector_new(
 
 nyx_dict_t *nyx_blob_prop_new(
     STR_t name,
-    __NULLABLE__ STR_t label,
-    __NULLABLE__ STR_t format,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff,
+    __NYX_NULLABLE__ STR_t label,
+    __NYX_NULLABLE__ STR_t format,
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff,
     bool managed
 );
 
@@ -2673,8 +2673,8 @@ nyx_dict_t *nyx_blob_prop_new(
 
 bool nyx_blob_prop_set_managed(
     nyx_dict_t *prop,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2690,8 +2690,8 @@ bool nyx_blob_prop_set_managed(
 
 bool nyx_blob_prop_set_unmanaged(
     nyx_dict_t *prop,
-    __ZEROABLE__ size_t size,
-    __NULLABLE__ BUFF_t buff
+    __NYX_ZEROABLE__ size_t size,
+    __NYX_NULLABLE__ BUFF_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2705,8 +2705,8 @@ bool nyx_blob_prop_set_unmanaged(
 
 void nyx_blob_prop_get(
     const nyx_dict_t *prop,
-    __NULLABLE__ size_t *size,
-    __NULLABLE__ buff_t *buff
+    __NYX_NULLABLE__ size_t *size,
+    __NYX_NULLABLE__ buff_t *buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2728,7 +2728,7 @@ nyx_dict_t *nyx_blob_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *props[],
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2760,7 +2760,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
 
 nyx_dict_t *nyx_stream_prop_new(
     STR_t name,
-    __NULLABLE__ STR_t label
+    __NYX_NULLABLE__ STR_t label
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2780,7 +2780,7 @@ nyx_dict_t *nyx_stream_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_dict_t *props[],
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2799,7 +2799,7 @@ nyx_dict_t *nyx_stream_vector_new(
 bool nyx_stream_pub(
     const nyx_dict_t *vector,
     size_t max_len,
-    __ZEROABLE__ size_t n_fields,
+    __NYX_ZEROABLE__ size_t n_fields,
     const size_t field_sizes[],
     const BUFF_t field_buffs[]
 );
@@ -2833,7 +2833,7 @@ nyx_dict_t *nyx_stream_set_vector_new(
 
 nyx_dict_t *nyx_message_new(
     STR_t device,
-    __NULLABLE__ STR_t message
+    __NYX_NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2849,8 +2849,8 @@ nyx_dict_t *nyx_message_new(
 
 nyx_dict_t *nyx_del_property_new(
     STR_t device,
-    __NULLABLE__ STR_t name,
-    __NULLABLE__ STR_t message
+    __NYX_NULLABLE__ STR_t name,
+    __NYX_NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2926,21 +2926,21 @@ typedef void (* nyx_mqtt_handler_t)(
  * @return The new Nyx node.
  */
 
-__NULLABLE__ nyx_node_t *nyx_node_initialize(
+__NYX_NULLABLE__ nyx_node_t *nyx_node_initialize(
     STR_t node_id,
     nyx_dict_t *vectors[],
     /**/
-    __NULLABLE__ STR_t indi_url,
+    __NYX_NULLABLE__ STR_t indi_url,
     /**/
-    __NULLABLE__ STR_t mqtt_url,
-    __NULLABLE__ STR_t mqtt_username,
-    __NULLABLE__ STR_t mqtt_password,
+    __NYX_NULLABLE__ STR_t mqtt_url,
+    __NYX_NULLABLE__ STR_t mqtt_username,
+    __NYX_NULLABLE__ STR_t mqtt_password,
     /**/
-    __NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
+    __NYX_NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
     /**/
-    __NULLABLE__ STR_t redis_url,
-    __NULLABLE__ STR_t redis_username,
-    __NULLABLE__ STR_t redis_password,
+    __NYX_NULLABLE__ STR_t redis_url,
+    __NYX_NULLABLE__ STR_t redis_username,
+    __NYX_NULLABLE__ STR_t redis_password,
     /**/
     uint64_t retry_ms,
     bool enable_xml
@@ -3007,8 +3007,8 @@ void nyx_node_poll(
 void nyx_node_enable(
     nyx_node_t *node,
     /*--------*/ STR_t device,
-    __NULLABLE__ STR_t name,
-    __NULLABLE__ STR_t message
+    __NYX_NULLABLE__ STR_t name,
+    __NYX_NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3025,8 +3025,8 @@ void nyx_node_enable(
 void nyx_node_disable(
     nyx_node_t *node,
     /*--------*/ STR_t device,
-    __NULLABLE__ STR_t name,
-    __NULLABLE__ STR_t message
+    __NYX_NULLABLE__ STR_t name,
+    __NYX_NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3043,7 +3043,7 @@ void nyx_node_disable(
 void nyx_node_send_message(
     nyx_node_t *node,
     STR_t device,
-    __NULLABLE__ STR_t message
+    __NYX_NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3061,8 +3061,8 @@ void nyx_node_send_message(
 void nyx_node_send_del_property(
     nyx_node_t *node,
     STR_t device,
-    __NULLABLE__ STR_t name,
-    __NULLABLE__ STR_t message
+    __NYX_NULLABLE__ STR_t name,
+    __NYX_NULLABLE__ STR_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3094,8 +3094,8 @@ void nyx_mqtt_sub(
 void nyx_mqtt_pub(
     nyx_node_t *node,
     STR_t topic,
-    __ZEROABLE__ size_t message_size,
-    __NULLABLE__ BUFF_t message_buff
+    __NYX_ZEROABLE__ size_t message_size,
+    __NYX_NULLABLE__ BUFF_t message_buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3120,7 +3120,7 @@ void nyx_redis_pub(
     STR_t device,
     STR_t stream,
     size_t max_len,
-    __ZEROABLE__ size_t n_fields,
+    __NYX_ZEROABLE__ size_t n_fields,
     const STR_t field_names[],
     const size_t field_sizes[],
     const BUFF_t field_buffs[]

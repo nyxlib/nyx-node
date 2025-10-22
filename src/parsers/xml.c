@@ -852,7 +852,7 @@ static nyx_xmldoc_t *xml_parse_content(xml_parser_t *parser, nyx_xmldoc_t *paren
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__ZEROABLE__ size_t size, __NULLABLE__ BUFF_t buff)
+__NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
 {
     if(size == 0x00
        ||
@@ -897,7 +897,7 @@ __NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__ZEROABLE__ size_t size, __NUL
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(__NULLABLE__ STR_t string)
+__NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(__NYX_NULLABLE__ STR_t string)
 {
     return nyx_xmldoc_parse_buff(
         strlen(string),

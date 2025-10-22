@@ -31,7 +31,7 @@ void nyx_mqtt_sub(nyx_node_t *node, STR_t topic)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __ZEROABLE__ size_t message_size, __NULLABLE__ BUFF_t message_buff)
+void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, __NYX_ZEROABLE__ size_t message_size, __NYX_NULLABLE__ BUFF_t message_buff)
 {
     if(node != NULL)
     {

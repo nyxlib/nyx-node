@@ -70,7 +70,7 @@ bool nyx_memory_finalize(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t nyx_memory_free(__NULLABLE__ buff_t buff)
+size_t nyx_memory_free(__NYX_NULLABLE__ buff_t buff)
 {
     if(buff == NULL)
     {
@@ -106,7 +106,7 @@ size_t nyx_memory_free(__NULLABLE__ buff_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_memory_alloc(__ZEROABLE__ size_t size)
+buff_t nyx_memory_alloc(__NYX_ZEROABLE__ size_t size)
 {
     if(size == 0x00)
     {
@@ -139,7 +139,7 @@ buff_t nyx_memory_alloc(__ZEROABLE__ size_t size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_memory_realloc(__NULLABLE__ buff_t buff, __ZEROABLE__ size_t size)
+buff_t nyx_memory_realloc(__NYX_NULLABLE__ buff_t buff, __NYX_ZEROABLE__ size_t size)
 {
     if(buff == NULL) {
         return nyx_memory_alloc(size);
@@ -203,7 +203,7 @@ str_t nyx_bool_dup(bool b)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ str_t nyx_double_dup(double d)
+__NYX_NULLABLE__ str_t nyx_double_dup(double d)
 {
     if(!isnan(d))
     {
@@ -219,7 +219,7 @@ __NULLABLE__ str_t nyx_double_dup(double d)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ str_t nyx_string_dup(__NULLABLE__ STR_t s)
+__NYX_NULLABLE__ str_t nyx_string_dup(__NYX_NULLABLE__ STR_t s)
 {
     if(s != NULL)
     {
@@ -239,7 +239,7 @@ __NULLABLE__ str_t nyx_string_dup(__NULLABLE__ STR_t s)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ str_t nyx_string_ndup(__NULLABLE__ STR_t s, __ZEROABLE__ size_t n)
+__NYX_NULLABLE__ str_t nyx_string_ndup(__NYX_NULLABLE__ STR_t s, __NYX_ZEROABLE__ size_t n)
 {
     if(s != NULL)
     {
@@ -260,7 +260,7 @@ __NULLABLE__ str_t nyx_string_ndup(__NULLABLE__ STR_t s, __ZEROABLE__ size_t n)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_str_t nyx_str_s(__NULLABLE__ STR_t s)
+nyx_str_t nyx_str_s(__NYX_NULLABLE__ STR_t s)
 {
     nyx_str_t str = {(char *) s, s == NULL ? 0x0000000 : strlen(s)};
 
@@ -271,7 +271,7 @@ nyx_str_t nyx_str_s(__NULLABLE__ STR_t s)
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_free(__NULLABLE__ nyx_object_t *object)
+void nyx_object_free(__NYX_NULLABLE__ nyx_object_t *object)
 {
     if(object == NULL)
     {
@@ -316,7 +316,7 @@ void nyx_object_free(__NULLABLE__ nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ const nyx_object_t *object2)
+bool nyx_object_equal(__NYX_NULLABLE__ const nyx_object_t *object1, __NYX_NULLABLE__ const nyx_object_t *object2)
 {
     if(object1 == NULL || object2 == NULL)
     {
@@ -358,7 +358,7 @@ bool nyx_object_equal(__NULLABLE__ const nyx_object_t *object1, __NULLABLE__ con
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
+str_t nyx_object_to_string(__NYX_NULLABLE__ const nyx_object_t *object)
 {
     if(object == NULL)
     {
@@ -397,7 +397,7 @@ str_t nyx_object_to_string(__NULLABLE__ const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
+str_t nyx_object_to_cstring(__NYX_NULLABLE__ const nyx_object_t *object)
 {
     if(object == NULL)
     {
@@ -436,7 +436,7 @@ str_t nyx_object_to_cstring(__NULLABLE__ const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_notify(__NULLABLE__ nyx_object_t *object)
+void nyx_object_notify(__NYX_NULLABLE__ nyx_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {

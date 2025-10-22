@@ -54,7 +54,7 @@ STR_t nyx_string_get(const nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_string_get_buff(const nyx_string_t *object, __NULLABLE__ size_t *result_size, __NULLABLE__ buff_t *result_buff)
+void nyx_string_get_buff(const nyx_string_t *object, __NYX_NULLABLE__ size_t *result_size, __NYX_NULLABLE__ buff_t *result_buff)
 {
     if(result_size != NULL) {
         *result_size = object->length;

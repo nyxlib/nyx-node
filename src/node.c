@@ -133,7 +133,7 @@ static void _out_callback(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dict)
+static void _get_properties(nyx_node_t *node, __NYX_NULLABLE__ const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
@@ -204,7 +204,7 @@ static void _get_properties(nyx_node_t *node, __NULLABLE__ const nyx_dict_t *dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int _get_client_index(nyx_node_t *node, __NULLABLE__ STR_t client)
+static int _get_client_index(nyx_node_t *node, __NYX_NULLABLE__ STR_t client)
 {
     if(client == NULL)
     {
@@ -348,14 +348,14 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void _enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
+__NYX_INLINE__ void _enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
 {
     _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state, NYX_FLAGS_BLOB_MASK);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__INLINE__ void _enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
+__NYX_INLINE__ void _enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 {
     _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state, NYX_FLAGS_STREAM_MASK);
 }
@@ -957,17 +957,17 @@ nyx_node_t *nyx_node_initialize(
     STR_t node_id,
     nyx_dict_t *vectors[],
     /**/
-    __NULLABLE__ STR_t indi_url,
+    __NYX_NULLABLE__ STR_t indi_url,
     /**/
-    __NULLABLE__ STR_t mqtt_url,
-    __NULLABLE__ STR_t mqtt_username,
-    __NULLABLE__ STR_t mqtt_password,
+    __NYX_NULLABLE__ STR_t mqtt_url,
+    __NYX_NULLABLE__ STR_t mqtt_username,
+    __NYX_NULLABLE__ STR_t mqtt_password,
     /**/
-    __NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
+    __NYX_NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
     /**/
-    __NULLABLE__ STR_t redis_url,
-    __NULLABLE__ STR_t redis_username,
-    __NULLABLE__ STR_t redis_password,
+    __NYX_NULLABLE__ STR_t redis_url,
+    __NYX_NULLABLE__ STR_t redis_username,
+    __NYX_NULLABLE__ STR_t redis_password,
     /**/
     uint64_t retry_ms,
     bool enable_xml
@@ -1113,7 +1113,7 @@ void nyx_node_ping(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message, nyx_onoff_t onoff)
+static void _device_onoff(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message, nyx_onoff_t onoff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1180,21 +1180,21 @@ static void _device_onoff(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t nam
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_enable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+void nyx_node_enable(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message)
 {
     _device_onoff(node, device, name, message, NYX_ONOFF_ON);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_disable(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+void nyx_node_disable(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message)
 {
     _device_onoff(node, device, name, message, NYX_ONOFF_OFF);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_message(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t message)
+void nyx_node_send_message(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t message)
 {
     if(node != NULL)
     {
@@ -1208,7 +1208,7 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t me
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NULLABLE__ STR_t name, __NULLABLE__ STR_t message)
+void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message)
 {
     if(node != NULL)
     {

@@ -30,7 +30,7 @@ static size_t intlen(size_t n)
 /* REDIS STREAM                                                                                                       */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLABLE__ STR_t password_buff)
+void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NYX_NULLABLE__ STR_t password_buff)
 {
     if(node == NULL)
     {
@@ -105,7 +105,7 @@ void nyx_redis_auth(nyx_node_t *node, __NULLABLE__ STR_t username_buff, __NULLAB
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __ZEROABLE__ size_t n_fields, const STR_t field_names[], const size_t field_sizes[], const BUFF_t field_buffs[])
+void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __NYX_ZEROABLE__ size_t n_fields, const STR_t field_names[], const size_t field_sizes[], const BUFF_t field_buffs[])
 {
     if(node == NULL
        ||

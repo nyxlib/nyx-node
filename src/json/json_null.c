@@ -33,7 +33,7 @@ void nyx_null_free(nyx_null_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_null_to_string(__UNUSED__ const nyx_null_t *object)
+str_t nyx_null_to_string(__NYX_UNUSED__ const nyx_null_t *object)
 {
     return nyx_string_dup("null");
 }

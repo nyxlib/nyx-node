@@ -9,7 +9,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_message_new(STR_t device, __NULLABLE__ STR_t message)
+nyx_dict_t *nyx_message_new(STR_t device, __NYX_NULLABLE__ STR_t message)
 {
     if(message == NULL)
     {

@@ -97,7 +97,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_object_t *nyx_xmldoc_to_object(__NULLABLE__ const nyx_xmldoc_t *xmldoc)
+nyx_object_t *nyx_xmldoc_to_object(__NYX_NULLABLE__ const nyx_xmldoc_t *xmldoc)
 {
     return xmldoc != NULL ? transform(xmldoc) : NULL;
 }

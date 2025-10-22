@@ -27,8 +27,8 @@ struct nyx_stack_s
 
     struct mg_mqtt_opts mqtt_opts;
 
-    __NULLABLE__ STR_t redis_username;
-    __NULLABLE__ STR_t redis_password;
+    __NYX_NULLABLE__ STR_t redis_username;
+    __NYX_NULLABLE__ STR_t redis_password;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -341,10 +341,10 @@ static void ping_timer_handler(void *arg)
 
 void nyx_node_stack_initialize(
     nyx_node_t *node,
-    __NULLABLE__ STR_t mqtt_username,
-    __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ STR_t redis_username,
-    __NULLABLE__ STR_t redis_password,
+    __NYX_NULLABLE__ STR_t mqtt_username,
+    __NYX_NULLABLE__ STR_t mqtt_password,
+    __NYX_NULLABLE__ STR_t redis_username,
+    __NYX_NULLABLE__ STR_t redis_password,
     uint64_t retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/

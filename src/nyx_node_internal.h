@@ -36,7 +36,7 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ str_t nyx_double_dup(
+__NYX_NULLABLE__ str_t nyx_double_dup(
     double d
 );
 
@@ -65,7 +65,7 @@ typedef struct mg_str nyx_str_t;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_str_t nyx_str_s(
-    __NULLABLE__ STR_t s
+    __NYX_NULLABLE__ STR_t s
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -108,7 +108,7 @@ int nyx_unicode_to_utf8(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_object_notify(
-    __NULLABLE__ nyx_object_t *object
+    __NYX_NULLABLE__ nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -225,35 +225,35 @@ nyx_xmldoc_t *nyx_xmldoc_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NULLABLE__ str_t nyx_xmldoc_get_name(
+__NYX_NULLABLE__ str_t nyx_xmldoc_get_name(
     const nyx_xmldoc_t *xmldoc
 );
 
 void nyx_xmldoc_set_name(
     /*-*/ nyx_xmldoc_t *xmldoc,
-    __NULLABLE__ STR_t name
+    __NYX_NULLABLE__ STR_t name
 );
 
-__NULLABLE__ str_t nyx_xmldoc_get_content(
+__NYX_NULLABLE__ str_t nyx_xmldoc_get_content(
     const nyx_xmldoc_t *xmldoc
 );
 
 void nyx_xmldoc_set_content(
     /*-*/ nyx_xmldoc_t *xmldoc,
-    __NULLABLE__ STR_t data
+    __NYX_NULLABLE__ STR_t data
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_xmldoc_add_child(
     nyx_xmldoc_t *xmldoc,
-    __NULLABLE__ nyx_xmldoc_t *child
+    __NYX_NULLABLE__ nyx_xmldoc_t *child
 );
 
 void nyx_xmldoc_add_attribute(
     nyx_xmldoc_t *xmldoc,
-    __NULLABLE__ STR_t name,
-    __NULLABLE__ STR_t data
+    __NYX_NULLABLE__ STR_t name,
+    __NYX_NULLABLE__ STR_t data
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -269,7 +269,7 @@ int internal_get_timestamp(
 
 void internal_set_opts(
     /*--------*/ /*-*/ nyx_dict_t *dict,
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -427,7 +427,7 @@ struct nyx_node_s
 
     nyx_dict_t **vectors;
 
-    __ZEROABLE__ uint32_t client_hashes[31];
+    __NYX_ZEROABLE__ uint32_t client_hashes[31];
 
     /**/
 
@@ -488,10 +488,10 @@ void nyx_node_ping(
 
 void nyx_node_stack_initialize(
     nyx_node_t *node,
-    __NULLABLE__ STR_t mqtt_username,
-    __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ STR_t redis_username,
-    __NULLABLE__ STR_t redis_password,
+    __NYX_NULLABLE__ STR_t mqtt_username,
+    __NYX_NULLABLE__ STR_t mqtt_password,
+    __NYX_NULLABLE__ STR_t redis_username,
+    __NYX_NULLABLE__ STR_t redis_password,
     uint64_t retry_ms
 );
 
@@ -507,8 +507,8 @@ void nyx_node_stack_finalize(
 
 void nyx_redis_auth(
     nyx_node_t *node,
-    __NULLABLE__ STR_t username,
-    __NULLABLE__ STR_t password
+    __NYX_NULLABLE__ STR_t username,
+    __NYX_NULLABLE__ STR_t password
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

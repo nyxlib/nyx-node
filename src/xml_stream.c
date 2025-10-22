@@ -74,7 +74,7 @@ bool nyx_xml_stream_detect_opening_tag(nyx_xml_stream_t *xml_stream, size_t size
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_xml_stream_detect_closing_tag(nyx_xml_stream_t *xml_stream, size_t size, __UNUSED__ BUFF_t buff)
+bool nyx_xml_stream_detect_closing_tag(nyx_xml_stream_t *xml_stream, size_t size, __NYX_UNUSED__ BUFF_t buff)
 {
     STR_t p = memmem(xml_stream->s_ptr, size - xml_stream->pos, xml_stream->tag->e_tag_buff, xml_stream->tag->e_tag_size);
 

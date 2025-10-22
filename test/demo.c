@@ -38,7 +38,7 @@ static unsigned int s_fft_size = 512U;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool run_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, int new_value, __UNUSED__ int old_value)
+static bool run_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, int new_value, __NYX_UNUSED__ int old_value)
 {
     s_run = (nyx_onoff_t) new_value;
 
@@ -47,7 +47,7 @@ static bool run_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *p
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mode_noise_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, __UNUSED__ int new_value, __UNUSED__ int old_value)
+static bool mode_noise_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, __NYX_UNUSED__ int new_value, __NYX_UNUSED__ int old_value)
 {
     if(new_value == NYX_ONOFF_ON)
     {
@@ -59,7 +59,7 @@ static bool mode_noise_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_di
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mode_delta_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, __UNUSED__ int new_value, __UNUSED__ int old_value)
+static bool mode_delta_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, __NYX_UNUSED__ int new_value, __NYX_UNUSED__ int old_value)
 {
     if(new_value == NYX_ONOFF_ON)
     {
@@ -71,7 +71,7 @@ static bool mode_delta_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_di
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool mode_comb_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, __UNUSED__ int new_value, __UNUSED__ int old_value)
+static bool mode_comb_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, __NYX_UNUSED__ int new_value, __NYX_UNUSED__ int old_value)
 {
     if(new_value == NYX_ONOFF_ON)
     {
@@ -83,7 +83,7 @@ static bool mode_comb_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool samp_rate_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
+static bool samp_rate_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, double new_value, __NYX_UNUSED__ double old_value)
 {
     s_samp_rate = (float) new_value;
 
@@ -92,7 +92,7 @@ static bool samp_rate_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool frequency_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
+static bool frequency_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, double new_value, __NYX_UNUSED__ double old_value)
 {
     s_frequency = (float) new_value;
 
@@ -101,7 +101,7 @@ static bool frequency_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool power_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, double new_value, __UNUSED__ double old_value)
+static bool power_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, double new_value, __NYX_UNUSED__ double old_value)
 {
     s_power = (float) new_value;
 
@@ -110,7 +110,7 @@ static bool power_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool fftsize_callback(__UNUSED__ nyx_dict_t *vector, __UNUSED__ nyx_dict_t *prop, unsigned int new_value, __UNUSED__ unsigned int old_value)
+static bool fftsize_callback(__NYX_UNUSED__ nyx_dict_t *vector, __NYX_UNUSED__ nyx_dict_t *prop, unsigned int new_value, __NYX_UNUSED__ unsigned int old_value)
 {
     s_fft_size = new_value;
 
@@ -161,7 +161,7 @@ static void gen_comb(float *dst, size_t n, float mean_db)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void timer_stream(__UNUSED__ void *arg)
+static void timer_stream(__NYX_UNUSED__ void *arg)
 {
     if(s_run != NYX_ONOFF_ON)
     {

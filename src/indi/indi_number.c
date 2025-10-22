@@ -26,7 +26,7 @@ static void _debug_callback(nyx_object_t *object)
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_prop_new(STR_t name, __NULLABLE__ STR_t label, STR_t format, nyx_variant_t min, nyx_variant_t max, nyx_variant_t step, nyx_variant_t value)
+nyx_dict_t *nyx_number_prop_new(STR_t name, __NYX_NULLABLE__ STR_t label, STR_t format, nyx_variant_t min, nyx_variant_t max, nyx_variant_t step, nyx_variant_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -88,7 +88,7 @@ nyx_dict_t *nyx_number_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *props[],
-    __NULLABLE__ const nyx_opts_t *opts
+    __NYX_NULLABLE__ const nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 

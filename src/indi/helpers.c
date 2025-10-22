@@ -294,7 +294,7 @@ int internal_get_timestamp(size_t size, str_t str)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_set_opts(nyx_dict_t *dict, __NULLABLE__ const nyx_opts_t *opts)
+void internal_set_opts(nyx_dict_t *dict, __NYX_NULLABLE__ const nyx_opts_t *opts)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
