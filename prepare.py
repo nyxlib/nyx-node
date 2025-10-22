@@ -29,7 +29,7 @@ def download_mongoose():
 
         if response.status_code == 200:
 
-            with open(f'src/stacks/generated/{filename}', 'wt') as f:
+            with open(f'src/stacks/external/{filename}', 'wt') as f:
 
                 f.write(patch(response.content.decode('UTF-8')))
 

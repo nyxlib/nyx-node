@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "generated/mongoose.h"
+#include "external/mongoose.h"
 
 #include "../nyx_node_internal.h"
 

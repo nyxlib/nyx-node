@@ -80,7 +80,7 @@ set(SOURCE_FILES
     src/indi/indi_stream.c
     src/indi/indi_text.c
     #
-    src/stacks/generated/mongoose.c
+    src/stacks/external/mongoose.c
     src/stacks/mongoose.c
     #
     src/xml_stream.c
