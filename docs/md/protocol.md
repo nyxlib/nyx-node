@@ -1,31 +1,20 @@
 # Protocol
 
-This page describes the **Nyx protocol**, a thin and backward-compatible overlay on the **INDI protocol**. INDI was
-originally designed to control astronomical hardware but is quite generic. Nyx preserves the INDI property/state
-model and message semantics while modernizing transport and serialization. By default, Nyx exchanges **JSON**
-messages over an **MQTT broker**, with a 1:1 mapping to INDI’s XML messages. It can also speak the original INDI
-XML directly over **TCP** for strict compatibility.
+This page describes the **Nyx protocol**, a thin and backward-compatible overlay on the **INDI protocol**. INDI was originally designed to control astronomical hardware but is quite generic. Nyx preserves the INDI property/state model and message semantics while modernizing transport and serialization. By default, Nyx exchanges **JSON** messages over an **MQTT broker**, with a 1:1 mapping to INDI’s XML messages. It can also speak the original INDI XML directly over **TCP** for strict compatibility.
 
-In addition, Nyx introduces an **additional low-latency streaming system**, based on **Redis**, to deliver data
-to multiple clients.
+In addition, Nyx introduces an **additional low-latency streaming system**, based on **Redis**, to deliver data to multiple clients.
 
 ## INDI protocol
 
-This section summarizes version 1.7 of the INDI protocol. For the normative specification (message grammar,
-semantics, etc.), see the official [INDI.pdf](https://github.com/nyxlib/nyx-node/blob/main/docs/specs/INDI.pdf).
+This section summarizes version 1.7 of the INDI protocol. For the normative specification (message grammar, semantics, etc.), see the official [INDI.pdf](https://github.com/nyxlib/nyx-node/blob/main/docs/specs/INDI.pdf).
 
 ### Purpose and model
 
-INDI is a small, XML-based protocol to control devices through **properties**. A device exposes named properties
-(vectors of elements) and a client reads and changes them. Messages are **asynchronous**: there is no strict
-request/response pairing and participants must accept any valid message at any time. Malformed or unexpected
-input should be ignored rather than negotiated.
+INDI is a small, XML-based protocol to control devices through **properties**. A device exposes named properties (vectors of elements) and a client reads and changes them. Messages are **asynchronous**: there is no strict request/response pairing and participants must accept any valid message at any time. Malformed or unexpected input should be ignored rather than negotiated.
 
 ### Discovery (introspection)
 
-A client begins by asking device to describe itself. The client may request all devices, all properties
-of one device, or one specific property. Devices answer with *definitions* that fully describe each property
-and its elements.
+A client begins by asking device to describe itself. The client may request all devices, all properties of one device, or one specific property. Devices answer with *definitions* that fully describe each property and its elements.
 
 ```xml
 <!-- Client → Device: ask for properties of all devices -->
@@ -41,18 +30,11 @@ and its elements.
 </defNumberVector>
 ```
 
-Definitions exist for text, number, switch, light, and BLOB vectors (`defTextVector`, `defNumberVector`,
-`defSwitchVector`, `defLightVector`, `defBLOBVector`). Each element has a `name` and optional `label`. Numbers
-add display `format`, `min`, `max`, and `step`. Switches can announce a UI `rule` such as `OneOfMany`, `AtMostOne`
-or `AnyOfMany`.
+Definitions exist for text, number, switch, light, and BLOB vectors (`defTextVector`, `defNumberVector`, `defSwitchVector`, `defLightVector`, `defBLOBVector`). Each element has a `name` and optional `label`. Numbers add display `format`, `min`, `max`, and `step`. Switches can announce a UI `rule` such as `OneOfMany`, `AtMostOne` or `AnyOfMany`.
 
 ### State, permissions, and timeouts
 
-Every property carries a **state** among `Idle`, `Ok`, `Busy`, and `Alert`. Devices should also send human-readable
-messages and timestamps alongside state changes. Permissions are hints for clients: text and number vectors can be
-`ro` (read-only), `wo` (write-only), or `rw` (read-write); switches can be `ro` or `rw`; lights are `ro`. The
-`timeout` value, in seconds, expresses the worst-case duration for the device to accomplish a change, allowing
-clients to reason about progress and failure.
+Every property carries a **state** among `Idle`, `Ok`, `Busy`, and `Alert`. Devices should also send human-readable messages and timestamps alongside state changes. Permissions are hints for clients: text and number vectors can be `ro` (read-only), `wo` (write-only), or `rw` (read-write); switches can be `ro` or `rw`; lights are `ro`. The `timeout` value, in seconds, expresses the worst-case duration for the device to accomplish a change, allowing clients to reason about progress and failure.
 
 ```xml
 <setLightVector device="Building" name="Security" state="Alert" timestamp="2002-03-13T16:06:20">
@@ -62,9 +44,7 @@ clients to reason about progress and failure.
 
 ### Numeric value format
 
-Numeric values are carried as **strings** and may be **integer**, **real**, or **sexagesimal**. A property may
-specify either a standard C `printf` format or the INDI sexagesimal spec `%<w>.<f>m`, where`<w>` is the total
-number of characters and `<f>` the fraction style:
+Numeric values are carried as **strings** and may be **integer**, **real**, or **sexagesimal**. A property may specify either a standard C `printf` format or the INDI sexagesimal spec `%<w>.<f>m`, where`<w>` is the total number of characters and `<f>` the fraction style:
 ```
 <f>=9  →  :mm:ss.ss
 <f>=8  →  :mm:ss.s
@@ -81,9 +61,7 @@ For example:
 
 ### Changing values (Client → Device)
 
-To change a property, the client sends a *target* message and immediately considers the property `Busy` until the
-device reports completion. For numbers and text, the client should send all elements; other types may carry only
-the changed members.
+To change a property, the client sends a *target* message and immediately considers the property `Busy` until the device reports completion. For numbers and text, the client should send all elements; other types may carry only the changed members.
 
 ```xml
 <!-- Set two numbers atomically -->
@@ -100,8 +78,7 @@ the changed members.
 
 ### Reporting values (Device → Client)
 
-Devices report current values with `setXXXVector` messages and may include a new `state`, `timeout`, and a
-timestamped `message`. For rapidly changing values, devices should avoid flooding slower clients.
+Devices report current values with `setXXXVector` messages and may include a new `state`, `timeout`, and a timestamped `message`. For rapidly changing values, devices should avoid flooding slower clients.
 
 ```xml
 <setSwitchVector device="Camera" name="Binning" state="Ok" timestamp="2002-03-13T16:04:02" message="Binning 2:1 selected">
@@ -112,10 +89,7 @@ timestamped `message`. For rapidly changing values, devices should avoid floodin
 
 ### Transferring binary data (BLOBs)
 
-BLOB elements carry base64-encoded payloads with a `format` hint (e.g., `.fits` or `.fits.z`) and a decoded size.
-Clients control BLOB flow per connection with `enableBLOB`: `Never` disables all `setBLOB` messages on that
-connection, `Also` permits `setBLOB` messages alongside normal INDI traffic, and `Only` restricts the connection
-to `setBLOB` messages exclusively.
+BLOB elements carry base64-encoded payloads with a `format` hint (e.g., `.fits` or `.fits.z`) and a decoded size. Clients control BLOB flow per connection with `enableBLOB`: `Never` disables all `setBLOB` messages on that connection, `Also` permits `setBLOB` messages alongside normal INDI traffic, and `Only` restricts the connection to `setBLOB` messages exclusively.
 
 ```xml
 <!-- Client opts in to receive BLOBs from this device -->
@@ -129,8 +103,7 @@ to `setBLOB` messages exclusively.
 
 ### Messages and deletions
 
-Devices can send human-oriented `message` elements, optionally tied to a device, to narrate progress or issues.
-They can also announce that a property—or an entire device—is no longer available with `delProperty`.
+Devices can send human-oriented `message` elements, optionally tied to a device, to narrate progress or issues. They can also announce that a property—or an entire device—is no longer available with `delProperty`.
 
 ```xml
 <message device="Camera" timestamp="2002-03-13T16:06:20" message="TEC is approaching target temperature"/>
@@ -140,9 +113,7 @@ They can also announce that a property—or an entire device—is no longer avai
 
 ### Snooping other devices
 
-Any device—or client—may subscribe to messages about other devices and properties by issuing `getProperties`
-with `device` and optional `name`. From that point, matching `defXXX` and `setXXX` traffic is mirrored to
-the requester, enabling coordination and higher-level behaviors.
+Any device—or client—may subscribe to messages about other devices and properties by issuing `getProperties` with `device` and optional `name`. From that point, matching `defXXX` and `setXXX` traffic is mirrored to the requester, enabling coordination and higher-level behaviors.
 
 ```xml
 <!-- Start snooping the Environment.Now property -->
@@ -153,9 +124,7 @@ the requester, enabling coordination and higher-level behaviors.
 
 ### XML → JSON mapping
 
-Nyx mirrors INDI’s XML as JSON with a minimal, lossless mapping: the element name is stored under `"<>"`, attributes
-use an `"@"` prefix, text content goes under `"$"`, and child elements appear in a `"children"` array (order
-preserved). Values are strings by design; clients parse numbers where needed.
+Nyx mirrors INDI’s XML as JSON with a minimal, lossless mapping: the element name is stored under `"<>"`, attributes use an `"@"` prefix, text content goes under `"$"`, and child elements appear in a `"children"` array (order preserved). Values are strings by design; clients parse numbers where needed.
 
 **Example — Client → Device (ask for properties):**
 ```json
@@ -199,18 +168,14 @@ preserved). Values are strings by design; clients parse numbers where needed.
 }
 ```
 
-In any `defXXXVector` message, Nyx supports an optional `@hints` attribute carrying Markdown to describe the vector
-in the UI.
+In any `defXXXVector` message, Nyx supports an optional `@hints` attribute carrying Markdown to describe the vector in the UI.
 
 ### Stream vectors
 
-Nyx adds a feature for describing **stream vectors** metadata. Stream payloads are not transported in JSON, a
-dedicated API delivers them to clients, using **Redis** for low-latency caching and streaming server. This
-capability is specific to Nyx and not part of INDI.
+Nyx adds a feature for describing **stream vectors** metadata. Stream payloads are not transported in JSON, a dedicated API delivers them to clients, using **Redis** for low-latency caching and streaming server. This capability is specific to Nyx and not part of INDI.
 
 ### Nyx message grammar
 
-The schema below describes the message structures for both the INDI protocol and its Nyx overlay . Nyx-specific
-extensions are explicitly noted.
+The schema below describes the message structures for both the INDI protocol and its Nyx overlay. Nyx-specific extensions are explicitly noted.
 
 \include ./docs/specs/nyx.xsd
