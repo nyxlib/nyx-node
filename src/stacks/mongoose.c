@@ -148,7 +148,7 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO("%lu OPEN", connection->id);
+        NYX_LOG_INFO("%lu INDI OPEN", connection->id);
 
         node->stack->indi_connection = connection;
 
@@ -156,13 +156,13 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_LOG_INFO("%lu CLOSE", connection->id);
+        NYX_LOG_INFO("%lu INDI CLOSE", connection->id);
 
         node->stack->indi_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_LOG_ERROR("%lu ERROR %s", connection->id, (STR_t) ev_data);
+        NYX_LOG_ERROR("%lu INDI ERROR %s", connection->id, (STR_t) ev_data);
     }
     else if(ev == MG_EV_READ)
     {
@@ -189,19 +189,19 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO("%lu OPEN", connection->id);
+        NYX_LOG_INFO("%lu MQTT OPEN", connection->id);
 
         node->stack->mqtt_connection = connection;
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_LOG_INFO("%lu CLOSE", connection->id);
+        NYX_LOG_INFO("%lu MQTT CLOSE", connection->id);
 
         node->stack->mqtt_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_LOG_ERROR("%lu ERROR %s", connection->id, (STR_t) ev_data);
+        NYX_LOG_ERROR("%lu MQTT ERROR %s", connection->id, (STR_t) ev_data);
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
@@ -235,7 +235,7 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO("%lu OPEN", connection->id);
+        NYX_LOG_INFO("%lu REDIS OPEN", connection->id);
 
         node->stack->redis_connection = connection;
 
@@ -243,13 +243,13 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_LOG_INFO("%lu CLOSE", connection->id);
+        NYX_LOG_INFO("%lu REDIS CLOSE", connection->id);
 
         node->stack->redis_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_LOG_ERROR("%lu ERROR %s", connection->id, (STR_t) ev_data);
+        NYX_LOG_ERROR("%lu REDIS ERROR %s", connection->id, (STR_t) ev_data);
     }
     else if(ev == MG_EV_READ)
     {
