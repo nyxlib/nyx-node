@@ -169,7 +169,7 @@ uint32_t internal_adler32(size_t src_size, BUFF_t src_buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_deflate(__NULLABLE__ size_t *result_size, __ZEROABLE__ size_t size, BUFF_t buff)
+buff_t nyx_zlib_deflate(__NYX_NULLABLE__ size_t *result_size, __NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
