@@ -37,6 +37,8 @@ static const nyx_str_t SPECIAL_TOPICS[] = {
 static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
+    #if !defined(ARDUINO)
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     if(node->enable_xml)
     {
@@ -59,6 +61,8 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
         }
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    #endif
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t json = nyx_object_to_string(object);
@@ -754,6 +758,8 @@ static void _process_message(nyx_node_t *node, nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+#if !defined(ARDUINO)
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const nyx_str_t payload)
 {
@@ -801,6 +807,8 @@ static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const 
     return 0;
 }
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+#endif
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const nyx_str_t event_topic, const nyx_str_t event_payload)
@@ -907,6 +915,8 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                         /*--------------------------------------------------------------------------------------------*/
                         /* XML NEW XXX VECTOR                                                                         */
                         /*--------------------------------------------------------------------------------------------*/
+                        #if !defined(ARDUINO)
+                        /*--------------------------------------------------------------------------------------------*/
 
                         nyx_xmldoc_t *xmldoc = nyx_xmldoc_parse_buff(event_payload.len, event_payload.buf);
 
@@ -924,6 +934,8 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                             nyx_xmldoc_free(xmldoc);
                         }
 
+                        /*--------------------------------------------------------------------------------------------*/
+                        #endif
                         /*--------------------------------------------------------------------------------------------*/
                     }
                     else if(node->user_mqtt_handler != NULL)
@@ -1044,7 +1056,9 @@ nyx_node_t *nyx_node_initialize(
 
     node->vectors = vectors;
 
+    #if !defined(ARDUINO)
     node->tcp_handler = _tcp_handler;
+    #endif
     node->mqtt_handler = _mqtt_handler;
     node->user_mqtt_handler = mqtt_handler;
 
