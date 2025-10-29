@@ -49,7 +49,7 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
             /*--------------------------------------------------------------------------------------------------------*/
 
             str_t xml = nyx_xmldoc_to_string(xmldoc);
-            internal_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml));
+            internal_mqtt_pub(node, nyx_str_s("nyx/xml"), nyx_str_s(xml), 2);
             internal_indi_pub(node, nyx_str_s(xml));
             nyx_memory_free(xml);
 
@@ -66,7 +66,7 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t json = nyx_object_to_string(object);
-    internal_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json));
+    internal_mqtt_pub(node, nyx_str_s("nyx/json"), nyx_str_s(json), 2);
     ////////_indi_pub(node, nyx_str_s(json));
     nyx_memory_free(json);
 
@@ -830,9 +830,9 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                      /*---*/ topic /*---*/
                 );
 
-                internal_mqtt_sub(node, SPECIAL_TOPICS[i]);
+                internal_mqtt_sub(node, SPECIAL_TOPICS[i], 2);
 
-                internal_mqtt_sub(node, nyx_str_s(topic));
+                internal_mqtt_sub(node, nyx_str_s(topic), 2);
             }
 
             nyx_memory_free(topic);
@@ -1119,9 +1119,9 @@ void nyx_node_ping(nyx_node_t *node)
 {
     if(node != NULL)
     {
-        internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id);
+        internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id, 0);
 
-        internal_mqtt_pub(node, node->master_client_topic, node->master_client_message);
+        internal_mqtt_pub(node, node->master_client_topic, node->master_client_message, 0);
     }
 }
 

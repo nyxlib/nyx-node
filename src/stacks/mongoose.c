@@ -98,7 +98,7 @@ void internal_indi_pub(nyx_node_t *node, const nyx_str_t message)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
+void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic, int qos)
 {
     if(node != NULL && node->stack->mqtt_connection != NULL)
     {
@@ -106,7 +106,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
 
         opts.topic = topic;
         ////.message = message;
-        opts.qos = 2;
+        opts.qos = (uint8_t) qos;
 
         mg_mqtt_sub(node->stack->mqtt_connection, &opts);
     }
@@ -114,7 +114,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t message)
+void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t message, int qos)
 {
     if(node != NULL && node->stack->mqtt_connection != NULL)
     {
@@ -122,7 +122,7 @@ void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t 
 
         opts.topic = topic;
         opts.message = message;
-        opts.qos = 2;
+        opts.qos = (uint8_t) qos;
 
         mg_mqtt_pub(node->stack->mqtt_connection, &opts);
     }

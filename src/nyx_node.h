@@ -3080,12 +3080,14 @@ void nyx_node_send_del_property(
  * @brief If MQTT is enabled, subscribes to an MQTT topic.
  * @param node Nyx node.
  * @param topic MQTT topic.
+ * @param qos MQTT Quality Of Service.
  * @note `mqtt_handler` has to be defined in @ref nyx_node_initialize.
  */
 
 void nyx_mqtt_sub(
     nyx_node_t *node,
-    STR_t topic
+    STR_t topic,
+    int qos
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3097,13 +3099,15 @@ void nyx_mqtt_sub(
  * @param topic MQTT topic.
  * @param message_size MQTT message length.
  * @param message_buff MQTT message buffer.
+ * @param qos MQTT Quality Of Service.
  */
 
 void nyx_mqtt_pub(
     nyx_node_t *node,
     STR_t topic,
     __NYX_ZEROABLE__ size_t message_size,
-    __NYX_NULLABLE__ BUFF_t message_buff
+    __NYX_NULLABLE__ BUFF_t message_buff,
+    int qos
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

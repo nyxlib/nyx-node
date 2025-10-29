@@ -468,7 +468,8 @@ void internal_indi_pub(
 
 void internal_mqtt_sub(
     /*-*/ nyx_node_t *node,
-    const nyx_str_t topic
+    const nyx_str_t topic,
+    int qos
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -476,7 +477,8 @@ void internal_mqtt_sub(
 void internal_mqtt_pub(
     /*-*/ nyx_node_t *node,
     const nyx_str_t topic,
-    const nyx_str_t message
+    const nyx_str_t message,
+    int qos
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
