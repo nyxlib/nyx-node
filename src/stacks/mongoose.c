@@ -106,7 +106,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
 
         opts.topic = topic;
         ////.message = message;
-        opts.qos = 1;
+        opts.qos = 2;
 
         mg_mqtt_sub(node->stack->mqtt_connection, &opts);
     }
@@ -122,7 +122,7 @@ void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t 
 
         opts.topic = topic;
         opts.message = message;
-        opts.qos = 1;
+        opts.qos = 2;
 
         mg_mqtt_pub(node->stack->mqtt_connection, &opts);
     }
