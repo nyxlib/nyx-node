@@ -2943,6 +2943,11 @@ void nyx_node_poll(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/**
+ * @brief Notifies the provided JSON object to the clients.
+ * @param object The provided JSON object.
+ */
+
 void nyx_node_notify(
     __NYX_NULLABLE__ nyx_object_t *object
 );
