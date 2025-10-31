@@ -2944,6 +2944,7 @@ void nyx_node_poll(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @memberof nyx_node_t
  * @brief Notifies the provided JSON object to the clients.
  * @param object The provided JSON object.
  */
