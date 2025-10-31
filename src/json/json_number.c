@@ -44,16 +44,11 @@ double nyx_number_get(const nyx_number_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_number_set_alt(nyx_number_t *object, double value, bool notify)
+bool nyx_number_set(nyx_number_t *object, double value)
 {
     bool modified = \
     object->value != value;
     object->value = value;
-
-    if(notify && modified)
-    {
-        nyx_object_notify(&object->base);
-    }
 
     return modified;
 }

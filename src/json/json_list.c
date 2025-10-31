@@ -90,8 +90,6 @@ static void internal_list_clear(nyx_list_t *object)
 void nyx_list_clear(nyx_list_t *object)
 {
     internal_list_clear(object);
-
-    nyx_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -174,7 +172,7 @@ nyx_object_t *nyx_list_get(const nyx_list_t *object, size_t idx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_list_set_alt(nyx_list_t *object, size_t idx, void *value, bool notify)
+bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -226,15 +224,7 @@ bool nyx_list_set_alt(nyx_list_t *object, size_t idx, void *value, bool notify)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
 _ok:
-    if(notify && modified)
-    {
-        nyx_object_notify(&object->base);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     return modified;
 }
 

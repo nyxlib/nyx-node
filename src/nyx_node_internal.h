@@ -100,16 +100,9 @@ int nyx_unicode_to_utf8(
                 .type = (Type),                 \
                 .node = NULL,                   \
                 .parent = NULL,                 \
-                .in_callback = {._ptr = NULL},  \
-                .out_callback = NULL,           \
+                .in_callback = {0},             \
                 .ctx = NULL                     \
             })
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_object_notify(
-    __NYX_NULLABLE__ nyx_object_t *object
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STRING BUILDER                                                                                                     */
@@ -281,8 +274,7 @@ void internal_set_opts(
 bool internal_copy(
     /*-*/ nyx_dict_t *dst,
     const nyx_dict_t *src,
-    STR_t key,
-    bool notify
+    STR_t key
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -94,8 +94,6 @@ static void internal_dict_clear(nyx_dict_t *object)
 void nyx_dict_clear(nyx_dict_t *object)
 {
     internal_dict_clear(object);
-
-    nyx_object_notify(&object->base);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -178,7 +176,7 @@ nyx_object_t *nyx_dict_get(const nyx_dict_t *object, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_alt(nyx_dict_t *object, STR_t key, void *value, bool notify)
+bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -232,15 +230,7 @@ bool nyx_dict_set_alt(nyx_dict_t *object, STR_t key, void *value, bool notify)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
 _ok:
-    if(notify && modified)
-    {
-        nyx_object_notify(&object->base);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     return modified;
 }
 

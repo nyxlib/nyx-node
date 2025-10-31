@@ -67,7 +67,7 @@ void nyx_string_get_buff(const nyx_string_t *object, __NYX_NULLABLE__ size_t *re
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_set_alt(nyx_string_t *object, STR_t value, bool manage, bool notify)
+bool nyx_string_set(nyx_string_t *object, STR_t value, bool manage)
 {
     if(value == NULL)
     {
@@ -95,13 +95,6 @@ bool nyx_string_set_alt(nyx_string_t *object, STR_t value, bool manage, bool not
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(notify && modified)
-        {
-            nyx_object_notify(&object->base);
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         return modified;
     }
 
@@ -110,7 +103,7 @@ bool nyx_string_set_alt(nyx_string_t *object, STR_t value, bool manage, bool not
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, bool managed, bool notify)
+bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -131,13 +124,6 @@ bool nyx_string_set_buff_alt(nyx_string_t *object, size_t size, BUFF_t buff, boo
     object->managed = /*---*/ managed;
     object->length = /*---*/ size;
     object->value = (str_t) buff;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(notify)
-    {
-        nyx_object_notify(&object->base);
-    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

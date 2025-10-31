@@ -226,7 +226,7 @@ nyx_stream_state_t nyx_str_to_stream_state(STR_t stream)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notify)
+bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 {
     nyx_object_t *src_object = nyx_dict_get(src, key);
 
@@ -244,17 +244,17 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key, bool notif
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_NUMBER:
-                return nyx_dict_set_alt(dst, key, nyx_number_from(nyx_number_get((nyx_number_t *) src_object)), notify);
+                return nyx_dict_set(dst, key, nyx_number_from(nyx_number_get((nyx_number_t *) src_object)));
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_BOOLEAN:
-                return nyx_dict_set_alt(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)), notify);
+                return nyx_dict_set(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)));
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_STRING:
-                return nyx_dict_set_alt(dst, key, nyx_string_from_dup(nyx_string_get((nyx_string_t *) src_object)), notify);
+                return nyx_dict_set(dst, key, nyx_string_from_dup(nyx_string_get((nyx_string_t *) src_object)));
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -356,12 +356,12 @@ bool internal_blob_is_compressed(const nyx_dict_t *def)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict, bool notify)
+static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    internal_copy(dst_dict, src_dict, "@size", notify);
-    internal_copy(dst_dict, src_dict, "@format", notify);
+    internal_copy(dst_dict, src_dict, "@size");
+    internal_copy(dst_dict, src_dict, "@format");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -390,7 +390,7 @@ static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict,
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set_alt(dst_dict, "$", nyx_string_from_buff_managed(dst_len, dst_str), notify);
+        nyx_dict_set(dst_dict, "$", nyx_string_from_buff_managed(dst_len, dst_str));
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -412,13 +412,13 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
     nyx_dict_set(result, "<>", nyx_string_from_dup(set_tag));
 
-    internal_copy(result, vector, "@client", false);
-    internal_copy(result, vector, "@device", false);
-    internal_copy(result, vector, "@name", false);
-    internal_copy(result, vector, "@state", false);
-    internal_copy(result, vector, "@timeout", false);
-    internal_copy(result, vector, "@timestamp", false);
-    internal_copy(result, vector, "@message", false);
+    internal_copy(result, vector, "@client");
+    internal_copy(result, vector, "@device");
+    internal_copy(result, vector, "@name");
+    internal_copy(result, vector, "@state");
+    internal_copy(result, vector, "@timeout");
+    internal_copy(result, vector, "@timestamp");
+    internal_copy(result, vector, "@message");
 
     nyx_dict_set(result, "children", children);
 
@@ -442,15 +442,15 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_dict_set_alt(dst_dict, "<>", nyx_string_from_dup(one_tag), false);
+                nyx_dict_set(dst_dict, "<>", nyx_string_from_dup(one_tag));
 
-                internal_copy(dst_dict, src_dict, "@name", false);
+                internal_copy(dst_dict, src_dict, "@name");
 
                 if(strcmp(one_tag, "oneBLOB") == 0) {
-                    internal_copy_blob(dst_dict, src_dict, false);
+                    internal_copy_blob(dst_dict, src_dict);
                 }
                 else {
-                    internal_copy(dst_dict, src_dict, "$", false);
+                    internal_copy(dst_dict, src_dict, "$");
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/

@@ -548,27 +548,27 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                                                                 {
                                                                     case NYX_VARIANT_TYPE_INT:
                                                                         if((success = object2->in_callback._int == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val.value._int, old_val.value._int))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_UINT:
                                                                         if((success = object2->in_callback._uint == NULL || object2->in_callback._uint(vector, (nyx_dict_t *) object2, new_val.value._uint, old_val.value._uint))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_LONG:
                                                                         if((success = object2->in_callback._long == NULL || object2->in_callback._long(vector, (nyx_dict_t *) object2, new_val.value._long, old_val.value._long))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_ULONG:
                                                                         if((success = object2->in_callback._ulong == NULL || object2->in_callback._ulong(vector, (nyx_dict_t *) object2, new_val.value._ulong, old_val.value._ulong))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_DOUBLE:
                                                                         if((success = object2->in_callback._double == NULL || object2->in_callback._double(vector, (nyx_dict_t *) object2, new_val.value._double, old_val.value._double))) {
-                                                                            modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), false);
+                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
                                                                         }
                                                                         break;
                                                                 }
@@ -586,7 +586,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._str == NULL || object2->in_callback._str(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_dup(new_val), false);
+                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_dup(new_val));
                                                             }
                                                         }
 
@@ -601,7 +601,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._double == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_unmanaged(nyx_state_to_str(new_val)), false);
+                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_unmanaged(nyx_state_to_str(new_val)));
                                                             }
                                                         }
 
@@ -616,7 +616,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._double == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_unmanaged(nyx_onoff_to_str(new_val)), false);
+                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_unmanaged(nyx_onoff_to_str(new_val)));
                                                             }
                                                         }
 
@@ -649,7 +649,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._str == NULL || object2->in_callback._buffer(vector, (nyx_dict_t *) object2, dst_size, dst_buff)))
                                                             {
-                                                                modified = nyx_dict_set_alt((nyx_dict_t *) object2, "$", nyx_string_from_buff_managed(dst_size, dst_buff), false);
+                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_buff_managed(dst_size, dst_buff));
                                                             }
                                                             else
                                                             {
@@ -700,7 +700,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                     if(vector->base.in_callback._vector != NULL) vector->base.in_callback._vector(vector, vector_modified);
 
-                    nyx_object_notify(&vector->base);
+                    nyx_node_notify(&vector->base);
 
                     break; /* property found */
 
@@ -1002,7 +1002,7 @@ nyx_node_t *nyx_node_initialize(
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set_alt(vector, "@client", nyx_string_from_dup(node_id), false);
+        nyx_dict_set(vector, "@client", nyx_string_from_dup(node_id));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -1016,13 +1016,9 @@ nyx_node_t *nyx_node_initialize(
 
             for(nyx_list_iter_t iter = NYX_LIST_ITER((nyx_list_t *) children); nyx_list_iterate(&iter, &idx, &vector_def);)
             {
-                vector_def->out_callback = /**/ NULL /**/;
-
                 vector_def->node = node;
             }
         }
-
-        vector->base.out_callback = _out_callback;
 
         vector->base.node = node;
 
@@ -1122,6 +1118,16 @@ void nyx_node_ping(nyx_node_t *node)
         internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id, 0);
 
         internal_mqtt_pub(node, node->master_client_topic, node->master_client_message, 0);
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_notify(__NYX_NULLABLE__ nyx_object_t *object)
+{
+    for(; object != NULL; object = object->parent)
+    {
+        _out_callback(object);
     }
 }
 

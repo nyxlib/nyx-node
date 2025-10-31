@@ -517,13 +517,7 @@ typedef struct nyx_object_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_NULLABLE__ void (* out_callback)(
-        struct nyx_object_s *object                                                             //!< This object.
-    );                                                                                          //!< Callback triggered when the server modifies this object.
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    __NYX_NULLABLE__ void *ctx;                                                                     //!< User context pointer.
+    __NYX_NULLABLE__ void *ctx;                                                                 //!< User context pointer.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -732,18 +726,6 @@ double nyx_number_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @private
- */
-
-bool nyx_number_set_alt(
-    /*-*/ nyx_number_t *object,
-    double value,
-    bool notify
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
  * @memberof nyx_number_t
  * @brief Set the value of the provided JSON number object.
  * @param object JSON number object.
@@ -751,10 +733,11 @@ bool nyx_number_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_number_set(nyx_number_t *object, double value)
-{
-    return nyx_number_set_alt(object, value, true);
-}
+bool nyx_number_set(
+    /*-*/ nyx_number_t *object,
+    double value
+);
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -849,18 +832,6 @@ bool nyx_boolean_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @private
- */
-
-bool nyx_boolean_set_alt(
-    /*-*/ nyx_boolean_t *object,
-    bool value,
-    bool notify
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
  * @memberof nyx_boolean_t
  * @brief Set the value of the provided JSON boolean object.
  * @param object JSON boolean object.
@@ -868,10 +839,10 @@ bool nyx_boolean_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_boolean_set(nyx_boolean_t *object, bool value)
-{
-    return nyx_boolean_set_alt(object, value, true);
-}
+bool nyx_boolean_set(
+    /*-*/ nyx_boolean_t *object,
+    bool value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -980,19 +951,6 @@ void nyx_string_get_buff(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @private
- */
-
-bool nyx_string_set_alt(
-    /*-*/ nyx_string_t *object,
-    STR_t value,
-    bool managed,
-    bool notify
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
  * @memberof nyx_string_t
  * @brief Set the value of the provided JSON string object.
  * @param object JSON string object.
@@ -1001,24 +959,13 @@ bool nyx_string_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
-{
-    return nyx_string_set_alt(object, value, managed, true);
-}
+bool nyx_string_set(
+    /*-*/ nyx_string_t *object,
+    STR_t value,
+    bool managed
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-bool nyx_string_set_buff_alt(
-    /*-*/ nyx_string_t *object,
-    __NYX_ZEROABLE__ size_t size,
-    __NYX_NULLABLE__ BUFF_t buff,
-    bool managed,
-    bool notify
-);
 
 /**
  * @memberof nyx_string_t
@@ -1030,10 +977,12 @@ bool nyx_string_set_buff_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
-{
-    return nyx_string_set_buff_alt(object, size, buff, managed, true);
-}
+bool nyx_string_set_buff(
+    /*-*/ nyx_string_t *object,
+    size_t size,
+    BUFF_t buff,
+    bool managed
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1315,17 +1264,6 @@ nyx_object_t *nyx_dict_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @private
- */
-
-bool nyx_dict_set_alt(
-    /*-*/ nyx_dict_t *object,
-    STR_t key,
-    void *value,
-    bool notify
-);
-
-/**
  * @memberof nyx_dict_t
  * @brief Sets a JSON object in the provided JSON dict object.
  * @param object JSON dict object.
@@ -1334,10 +1272,11 @@ bool nyx_dict_set_alt(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
-{
-    return nyx_dict_set_alt(object, key, value, true);
-}
+bool nyx_dict_set(
+    /*-*/ nyx_dict_t *object,
+    STR_t key,
+    void *value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1568,12 +1507,13 @@ nyx_object_t *nyx_list_get(
  * @private
  */
 
-bool nyx_list_set_alt(
+bool nyx_list_set(
     /*-*/ nyx_list_t *object,
     size_t idx,
-    void *value,
-    bool notify
+    void *value
 );
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @memberof nyx_list_t
@@ -1585,7 +1525,7 @@ bool nyx_list_set_alt(
 
 __NYX_INLINE__ bool nyx_list_push(nyx_list_t *object, void *value)
 {
-    return nyx_list_set_alt(object, (size_t) -1, value, true);
+    return nyx_list_set(object, (size_t) -1, value);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2999,6 +2939,12 @@ void nyx_node_add_timer(
 void nyx_node_poll(
     nyx_node_t *node,
     int timeout_ms
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_node_notify(
+    __NYX_NULLABLE__ nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -10,19 +10,6 @@
 #include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-static void _debug_callback(nyx_object_t *object)
-{
-    nyx_dict_t *dict = nyx_light_set_vector_new((nyx_dict_t *) object);
-
-    str_t json = nyx_dict_to_string(dict);
-    printf("** \033[91mNOT REGISTERED\033[0m **\n%s\n", json);
-    nyx_memory_free(json);
-
-    nyx_dict_free(dict);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -105,8 +92,6 @@ nyx_dict_t *nyx_light_vector_new(
     for(; *props != NULL; props++) nyx_list_push(children, *props);
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    result->base.out_callback = _debug_callback;
 
     return result;
 }

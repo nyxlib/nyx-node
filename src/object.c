@@ -435,16 +435,3 @@ str_t nyx_object_to_cstring(__NYX_NULLABLE__ const nyx_object_t *object)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_object_notify(__NYX_NULLABLE__ nyx_object_t *object)
-{
-    for(; object != NULL; object = object->parent)
-    {
-        if(object->out_callback != NULL)
-        {
-            object->out_callback(object);
-        }
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
