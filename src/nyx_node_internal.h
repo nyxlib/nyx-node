@@ -108,6 +108,12 @@ int nyx_unicode_to_utf8(
 /* STRING BUILDER                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define NYX_SB_NO_ESCAPE        (0x0000)
+#define NYX_SB_ESCAPE_JSON      (1 << 0)
+#define NYX_SB_ESCAPE_XML       (1 << 1)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
     struct nyx_string_builder_node_s *head;
@@ -135,9 +141,18 @@ void nyx_string_builder_clear(
 
 void nyx_string_builder_append_n(
     /*-*/ nyx_string_builder_t *sb,
+    uint32_t flags,
     STR_t args[],
-    size_t n,
-    bool xml
+    size_t n
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_string_builder_append_buff(
+    /*-*/ nyx_string_builder_t *sb,
+    uint32_t flags,
+    size_t len,
+    STR_t str
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -166,44 +181,22 @@ str_t nyx_string_builder_to_cstring(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define nyx_string_builder_append(sb, ...) ({                                                                          \
+#define nyx_string_builder_append(sb, flags, ...) ({                                                                   \
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
-    nyx_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t), false);                                        \
+    nyx_string_builder_append_n(sb, flags, args, sizeof(args) / sizeof(STR_t));                                        \
 })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define nyx_string_builder_append_xml(sb, ...) ({                                                                      \
-                                                                                                                       \
-    STR_t args[] = {__VA_ARGS__};                                                                                      \
-                                                                                                                       \
-    nyx_string_builder_append_n(sb, args, sizeof(args) / sizeof(STR_t), true);                                         \
-})
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define nyx_string_builder_from(...) ({                                                                                \
+#define nyx_string_builder_from(flags, ...) ({                                                                         \
                                                                                                                        \
     STR_t args[] = {__VA_ARGS__};                                                                                      \
                                                                                                                        \
     nyx_string_builder_t *_sb = nyx_string_builder_new();                                                              \
                                                                                                                        \
-    nyx_string_builder_append_n(_sb, args, sizeof(args) / sizeof(STR_t), false);                                       \
-                                                                                                                       \
-    _sb;                                                                                                               \
-})
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define nyx_string_builder_from_xml(...) ({                                                                            \
-                                                                                                                       \
-    STR_t args[] = {__VA_ARGS__};                                                                                      \
-                                                                                                                       \
-    nyx_string_builder_t *_sb = nyx_string_builder_new();                                                              \
-                                                                                                                       \
-    nyx_string_builder_append_n(_sb, args, sizeof(args) / sizeof(STR_t), true);                                        \
+    nyx_string_builder_append_n(_sb, flags, args, sizeof(args) / sizeof(STR_t));                                       \
                                                                                                                        \
     _sb;                                                                                                               \
 })
