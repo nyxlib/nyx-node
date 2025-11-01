@@ -235,9 +235,9 @@ __NYX_INLINE__ void to_string_append_attribute(nyx_string_builder_t *sb, const n
     {
         next_child = curr_child->next;
 
-        nyx_string_builder_append(sb, " ", curr_child->name, "=\"");
-        nyx_string_builder_append_xml(sb, curr_child->data);
-        nyx_string_builder_append(sb, "\"");
+        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, " ", curr_child->name, "=\"");
+        nyx_string_builder_append(sb, NYX_SB_ESCAPE_XML, curr_child->data);
+        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "\"");
     }
 }
 
@@ -255,7 +255,7 @@ __NYX_INLINE__ void to_string_append_content(nyx_string_builder_t *sb, const nyx
         {
             str_t node = nyx_xmldoc_to_string(curr_child);
 
-            nyx_string_builder_append(sb, node);
+            nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, node);
 
             nyx_memory_free(node);
         }
@@ -264,15 +264,15 @@ __NYX_INLINE__ void to_string_append_content(nyx_string_builder_t *sb, const nyx
 
         else if(curr_child->type == NYX_XML_COMMENT)
         {
-            nyx_string_builder_append(sb, "<!--", curr_child->data, "-->");
+            nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "<!--", curr_child->data, "-->");
         }
         else if(curr_child->type == NYX_XML_CDATA)
         {
-            nyx_string_builder_append(sb, "<![CDATA[", curr_child->data, "]]>");
+            nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "<![CDATA[", curr_child->data, "]]>");
         }
         else if(curr_child->type == NYX_XML_TEXT)
         {
-            nyx_string_builder_append_xml(sb, curr_child->data);
+            nyx_string_builder_append(sb, NYX_SB_ESCAPE_XML, curr_child->data);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -289,15 +289,15 @@ str_t nyx_xmldoc_to_string(const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 
     if(xmldoc->self_closing)
     {
-        nyx_string_builder_append(sb, "<", xmldoc->name); to_string_append_attribute(sb, xmldoc); nyx_string_builder_append(sb, " />");
+        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "<", xmldoc->name); to_string_append_attribute(sb, xmldoc); nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, " />");
     }
     else
     {
-        nyx_string_builder_append(sb, "<", xmldoc->name); to_string_append_attribute(sb, xmldoc); nyx_string_builder_append(sb, ">");
+        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "<", xmldoc->name); to_string_append_attribute(sb, xmldoc); nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, ">");
 
         to_string_append_content(sb, xmldoc);
 
-        nyx_string_builder_append(sb, "</", xmldoc->name, ">");
+        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "</", xmldoc->name, ">");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
