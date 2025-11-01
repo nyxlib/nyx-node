@@ -59,7 +59,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
 
     for(nyx_xmldoc_t *attribute = curr_node->attributes; attribute != NULL; attribute = attribute->next)
     {
-        nyx_string_builder_t *sb = nyx_string_builder_from("@", attribute->name);
+        nyx_string_builder_t *sb = nyx_string_builder_from(NYX_SB_ESCAPE_JSON, "@", attribute->name);
 
         /**/    str_t attribute_name = nyx_string_builder_to_cstring(sb);
         /**/
