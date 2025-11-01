@@ -255,23 +255,31 @@ str_t nyx_dict_to_string(const nyx_dict_t *object)
 {
     nyx_string_builder_t *sb = nyx_string_builder_new();
 
-    /**/    nyx_string_builder_append(sb, "{");
+    /**/    nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "{");
     /**/
     /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
+    /**/        /*----------------------------------------------------------------------------------------------------*/
+    /**/
     /**/        str_t curr_node_val = nyx_object_to_string(curr_node->value);
     /**/
-    /**/        /**/    nyx_string_builder_append(sb, "\"", curr_node->key, "\"", ":", curr_node_val);
+    /**/        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "\"");
+    /**/        nyx_string_builder_append(sb, NYX_SB_ESCAPE_JSON, curr_node->key);
+    /**/        nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "\"", ":", curr_node_val);
     /**/
     /**/        nyx_memory_free(curr_node_val);
     /**/
+    /**/        /*----------------------------------------------------------------------------------------------------*/
+    /**/
     /**/        if(curr_node->next != NULL)
     /**/        {
-    /**/            nyx_string_builder_append(sb, ",");
+    /**/            nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, ",");
     /**/        }
+    /**/
+    /**/        /*----------------------------------------------------------------------------------------------------*/
     /**/    }
     /**/
-    /**/    nyx_string_builder_append(sb, "}");
+    /**/    nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "}");
 
     str_t result = nyx_string_builder_to_cstring(sb);
 
