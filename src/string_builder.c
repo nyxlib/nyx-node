@@ -131,7 +131,7 @@ void nyx_string_builder_append_n(nyx_string_builder_t *sb, uint32_t flags, STR_t
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
+static size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
 {
     size_t result = 0;
 
@@ -261,7 +261,7 @@ size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
+static str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
