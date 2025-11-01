@@ -141,7 +141,7 @@ size_t nyx_string_length(const nyx_string_t *object)
 
 str_t nyx_string_to_string(const nyx_string_t *object)
 {
-    nyx_string_builder_t *sb = nyx_string_builder_from(NYX_SB_NO_ESCAPE, object->value);
+    nyx_string_builder_t *sb = nyx_string_builder_from(NYX_SB_ESCAPE_JSON, object->value);
 
     str_t result = nyx_string_builder_to_string(sb);
 
@@ -154,7 +154,7 @@ str_t nyx_string_to_string(const nyx_string_t *object)
 
 str_t nyx_string_to_cstring(const nyx_string_t *object)
 {
-    nyx_string_builder_t *sb = nyx_string_builder_from(NYX_SB_ESCAPE_JSON, object->value);
+    nyx_string_builder_t *sb = nyx_string_builder_from(NYX_SB_NO_ESCAPE, object->value);
 
     str_t result = nyx_string_builder_to_cstring(sb);
 

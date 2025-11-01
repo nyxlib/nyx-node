@@ -145,8 +145,6 @@ size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
 
         if((node->flags & NYX_SB_ESCAPE_JSON) != 0)
         {
-            if(cstring) result++;
-
             if((node->flags & NYX_SB_ESCAPE_XML) != 0)
             {
                 /*----------------------------------------------------------------------------------------------------*/
@@ -212,8 +210,6 @@ size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-
-            if(cstring) result++;
         }
         else
         {
@@ -258,7 +254,9 @@ size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return result;
+    return cstring ? result + 0
+                   : result + 2
+    ;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -268,6 +266,10 @@ str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t result = nyx_memory_alloc(nyx_string_builder_length(sb) + 1), p = result;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(!cstring) *p++ = '"';
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -281,7 +283,6 @@ str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
 
         if((node->flags & NYX_SB_ESCAPE_JSON) != 0)
         {
-            if(cstring) *p++ = '"';
 
             if((node->flags & NYX_SB_ESCAPE_XML) != 0)
             {
@@ -345,8 +346,6 @@ str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-
-            if(cstring) *p++ = '"';
         }
         else
         {
@@ -394,6 +393,10 @@ str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    if(!cstring) *p++ = '"';
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     *p = '\0';
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -405,28 +408,28 @@ str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
 
 size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
 {
-    return string_builder_length(sb, true);
+    return string_builder_length(sb, false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 size_t nyx_string_builder_clength(const nyx_string_builder_t *sb)
 {
-    return string_builder_length(sb, false);
+    return string_builder_length(sb, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 {
-    return string_builder_to_string(sb, true);
+    return string_builder_to_string(sb, false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 str_t nyx_string_builder_to_cstring(const nyx_string_builder_t *sb)
 {
-    return string_builder_to_string(sb, false);
+    return string_builder_to_string(sb, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
