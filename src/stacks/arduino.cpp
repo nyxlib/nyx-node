@@ -9,7 +9,6 @@
 
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include <vector>
 #include <arduino-timer.h>
 
 #if defined(NYX_HAS_WIFI)
@@ -27,11 +26,6 @@
 #endif
 
 #include "../nyx_node_internal.h"
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-#define TCP_RECV_BUFF_GROW_STEP         512U
-#define TCP_RECV_BUFF_SHRINK_FACTOR     1.25f
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -83,17 +77,13 @@ struct nyx_stack_s
 
     #ifdef NYX_HAS_WIFI
     WiFiClient tcp_client;
-    WiFiServer tcp_server;
 
-    WiFiClient indi_client;
     WiFiClient redis_client;
     #endif
 
     #ifdef NYX_HAS_ETHERNET
     EthernetClient tcp_client;
-    EthernetServer tcp_server;
 
-    EthernetClient indi_client;
     EthernetClient redis_client;
     #endif
 
@@ -102,9 +92,6 @@ struct nyx_stack_s
     PubSubClient mqtt_client;
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    IPAddress indi_ip;
-    int indi_port = 7624;
 
     IPAddress redis_ip;
     int redis_port = 6379;
@@ -119,10 +106,6 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    std::vector<uint8_t> recv_buff;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     bool indi_server_started = false;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -133,11 +116,8 @@ struct nyx_stack_s
 
     nyx_stack_s():
         tcp_client(),
-        tcp_server(),
         mqtt_client(tcp_client),
-        indi_client(),
         redis_client(),
-        recv_buff(),
         indi_server_started(false),
         mqtt_buf_estimate(0)
     {}
@@ -211,18 +191,6 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* TCP & MQTT                                                                                                         */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void internal_indi_pub(nyx_node_t *node, const nyx_str_t message)
-{
-    auto stack = node->stack;
-
-    if(stack->indi_client.connected())
-    {
-        stack->indi_client.write(message.buf, message.len);
-    }
-}
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
@@ -410,31 +378,6 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->indi_url != nullptr && node->indi_url[0] != '\0')
-    {
-        if(parse_host_port(node->indi_url, stack->indi_ip, stack->indi_port, 7624))
-        {
-            NYX_LOG_INFO("INDI ip: %d:%d:%d:%d, port: %d",
-                stack->indi_ip[0],
-                stack->indi_ip[1],
-                stack->indi_ip[2],
-                stack->indi_ip[3],
-                stack->indi_port
-            );
-
-            stack->recv_buff.clear();
-            stack->recv_buff.reserve(stack->mqtt_buf_estimate);
-        }
-        else
-        {
-            NYX_LOG_ERROR("Cannot initialize TCP server: bad address");
-
-            node->indi_url = nullptr;
-        }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
     {
         IPAddress ip;
@@ -506,108 +449,12 @@ void nyx_node_stack_finalize(__UNUSED__ nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void read_data(nyx_node_t *node, size_t grow_step, float shrink_factor)
-{
-    auto stack = node->stack;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* READ AVAILABLE DATA                                                                                            */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    size_t available = stack->indi_client.available();
-
-    if(available == 0)
-    {
-        return;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* EXPAND BUFFER IF NEEDED (STEP)                                                                                 */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const size_t required = stack->recv_buff.size() + available;
-
-    if(required > stack->recv_buff.capacity())
-    {
-        size_t new_capa = stack->recv_buff.capacity() + grow_step;
-
-        if(new_capa < required)
-        {
-            new_capa = required;
-        }
-
-        std::vector<uint8_t> tmp;
-        tmp.reserve(new_capa);
-        tmp.insert(tmp.end(), stack->recv_buff.begin(), stack->recv_buff.end());
-        stack->recv_buff.swap(tmp);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* CONSUME DATA                                                                                                   */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    size_t old_size = stack->recv_buff.size();
-
-    stack->recv_buff.resize(old_size + available);
-
-    size_t got = stack->indi_client.read(
-        static_cast<uint8_t *>(stack->recv_buff.data()) + old_size,
-        available
-    );
-
-    if(got < available)
-    {
-        stack->recv_buff.resize(old_size + got);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(!stack->recv_buff.empty())
-    {
-        size_t consumed = node->tcp_handler(
-            node,
-            NYX_NODE_EVENT_MSG,
-            NYX_STR_S(reinterpret_cast<str_t>(stack->recv_buff.data()), stack->recv_buff.size())
-        );
-
-        if(consumed > stack->recv_buff.size())
-        {
-            NYX_LOG_ERROR("Internal error: consumed > size");
-
-            return;
-        }
-
-        if(consumed > 0)
-        {
-            stack->recv_buff.erase(
-                stack->recv_buff.begin(),
-                stack->recv_buff.begin() + static_cast<long>(consumed)
-            );
-
-            const size_t capa = stack->recv_buff.capacity();
-            const size_t size = stack->recv_buff.size();
-
-            if(capa > grow_step && size < (capa / 2))
-            {
-                size_t new_capa = max(grow_step, static_cast<size_t>(static_cast<float>(size) * shrink_factor));
-
-                std::vector<uint8_t> tmp;
-                tmp.reserve(new_capa);
-                tmp.insert(tmp.end(), stack->recv_buff.begin(), stack->recv_buff.end());
-                stack->recv_buff.swap(tmp);
-            }
-        }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
 {
     if(node != NULL && callback != NULL)
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
         nyx_timer_ctx_t *ctx = (nyx_timer_ctx_t *) nyx_memory_alloc(sizeof(nyx_timer_ctx_t));
 
         if(ctx == NULL)
@@ -617,14 +464,14 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
             return;
         }
 
-        ctx->cb  = callback;
+        ctx->cb = callback;
         ctx->arg = arg;
 
-        __nyx_timer.in(
-            0,
-            __nyx_timer_trampoline,
-            (void *) ctx
-        );
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        __nyx_timer.in(0, __nyx_timer_trampoline, (void *) ctx);
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         uint32_t ival = (uint32_t) (interval_ms > 0xFFFFFFFFULL ? 0xFFFFFFFFUL : interval_ms);
 
@@ -633,6 +480,8 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
             __nyx_timer_trampoline,
             (void *) ctx
         );
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 }
 
@@ -647,59 +496,6 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     __nyx_timer.tick();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* TCP                                                                                                            */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(node->indi_url != nullptr && node->indi_url[0] != '\0')
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* START SERVER ONCE                                                                                          */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(!stack->indi_server_started)
-        {
-            stack->tcp_server.begin(stack->indi_port);
-
-            stack->indi_server_started = true;
-
-            NYX_LOG_INFO("INDI support is enabled");
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* ACCEPT CLIENT (PORTABLE)                                                                                   */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(!stack->indi_client.connected())
-        {
-            #ifdef NYX_HAS_WIFI
-            WiFiClient new_client = stack->tcp_server.available();
-            #endif
-
-            #ifdef NYX_HAS_ETHERNET
-            EthernetClient new_client = stack->tcp_server.available();
-            #endif
-
-            if(new_client.connected())
-            {
-                stack->indi_client = new_client;
-
-                stack->recv_buff.clear();
-                stack->recv_buff.reserve(stack->mqtt_buf_estimate);
-            }
-            else
-            {
-                goto __mqtt;
-            }
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* TREATMENT                                                                                                  */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        read_data(node, TCP_RECV_BUFF_GROW_STEP, TCP_RECV_BUFF_SHRINK_FACTOR);
-    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* MQTT                                                                                                           */
