@@ -2945,8 +2945,8 @@ void nyx_node_poll(
 
 /**
  * @memberof nyx_node_t
- * @brief Notifies the provided JSON object to the clients.
- * @param object The provided JSON object.
+ * @brief Notifies the provided Nyx / INDI object to the clients.
+ * @param object The provided Nyx / INDI object.
  */
 
 void nyx_node_notify(
