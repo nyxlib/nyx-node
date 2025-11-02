@@ -276,7 +276,6 @@ str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 
         if((node->flags & NYX_SB_ESCAPE_JSON) != 0)
         {
-
             if((node->flags & NYX_SB_ESCAPE_XML) != 0)
             {
                 /*----------------------------------------------------------------------------------------------------*/
