@@ -1619,7 +1619,7 @@ __NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
   * @defgroup XMLDOC XML serialization / deserialization
-  * XML serialization / deserialization.
+  * XML serialization / deserialization (not available on ARDUINO).
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1725,7 +1725,7 @@ str_t nyx_xmldoc_to_string(
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
   * @defgroup TRANSFORM JSON ↔ XML
-  * JSON ↔ XML Nyx / INDI commands.
+  * JSON ↔ XML Nyx / INDI commands (not available on ARDUINO).
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
