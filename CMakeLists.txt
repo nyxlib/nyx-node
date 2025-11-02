@@ -4,7 +4,12 @@ cmake_minimum_required(VERSION 3.5)
 
 ########################################################################################################################
 
-project(nyx_node LANGUAGES C VERSION 1.0.0)
+project(nyx_node
+    VERSION 1.0.0
+    LANGUAGES C
+)
+
+########################################################################################################################
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -14,10 +19,6 @@ set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_DIRLIST=0 -DMG_ENABLE_POLL=0 -DMG_ENABLE_EPOLL=1 -DMG_ENABLE_SSI=0 -Wall -Wextra -Wconversion -Wdouble-promotion -Wno-unknown-pragmas -Wno-unused-function)
-
-########################################################################################################################
-
-find_package(Doxygen)
 
 ########################################################################################################################
 # LIBS                                                                                                                 #
@@ -40,6 +41,10 @@ else()
     set(HAVE_ZLIB 0)
     message(STATUS "Zlib not found -> building with minimal compression support")
 endif()
+
+########################################################################################################################
+
+find_package(Doxygen)
 
 ########################################################################################################################
 
