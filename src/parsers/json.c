@@ -692,14 +692,14 @@ __NYX_NULLABLE__ nyx_object_t *nyx_object_parse_buff(__NYX_ZEROABLE__ size_t siz
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    json_parser_t *parser = &((json_parser_t) {
+    json_parser_t *parser = &(json_parser_t) {
         .size = size,
         .buff = buff,
         .curr_token = {
             .value = NULL,
             .token_type = JSON_TOKEN_ERROR,
         },
-    });
+    };
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

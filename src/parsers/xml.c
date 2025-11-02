@@ -865,7 +865,7 @@ __NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NYX_ZEROABLE__ size_t siz
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    xml_parser_t *parser = &((xml_parser_t) {
+    xml_parser_t *parser = &(xml_parser_t) {
         .tag = false,
         .size = size,
         .buff = buff,
@@ -873,7 +873,7 @@ __NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse_buff(__NYX_ZEROABLE__ size_t siz
             .value = NULL,
             .token_type = XML_TOKEN_ERROR,
         },
-    });
+    };
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
