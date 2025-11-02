@@ -131,7 +131,7 @@ void nyx_string_builder_append_n(nyx_string_builder_t *sb, uint32_t flags, STR_t
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring)
+size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
 {
     size_t result = 0;
 
@@ -254,22 +254,16 @@ static size_t string_builder_length(const nyx_string_builder_t *sb, bool cstring
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return cstring ? result + 0
-                   : result + 2
-    ;
+    return result;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstring)
+str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     str_t result = nyx_memory_alloc(nyx_string_builder_length(sb) + 1), p = result;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(!cstring) *p++ = '"';
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -393,43 +387,11 @@ static str_t string_builder_to_string(const nyx_string_builder_t *sb, bool cstri
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!cstring) *p++ = '"';
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     *p = '\0';
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-size_t nyx_string_builder_length(const nyx_string_builder_t *sb)
-{
-    return string_builder_length(sb, false);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-size_t nyx_string_builder_clength(const nyx_string_builder_t *sb)
-{
-    return string_builder_length(sb, true);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
-{
-    return string_builder_to_string(sb, false);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-str_t nyx_string_builder_to_cstring(const nyx_string_builder_t *sb)
-{
-    return string_builder_to_string(sb, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

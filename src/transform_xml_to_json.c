@@ -61,7 +61,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
     {
         nyx_string_builder_t *sb = nyx_string_builder_from(NYX_SB_ESCAPE_JSON, "@", attribute->name);
 
-        /**/    str_t attribute_name = nyx_string_builder_to_cstring(sb);
+        /**/    str_t attribute_name = nyx_string_builder_to_string(sb);
         /**/
         /**/    /**/
         /**/    /**/    nyx_dict_set(result, attribute_name, nyx_string_from_dup(attribute->data));

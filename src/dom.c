@@ -302,7 +302,7 @@ str_t nyx_xmldoc_to_string(const nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t result = nyx_string_builder_to_cstring(sb);
+    str_t result = nyx_string_builder_to_string(sb);
 
     nyx_string_builder_free(sb);
 

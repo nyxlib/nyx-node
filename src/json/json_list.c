@@ -272,7 +272,7 @@ str_t nyx_list_to_string(const nyx_list_t *object)
     /**/
     /**/    nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "]");
 
-    str_t result = nyx_string_builder_to_cstring(sb);
+    str_t result = nyx_string_builder_to_string(sb);
 
     nyx_string_builder_free(sb);
 
