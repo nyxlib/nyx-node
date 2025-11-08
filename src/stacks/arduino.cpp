@@ -451,13 +451,13 @@ void nyx_node_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 
 void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
 {
-    if(node != NULL && callback != NULL)
+    if(node != nullptr && callback != nullptr)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_timer_ctx_t *ctx = (nyx_timer_ctx_t *) nyx_memory_alloc(sizeof(nyx_timer_ctx_t));
 
-        if(ctx == NULL)
+        if(ctx == nullptr)
         {
             NYX_LOG_ERROR("Cannot create timer: out of memory");
 
