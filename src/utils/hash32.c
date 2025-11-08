@@ -39,7 +39,7 @@ uint32_t nyx_hash32(__NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff, 
         k *= MURMUR2_MAGIC;
 
         h *= MURMUR2_MAGIC;
-        h ^= /*-*/ k /*-*/;
+        h ^= k >> 0;
 
         data += 4;
         size -= 4;
