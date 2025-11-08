@@ -130,6 +130,8 @@ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool ma
         object->value = (str_t) buff;
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        return modified;
     }
 
     return true;
