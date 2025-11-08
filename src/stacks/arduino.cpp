@@ -508,7 +508,7 @@ __mqtt:
         {
             if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
-                node->mqtt_handler(node, NYX_EVENT_OPEN, node->node_id, node->node_id);
+                node->mqtt_handler(node, NYX_NODE_EVENT_OPEN, node->node_id, node->node_id);
 
                 NYX_LOG_INFO("MQTT support is enabled");
             }
