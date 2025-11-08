@@ -112,7 +112,7 @@ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool ma
         return false;
     }
 
-    bool modified = memcmp(object->value, buff, size) != 0;
+    bool modified = (object->length != size) || memcmp(object->value, buff, size) != 0;
 
     if(modified || object->managed == false)
     {
