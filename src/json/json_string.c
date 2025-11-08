@@ -105,9 +105,9 @@ bool nyx_string_set(nyx_string_t *object, STR_t value, bool manage)
 
 bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool managed)
 {
-    if(size == 0x00 || buff == NULL)
+    if(buff == NULL)
     {
-        NYX_LOG_ERROR("Null string not allowed");
+        NYX_LOG_ERROR("Null buffer not allowed");
 
         return false;
     }
