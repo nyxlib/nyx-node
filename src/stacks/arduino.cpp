@@ -98,11 +98,11 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NULLABLE__ STR_t mqtt_username = nullptr;
-    __NULLABLE__ STR_t mqtt_password = nullptr;
+    __NYX_NULLABLE__ STR_t mqtt_username = nullptr;
+    __NYX_NULLABLE__ STR_t mqtt_password = nullptr;
 
-    __NULLABLE__ STR_t redis_username = nullptr;
-    __NULLABLE__ STR_t redis_password = nullptr;
+    __NYX_NULLABLE__ STR_t redis_username = nullptr;
+    __NYX_NULLABLE__ STR_t redis_password = nullptr;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -351,11 +351,11 @@ static uint16_t mqtt_estimate_buffer_size()
 
 void nyx_node_stack_initialize(
     nyx_node_t *node,
-    __NULLABLE__ STR_t mqtt_username,
-    __NULLABLE__ STR_t mqtt_password,
-    __NULLABLE__ STR_t redis_username,
-    __NULLABLE__ STR_t redis_password,
-    __UNUSED__ int retry_ms
+    __NYX_NULLABLE__ STR_t mqtt_username,
+    __NYX_NULLABLE__ STR_t mqtt_password,
+    __NYX_NULLABLE__ STR_t redis_username,
+    __NYX_NULLABLE__ STR_t redis_password,
+    __NYX_UNUSED__ int retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
