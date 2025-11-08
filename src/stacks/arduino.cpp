@@ -56,7 +56,7 @@ nyx_timer_ctx_t;
 
 static bool __nyx_timer_trampoline(void *ctx)
 {
-    nyx_timer_ctx_t *p = (nyx_timer_ctx_t *) ctx;
+    nyx_timer_ctx_t *p = static_cast<nyx_timer_ctx_t *>(ctx);
 
     p->cb(p->arg);
 
@@ -64,9 +64,10 @@ static bool __nyx_timer_trampoline(void *ctx)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
 static void ping_timer_handler(void *arg)
 {
-    nyx_node_ping((nyx_node_t *) arg);
+    nyx_node_ping(static_cast<nyx_node_t *>(arg));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -339,8 +340,8 @@ static uint16_t mqtt_estimate_buffer_size()
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    NYX_LOG_INFO("Free heap size: %u bytes", (uint32_t) free_heap);
-    NYX_LOG_INFO("MQTT buffer size: %u bytes", (uint32_t) buff_size);
+    NYX_LOG_INFO("Free heap size: %u bytes", static_cast<uint32_t>(free_heap));
+    NYX_LOG_INFO("MQTT buffer size: %u bytes", static_cast<uint32_t>(buff_size));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -455,7 +456,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_timer_ctx_t *ctx = (nyx_timer_ctx_t *) nyx_memory_alloc(sizeof(nyx_timer_ctx_t));
+        auto *ctx = static_cast<nyx_timer_ctx_t *>(nyx_memory_alloc(sizeof(nyx_timer_ctx_t)));
 
         if(ctx == nullptr)
         {
@@ -473,7 +474,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        uint32_t ival = (uint32_t) (interval_ms > 0xFFFFFFFFULL ? 0xFFFFFFFFUL : interval_ms);
+        auto ival = static_cast<uint32_t>(interval_ms > 0xFFFFFFFFULL ? 0xFFFFFFFFUL : interval_ms);
 
         __nyx_timer.every(
             ival,
