@@ -439,7 +439,7 @@ void nyx_node_stack_initialize(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_finalize(__UNUSED__ nyx_node_t *node)
+void nyx_node_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 {
     for(;;)
     {
