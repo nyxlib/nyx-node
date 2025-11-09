@@ -356,7 +356,7 @@ void internal_stack_initialize(
     __NYX_NULLABLE__ STR_t mqtt_password,
     __NYX_NULLABLE__ STR_t redis_username,
     __NYX_NULLABLE__ STR_t redis_password,
-    __NYX_UNUSED__ int retry_ms
+    uint64_t retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
