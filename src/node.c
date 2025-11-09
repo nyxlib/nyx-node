@@ -1062,7 +1062,7 @@ nyx_node_t *nyx_node_initialize(
     /* INITIALIZE UNDERLYING STACK                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_node_stack_initialize(node, mqtt_username, mqtt_password, redis_username, redis_password, retry_ms);
+    internal_stack_initialize(node, mqtt_username, mqtt_password, redis_username, redis_password, retry_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1079,7 +1079,7 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
         /* FINALIZE UNDERLYING STACK                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_node_stack_finalize(node);
+        internal_stack_finalize(node);
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* FREE DEF VECTORS                                                                                           */

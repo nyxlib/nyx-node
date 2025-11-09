@@ -54,9 +54,9 @@ nyx_timer_ctx_t;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool __nyx_timer_trampoline(void *ctx)
+static bool _timer_trampoline(void *ctx)
 {
-    nyx_timer_ctx_t *p = static_cast<nyx_timer_ctx_t *>(ctx);
+    auto *p = static_cast<nyx_timer_ctx_t *>(ctx);
 
     p->cb(p->arg);
 
@@ -65,7 +65,7 @@ static bool __nyx_timer_trampoline(void *ctx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void ping_timer_handler(void *arg)
+static void _ping_timer_handler(void *arg)
 {
     nyx_node_ping(static_cast<nyx_node_t *>(arg));
 }
@@ -241,7 +241,7 @@ void internal_redis_pub(nyx_node_t *node, const nyx_str_t message)
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool parse_host_port(String url, IPAddress &ip, int &port, int default_port)
+static bool _parse_host_port(String url, IPAddress &ip, int &port, int default_port)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SKIP PROTOCOL                                                                                                  */
@@ -290,7 +290,7 @@ static bool parse_host_port(String url, IPAddress &ip, int &port, int default_po
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
+static void _mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 {
     nyx_str_t message = {
         reinterpret_cast<str_t>(buff),
@@ -302,7 +302,7 @@ static void mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static uint16_t mqtt_estimate_buffer_size()
+static uint16_t _mqtt_estimate_buffer_size()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -350,7 +350,7 @@ static uint16_t mqtt_estimate_buffer_size()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_initialize(
+void internal_stack_initialize(
     nyx_node_t *node,
     __NYX_NULLABLE__ STR_t mqtt_username,
     __NYX_NULLABLE__ STR_t mqtt_password,
@@ -375,7 +375,7 @@ void nyx_node_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    stack->mqtt_buf_estimate = mqtt_estimate_buffer_size();
+    stack->mqtt_buf_estimate = _mqtt_estimate_buffer_size();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -384,19 +384,19 @@ void nyx_node_stack_initialize(
         IPAddress ip;
         int port;
 
-        if(parse_host_port(node->mqtt_url, ip, port, 1883))
+        if(_parse_host_port(node->mqtt_url, ip, port, 1883))
         {
             if(stack->mqtt_client.setBufferSize(stack->mqtt_buf_estimate))
             {
                 NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
 
                 stack->mqtt_client.setCallback(
-                    mqtt_callback
+                    _mqtt_callback
                 ).setServer(
                     ip, port
                 );
 
-                nyx_node_add_timer(node, NYX_PING_MS, ping_timer_handler, node);
+                nyx_node_add_timer(node, NYX_PING_MS, _ping_timer_handler, node);
             }
             else
             {
@@ -417,7 +417,7 @@ void nyx_node_stack_initialize(
 
     if(node->redis_url != nullptr && node->redis_url[0] != '\0')
     {
-        if(parse_host_port(node->redis_url, stack->redis_ip, stack->redis_port, 6379))
+        if(_parse_host_port(node->redis_url, stack->redis_ip, stack->redis_port, 6379))
         {
             NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d",
                 stack->redis_ip[0],
@@ -440,7 +440,7 @@ void nyx_node_stack_initialize(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
+void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 {
     for(;;)
     {
@@ -470,7 +470,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        __nyx_timer.in(0, __nyx_timer_trampoline, (void *) ctx);
+        __nyx_timer.in(0, _timer_trampoline, (void *) ctx);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -478,7 +478,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
 
         __nyx_timer.every(
             ival,
-            __nyx_timer_trampoline,
+            _timer_trampoline,
             (void *) ctx
         );
 

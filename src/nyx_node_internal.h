@@ -475,7 +475,7 @@ void nyx_node_ping(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_initialize(
+void internal_stack_initialize(
     nyx_node_t *node,
     __NYX_NULLABLE__ STR_t mqtt_username,
     __NYX_NULLABLE__ STR_t mqtt_password,
@@ -486,7 +486,7 @@ void nyx_node_stack_initialize(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_finalize(
+void internal_stack_finalize(
     nyx_node_t *node
 );
 

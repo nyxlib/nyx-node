@@ -142,7 +142,7 @@ void internal_redis_pub(nyx_node_t *node, const nyx_str_t message)
 /* STACK                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void indi_handler(struct mg_connection *connection, int ev, void *ev_data)
+static void _indi_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
     nyx_node_t *node = (nyx_node_t *) connection->fn_data;
 
@@ -183,7 +183,7 @@ static void indi_handler(struct mg_connection *connection, int ev, void *ev_data
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data)
+static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
     nyx_node_t *node = (nyx_node_t *) connection->fn_data;
 
@@ -229,7 +229,7 @@ static void mqtt_handler(struct mg_connection *connection, int ev, void *ev_data
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void redis_handler(struct mg_connection *connection, int ev, void *ev_data)
+static void _redis_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
     nyx_node_t *node = (nyx_node_t *) connection->fn_data;
 
@@ -263,7 +263,7 @@ static void redis_handler(struct mg_connection *connection, int ev, void *ev_dat
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void retry_timer_handler(void *arg)
+static void _retry_timer_handler(void *arg)
 {
     nyx_node_t *node = (nyx_node_t *) arg;
 
@@ -278,7 +278,7 @@ static void retry_timer_handler(void *arg)
         stack->indi_connection = mg_listen(
             &stack->mgr,
             node->indi_url,
-            indi_handler,
+            _indi_handler,
             node
         );
 
@@ -298,7 +298,7 @@ static void retry_timer_handler(void *arg)
             &stack->mgr,
             node->mqtt_url,
             &stack->mqtt_opts,
-            mqtt_handler,
+            _mqtt_handler,
             node
         );
 
@@ -317,7 +317,7 @@ static void retry_timer_handler(void *arg)
         stack->redis_connection = mg_connect(
             &stack->mgr,
             node->redis_url,
-            redis_handler,
+            _redis_handler,
             node
         );
 
@@ -332,14 +332,14 @@ static void retry_timer_handler(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void ping_timer_handler(void *arg)
+static void _ping_timer_handler(void *arg)
 {
     nyx_node_ping((nyx_node_t *) arg);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_initialize(
+void internal_stack_initialize(
     nyx_node_t *node,
     __NYX_NULLABLE__ STR_t mqtt_username,
     __NYX_NULLABLE__ STR_t mqtt_password,
@@ -374,17 +374,17 @@ void nyx_node_stack_initialize(
 
     if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
     {
-        mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, ping_timer_handler, node);
+        mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, _ping_timer_handler, node);
     }
 
-    mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, retry_timer_handler, node);
+    mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, _retry_timer_handler, node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_stack_finalize(nyx_node_t *node)
+void internal_stack_finalize(nyx_node_t *node)
 {
     if(node != NULL)
     {
