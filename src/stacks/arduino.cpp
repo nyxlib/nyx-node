@@ -130,7 +130,7 @@ struct nyx_stack_s
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char *fmt, ...)
+void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char *fmt, ...)
 {
     if(level <= nyx_log_level)
     {
@@ -194,7 +194,7 @@ extern "C" void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line,
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
+void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic, int qos)
 {
     auto stack = node->stack;
 
@@ -209,7 +209,7 @@ extern "C" void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t message)
+void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t message, int qos)
 {
     auto stack = node->stack;
 
@@ -227,7 +227,7 @@ extern "C" void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void internal_redis_pub(nyx_node_t *node, const nyx_str_t message)
+void internal_redis_pub(nyx_node_t *node, const nyx_str_t message)
 {
     auto stack = node->stack;
 
@@ -350,7 +350,7 @@ static uint16_t _mqtt_estimate_buffer_size()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void internal_stack_initialize(
+void internal_stack_initialize(
     nyx_node_t *node,
     __NYX_NULLABLE__ STR_t mqtt_username,
     __NYX_NULLABLE__ STR_t mqtt_password,
@@ -440,7 +440,7 @@ extern "C" void internal_stack_initialize(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
+void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 {
     for(;;)
     {
@@ -450,7 +450,7 @@ extern "C" void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
+void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
 {
     if(node != nullptr && callback != nullptr)
     {
@@ -488,7 +488,7 @@ extern "C" void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-extern "C" void nyx_node_poll(nyx_node_t *node, int timeout_ms)
+void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
     auto stack = node->stack;
 
