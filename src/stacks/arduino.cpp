@@ -41,13 +41,10 @@ static nyx_node_t *nyx_node = nullptr;
 /* TIMERS (LITE: ARDUINO-TIMER + TRAMPOLINE)                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static auto __nyx_timer = timer_create_default();
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 typedef struct nyx_timer_ctx_s
 {
-    void (* cb)(void *);
+    void (* callback)(void *);
+
     void *arg;
 }
 nyx_timer_ctx_t;
@@ -58,7 +55,7 @@ static bool _timer_trampoline(void *ctx)
 {
     auto *p = static_cast<nyx_timer_ctx_t *>(ctx);
 
-    p->cb(p->arg);
+    p->callback(p->arg);
 
     return true;
 }
@@ -76,15 +73,17 @@ struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    Timer<> timer = timer_create_default();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     #ifdef NYX_HAS_WIFI
     WiFiClient tcp_client;
-
     WiFiClient redis_client;
     #endif
 
     #ifdef NYX_HAS_ETHERNET
     EthernetClient tcp_client;
-
     EthernetClient redis_client;
     #endif
 
@@ -115,13 +114,7 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_stack_s():
-        tcp_client(),
-        mqtt_client(tcp_client),
-        redis_client(),
-        indi_server_started(false),
-        mqtt_buf_estimate(0)
-    {}
+    nyx_stack_s(): mqtt_client(tcp_client) {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -200,7 +193,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic, int qos)
 
     if(stack->mqtt_client.connected())
     {
-        if(!stack->mqtt_client.subscribe(topic.buf, qos))
+        if(!stack->mqtt_client.subscribe(topic.buf, 0))
         {
             NYX_LOG_ERROR("Cannot subscribe to %s", topic.buf);
         }
@@ -375,6 +368,17 @@ void internal_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    #if defined(NYX_HAS_ETHERNET)
+    if(Ethernet.linkStatus() != LinkON)
+    {
+        NYX_LOG_ERROR("Ethernet link down");
+    }
+
+    EthDNS.begin(Ethernet.dnsServerIP());
+    #endif
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     stack->mqtt_buf_estimate = _mqtt_estimate_buffer_size();
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -458,18 +462,12 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
 
         auto *ctx = static_cast<nyx_timer_ctx_t *>(nyx_memory_alloc(sizeof(nyx_timer_ctx_t)));
 
-        ctx->cb = callback;
+        ctx->callback = callback;
         ctx->arg = arg;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        __nyx_timer.in(
-            0x00UL,
-            _timer_trampoline,
-            static_cast<void *>(ctx)
-        );
-
-        __nyx_timer.every(
+        node->stack->timer.every(
             interval_ms,
             _timer_trampoline,
             static_cast<void *>(ctx)
@@ -489,7 +487,7 @@ void nyx_node_poll(nyx_node_t *node, int timeout_ms)
     /* TIMERS                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __nyx_timer.tick();
+    node->stack->timer.tick();
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* MQTT                                                                                                           */
@@ -544,9 +542,13 @@ __redis:
     /*----------------------------------------------------------------------------------------------------------------*/
 
 __delay:
-    delay(timeout_ms);
+    if(timeout_ms > 0)
+    {
+        delay(timeout_ms);
+    }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 #endif
 /*--------------------------------------------------------------------------------------------------------------------*/
+
