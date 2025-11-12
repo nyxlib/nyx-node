@@ -200,7 +200,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic, int qos)
 
     if(stack->mqtt_client.connected())
     {
-        if(!stack->mqtt_client.subscribe(topic.buf, 1))
+        if(!stack->mqtt_client.subscribe(topic.buf, qos))
         {
             NYX_LOG_ERROR("Cannot subscribe to %s", topic.buf);
         }
@@ -458,19 +458,12 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
 
         auto *ctx = static_cast<nyx_timer_ctx_t *>(nyx_memory_alloc(sizeof(nyx_timer_ctx_t)));
 
-        if(ctx == nullptr)
-        {
-            NYX_LOG_ERROR("Cannot create timer: out of memory");
-
-            return;
-        }
-
         ctx->cb = callback;
         ctx->arg = arg;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        __nyx_timer.in(0, _timer_trampoline, (void *) ctx);
+        __nyx_timer.in(0, _timer_trampoline, static_cast<void *>(ctx));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -479,7 +472,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
         __nyx_timer.every(
             ival,
             _timer_trampoline,
-            (void *) ctx
+            static_cast<void *>(ctx)
         );
 
         /*------------------------------------------------------------------------------------------------------------*/
