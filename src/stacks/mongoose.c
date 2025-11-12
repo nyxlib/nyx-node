@@ -396,7 +396,7 @@ void internal_stack_finalize(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
+void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)(void *), void *arg)
 {
     if(node != NULL)
     {

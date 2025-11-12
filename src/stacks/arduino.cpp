@@ -450,9 +450,9 @@ void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)(void *), void *arg)
+void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)(void *), void *arg)
 {
-    if(node != nullptr && callback != nullptr)
+    if(node != nullptr && interval_ms > 0x00U && callback != nullptr)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -463,14 +463,14 @@ void nyx_node_add_timer(nyx_node_t *node, uint64_t interval_ms, void(* callback)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        __nyx_timer.in(0, _timer_trampoline, static_cast<void *>(ctx));
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        auto ival = static_cast<uint32_t>(interval_ms > 0xFFFFFFFFULL ? 0xFFFFFFFFUL : interval_ms);
+        __nyx_timer.in(
+            0x00UL,
+            _timer_trampoline,
+            static_cast<void *>(ctx)
+        );
 
         __nyx_timer.every(
-            ival,
+            interval_ms,
             _timer_trampoline,
             static_cast<void *>(ctx)
         );

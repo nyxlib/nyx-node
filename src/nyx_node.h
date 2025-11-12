@@ -2922,7 +2922,7 @@ void nyx_node_finalize(
 
 void nyx_node_add_timer(
     nyx_node_t *node,
-    uint64_t interval_ms,
+    uint32_t interval_ms,
     void(* callback)(void *),
     void *arg
 );
