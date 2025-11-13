@@ -14,7 +14,7 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool nyx_startswith(nyx_str_t topic, nyx_str_t prefix)
+static bool _startswith(nyx_str_t topic, nyx_str_t prefix)
 {
     return topic.len >= prefix.len && memcmp(topic.buf, prefix.buf, prefix.len) == 0;
 }
@@ -803,7 +803,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
     {
         if(event_topic.len > 0 && event_topic.buf != NULL)
         {
-            /**/ if(nyx_startswith(event_topic, SPECIAL_TOPICS[0]))
+            /**/ if(_startswith(event_topic, SPECIAL_TOPICS[0]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* TRIGGER PING                                                                                       */
@@ -817,7 +817,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
             {
                 if(event_payload.len > 0 && event_payload.buf != NULL)
                 {
-                    /**/ if(nyx_startswith(event_topic, SPECIAL_TOPICS[1]))
+                    /**/ if(_startswith(event_topic, SPECIAL_TOPICS[1]))
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* SET_MASTER_CLIENT                                                                          */
@@ -831,7 +831,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
-                    else if(nyx_startswith(event_topic, SPECIAL_TOPICS[2]))
+                    else if(_startswith(event_topic, SPECIAL_TOPICS[2]))
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* JSON NEW XXX VECTOR                                                                        */
@@ -848,7 +848,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
-                    else if(nyx_startswith(event_topic, SPECIAL_TOPICS[3]))
+                    else if(_startswith(event_topic, SPECIAL_TOPICS[3]))
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* XML NEW XXX VECTOR                                                                         */
