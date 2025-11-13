@@ -75,68 +75,6 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _out_callback(nyx_object_t *object)
-{
-    if(object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
-    {
-        nyx_dict_t *vector = (nyx_dict_t *) object;
-
-        STR_t tag = nyx_dict_get_string(vector, "<>");
-
-        if(tag != NULL)
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            nyx_dict_t *set_vector;
-
-            /**/ if(strcmp("defNumberVector", tag) == 0) {
-                set_vector = nyx_number_set_vector_new(vector);
-            }
-            else if(strcmp("defTextVector", tag) == 0) {
-                set_vector = nyx_text_set_vector_new(vector);
-            }
-            else if(strcmp("defLightVector", tag) == 0) {
-                set_vector = nyx_light_set_vector_new(vector);
-            }
-            else if(strcmp("defSwitchVector", tag) == 0) {
-                set_vector = nyx_switch_set_vector_new(vector);
-            }
-            else if(strcmp("defStreamVector", tag) == 0) {
-                set_vector = nyx_stream_set_vector_new(vector);
-            }
-            else if(strcmp("defBLOBVector", tag) == 0) {
-
-                if((vector->base.flags & NYX_FLAGS_BLOB_MASK) != 0) {
-
-                    set_vector = nyx_blob_set_vector_new(vector);
-                }
-                else {
-                    return;
-                }
-            }
-            else {
-                return;
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            STR_t perm = nyx_dict_get_string(vector, "@perm");
-
-            bool is_not_wo = perm == NULL || strcmp(perm, "wo") != 0;
-
-            if(is_not_wo) _sub_object(object->node, (nyx_object_t *) set_vector);
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            nyx_dict_free(set_vector);
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-    }
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 static void _get_properties(nyx_node_t *node, __NYX_NULLABLE__ const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -1123,11 +1061,80 @@ void nyx_node_ping(nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static bool _notify(nyx_object_t *object)
+{
+    if(object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
+    {
+        nyx_dict_t *vector = (nyx_dict_t *) object;
+
+        STR_t tag = nyx_dict_get_string(vector, "<>");
+
+        if(tag != NULL)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyx_dict_t *set_vector;
+
+            /**/ if(strcmp("defNumberVector", tag) == 0) {
+                set_vector = nyx_number_set_vector_new(vector);
+            }
+            else if(strcmp("defTextVector", tag) == 0) {
+                set_vector = nyx_text_set_vector_new(vector);
+            }
+            else if(strcmp("defLightVector", tag) == 0) {
+                set_vector = nyx_light_set_vector_new(vector);
+            }
+            else if(strcmp("defSwitchVector", tag) == 0) {
+                set_vector = nyx_switch_set_vector_new(vector);
+            }
+            else if(strcmp("defStreamVector", tag) == 0) {
+                set_vector = nyx_stream_set_vector_new(vector);
+            }
+            else if(strcmp("defBLOBVector", tag) == 0) {
+
+                if((vector->base.flags & NYX_FLAGS_BLOB_MASK) != 0) {
+
+                    set_vector = nyx_blob_set_vector_new(vector);
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            STR_t perm = nyx_dict_get_string(vector, "@perm");
+
+            bool is_not_wo = perm == NULL || strcmp(perm, "wo") != 0;
+
+            if(is_not_wo) _sub_object(object->node, (nyx_object_t *) set_vector);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyx_dict_free(set_vector);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 void nyx_node_notify(__NYX_NULLABLE__ nyx_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {
-        _out_callback(object);
+        if(_notify(object))
+        {
+            break;
+        }
     }
 }
 
