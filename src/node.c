@@ -1127,15 +1127,17 @@ static bool _notify(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_notify(__NYX_NULLABLE__ nyx_object_t *object)
+bool nyx_node_notify(__NYX_NULLABLE__ nyx_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {
         if(_notify(object))
         {
-            break;
+            return true;
         }
     }
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -2949,7 +2949,7 @@ void nyx_node_poll(
  * @param object The provided Nyx / INDI object.
  */
 
-void nyx_node_notify(
+bool nyx_node_notify(
     __NYX_NULLABLE__ nyx_object_t *object
 );
 
