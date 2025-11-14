@@ -345,7 +345,7 @@ void internal_stack_initialize(
     __NYX_NULLABLE__ STR_t mqtt_password,
     __NYX_NULLABLE__ STR_t redis_username,
     __NYX_NULLABLE__ STR_t redis_password,
-    uint64_t retry_ms
+    uint32_t retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -374,10 +374,10 @@ void internal_stack_initialize(
 
     if(node->mqtt_url != NULL && node->mqtt_url[0] != '\0')
     {
-        mg_timer_add(&stack->mgr, NYX_PING_MS, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, _ping_timer_handler, node);
+        nyx_node_add_timer(node, NYX_PING_MS, _ping_timer_handler, node);
     }
 
-    mg_timer_add(&stack->mgr, retry_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, _retry_timer_handler, node);
+    nyx_node_add_timer(node, retry_ms, _retry_timer_handler, node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -406,11 +406,11 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_poll(nyx_node_t *node, int timeout_ms)
+void nyx_node_poll(nyx_node_t *node, uint32_t timeout_ms)
 {
     if(node != NULL)
     {
-        mg_mgr_poll(&node->stack->mgr, timeout_ms);
+        mg_mgr_poll(&node->stack->mgr, timeout_ms == 0 ? timeout_ms : 10);
     }
 }
 

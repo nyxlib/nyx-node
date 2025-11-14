@@ -403,7 +403,7 @@ void internal_stack_initialize(
     __NYX_NULLABLE__ STR_t mqtt_password,
     __NYX_NULLABLE__ STR_t redis_username,
     __NYX_NULLABLE__ STR_t redis_password,
-    uint64_t retry_ms
+    uint32_t retry_ms
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -546,11 +546,11 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_poll(nyx_node_t *node, int timeout_ms)
+void nyx_node_poll(nyx_node_t *node, uint32_t timeout_ms)
 {
     node->stack->timer.tick();
 
-    delay(timeout_ms > 0 ? timeout_ms : 10);
+    delay(timeout_ms == 0 ? timeout_ms : 10);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

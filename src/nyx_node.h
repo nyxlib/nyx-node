@@ -2890,7 +2890,7 @@ __NYX_NULLABLE__ nyx_node_t *nyx_node_initialize(
     __NYX_NULLABLE__ STR_t redis_username,
     __NYX_NULLABLE__ STR_t redis_password,
     /**/
-    uint64_t retry_ms,
+    uint32_t retry_ms,
     bool enable_xml
 );
 
@@ -2938,7 +2938,7 @@ void nyx_node_add_timer(
 
 void nyx_node_poll(
     nyx_node_t *node,
-    int timeout_ms
+    uint32_t timeout_ms
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
