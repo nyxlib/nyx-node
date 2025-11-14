@@ -38,22 +38,19 @@ static DNSClient EthDNS;
 static nyx_node_t *nyx_node = nullptr;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* TIMERS (LITE: ARDUINO-TIMER + TRAMPOLINE)                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct nyx_timer_ctx_s
+struct _timer_ctx_s
 {
     void (* callback)(void *);
 
     void *arg;
-}
-nyx_timer_ctx_t;
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static bool _timer_trampoline(void *ctx)
 {
-    auto *p = static_cast<nyx_timer_ctx_t *>(ctx);
+    auto *p = static_cast<struct _timer_ctx_s *>(ctx);
 
     p->callback(p->arg);
 
@@ -539,7 +536,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        auto *ctx = static_cast<nyx_timer_ctx_t *>(nyx_memory_alloc(sizeof(nyx_timer_ctx_t)));
+        auto *ctx = static_cast<struct _timer_ctx_s *>(nyx_memory_alloc(sizeof(struct _timer_ctx_s)));
 
         ctx->callback = callback;
         ctx->arg = arg;
