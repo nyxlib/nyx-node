@@ -304,13 +304,17 @@ static void _retry_timer_handler(void *arg)
         {
             if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
             {
-                node->mqtt_handler(node, NYX_NODE_EVENT_OPEN, node->node_id, node->node_id);
-
                 NYX_LOG_INFO("MQTT support is enabled");
+
+                node->mqtt_handler(
+                    node,
+                    NYX_NODE_EVENT_OPEN,
+                    node->node_id, node->node_id
+                );
             }
             else
             {
-                goto __redis;
+                goto __skip1;
             }
         }
 
@@ -321,7 +325,7 @@ static void _retry_timer_handler(void *arg)
     /* REDIS                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-__redis:
+__skip1:
     if(node->redis_url != nullptr && node->redis_url[0] != '\0')
     {
         if(!stack->redis_client.connected())
@@ -329,15 +333,26 @@ __redis:
             /*
             if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
             {
-                nyx_redis_auth(node, stack->redis_username, stack->redis_password);
-
                 NYX_LOG_INFO("Redis support is enabled");
+
+                nyx_redis_auth(
+                    node,
+                    stack->redis_username,
+                    stack->redis_password
+                );
+            }
+            else
+            {
+                goto __skip2;
             }
             */
         }
+
+        /* NOTHING TO DO */
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+__skip2:
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -533,6 +548,8 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
         ctx->arg = arg;
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        callback(arg);
 
         node->stack->timer.every(
             interval_ms,
