@@ -62,13 +62,6 @@ static bool _timer_trampoline(void *ctx)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _ping_timer_handler(void *arg)
-{
-    nyx_node_ping(static_cast<nyx_node_t *>(arg));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 struct nyx_stack_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -295,6 +288,67 @@ static void _mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void _retry_timer_handler(void *arg)
+{
+    nyx_node_t *node = (nyx_node_t *) arg;
+
+    nyx_stack_t *stack = (nyx_stack_t *) node->stack;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* TCP                                                                                                            */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
+    {
+        if(!stack->mqtt_client.connected())
+        {
+            if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
+            {
+                node->mqtt_handler(node, NYX_NODE_EVENT_OPEN, node->node_id, node->node_id);
+
+                NYX_LOG_INFO("MQTT support is enabled");
+            }
+            else
+            {
+                goto __redis;
+            }
+        }
+
+        stack->mqtt_client.loop();
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* REDIS                                                                                                          */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+__redis:
+    if(node->redis_url != nullptr && node->redis_url[0] != '\0')
+    {
+        if(!stack->redis_client.connected())
+        {
+            /*
+            if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
+            {
+                nyx_redis_auth(node, stack->redis_username, stack->redis_password);
+
+                NYX_LOG_INFO("Redis support is enabled");
+            }
+            */
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static void _ping_timer_handler(void *arg)
+{
+    nyx_node_ping(static_cast<nyx_node_t *>(arg));
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static uint16_t _mqtt_estimate_buffer_size()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -392,15 +446,19 @@ void internal_stack_initialize(
         {
             if(stack->mqtt_client.setBufferSize(stack->mqtt_buf_estimate))
             {
-                NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d", ip[0], ip[1], ip[2], ip[3], port);
+                NYX_LOG_INFO("MQTT ip: %d:%d:%d:%d, port: %d",
+                    ip[0],
+                    ip[1],
+                    ip[2],
+                    ip[3],
+                    port
+                );
 
                 stack->mqtt_client.setCallback(
                     _mqtt_callback
                 ).setServer(
                     ip, port
                 );
-
-                nyx_node_add_timer(node, NYX_PING_MS, _ping_timer_handler, node);
             }
             else
             {
@@ -438,6 +496,15 @@ void internal_stack_initialize(
             node->redis_url = nullptr;
         }
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
+    {
+        nyx_node_add_timer(node, NYX_PING_MS, _ping_timer_handler, node);
+    }
+
+    nyx_node_add_timer(node, retry_ms, _retry_timer_handler, node);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -481,71 +548,9 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
 
 void nyx_node_poll(nyx_node_t *node, int timeout_ms)
 {
-    auto stack = node->stack;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* TIMERS                                                                                                         */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     node->stack->timer.tick();
 
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* MQTT                                                                                                           */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-__mqtt:
-    if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
-    {
-        if(!stack->mqtt_client.connected())
-        {
-            if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
-            {
-                node->mqtt_handler(node, NYX_NODE_EVENT_OPEN, node->node_id, node->node_id);
-
-                NYX_LOG_INFO("MQTT support is enabled");
-            }
-            else
-            {
-                goto __redis;
-            }
-        }
-
-        stack->mqtt_client.loop();
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* REDIS                                                                                                          */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-__redis:
-    if(node->redis_url != nullptr && node->redis_url[0] != '\0')
-    {
-        if(!stack->redis_client.connected())
-        {
-            if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
-            {
-                nyx_redis_auth(node, stack->redis_username, stack->redis_password);
-
-                NYX_LOG_INFO("Redis support is enabled");
-            }
-            else
-            {
-                goto __delay;
-            }
-        }
-
-        /* NOTHING TO DO */
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* DELAY                                                                                                          */
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-__delay:
-    if(timeout_ms > 0)
-    {
-        delay(timeout_ms);
-    }
+    delay(timeout_ms > 0 ? timeout_ms : 10);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
