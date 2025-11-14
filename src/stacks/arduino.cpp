@@ -290,9 +290,9 @@ static void _mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 static void _retry_timer_handler(void *arg)
 {
-    nyx_node_t *node = (nyx_node_t *) arg;
+    nyx_node_t *node = static_cast<nyx_node_t *>(arg);
 
-    nyx_stack_t *stack = (nyx_stack_t *) node->stack;
+    nyx_stack_t *stack = static_cast<nyx_stack_t *>(node->stack);
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* TCP                                                                                                            */
