@@ -330,7 +330,6 @@ __skip1:
     {
         if(!stack->redis_client.connected())
         {
-            /*
             if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
             {
                 NYX_LOG_INFO("Redis support is enabled");
@@ -345,7 +344,6 @@ __skip1:
             {
                 //// __skip2;
             }
-            */
         }
 
         /* NOTHING TO DO */
