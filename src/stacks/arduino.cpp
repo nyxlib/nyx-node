@@ -275,56 +275,37 @@ static void _retry_timer_handler(void *arg)
     /* TCP                                                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0')
+    if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0' && !stack->mqtt_client.connected())
     {
-        if(!stack->mqtt_client.connected())
+        if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
         {
-            if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
-            {
-                NYX_LOG_INFO("MQTT support is enabled");
+            NYX_LOG_INFO("MQTT support is enabled");
 
-                node->mqtt_handler(
-                    node,
-                    NYX_NODE_EVENT_OPEN,
-                    node->node_id,
-                    node->node_id
-                );
-            }
-            else
-            {
-                goto __skip1;
-            }
+            node->mqtt_handler(
+                node,
+                NYX_NODE_EVENT_OPEN,
+                node->node_id,
+                node->node_id
+            );
         }
-
-        stack->mqtt_client.loop();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* REDIS                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-__skip1:
-    if(node->redis_url != nullptr && node->redis_url[0] != '\0')
+    if(node->redis_url != nullptr && node->redis_url[0] != '\0' && !stack->redis_client.connected())
     {
-        if(!stack->redis_client.connected())
+        if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
         {
-            if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
-            {
-                NYX_LOG_INFO("Redis support is enabled");
+            NYX_LOG_INFO("Redis support is enabled");
 
-                nyx_redis_auth(
-                    node,
-                    stack->redis_username,
-                    stack->redis_password
-                );
-            }
-            else
-            {
-                //// __skip2;
-            }
+            nyx_redis_auth(
+                node,
+                stack->redis_username,
+                stack->redis_password
+            );
         }
-
-        /////->redis_client.loop();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -513,7 +494,7 @@ void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 
 struct _timer_ctx_s
 {
-    void (* callback)(void *arg);
+    void (* callback)(void *);
 
     void *arg;
 };
@@ -562,7 +543,7 @@ void nyx_node_poll(nyx_node_t *node, uint32_t timeout_ms)
 
         node->stack->timer.tick();
 
-        /*------------------------------------------------------------------------------------------------------------*/
+        node->stack->mqtt_client.loop();
 
         delay(timeout_ms == 0 ? timeout_ms : 10);
 
