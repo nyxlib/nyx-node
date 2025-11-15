@@ -1319,8 +1319,8 @@ __NYX_INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *value = nyx_dict_get(object, key);
 
-    return (value != NULL && value->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_boolean_t *) value)
-                                                              : false
+    return value != NULL && value->type == NYX_TYPE_BOOLEAN ? nyx_boolean_get((nyx_boolean_t *) value)
+                                                            : false
     ;
 }
 
@@ -1338,8 +1338,8 @@ __NYX_INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *value = nyx_dict_get(object, key);
 
-    return (value != NULL && value->type == NYX_TYPE_NUMBER) ? nyx_number_get((nyx_number_t *) value)
-                                                             : nan("1")
+    return value != NULL && value->type == NYX_TYPE_NUMBER ? nyx_number_get((nyx_number_t *) value)
+                                                           : nan("1")
     ;
 }
 
@@ -1357,8 +1357,8 @@ __NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
 {
     nyx_object_t *value = nyx_dict_get(object, key);
 
-    return (value != NULL && value->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) value)
-                                                             : NULL
+    return value != NULL && value->type == NYX_TYPE_STRING ? nyx_string_get((nyx_string_t *) value)
+                                                           : NULL
     ;
 }
 
@@ -1569,8 +1569,8 @@ __NYX_INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *boolean = nyx_list_get(object, idx);
 
-    return (boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN) ? nyx_boolean_get((nyx_boolean_t *) boolean)
-                                                                  : false
+    return boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN ? nyx_boolean_get((nyx_boolean_t *) boolean)
+                                                                : false
     ;
 }
 
@@ -1588,8 +1588,8 @@ __NYX_INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *number = nyx_list_get(object, idx);
 
-    return (number != NULL && number->type == NYX_TYPE_NUMBER) ? nyx_number_get((nyx_number_t *) number)
-                                                               : nan("1")
+    return number != NULL && number->type == NYX_TYPE_NUMBER ? nyx_number_get((nyx_number_t *) number)
+                                                             : nan("1")
     ;
 }
 
@@ -1607,8 +1607,8 @@ __NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 {
     nyx_object_t *string = nyx_list_get(object, idx);
 
-    return (string != NULL && string->type == NYX_TYPE_STRING) ? nyx_string_get((nyx_string_t *) string)
-                                                               : NULL
+    return string != NULL && string->type == NYX_TYPE_STRING ? nyx_string_get((nyx_string_t *) string)
+                                                             : NULL
     ;
 }
 
@@ -2749,7 +2749,7 @@ bool nyx_stream_pub(
     size_t max_len,
     __NYX_ZEROABLE__ size_t n_fields,
     const size_t field_sizes[],
-    const BUFF_t field_buffs[]
+    const buff_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -3085,9 +3085,9 @@ void nyx_redis_pub(
     STR_t stream,
     size_t max_len,
     __NYX_ZEROABLE__ size_t n_fields,
-    const STR_t field_names[],
+    const str_t field_names[],
     const size_t field_sizes[],
-    const BUFF_t field_buffs[]
+    const buff_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
