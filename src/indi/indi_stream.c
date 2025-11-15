@@ -153,7 +153,7 @@ static bool _get_field_names(STR_t field_names[], size_t n_fields, const nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, size_t n_fields, const size_t field_sizes[], const BUFF_t field_buffs[])
+bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, size_t n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */
