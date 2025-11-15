@@ -35,7 +35,7 @@ struct nyx_stack_s
 /* LOGGER                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, const char *fmt, ...)
+void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt, ...)
 {
     if(level <= nyx_log_level)
     {
@@ -144,7 +144,7 @@ void internal_redis_pub(nyx_node_t *node, const nyx_str_t message)
 
 static void _indi_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
+    nyx_node_t *node = connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -185,7 +185,7 @@ static void _indi_handler(struct mg_connection *connection, int ev, void *ev_dat
 
 static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
+    nyx_node_t *node = connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -216,7 +216,7 @@ static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_dat
     }
     else if(ev == MG_EV_MQTT_MSG)
     {
-        struct mg_mqtt_message *message = (struct mg_mqtt_message *) ev_data;
+        const struct mg_mqtt_message *message = ev_data;
 
         node->mqtt_handler(
             node,
@@ -231,7 +231,7 @@ static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_dat
 
 static void _redis_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
-    nyx_node_t *node = (nyx_node_t *) connection->fn_data;
+    nyx_node_t *node = connection->fn_data;
 
     /**/ if(ev == MG_EV_OPEN)
     {
@@ -265,9 +265,9 @@ static void _redis_handler(struct mg_connection *connection, int ev, void *ev_da
 
 static void _retry_timer_handler(void *arg)
 {
-    nyx_node_t *node = (nyx_node_t *) arg;
+    nyx_node_t *node = arg;
 
-    nyx_stack_t *stack = (nyx_stack_t *) node->stack;
+    nyx_stack_t *stack = node->stack;
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* TCP                                                                                                            */
@@ -334,7 +334,7 @@ static void _retry_timer_handler(void *arg)
 
 static void _ping_timer_handler(void *arg)
 {
-    nyx_node_ping((nyx_node_t *) arg);
+    nyx_node_ping(arg);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -410,7 +410,7 @@ void nyx_node_poll(nyx_node_t *node, uint32_t timeout_ms)
 {
     if(node != NULL)
     {
-        mg_mgr_poll(&node->stack->mgr, timeout_ms == 0 ? timeout_ms : 10);
+        mg_mgr_poll(&node->stack->mgr, timeout_ms == 0 ? (int) timeout_ms : 10);
     }
 }
 

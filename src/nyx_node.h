@@ -64,11 +64,11 @@ double nan(const char *tag);
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef /*-*/ void *buff_t;                                                                     //!< Alias for `void *`.
-typedef const void *BUFF_t;                                                                     //!< Alias for `const void *`.
+#define buff_t /*-*/ void *                                                                     //!< Alias for `void *`.
+#define BUFF_t const void *                                                                     //!< Alias for `const void *`.
 
-typedef /*-*/ char *str_t;                                                                      //!< Alias for `char *`.
-typedef const char *STR_t;                                                                      //!< Alias for `const char *`.
+#define str_t /*-*/ char *                                                                      //!< Alias for `char *`.
+#define STR_t const char *                                                                      //!< Alias for `const char *`.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
