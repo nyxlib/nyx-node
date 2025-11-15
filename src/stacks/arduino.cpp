@@ -513,7 +513,7 @@ void internal_stack_finalize(__NYX_UNUSED__ nyx_node_t *node)
 
 struct _timer_ctx_s
 {
-    void (* callback)(void *);
+    void (* callback)(void *arg);
 
     void *arg;
 };
