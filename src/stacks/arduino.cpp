@@ -157,7 +157,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 /* TCP & MQTT                                                                                                         */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
+void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, __NYX_UNUSED__ int qos)
 {
     auto stack = node->stack;
 
@@ -172,7 +172,7 @@ void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos)
+void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, __NYX_UNUSED__ int qos)
 {
     auto stack = node->stack;
 
@@ -241,7 +241,7 @@ static bool _parse_host_port(String url, IPAddress &ip, int &port, int default_p
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef NYX_HAS_WIFI
-    return ip.fromString(host.c_str()) || WiFi.hostByName(host.c_str(), ip) == 1;
+    return ip.fromString(host.c_str()) || WiFiClass::hostByName(host.c_str(), ip) == 1;
     #endif
 
     #ifdef NYX_HAS_ETHERNET
@@ -544,17 +544,8 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        node->stack->timer.in(
-            0x00000000U,
-            _timer_trampoline,
-            static_cast<void *>(ctx)
-        );
-
-        node->stack->timer.every(
-            interval_ms,
-            _timer_trampoline,
-            static_cast<void *>(ctx)
-        );
+        node->stack->timer.in(0x00000000000U, _timer_trampoline, ctx);
+        node->stack->timer.every(interval_ms, _timer_trampoline, ctx);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
