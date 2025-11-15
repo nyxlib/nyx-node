@@ -228,7 +228,7 @@ static bool _parse_host_port(String url, IPAddress &ip, int &port, int default_p
     if(colon >= 0)
     {
         host = url.substring(0, colon);
-        port = atoi(url.substring(colon + 1).c_str());
+        port = strtol(url.substring(colon + 1).c_str(), nullptr, 10);
     }
     else
     {
@@ -267,9 +267,9 @@ static void _mqtt_callback(char *topic, uint8_t *buff, unsigned int size)
 
 static void _retry_timer_handler(void *arg)
 {
-    nyx_node_t *node = static_cast<nyx_node_t *>(arg);
+    auto node = static_cast<nyx_node_t *>(arg);
 
-    nyx_stack_t *stack = static_cast<nyx_stack_t *>(node->stack);
+    auto stack = static_cast<nyx_stack_t *>(node->stack);
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* TCP                                                                                                            */
