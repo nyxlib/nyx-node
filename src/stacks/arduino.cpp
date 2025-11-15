@@ -522,7 +522,7 @@ struct _timer_ctx_s
 
 static bool _timer_trampoline(void *ctx)
 {
-    auto *p = static_cast<struct _timer_ctx_s *>(ctx);
+    auto p = static_cast<struct _timer_ctx_s *>(ctx);
 
     p->callback(p->arg);
 
@@ -537,7 +537,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        auto *ctx = static_cast<struct _timer_ctx_s *>(nyx_memory_alloc(sizeof(struct _timer_ctx_s)));
+        auto ctx = static_cast<struct _timer_ctx_s *>(nyx_memory_alloc(sizeof(struct _timer_ctx_s)));
 
         ctx->callback = callback;
         ctx->arg = arg;
