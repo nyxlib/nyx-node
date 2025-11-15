@@ -67,7 +67,7 @@ void nyx_string_get_buff(const nyx_string_t *object, __NYX_NULLABLE__ size_t *re
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_string_set(nyx_string_t *object, STR_t value, bool manage)
+bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
 {
     if(value == NULL)
     {
@@ -89,7 +89,7 @@ bool nyx_string_set(nyx_string_t *object, STR_t value, bool manage)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->managed = /*--*/ manage;
+        object->managed = /*--*/ managed;
         object->length = strlen(value);
         object->value = (str_t) value;
 
@@ -112,7 +112,7 @@ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool ma
         return false;
     }
 
-    bool modified = (object->length != size) || memcmp(object->value, buff, size) != 0;
+    bool modified = object->length != size || memcmp(object->value, buff, size) != 0;
 
     if(modified || object->managed == false)
     {

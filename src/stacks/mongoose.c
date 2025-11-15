@@ -88,7 +88,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 /* TCP, MQTT & REDIS                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_indi_pub(nyx_node_t *node, const nyx_str_t message)
+void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 {
     if(node != NULL && node->stack->indi_connection != NULL)
     {
@@ -98,7 +98,7 @@ void internal_indi_pub(nyx_node_t *node, const nyx_str_t message)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic, int qos)
+void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 {
     if(node != NULL && node->stack->mqtt_connection != NULL)
     {
@@ -114,7 +114,7 @@ void internal_mqtt_sub(nyx_node_t *node, const nyx_str_t topic, int qos)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t message, int qos)
+void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos)
 {
     if(node != NULL && node->stack->mqtt_connection != NULL)
     {
@@ -130,7 +130,7 @@ void internal_mqtt_pub(nyx_node_t *node, const nyx_str_t topic, const nyx_str_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_redis_pub(nyx_node_t *node, const nyx_str_t message)
+void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
 {
     if(node != NULL && node->stack->redis_connection != NULL)
     {

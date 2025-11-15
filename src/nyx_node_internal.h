@@ -421,14 +421,14 @@ struct nyx_node_s
     size_t (* tcp_handler)(
         struct nyx_node_s *node,
         nyx_event_type_t event_type,
-        const nyx_str_t payload
+        nyx_str_t payload
     );
 
     void (* mqtt_handler)(
         struct nyx_node_s *node,
         nyx_event_type_t event_type,
-        const nyx_str_t topic,
-        const nyx_str_t payload
+        nyx_str_t topic,
+        nyx_str_t payload
     );
 
     /**/
@@ -439,32 +439,32 @@ struct nyx_node_s
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_indi_pub(
-    /*-*/ nyx_node_t *node,
-    const nyx_str_t message
+    nyx_node_t *node,
+    nyx_str_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_mqtt_sub(
-    /*-*/ nyx_node_t *node,
-    const nyx_str_t topic,
+    nyx_node_t *node,
+    nyx_str_t topic,
     int qos
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_mqtt_pub(
-    /*-*/ nyx_node_t *node,
-    const nyx_str_t topic,
-    const nyx_str_t message,
+    nyx_node_t *node,
+    nyx_str_t topic,
+    nyx_str_t message,
     int qos
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_redis_pub(
-    /*-*/ nyx_node_t *node,
-    const nyx_str_t message
+    nyx_node_t *node,
+    nyx_str_t message
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
