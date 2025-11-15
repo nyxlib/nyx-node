@@ -282,33 +282,33 @@ str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 
                 for(; len > 0; len--)
                 {
-                    switch((c = *q++))
+                    switch(c = *q++)
                     {
-                    case '<':
-                        *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
+                        case '<':
+                            *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
 
-                    case '>':
-                        *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
+                        case '>':
+                            *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
 
-                    case '&':
-                        *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
+                        case '&':
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
 
-                    case '\"':
-                        *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
+                        case '\"':
+                            *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
 
-                    case '\'':
-                        *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
+                        case '\'':
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
 
-                    case '\\': *p++ = '\\'; *p++ = '\\'; break;
-                    case '\b': *p++ = '\\'; *p++ = 'b'; break;
-                    case '\f': *p++ = '\\'; *p++ = 'f'; break;
-                    case '\n': *p++ = '\\'; *p++ = 'n'; break;
-                    case '\r': *p++ = '\\'; *p++ = 'r'; break;
-                    case '\t': *p++ = '\\'; *p++ = 't'; break;
+                        case '\\': *p++ = '\\'; *p++ = '\\'; break;
+                        case '\b': *p++ = '\\'; *p++ = 'b'; break;
+                        case '\f': *p++ = '\\'; *p++ = 'f'; break;
+                        case '\n': *p++ = '\\'; *p++ = 'n'; break;
+                        case '\r': *p++ = '\\'; *p++ = 'r'; break;
+                        case '\t': *p++ = '\\'; *p++ = 't'; break;
 
-                    default:
-                        *p++ = c;
-                        break;
+                        default:
+                            *p++ = c;
+                            break;
                     }
                 }
 
@@ -320,19 +320,19 @@ str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 
                 for(; len > 0; len--)
                 {
-                    switch((c = *q++))
+                    switch(c = *q++)
                     {
-                    case '\"': *p++ = '\\'; *p++ = '\"'; break;
-                    case '\\': *p++ = '\\'; *p++ = '\\'; break;
-                    case '\b': *p++ = '\\'; *p++ = 'b'; break;
-                    case '\f': *p++ = '\\'; *p++ = 'f'; break;
-                    case '\n': *p++ = '\\'; *p++ = 'n'; break;
-                    case '\r': *p++ = '\\'; *p++ = 'r'; break;
-                    case '\t': *p++ = '\\'; *p++ = 't'; break;
+                        case '\"': *p++ = '\\'; *p++ = '\"'; break;
+                        case '\\': *p++ = '\\'; *p++ = '\\'; break;
+                        case '\b': *p++ = '\\'; *p++ = 'b'; break;
+                        case '\f': *p++ = '\\'; *p++ = 'f'; break;
+                        case '\n': *p++ = '\\'; *p++ = 'n'; break;
+                        case '\r': *p++ = '\\'; *p++ = 'r'; break;
+                        case '\t': *p++ = '\\'; *p++ = 't'; break;
 
-                    default:
-                        *p++ = c;
-                        break;
+                        default:
+                            *p++ = c;
+                            break;
                     }
                 }
 
@@ -347,26 +347,26 @@ str_t nyx_string_builder_to_string(const nyx_string_builder_t *sb)
 
                 for(; len > 0; len--)
                 {
-                    switch((c = *q++))
+                    switch(c = *q++)
                     {
-                    case '<':
-                        *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
+                        case '<':
+                            *p++ = '&'; *p++ = 'l'; *p++ = 't'; *p++ = ';'; break;
 
-                    case '>':
-                        *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
+                        case '>':
+                            *p++ = '&'; *p++ = 'g'; *p++ = 't'; *p++ = ';'; break;
 
-                    case '&':
-                        *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
+                        case '&':
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'm'; *p++ = 'p'; *p++ = ';'; break;
 
-                    case '\"':
-                        *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
+                        case '\"':
+                            *p++ = '&'; *p++ = 'q'; *p++ = 'u'; *p++ = 'o'; *p++ = 't'; *p++ = ';'; break;
 
-                    case '\'':
-                        *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
+                        case '\'':
+                            *p++ = '&'; *p++ = 'a'; *p++ = 'p'; *p++ = 'o'; *p++ = 's'; *p++ = ';'; break;
 
-                    default:
-                        *p++ = c;
-                        break;
+                        default:
+                            *p++ = c;
+                            break;
                     }
                 }
 
