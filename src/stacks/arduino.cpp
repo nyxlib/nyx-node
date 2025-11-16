@@ -68,18 +68,6 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_NULLABLE__ STR_t mqtt_username = nullptr;
-    __NYX_NULLABLE__ STR_t mqtt_password = nullptr;
-
-    __NYX_NULLABLE__ STR_t redis_username = nullptr;
-    __NYX_NULLABLE__ STR_t redis_password = nullptr;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    bool indi_server_started = false;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     nyx_stack_s(): mqtt_client(tcp_client) {}
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -268,12 +256,12 @@ static void _retry_timer_handler(void *arg)
     auto stack = static_cast<nyx_stack_t *>(node->stack);
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* TCP                                                                                                            */
+    /* MQTT                                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(node->mqtt_url != nullptr && node->mqtt_url[0] != '\0' && !stack->mqtt_client.connected())
     {
-        if(stack->mqtt_client.connect(node->node_id.buf, stack->mqtt_username, stack->mqtt_password))
+        if(stack->mqtt_client.connect(node->node_id.buf, node->mqtt_username, node->mqtt_password))
         {
             NYX_LOG_INFO("MQTT support is enabled");
 
@@ -298,8 +286,8 @@ static void _retry_timer_handler(void *arg)
 
             nyx_redis_auth(
                 node,
-                stack->redis_username,
-                stack->redis_password
+                node->redis_username,
+                node->redis_password
             );
         }
     }
@@ -364,24 +352,11 @@ static uint16_t _mqtt_buffer_size()
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_stack_initialize(
-    nyx_node_t *node,
-    __NYX_NULLABLE__ STR_t mqtt_username,
-    __NYX_NULLABLE__ STR_t mqtt_password,
-    __NYX_NULLABLE__ STR_t redis_username,
-    __NYX_NULLABLE__ STR_t redis_password,
-    uint32_t retry_ms
-) {
+void internal_stack_initialize(nyx_node_t *node, uint32_t retry_ms)
+{
     /*----------------------------------------------------------------------------------------------------------------*/
 
     auto stack = node->stack = new nyx_stack_t();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    stack->mqtt_username = mqtt_username;
-    stack->mqtt_password = mqtt_password;
-    stack->redis_username = redis_username;
-    stack->redis_password = redis_password;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

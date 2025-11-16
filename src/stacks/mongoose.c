@@ -21,14 +21,11 @@ struct nyx_stack_s
 {
     struct mg_mgr mgr;
 
+    struct mg_mqtt_opts mqtt_opts;
+
     struct mg_connection *indi_connection;
     struct mg_connection *mqtt_connection;
     struct mg_connection *redis_connection;
-
-    struct mg_mqtt_opts mqtt_opts;
-
-    __NYX_NULLABLE__ STR_t redis_username;
-    __NYX_NULLABLE__ STR_t redis_password;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -239,7 +236,7 @@ static void _redis_handler(struct mg_connection *connection, int ev, void *ev_da
 
         node->stack->redis_connection = connection;
 
-        nyx_redis_auth(node, node->stack->redis_username, node->stack->redis_password);
+        nyx_redis_auth(node, node->redis_username, node->redis_password);
     }
     else if(ev == MG_EV_CLOSE)
     {
@@ -339,14 +336,8 @@ static void _ping_timer_handler(void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_stack_initialize(
-    nyx_node_t *node,
-    __NYX_NULLABLE__ STR_t mqtt_username,
-    __NYX_NULLABLE__ STR_t mqtt_password,
-    __NYX_NULLABLE__ STR_t redis_username,
-    __NYX_NULLABLE__ STR_t redis_password,
-    uint32_t retry_ms
-) {
+void internal_stack_initialize(nyx_node_t *node, uint32_t retry_ms)
+{
     /*----------------------------------------------------------------------------------------------------------------*/
 
     struct nyx_stack_s *stack = node->stack = nyx_memory_alloc(sizeof(struct nyx_stack_s));
@@ -355,16 +346,13 @@ void internal_stack_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    stack->mqtt_opts.user = mg_str(mqtt_username);
-    stack->mqtt_opts.pass = mg_str(mqtt_password);
+    stack->mqtt_opts.user = mg_str(node->mqtt_username);
+    stack->mqtt_opts.pass = mg_str(node->mqtt_password);
 
     stack->mqtt_opts.client_id = node->node_id;
 
     stack->mqtt_opts.version = 0x04;
     stack->mqtt_opts.clean = true;
-
-    stack->redis_username = redis_username;
-    stack->redis_password = redis_password;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

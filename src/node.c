@@ -14,7 +14,7 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _startswith(const nyx_str_t topic, const nyx_str_t prefix)
+static bool _starts_with(const nyx_str_t topic, const nyx_str_t prefix)
 {
     return topic.len >= prefix.len && memcmp(topic.buf, prefix.buf, prefix.len) == 0;
 }
@@ -803,7 +803,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
     {
         if(event_topic.len > 0 && event_topic.buf != NULL)
         {
-            /**/ if(_startswith(event_topic, SPECIAL_TOPICS[0]))
+            /**/ if(_starts_with(event_topic, SPECIAL_TOPICS[0]))
             {
                 /*----------------------------------------------------------------------------------------------------*/
                 /* TRIGGER PING                                                                                       */
@@ -817,7 +817,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
             {
                 if(event_payload.len > 0 && event_payload.buf != NULL)
                 {
-                    /**/ if(_startswith(event_topic, SPECIAL_TOPICS[1]))
+                    /**/ if(_starts_with(event_topic, SPECIAL_TOPICS[1]))
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* SET_MASTER_CLIENT                                                                          */
@@ -831,7 +831,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
-                    else if(_startswith(event_topic, SPECIAL_TOPICS[2]))
+                    else if(_starts_with(event_topic, SPECIAL_TOPICS[2]))
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* JSON NEW XXX VECTOR                                                                        */
@@ -848,7 +848,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
 
                         /*--------------------------------------------------------------------------------------------*/
                     }
-                    else if(_startswith(event_topic, SPECIAL_TOPICS[3]))
+                    else if(_starts_with(event_topic, SPECIAL_TOPICS[3]))
                     {
                         /*--------------------------------------------------------------------------------------------*/
                         /* XML NEW XXX VECTOR                                                                         */
@@ -967,11 +967,11 @@ nyx_node_t *nyx_node_initialize(
     /* SET NODE OPTIONS                                                                                               */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->node_id = nyx_str_s(node_id);
+    node->node_id = nyx_str_s(nyx_string_dup(node_id));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    str_t master_client_topic = nyx_memory_alloc(strlen("nyx/master_client/") + node->node_id.len + 1);
+    str_t master_client_topic = nyx_memory_alloc(sizeof("nyx/master_client/") + node->node_id.len + 1);
 
     if(sprintf(master_client_topic, "nyx/master_client/%s", node->node_id.buf) > 0)
     {
@@ -982,13 +982,25 @@ nyx_node_t *nyx_node_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->indi_url = indi_url;
-    node->mqtt_url = mqtt_url;
-    node->redis_url = redis_url;
+    node->indi_url = nyx_string_dup(indi_url);
+
+    node->mqtt_url = nyx_string_dup(mqtt_url);
+    node->mqtt_username = nyx_string_dup(mqtt_username);
+    node->mqtt_password = nyx_string_dup(mqtt_password);
+
+    node->redis_url = nyx_string_dup(redis_url);
+    node->redis_username = nyx_string_dup(redis_username);
+    node->redis_password = nyx_string_dup(redis_password);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     node->enable_xml = enable_xml;
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     node->vectors = vectors;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     #if !defined(ARDUINO)
     node->tcp_handler = _tcp_handler;
@@ -1000,7 +1012,7 @@ nyx_node_t *nyx_node_initialize(
     /* INITIALIZE UNDERLYING STACK                                                                                    */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    internal_stack_initialize(node, mqtt_username, mqtt_password, redis_username, redis_password, retry_ms);
+    internal_stack_initialize(node, retry_ms);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1035,9 +1047,23 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
         /* FREE NODE                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_memory_free(node->master_client_message.buf);
+        nyx_memory_free(node->node_id.buf);
 
         nyx_memory_free(node->master_client_topic.buf);
+
+        nyx_memory_free(node->master_client_message.buf);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        nyx_memory_free(node->indi_url);
+
+        nyx_memory_free(node->mqtt_url);
+        nyx_memory_free(node->mqtt_username);
+        nyx_memory_free(node->mqtt_password);
+
+        nyx_memory_free(node->redis_url);
+        nyx_memory_free(node->redis_username);
+        nyx_memory_free(node->redis_password);
 
         /*------------------------------------------------------------------------------------------------------------*/
 

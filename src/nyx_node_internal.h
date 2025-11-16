@@ -402,13 +402,19 @@ struct nyx_node_s
 
     /**/
 
-    STR_t indi_url;
-    STR_t mqtt_url;
-    STR_t redis_url;
+    __NYX_NULLABLE__ str_t indi_url;
 
-    bool enable_xml;
+    __NYX_NULLABLE__ str_t mqtt_url;
+    __NYX_NULLABLE__ str_t mqtt_username;
+    __NYX_NULLABLE__ str_t mqtt_password;
+
+    __NYX_NULLABLE__ str_t redis_url;
+    __NYX_NULLABLE__ str_t redis_username;
+    __NYX_NULLABLE__ str_t redis_password;
 
     /**/
+
+    bool enable_xml;
 
     nyx_stack_t *stack;
 
@@ -477,10 +483,6 @@ void nyx_node_ping(
 
 void internal_stack_initialize(
     nyx_node_t *node,
-    __NYX_NULLABLE__ STR_t mqtt_username,
-    __NYX_NULLABLE__ STR_t mqtt_password,
-    __NYX_NULLABLE__ STR_t redis_username,
-    __NYX_NULLABLE__ STR_t redis_password,
     uint32_t retry_ms
 );
 
