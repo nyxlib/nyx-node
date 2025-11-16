@@ -246,11 +246,11 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_BLOB_STATE_ENABLED:
-                    vector->base.flags |= (1LU << (2 + 0 * 31 + index));
+                    vector->base.flags |= (UINT64_C(1) << (2 + 0 * 31 + index));
                     break;
 
                 case NYX_BLOB_STATE_DISABLED:
-                    vector->base.flags &= ~(1LU << (2 + 0 * 31 + index));
+                    vector->base.flags &= ~(UINT64_C(1) << (2 + 0 * 31 + index));
                     break;
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -258,11 +258,11 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_STREAM_STATE_ENABLED:
-                    vector->base.flags |= (1LU << (2 + 1 * 31 + index));
+                    vector->base.flags |= (UINT64_C(1) << (2 + 1 * 31 + index));
                     break;
 
                 case NYX_STREAM_STATE_DISABLED:
-                    vector->base.flags &= ~(1LU << (2 + 1 * 31 + index));
+                    vector->base.flags &= ~(UINT64_C(1) << (2 + 1 * 31 + index));
                     break;
 
                 /*----------------------------------------------------------------------------------------------------*/

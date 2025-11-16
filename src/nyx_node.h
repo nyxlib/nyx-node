@@ -393,18 +393,18 @@ __NYX_NULLABLE__ buff_t nyx_zlib_base64_inflate(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT_MAGIC 0x65656565U                                                            //!< Magic number for identifying JSON objects.
+#define NYX_OBJECT_MAGIC      UINT32_C(0x65656565)                                              //!< Magic number for identifying JSON objects.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_FLAGS_DISABLED    ((uint64_t) 0x0000000000000001U)                                  // Flag indicating that the object is disabled.
-/* 0b0000000000000000000000000000000_0000000000000000000000000000000_01 */
+#define NYX_FLAGS_DISABLED    UINT64_C(0x0000000000000001)                                      // Flag indicating that the object is disabled.
+    /* 0b0000000000000000000000000000000_0000000000000000000000000000000_01 */
 
-#define NYX_FLAGS_BLOB_MASK   ((uint64_t) 0x00000001FFFFFFFCU)                                  // Mask indicating the Nyx blob emission per client.
-/* 0b0000000000000000000000000000000_1111111111111111111111111111111_00 */
+#define NYX_FLAGS_BLOB_MASK   UINT64_C(0x00000001FFFFFFFC)                                      // Mask indicating the Nyx blob emission per client.
+    /* 0b0000000000000000000000000000000_1111111111111111111111111111111_00 */
 
-#define NYX_FLAGS_STREAM_MASK ((uint64_t) 0xFFFFFFFE00000000U)                                  // Mask indicating the Nyx stream emission per client.
-/* 0b1111111111111111111111111111111_0000000000000000000000000000000_00 */
+#define NYX_FLAGS_STREAM_MASK UINT64_C(0xFFFFFFFE00000000)                                      // Mask indicating the Nyx stream emission per client.
+    /* 0b1111111111111111111111111111111_0000000000000000000000000000000_00 */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
