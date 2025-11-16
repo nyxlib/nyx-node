@@ -215,6 +215,9 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
             if(header_size > 0 && header_size < sizeof(header_buff))
             {
+                NYX_LOG_INFO("%.*s", (int) header_size, (STR_t) header_buff);
+                NYX_LOG_INFO("%.*s", (int) value_size, (STR_t) value_buff);
+
                 internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
 
                 internal_redis_pub(node, NYX_STR_S(value_buff, value_size));
