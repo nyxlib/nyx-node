@@ -330,16 +330,16 @@ static uint16_t _mqtt_buffer_size()
 
     uint16_t buff_size;
 
-    /**/ if(free_heap > 2 * 8192) {
+    /**/ if(free_heap > 4 * 8192) {
         buff_size = 8192;
     }
-    else if(free_heap > 2 * 4096) {
+    else if(free_heap > 4 * 4096) {
         buff_size = 4096;
     }
-    else if(free_heap > 2 * 2048) {
+    else if(free_heap > 4 * 2048) {
         buff_size = 2048;
     }
-    else if(free_heap > 2 * 1024) {
+    else if(free_heap > 4 * 1024) {
         buff_size = 1024;
     }
     else {
