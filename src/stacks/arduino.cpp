@@ -149,7 +149,7 @@ void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, __NYX_UNUSED__ int qos
     {
         if(!stack->mqtt_client.subscribe(topic.buf, 0))
         {
-            NYX_LOG_ERROR("Cannot subscribe to %s", topic.buf);
+            NYX_LOG_ERROR("Cannot subscribe to %.*s", topic.len, topic.buf);
         }
     }
 }
@@ -167,7 +167,7 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, __N
             reinterpret_cast<uint8_t *>(message.buf),
             reinterpret_cast<unsigned int>(message.len)
         )) {
-            NYX_LOG_ERROR("Cannot publish to %s", topic.buf);
+            NYX_LOG_ERROR("Cannot publish to %.*s", topic.len, topic.buf);
         }
     }
 }

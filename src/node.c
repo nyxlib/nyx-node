@@ -983,6 +983,8 @@ nyx_node_t *nyx_node_initialize(
     /*----------------------------------------------------------------------------------------------------------------*/
 
     node->indi_url = nyx_string_dup(indi_url);
+    ////->indi_username = nyx_string_dup(indi_username);
+    ////->indi_password = nyx_string_dup(indi_password);
 
     node->mqtt_url = nyx_string_dup(mqtt_url);
     node->mqtt_username = nyx_string_dup(mqtt_username);
@@ -1006,6 +1008,7 @@ nyx_node_t *nyx_node_initialize(
     node->tcp_handler = _tcp_handler;
     #endif
     node->mqtt_handler = _mqtt_handler;
+
     node->user_mqtt_handler = mqtt_handler;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -1056,6 +1059,8 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_memory_free(node->indi_url);
+        ///_memory_free(node->indi_username);
+        ///_memory_free(node->indi_password);
 
         nyx_memory_free(node->mqtt_url);
         nyx_memory_free(node->mqtt_username);

@@ -58,19 +58,23 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        mg_xprintf(mg_pfn_stdout, NULL, "%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
+        fprintf(stdout, "%s - %s:%d %s() - ", nyx_log_level_to_str(level), file, line, func);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         va_list ap;
         va_start(ap, fmt);
-        mg_vxprintf(mg_pfn_stdout, NULL, fmt, &ap);
+        vfprintf(stdout, fmt, ap);
         va_end(ap);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        mg_pfn_stdout('\r', NULL);
-        mg_pfn_stdout('\n', NULL);
+        fputc('\r', stdout);
+        fputc('\n', stdout);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        fflush(stdout);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
