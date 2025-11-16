@@ -14,9 +14,16 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static size_t intlen(size_t n)
+static uint32_t _safe_strlen(STR_t s)
 {
-    size_t len;
+    return (uint32_t) strlen(s);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+static uint32_t _safe_intlen(size_t n)
+{
+    uint32_t len;
 
     for(len = 1; n >= 10; len++)
     {
@@ -41,11 +48,11 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
     if(password_buff != NULL && password_buff[0] != '\0')
     {
-        size_t password_size = strlen(password_buff);
+        uint32_t password_size = _safe_strlen(password_buff);
 
         if(username_buff != NULL && username_buff[0] != '\0')
         {
-            size_t username_size = strlen(username_buff);
+            uint32_t username_size = _safe_strlen(username_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -53,13 +60,13 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t cmd_size = (size_t) snprintf(
+            uint32_t cmd_size = (uint32_t) snprintf(
                 /*--*/(cmd_buff),
                 sizeof(cmd_buff),
                 "*3\r\n"
                 "$4\r\nAUTH\r\n"
-                "$%zu\r\n%s\r\n"
-                "$%zu\r\n%s\r\n",
+                "$%u\r\n%s\r\n"
+                "$%u\r\n%s\r\n",
                 username_size,
                 username_buff,
                 password_size,
@@ -81,12 +88,12 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            size_t cmd_size = (size_t) snprintf(
+            uint32_t cmd_size = (uint32_t) snprintf(
                 /*--*/(cmd_buff),
                 sizeof(cmd_buff),
                 "*2\r\n"
                 "$4\r\nAUTH\r\n"
-                "$%zu\r\n%s\r\n",
+                "$%u\r\n%s\r\n",
                 password_size,
                 password_buff
             );
@@ -105,7 +112,7 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __NYX_ZEROABLE__ size_t n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
+void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len, __NYX_ZEROABLE__ int n_fields, const str_t field_names[], const size_t field_sizes[], const buff_t field_buffs[])
 {
     if(node == NULL
        ||
@@ -126,21 +133,21 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t header_size = (size_t) snprintf(
+    uint32_t header_size = (uint32_t) snprintf(
         /*--*/(header_buff),
         sizeof(header_buff),
-        "*%zu\r\n"
+        "*%d\r\n"
         "$4\r\nXADD\r\n"
-        "$%zu\r\n%s/%s\r\n"
+        "$%u\r\n%s/%s\r\n"
         "$6\r\nMAXLEN\r\n"
         "$1\r\n~\r\n"
-        "$%zu\r\n%zu\r\n"
+        "$%u\r\n%u\r\n"
         "$1\r\n*\r\n",
         6 + 2 * n_fields,
-        strlen(device) + 1 + strlen(stream),
-        /*--*/(device)   ,   /*--*/(stream),
-        intlen(max_len),
-        /*--*/(max_len)
+        _safe_strlen(device) + 1 + _safe_strlen(stream),
+        /*--------*/(device)   ,   /*--------*/(stream),
+        _safe_intlen(max_len),
+        (uint32_t)(max_len)
     );
 
     if(header_size > 0 && header_size < sizeof(header_buff))
@@ -151,7 +158,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(size_t i = 0; i < n_fields; i++)
+        for(int i = 0; i < n_fields; i++)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -196,14 +203,14 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            header_size = (size_t) snprintf(
+            header_size = (uint32_t) snprintf(
                 /*--*/(header_buff),
                 sizeof(header_buff),
-                "$%zu\r\n%s\r\n"
-                "$%zu\r\n",
-                strlen(field_name),
-                /*--*/(field_name),
-                value_size
+                "$%u\r\n%s\r\n"
+                "$%u\r\n",
+                _safe_strlen(field_name),
+                /*--------*/(field_name),
+                (uint32_t)(value_size)
             );
 
             if(header_size > 0 && header_size < sizeof(header_buff))

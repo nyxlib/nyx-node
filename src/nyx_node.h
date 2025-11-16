@@ -3084,7 +3084,7 @@ void nyx_redis_pub(
     STR_t device,
     STR_t stream,
     size_t max_len,
-    __NYX_ZEROABLE__ size_t n_fields,
+    __NYX_ZEROABLE__ int n_fields,
     const str_t field_names[],
     const size_t field_sizes[],
     const buff_t field_buffs[]
