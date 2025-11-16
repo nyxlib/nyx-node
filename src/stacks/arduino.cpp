@@ -308,19 +308,25 @@ static uint16_t _mqtt_buffer_size()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    #if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
-
-    uint32_t free_heap = ESP.getFreeHeap();
-
-    #elif defined(NYX_RAM_SIZE)
+    #if defined(NYX_RAM_SIZE)
 
     uint32_t free_heap = NYX_RAM_SIZE;
+
+    #elif defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+
+    uint32_t free_heap = ESP.getFreeHeap();
 
     #else
     #  error "NYX_RAM_SIZE is not defined!"
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    #if defined(NYX_MQTT_BUFF_SIZE)
+
+    uint16_t buff_size = NYX_MQTT_BUFF_SIZE;
+
+    #else
 
     uint16_t buff_size;
 
@@ -339,6 +345,8 @@ static uint16_t _mqtt_buffer_size()
     else {
         buff_size = 512;
     }
+
+    #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
