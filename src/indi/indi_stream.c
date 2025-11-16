@@ -91,7 +91,7 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 /* PUBLISHER                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _get_field_names(STR_t field_names[], size_t n_fields, const nyx_dict_t *vector)
+static bool _get_field_names(STR_t field_names[], int n_fields, const nyx_dict_t *vector)
 {
     nyx_object_t *list = nyx_dict_get(vector, "children");
 
@@ -99,11 +99,11 @@ static bool _get_field_names(STR_t field_names[], size_t n_fields, const nyx_dic
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        size_t expected_n_fields = nyx_list_size((nyx_list_t *) list);
+        int expected_n_fields = (int) nyx_list_size((nyx_list_t *) list);
 
         if(expected_n_fields != n_fields)
         {
-            NYX_LOG_ERROR("%d expected fields but %d provided", (int) expected_n_fields, (int) n_fields);
+            NYX_LOG_ERROR("%d expected fields but %d provided", expected_n_fields, n_fields);
 
             return false;
         }
@@ -153,7 +153,7 @@ static bool _get_field_names(STR_t field_names[], size_t n_fields, const nyx_dic
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, size_t n_fields, const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, int n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */

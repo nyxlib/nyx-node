@@ -14,14 +14,14 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static uint32_t _safe_strlen(STR_t s)
+__NYX_INLINE__ uint32_t _safe_strlen(STR_t s)
 {
     return (uint32_t) strlen(s);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static uint32_t _safe_intlen(size_t n)
+__NYX_INLINE__ uint32_t _safe_intlen(size_t n)
 {
     uint32_t len;
 
