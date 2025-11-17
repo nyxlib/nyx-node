@@ -56,13 +56,14 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            char cmd_buff[64 + username_size + password_size];
+            size_t cmd_size0 = 64 + username_size + password_size;
+            str_t cmd_buff = nyx_memory_alloc(cmd_size0);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             uint32_t cmd_size = (uint32_t) snprintf(
-                /*--*/(cmd_buff),
-                sizeof(cmd_buff),
+                cmd_buff,
+                cmd_size0,
                 "*3\r\n"
                 "$4\r\nAUTH\r\n"
                 "$%u\r\n%s\r\n"
@@ -73,10 +74,14 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
                 password_buff
             );
 
-            if(cmd_size > 0 && cmd_size < sizeof(cmd_buff))
+            if(cmd_size > 0 && cmd_size < cmd_size0)
             {
                 internal_redis_pub(node, NYX_STR_S(cmd_buff, cmd_size));
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyx_memory_free(cmd_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -84,13 +89,14 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            char cmd_buff[64 + password_size];
+            size_t cmd_size0 = 64 + 0x00000000000 + password_size;
+            str_t cmd_buff = nyx_memory_alloc(cmd_size0);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             uint32_t cmd_size = (uint32_t) snprintf(
-                /*--*/(cmd_buff),
-                sizeof(cmd_buff),
+                cmd_buff,
+                cmd_size0,
                 "*2\r\n"
                 "$4\r\nAUTH\r\n"
                 "$%u\r\n%s\r\n",
@@ -98,10 +104,14 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
                 password_buff
             );
 
-            if(cmd_size > 0 && cmd_size < sizeof(cmd_buff))
+            if(cmd_size > 0 && cmd_size < cmd_size0)
             {
                 internal_redis_pub(node, NYX_STR_S(cmd_buff, cmd_size));
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyx_memory_free(cmd_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
