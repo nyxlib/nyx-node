@@ -17,6 +17,10 @@
 /* UTILITIES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static const double NAN_double = (double) NAN;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static bool _parse_format(char *result_conv, int *result_lcnt, int *result_w, int *result_f, STR_t s)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -144,13 +148,13 @@ static double sextod(STR_t p)
     deg = (double) strtol(p, &end1, 10);
 
     if(p == end1) {
-        return NAN;
+        return NAN_double;
     }
     p = end1;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(*p != ':') { return NAN; } p++;
+    if(*p != ':') { return NAN_double; } p++;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -164,13 +168,13 @@ static double sextod(STR_t p)
         min = (double) strtol(p, &end2, 10);
 
         if(p == end2) {
-            return NAN;
+            return NAN_double;
         }
         p = end2;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(p != colon) { return NAN; } p++;
+        if(p != colon) { return NAN_double; } p++;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -178,7 +182,7 @@ static double sextod(STR_t p)
         sec = (double) strtod(p, &end3);
 
         if(p == end3) {
-            return NAN;
+            return NAN_double;
         }
         p = end3;
 
@@ -192,7 +196,7 @@ static double sextod(STR_t p)
         min = (double) strtod(p, &end4);
 
         if(p == end4) {
-            return NAN;
+            return NAN_double;
         }
         p = end4;
 
@@ -209,11 +213,11 @@ static double sextod(STR_t p)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(*p != '\0') { return NAN; }
+    if(*p != '\0') { return NAN_double; }
 
-    if(!(min >= 0.0 && min < 60.0)) { return NAN; }
+    if(!(min >= 0.0 && min < 60.0)) { return NAN_double; }
 
-    if(!(sec >= 0.0 && sec < 60.0)) { return NAN; }
+    if(!(sec >= 0.0 && sec < 60.0)) { return NAN_double; }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -285,7 +289,7 @@ static int snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
         {
             long s10   = lround(frac_d * 36000.0);
             int  mm    = (int) (s10 / 600);
-            int  ss    = (int) ((s10 % 600) / 10);
+            int  ss    = (int) (s10 % 600 / 10);
             int  ss_t1 = (int) (s10 % 10);
 
             if(mm >= 60) { mm = 0; deg_i++; }
@@ -298,7 +302,7 @@ static int snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
         {
             long s100  = lround(frac_d * 360000.0);
             int  mm    = (int) (s100 / 6000);
-            int  ss    = (int) ((s100 % 6000) / 100);
+            int  ss    = (int) (s100 % 6000 / 100);
             int  ss_t2 = (int) (s100 % 100);
 
             if(mm >= 60) { mm = 0; deg_i++; }
