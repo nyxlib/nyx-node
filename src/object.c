@@ -29,7 +29,7 @@ size_t malloc_usable_size(void *);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-static size_t used_mem = 0u;
+static unsigned long used_mem = 0UL;
 #endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -39,7 +39,7 @@ void nyx_memory_initialize(void)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-    atomic_store_explicit(&used_mem, 0u, memory_order_relaxed);
+    atomic_store_explicit(&used_mem, 0UL, memory_order_relaxed);
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -52,11 +52,11 @@ bool nyx_memory_finalize(void)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
-    size_t leaks = atomic_exchange_explicit(&used_mem, 0u, memory_order_relaxed);
+    unsigned long leaks = atomic_exchange_explicit(&used_mem, 0UL, memory_order_relaxed);
 
-    if(leaks > 0u)
+    if(leaks > 0UL)
     {
-        NYX_LOG_ERROR("Memory leak: %zu bytes", leaks);
+        NYX_LOG_ERROR("Memory leak: %lu bytes", leaks);
 
         return false;
     }
@@ -83,6 +83,8 @@ size_t nyx_memory_free(__NYX_NULLABLE__ buff_t buff)
 
     atomic_fetch_sub_explicit(&used_mem, result, memory_order_relaxed);
     #endif
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef HAVE_MALLOC_USABLE_SIZE
     size_t result = malloc_usable_size(buff);
@@ -127,6 +129,8 @@ buff_t nyx_memory_alloc(__NYX_ZEROABLE__ size_t size)
     atomic_fetch_add_explicit(&used_mem, malloc_size(result), memory_order_relaxed);
     #endif
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     #ifdef HAVE_MALLOC_USABLE_SIZE
     atomic_fetch_add_explicit(&used_mem, malloc_usable_size(result), memory_order_relaxed);
     #endif
@@ -154,6 +158,8 @@ buff_t nyx_memory_realloc(__NYX_NULLABLE__ buff_t buff, __NYX_ZEROABLE__ size_t 
     atomic_fetch_sub_explicit(&used_mem, malloc_size(buff), memory_order_relaxed);
     #endif
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     #ifdef HAVE_MALLOC_USABLE_SIZE
     atomic_fetch_sub_explicit(&used_mem, malloc_usable_size(buff), memory_order_relaxed);
     #endif
@@ -172,6 +178,8 @@ buff_t nyx_memory_realloc(__NYX_NULLABLE__ buff_t buff, __NYX_ZEROABLE__ size_t 
     #ifdef HAVE_MALLOC_SIZE
     atomic_fetch_add_explicit(&used_mem, malloc_size(result), memory_order_relaxed);
     #endif
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     #ifdef HAVE_MALLOC_USABLE_SIZE
     atomic_fetch_add_explicit(&used_mem, malloc_usable_size(result), memory_order_relaxed);
@@ -208,7 +216,7 @@ __NYX_NULLABLE__ str_t nyx_double_dup(double d)
     {
         str_t str = nyx_memory_alloc(32 + 1);
 
-        snprintf(str, 32, "%f", d);
+        snprintf(str, 32 + 1, "%f", d);
 
         return str;
     }
