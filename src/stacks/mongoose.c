@@ -86,7 +86,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* TCP, MQTT & REDIS                                                                                                  */
+/* INDI, MQTT & REDIS                                                                                                 */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_indi_pub(nyx_node_t *node, nyx_str_t message)

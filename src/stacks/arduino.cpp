@@ -138,7 +138,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* TCP & MQTT                                                                                                         */
+/* MQTT & REDIS                                                                                                       */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, __NYX_UNUSED__ int qos)
