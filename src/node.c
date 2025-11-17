@@ -14,6 +14,13 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static str_t _safe_dup(STR_t s)
+{
+    return s != NULL && s[0] != '\0' ? nyx_string_dup(s) : NULL;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 static bool _starts_with(const nyx_str_t topic, const nyx_str_t prefix)
 {
     return topic.len >= prefix.len && memcmp(topic.buf, prefix.buf, prefix.len) == 0;
@@ -982,17 +989,17 @@ nyx_node_t *nyx_node_initialize(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node->indi_url = nyx_string_dup(indi_url);
-    ////->indi_username = nyx_string_dup(indi_username);
-    ////->indi_password = nyx_string_dup(indi_password);
+    node->indi_url = _safe_dup(indi_url);
+    ////->indi_username = _safe_dup(indi_username);
+    ////->indi_password = _safe_dup(indi_password);
 
-    node->mqtt_url = nyx_string_dup(mqtt_url);
-    node->mqtt_username = nyx_string_dup(mqtt_username);
-    node->mqtt_password = nyx_string_dup(mqtt_password);
+    node->mqtt_url = _safe_dup(mqtt_url);
+    node->mqtt_username = _safe_dup(mqtt_username);
+    node->mqtt_password = _safe_dup(mqtt_password);
 
-    node->redis_url = nyx_string_dup(redis_url);
-    node->redis_username = nyx_string_dup(redis_username);
-    node->redis_password = nyx_string_dup(redis_password);
+    node->redis_url = _safe_dup(redis_url);
+    node->redis_username = _safe_dup(redis_username);
+    node->redis_password = _safe_dup(redis_password);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
