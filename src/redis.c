@@ -14,16 +14,16 @@
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_INLINE__ uint32_t _safe_strlen(STR_t s)
+__NYX_INLINE__ unsigned int _safe_strlen(STR_t s)
 {
-    return (uint32_t) strlen(s);
+    return (unsigned int) strlen(s);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_INLINE__ uint32_t _safe_intlen(size_t n)
+__NYX_INLINE__ unsigned int _safe_intlen(size_t n)
 {
-    uint32_t len;
+    unsigned int len;
 
     for(len = 1; n >= 10; len++)
     {
@@ -48,11 +48,11 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
     if(password_buff != NULL && password_buff[0] != '\0')
     {
-        uint32_t password_size = _safe_strlen(password_buff);
+        unsigned int password_size = _safe_strlen(password_buff);
 
         if(username_buff != NULL && username_buff[0] != '\0')
         {
-            uint32_t username_size = _safe_strlen(username_buff);
+            unsigned int username_size = _safe_strlen(username_buff);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -61,7 +61,7 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            uint32_t cmd_size = (uint32_t) snprintf(
+            unsigned int cmd_size = (unsigned int) snprintf(
                 cmd_buff,
                 cmd_size0,
                 "*3\r\n"
@@ -94,7 +94,7 @@ void nyx_redis_auth(nyx_node_t *node, __NYX_NULLABLE__ STR_t username_buff, __NY
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            uint32_t cmd_size = (uint32_t) snprintf(
+            unsigned int cmd_size = (unsigned int) snprintf(
                 cmd_buff,
                 cmd_size0,
                 "*2\r\n"
@@ -143,7 +143,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t header_size = (uint32_t) snprintf(
+    unsigned int header_size = (unsigned int) snprintf(
         /*--*/(header_buff),
         sizeof(header_buff),
         "*%d\r\n"
@@ -157,7 +157,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
         _safe_strlen(device) + 1 + _safe_strlen(stream),
         /*--------*/(device)   ,   /*--------*/(stream),
         _safe_intlen(max_len),
-        (uint32_t)(max_len)
+        (unsigned int)(max_len)
     );
 
     if(header_size > 0 && header_size < sizeof(header_buff))
@@ -213,21 +213,18 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            header_size = (uint32_t) snprintf(
+            header_size = (unsigned int) snprintf(
                 /*--*/(header_buff),
                 sizeof(header_buff),
                 "$%u\r\n%s\r\n"
                 "$%u\r\n",
                 _safe_strlen(field_name),
                 /*--------*/(field_name),
-                (uint32_t)(value_size)
+                (unsigned int)(value_size)
             );
 
             if(header_size > 0 && header_size < sizeof(header_buff))
             {
-                //NYX_LOG_INFO("%.*s", (int) header_size, (STR_t) header_buff);
-                //NYX_LOG_INFO("%.*s", (int) value_size, (STR_t) value_buff);
-
                 internal_redis_pub(node, NYX_STR_S(header_buff, header_size));
 
                 internal_redis_pub(node, NYX_STR_S(value_buff, value_size));
