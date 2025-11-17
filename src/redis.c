@@ -120,7 +120,7 @@ void nyx_redis_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t max_len,
        ||
        stream == NULL
        ||
-       n_fields == 0x0U
+       n_fields == 0x00
        ||
        field_names == NULL || field_sizes == NULL || field_buffs == NULL
     ) {
