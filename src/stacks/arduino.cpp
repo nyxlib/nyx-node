@@ -500,7 +500,7 @@ void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        node->stack->timer.in(0x00000000000U, _timer_trampoline, ctx);
+        node->stack->timer.in(0x00000000U, _timer_trampoline, ctx);
 
         node->stack->timer.every(interval_ms, _timer_trampoline, ctx);
 

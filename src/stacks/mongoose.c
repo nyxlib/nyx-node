@@ -93,7 +93,10 @@ void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 {
     if(node != NULL && node->stack->indi_connection != NULL)
     {
-        mg_send(node->stack->indi_connection, message.buf, message.len);
+        if(!mg_send(node->stack->indi_connection, message.buf, message.len))
+        {
+            NYX_LOG_ERROR("Cannot send message to INDI");
+        }
     }
 }
 
@@ -135,7 +138,10 @@ void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
 {
     if(node != NULL && node->stack->redis_connection != NULL)
     {
-        mg_send(node->stack->redis_connection, message.buf, message.len);
+        if(!mg_send(node->stack->redis_connection, message.buf, message.len))
+        {
+            NYX_LOG_ERROR("Cannot send message to Redis");
+        }
     }
 }
 
