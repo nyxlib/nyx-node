@@ -158,8 +158,6 @@ static void _indi_handler(struct mg_connection *connection, int ev, void *ev_dat
         NYX_LOG_INFO("%lu INDI OPEN", connection->id);
 
         node->stack->indi_connection = connection;
-
-        ///_indi_auth(node, stack->indi_password);
     }
     else if(ev == MG_EV_CLOSE)
     {
