@@ -449,15 +449,15 @@ typedef struct nyx_object_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_NULLABLE__ struct nyx_node_s *node;                                                       //!< Pointer to the associated Nyx node.
+    __NYX_NULLABLE__ struct nyx_node_s *node;                                                   //!< Pointer to the associated Nyx node.
 
-    __NYX_NULLABLE__ struct nyx_object_s *parent;                                                   //!< Pointer to the parent object.
+    __NYX_NULLABLE__ struct nyx_object_s *parent;                                               //!< Pointer to the parent object.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     union {
 
-        __NYX_NULLABLE__ void *_ptr;                                                                //!< Untyped pointer.
+        __NYX_NULLABLE__ void *_ptr;                                                            //!< Untyped pointer.
 
         __NYX_NULLABLE__ bool (* _int)(
             struct nyx_dict_s *vector,                                                          //!< Parent vector object.

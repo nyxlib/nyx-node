@@ -21,6 +21,16 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 add_compile_options(-D_GNU_SOURCE -DMG_ENABLE_LOG=0 -DMG_ENABLE_DIRLIST=0 -DMG_ENABLE_POLL=0 -DMG_ENABLE_EPOLL=1 -DMG_ENABLE_SSI=0 -Wall -Wextra -Wconversion -Wdouble-promotion -Wno-unknown-pragmas -Wno-unused-function)
 
 ########################################################################################################################
+
+option(ENABLE_COVERAGE "Enable code coverage instrumentation" OFF)
+
+if(ENABLE_COVERAGE AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(--coverage)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --coverage")
+endif()
+
+########################################################################################################################
 # LIBS                                                                                                                 #
 ########################################################################################################################
 
