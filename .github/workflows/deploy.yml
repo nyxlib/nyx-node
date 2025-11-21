@@ -30,10 +30,9 @@ jobs:
                     make docs
 
             -   name: SonarQube Scan
-                uses: sonarsource/sonarqube-scan-action@v3
+                uses: SonarSource/sonarqube-scan-action@v6
                 env:
                     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                    SONAR_HOST_URL: ${{ secrets.SONAR_HOST }}
 
             -   name: Deploy project
                 shell: bash
