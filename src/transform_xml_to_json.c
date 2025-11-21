@@ -48,7 +48,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
             {
                 *content_e = '\0';
 
-                nyx_dict_set(result, "$", nyx_string_from_dup((str_t) content_s));
+                nyx_dict_set(result, "$", nyx_string_from_dup(content_s));
             }
 
             break;
