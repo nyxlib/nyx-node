@@ -194,7 +194,7 @@ static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_dat
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO("%lu MQTT OPEN", connection->id);
+        NYX_LOG_INFO("%lu MQTT OPEN 1/2", connection->id);
 
         node->stack->mqtt_connection = connection;
     }
@@ -210,7 +210,7 @@ static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_dat
     }
     else if(ev == MG_EV_MQTT_OPEN)
     {
-        NYX_LOG_INFO("%lu MQTT OPEN", connection->id);
+        NYX_LOG_INFO("%lu MQTT OPEN 2/2", connection->id);
 
         node->mqtt_handler(
             node,
