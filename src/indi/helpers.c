@@ -275,20 +275,22 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 
 int internal_get_timestamp(size_t size, str_t str)
 {
+    struct tm tm_now;
+
     time_t now = time(NULL);
 
-    struct tm *tm_now = localtime(&now);
+    localtime_r(&now, &tm_now);
 
     return snprintf(
         str,
         size,
         "%04d-%02d-%02dT%02d:%02d:%02d",
-        tm_now->tm_year + 1900,
-        tm_now->tm_mon + 1,
-        tm_now->tm_mday,
-        tm_now->tm_hour,
-        tm_now->tm_min,
-        tm_now->tm_sec
+        tm_now.tm_year + 1900,
+        tm_now.tm_mon + 1,
+        tm_now.tm_mday,
+        tm_now.tm_hour,
+        tm_now.tm_min,
+        tm_now.tm_sec
     );
 }
 
