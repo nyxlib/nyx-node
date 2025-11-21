@@ -273,7 +273,7 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-int internal_get_timestamp(size_t size, str_t str)
+int internal_get_timestamp(size_t len, str_t str)
 {
     struct tm tm_now;
 
@@ -283,7 +283,7 @@ int internal_get_timestamp(size_t size, str_t str)
 
     return snprintf(
         str,
-        size,
+        len,
         "%04d-%02d-%02dT%02d:%02d:%02d",
         tm_now.tm_year + 1900,
         tm_now.tm_mon + 1,
