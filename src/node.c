@@ -363,7 +363,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(tag1_string != NULL && device1_string->type == NYX_TYPE_STRING
+    if(tag1_string != NULL && tag1_string->type == NYX_TYPE_STRING
        &&
        device1_string != NULL && device1_string->type == NYX_TYPE_STRING
        &&
@@ -392,7 +392,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(tag2_string != NULL && device2_string->type == NYX_TYPE_STRING
+            if(tag2_string != NULL && tag2_string->type == NYX_TYPE_STRING
                &&
                device2_string != NULL && device2_string->type == NYX_TYPE_STRING
                &&
