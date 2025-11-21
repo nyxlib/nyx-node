@@ -317,7 +317,7 @@ static bool _is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 
     STR_t client1 = node->master_client_message.buf;
 
-    if((client1 != NULL) && (strcmp(NYX_ALL, client1) == 0))
+    if(client1 != NULL && strcmp(NYX_ALL, client1) == 0)
     {
         return true;
     }
@@ -326,7 +326,7 @@ static bool _is_allowed(const nyx_node_t *node, const nyx_dict_t *dict)
 
     STR_t client2 = nyx_dict_get_string(dict, "@client");
 
-    if((client1 != NULL) && (client2 != NULL) && (strcmp(client1, client2) == 0))
+    if(client1 != NULL && client2 != NULL && strcmp(client1, client2) == 0)
     {
         return true;
     }
