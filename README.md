@@ -1,4 +1,5 @@
 [![][Build Status img]][Build Status]
+[![][Quality Gate Status img]][Quality Gate Status]
 [![][License_mongoose img]][License_mongoose]
 [![][License_arduino img]][License_arduino]
 
@@ -58,6 +59,9 @@ In Greek mythology, Nyx is the goddess and personification of the night.
 
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
 [Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg
+
+[Quality Gate Status]:https://sonarcloud.io/summary/new_code?id=nyxlib_nyx-node
+[Quality Gate Status img]:https://sonarcloud.io/api/project_badges/measure?project=nyxlib_nyx-node&metric=alert_status
 
 [License_mongoose]:https://www.gnu.org/licenses/gpl-2.0.txt
 [License_mongoose img]:https://img.shields.io/badge/License-GPL_2.0_only_(mongoose_layer)-blue.svg
