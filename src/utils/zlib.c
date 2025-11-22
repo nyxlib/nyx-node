@@ -251,7 +251,7 @@ buff_t nyx_zlib_deflate(__NYX_NULLABLE__ size_t *result_size, __NYX_ZEROABLE__ s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_zlib_inflate(__NYX_NOTNULL__ size_t *result_size, __NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
+buff_t nyx_zlib_inflate(__NYX_NOTNULL__ size_t *result_size, __NYX_ZEROABLE__ __NYX_UNUSED__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
 {
     NYX_LOG_ERROR("ZLib uncompression not supported");
 
