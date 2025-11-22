@@ -8,8 +8,6 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        container:
-            image: ubuntu:24.04
 
         steps:
             -   name: Checkout repository
@@ -20,7 +18,7 @@ jobs:
             -   name: Install dependencies
                 run: |
                     apt-get update
-                    apt-get install -y gcc git bash make cmake rsync unzip doxygen graphviz openssh-client
+                    apt-get install -y gcc bash make cmake rsync unzip doxygen graphviz openssh-client
 
             -   name: Build project
                 shell: bash
