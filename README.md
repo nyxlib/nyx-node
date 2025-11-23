@@ -51,9 +51,7 @@ Documentation:
 
 # A bit of classical culture
 
-In Greek mythology, Nyx is the goddess and personification of the night.
-
-She is one of the primordial deities, born from Chaos at the dawn of creation.
+In Greek mythology, Nyx is the goddess and personification of the night. She is one of the primordial deities, born from Chaos at the dawn of creation.
 
 Mysterious and powerful, Nyx dwells in the deepest shadows of the cosmos, from where she gives birth to many other divine figures, including Hypnos (Sleep) and Thanatos (Death).
 
