@@ -15,7 +15,7 @@ jobs:
             -   name: Install dependencies
                 run: |
                     apt-get update
-                    apt-get install -y gcc git bash make cmake rsync unzip doxygen graphviz mosquitto openssh-client
+                    apt-get install -y gcc git bash make cmake gcovr rsync unzip doxygen graphviz mosquitto openssh-client
 
             -   name: Start MQTT broker
                 run: |
@@ -30,10 +30,14 @@ jobs:
                 run: |
                     mkdir -p build
                     cd build
+
                     cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON ..
                     make all
                     make docs
+
                     MQTT_URL=mqtt://localhost:1883 CI_BREAK=ON ./demo
+
+                    gcovr -r .. --sonarqube coverage.xml --exclude '../src/stacks/external/.*' --gcov-ignore-parse-errors=all
 
             -   name: SonarQube Scan
                 uses: SonarSource/sonarqube-scan-action@v6
