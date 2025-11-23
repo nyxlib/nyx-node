@@ -49,9 +49,13 @@ Documentation:
 
 * [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-# A bit of history
+# A bit of classical culture
 
 In Greek mythology, Nyx is the goddess and personification of the night.
+
+She is one of the primordial deities, born from Chaos at the dawn of creation.
+
+Mysterious and powerful, Nyx dwells in the deepest shadows of the cosmos, from where she gives birth to many other divine figures, including Hypnos (Sleep) and Thanatos (Death).
 
 <div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.png" style="width: 600px;" />
