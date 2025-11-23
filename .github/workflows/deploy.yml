@@ -15,7 +15,12 @@ jobs:
             -   name: Install dependencies
                 run: |
                     apt-get update
-                    apt-get install -y gcc git bash make cmake rsync unzip doxygen graphviz openssh-client
+                    apt-get install -y gcc git bash make cmake rsync unzip doxygen graphviz mosquitto openssh-client
+
+            -   name: Start MQTT broker
+                run: |
+                    mosquitto -d
+                    sleep 1
 
             -   name: Checkout repository
                 uses: actions/checkout@v4
@@ -28,7 +33,7 @@ jobs:
                     cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON ..
                     make all
                     make docs
-                    CI_BREAK=ON ./demo
+                    MQTT_URL=mqtt://localhost:1883 CI_BREAK=ON ./demo
 
             -   name: SonarQube Scan
                 uses: SonarSource/sonarqube-scan-action@v6
