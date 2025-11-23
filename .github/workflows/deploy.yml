@@ -25,11 +25,10 @@ jobs:
                 run: |
                     mkdir -p build
                     cd build
-                    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON ..
+                    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON ..
                     make all
                     make docs
-                    ./test_json '[{"key1": "value1", "key2": 123, "key3": null}, {"key1": "value1", "key2": 123, "key3": null}]'
-                    ./test_xml '<foo><bar baz="qux">foobar</bar><bar baz="qux"><![CDATA[foobar]]></bar><bar baz="qux"><!-- foobar --></bar></foo>'
+                    CI_BREAK=ON ./demo
 
             -   name: SonarQube Scan
                 uses: SonarSource/sonarqube-scan-action@v6

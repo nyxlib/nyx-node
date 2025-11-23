@@ -341,9 +341,14 @@ int main()
 
     nyx_node_add_timer(node, 50, timer_stream, NULL);
 
-    while(s_signo == 0)
+    for(int i = 0; s_signo == 0; i++)
     {
         nyx_node_poll(node, 25);
+
+        if(i > 10 && getenv("CI_BREAK") != NULL)
+        {
+            break;
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
