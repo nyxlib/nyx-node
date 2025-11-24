@@ -8,7 +8,7 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int volatile s_signo = 0;
+static volatile sig_atomic_t s_signo = 0;
 
 static void signal_handler(int signo)
 {
