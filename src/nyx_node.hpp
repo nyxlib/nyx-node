@@ -12,6 +12,8 @@
 
 #include <vector>
 #include <memory>
+#include <cstdio>
+#include <cstdlib>
 #include <csignal>
 
 #include "nyx_node.h"
@@ -83,20 +85,59 @@ public:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    static void print_usage(
+        STR_t prog,
+        STR_t indi_uri,
+        STR_t mqtt_uri,
+        STR_t redis_uri,
+        STR_t mqtt_username,
+        STR_t mqtt_password,
+        STR_t redis_username,
+        STR_t redis_password,
+        int node_timeout
+    ) {
+        std::fprintf(
+            stderr,
+            "Usage: %s [options]\n"
+            "\n"
+            "Options:\n"
+            "  -i URI   INDI server URI (default: %s)\n"
+            "  -m URI   MQTT broker URI (default: %s)\n"
+            "  -r URI   Redis server URI (default: %s)\n"
+            "  -u USER  MQTT username (default: %s)\n"
+            "  -p PASS  MQTT password (default: %s)\n"
+            "  -U USER  Redis username (default: %s)\n"
+            "  -P PASS  Redis password (default: %s)\n"
+            "  -t MS    Node poll timeout (default: %d)\n"
+            "  -h       Show this help and exit\n",
+            prog,
+            indi_uri != NULL && indi_uri[0] != '\0' ? indi_uri : "none",
+            mqtt_uri != NULL && mqtt_uri[0] != '\0' ? mqtt_uri : "none",
+            redis_uri != NULL && redis_uri[0] != '\0' ? redis_uri : "none",
+            mqtt_username != NULL && mqtt_username[0] != '\0' ? mqtt_username : "none",
+            mqtt_password != NULL && mqtt_password[0] != '\0' ? mqtt_password : "none",
+            redis_username != NULL && redis_username[0] != '\0' ? redis_username : "none",
+            redis_password != NULL && redis_password[0] != '\0' ? redis_password : "none",
+            node_timeout
+        );
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     int run(int argc, char **argv)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        STR_t indiURL = this.indiURI();
-        STR_t mqttURL = this.mqttURI();
-        STR_t redisURL = this.redisURI();
+        STR_t indiURL = this->indiURI();
+        STR_t mqttURL = this->mqttURI();
+        STR_t redisURL = this->redisURI();
 
-        STR_t mqttUsername = this.mqttUsername();
-        STR_t mqttPassword = this.mqttPassword();
-        STR_t redisUsername = this.redisUsername();
-        STR_t redisPassword = this.redisPassword();
+        STR_t mqttUsername = this->mqttUsername();
+        STR_t mqttPassword = this->mqttPassword();
+        STR_t redisUsername = this->redisUsername();
+        STR_t redisPassword = this->redisPassword();
 
-        int nodeTimeoutMS = this.nodeTimeoutMS();
+        int nodeTimeoutMS = this->nodeTimeoutMS();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -107,41 +148,41 @@ public:
             switch (opt)
             {
             case 'i':
-                indi_uri = optarg;
+                indiURL = optarg;
                 break;
             case 'm':
-                mqtt_uri = optarg;
+                mqttURL = optarg;
                 break;
             case 'r':
-                redis_uri = optarg;
+                redisURL = optarg;
                 break;
             case 'u':
-                mqtt_username = optarg;
+                mqttUsername = optarg;
                 break;
             case 'p':
-                mqtt_password = optarg;
+                mqttPassword = optarg;
                 break;
             case 'U':
-                redis_username = optarg;
+                redisUsername = optarg;
                 break;
             case 'P':
-                redis_password = optarg;
+                redisPassword = optarg;
                 break;
             case 't':
-                node_timeout = atoi(optarg);
+                nodeTimeoutMS = std::atoi(optarg);
                 break;
             case 'h':
             default:
-                this.print_usage(
+                BaseDriver::print_usage(
                     argv[0],
-                    tcp_uri,
-                    mqtt_uri,
-                    redis_uri,
-                    mqtt_username,
-                    mqtt_password,
-                    redis_username,
-                    redis_password,
-                    node_timeout
+                    indiURL,
+                    mqttURL,
+                    redisURL,
+                    mqttUsername,
+                    mqttPassword,
+                    redisUsername,
+                    redisPassword,
+                    nodeTimeoutMS
                 );
 
                 return (opt == 'h') ? 0 : 1;
