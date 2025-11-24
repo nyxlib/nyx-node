@@ -132,7 +132,7 @@ public:
                 break;
             case 'h':
             default:
-                print_usage(
+                this.print_usage(
                     argv[0],
                     tcp_uri,
                     mqtt_uri,
