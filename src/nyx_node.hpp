@@ -83,8 +83,71 @@ public:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    int run()
+    int run(int argc, char **argv)
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        STR_t indiURL = this.indiURI();
+        STR_t mqttURL = this.mqttURI();
+        STR_t redisURL = this.redisURI();
+
+        STR_t mqttUsername = this.mqttUsername();
+        STR_t mqttPassword = this.mqttPassword();
+        STR_t redisUsername = this.redisUsername();
+        STR_t redisPassword = this.redisPassword();
+
+        int nodeTimeoutMS = this.nodeTimeoutMS();
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        int opt;
+
+        while((opt = getopt(argc, argv, "i:m:r:u:p:U:P:t:h")) != -1)
+        {
+            switch (opt)
+            {
+            case 'i':
+                indi_uri = optarg;
+                break;
+            case 'm':
+                mqtt_uri = optarg;
+                break;
+            case 'r':
+                redis_uri = optarg;
+                break;
+            case 'u':
+                mqtt_username = optarg;
+                break;
+            case 'p':
+                mqtt_password = optarg;
+                break;
+            case 'U':
+                redis_username = optarg;
+                break;
+            case 'P':
+                redis_password = optarg;
+                break;
+            case 't':
+                node_timeout = atoi(optarg);
+                break;
+            case 'h':
+            default:
+                print_usage(
+                    argv[0],
+                    tcp_uri,
+                    mqtt_uri,
+                    redis_uri,
+                    mqtt_username,
+                    mqtt_password,
+                    redis_username,
+                    redis_password,
+                    node_timeout
+                );
+
+                return (opt == 'h') ? 0 : 1;
+            }
+        }
+
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_memory_initialize();
@@ -125,20 +188,20 @@ public:
         nyx_node_t *node = nyx_node_initialize(
             this->name(),
             vectors.data(),
-            this->tcpURI(),
-            this->mqttURI(),
-            this->mqttUsername(),
-            this->mqttPassword(),
+            indiURL,
+            mqttURL,
+            mqttUsername,
+            mqttPassword,
             nullptr,
-            this->redisURI(),
-            this->redisUsername(),
-            this->redisPassword(),
+            redisURL,
+            redisUsername,
+            redisPassword,
             3000,
             true
         );
 
         for(const auto &uptr: this->m_devices) uptr->initialize(node);
-        while(s_signo == 0) nyx_node_poll(node, this->nodeTimeoutMS());
+        while(s_signo == 0) nyx_node_poll(node, nodeTimeoutMS);
         for(const auto &uptr: this->m_devices) uptr->finalize(node);
 
         nyx_node_finalize(node, true);
@@ -169,7 +232,7 @@ protected:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    virtual STR_t tcpURI() const = 0;
+    virtual STR_t indiURI() const = 0;
 
     virtual STR_t mqttURI() const = 0;
     virtual STR_t mqttUsername() const = 0;
