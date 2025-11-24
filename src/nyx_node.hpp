@@ -87,13 +87,13 @@ public:
 
     static void print_usage(
         STR_t prog,
-        STR_t indi_uri,
-        STR_t mqtt_uri,
-        STR_t redis_uri,
-        STR_t mqtt_username,
-        STR_t mqtt_password,
-        STR_t redis_username,
-        STR_t redis_password,
+        STR_t indiURL,
+        STR_t mqttURL,
+        STR_t redisURL,
+        STR_t mqttUsername,
+        STR_t mqttPassword,
+        STR_t redisUsername,
+        STR_t redisPassword,
         int node_timeout
     ) {
         std::fprintf(
@@ -101,9 +101,9 @@ public:
             "Usage: %s [options]\n"
             "\n"
             "Options:\n"
-            "  -i URI   INDI server URI (default: %s)\n"
-            "  -m URI   MQTT broker URI (default: %s)\n"
-            "  -r URI   Redis server URI (default: %s)\n"
+            "  -i URL   INDI server URL (default: %s)\n"
+            "  -m URL   MQTT broker URL (default: %s)\n"
+            "  -r URL   Redis server URL (default: %s)\n"
             "  -u USER  MQTT username (default: %s)\n"
             "  -p PASS  MQTT password (default: %s)\n"
             "  -U USER  Redis username (default: %s)\n"
@@ -111,13 +111,13 @@ public:
             "  -t MS    Node poll timeout (default: %d)\n"
             "  -h       Show this help and exit\n",
             prog,
-            indi_uri != NULL && indi_uri[0] != '\0' ? indi_uri : "none",
-            mqtt_uri != NULL && mqtt_uri[0] != '\0' ? mqtt_uri : "none",
-            redis_uri != NULL && redis_uri[0] != '\0' ? redis_uri : "none",
-            mqtt_username != NULL && mqtt_username[0] != '\0' ? mqtt_username : "none",
-            mqtt_password != NULL && mqtt_password[0] != '\0' ? mqtt_password : "none",
-            redis_username != NULL && redis_username[0] != '\0' ? redis_username : "none",
-            redis_password != NULL && redis_password[0] != '\0' ? redis_password : "none",
+            indiURL != NULL && indiURL[0] != '\0' ? indiURL : "none",
+            mqttURL != NULL && mqttURL[0] != '\0' ? mqttURL : "none",
+            redisURL != NULL && redisURL[0] != '\0' ? redisURL : "none",
+            mqttUsername != NULL && mqttUsername[0] != '\0' ? mqttUsername : "none",
+            mqttPassword != NULL && mqttPassword[0] != '\0' ? mqttPassword : "none",
+            redisUsername != NULL && redisUsername[0] != '\0' ? redisUsername : "none",
+            redisPassword != NULL && redisPassword[0] != '\0' ? redisPassword : "none",
             node_timeout
         );
     }
@@ -128,9 +128,9 @@ public:
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        STR_t indiURL = this->indiURI();
-        STR_t mqttURL = this->mqttURI();
-        STR_t redisURL = this->redisURI();
+        STR_t indiURL = this->indiURL();
+        STR_t mqttURL = this->mqttURL();
+        STR_t redisURL = this->redisURL();
 
         STR_t mqttUsername = this->mqttUsername();
         STR_t mqttPassword = this->mqttPassword();
@@ -273,13 +273,13 @@ protected:
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    virtual STR_t indiURI() const = 0;
+    virtual STR_t indiURL() const = 0;
 
-    virtual STR_t mqttURI() const = 0;
+    virtual STR_t mqttURL() const = 0;
     virtual STR_t mqttUsername() const = 0;
     virtual STR_t mqttPassword() const = 0;
 
-    virtual STR_t redisURI() const = 0;
+    virtual STR_t redisURL() const = 0;
     virtual STR_t redisUsername() const = 0;
     virtual STR_t redisPassword() const = 0;
 
