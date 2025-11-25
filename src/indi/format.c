@@ -342,13 +342,13 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
 
         /**/ if(lcnt == 1)
         {
-            if((value.type == NYX_VARIANT_TYPE_LONG   && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._long)) >= 0)
+            if(((value.type == NYX_VARIANT_TYPE_LONG   && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._long)) >= 0))
                ||
-               (value.type == NYX_VARIANT_TYPE_ULONG  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._ulong)) >= 0)
+               ((value.type == NYX_VARIANT_TYPE_ULONG  && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._ulong)) >= 0))
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && (l = snprintf(buffer, sizeof(buffer), format, value.value._double)) >= 0)
+               ((value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && (l = snprintf(buffer, sizeof(buffer), format, value.value._double)) >= 0))
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintm(buffer, sizeof(buffer), w, f, value.value._double)) >= 0)
+               ((value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintm(buffer, sizeof(buffer), w, f, value.value._double)) >= 0))
             ) {
                 for(int i = 0; i < l; i++) if(buffer[i] == ',') buffer[i] = '.';
 
@@ -357,13 +357,13 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
         }
         else if(lcnt == 0)
         {
-            if((value.type == NYX_VARIANT_TYPE_INT    && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._int)) >= 0)
+            if(((value.type == NYX_VARIANT_TYPE_INT    && (conv == 'd' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._int)) >= 0))
                ||
-               (value.type == NYX_VARIANT_TYPE_UINT   && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._uint)) >= 0)
+               ((value.type == NYX_VARIANT_TYPE_UINT   && (conv == 'u' || conv == 'o' || conv == 'x' || conv == 'X' /*-------------------------------------------------------*/) && (l = snprintf(buffer, sizeof(buffer), format, value.value._uint)) >= 0))
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && (l = snprintf(buffer, sizeof(buffer), format, value.value._double)) >= 0)
+               ((value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A') && (l = snprintf(buffer, sizeof(buffer), format, value.value._double)) >= 0))
                ||
-               (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintm(buffer, sizeof(buffer), w, f, value.value._double)) >= 0)
+               ((value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintm(buffer, sizeof(buffer), w, f, value.value._double)) >= 0))
             ) {
                 for(int i = 0; i < l; i++) if(buffer[i] == ',') buffer[i] = '.';
 
