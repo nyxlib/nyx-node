@@ -24,14 +24,6 @@ The `Nyx Node` library is written in C11 and only requires a POSIX or Arduino en
 
 [Jérôme ODIER](https://annuaire.in2p3.fr/4121-4467/jerome-odier) ([CNRS/LPSC](http://lpsc.in2p3.fr/))
 
-## A bit of history
-
-In Greek mythology, Nyx is the goddess and personification of the night.
-
-<div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx.png" style="width: 600px;" />
-</div>
-
 [Build Status]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml
 [Build Status img]:https://github.com/nyxlib/nyx-node/actions/workflows/deploy.yml/badge.svg
 
