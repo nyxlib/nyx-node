@@ -33,7 +33,7 @@ static const unsigned char BASE64_DECODE_TABLE[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_base64_encode(__NYX_NULLABLE__ size_t *result_len, __NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
+str_t nyx_base64_encode(size_t *result_len, size_t size, BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -56,8 +56,8 @@ str_t nyx_base64_encode(__NYX_NULLABLE__ size_t *result_len, __NYX_ZEROABLE__ si
     size_t div = size / 3;
     size_t mod = size % 3;
 
-    const unsigned char * restrict p = buff;
-    /*-*/ /*----*/ char * restrict q = str;
+    const unsigned char *p = buff;
+    /*-*/ /*----*/ char *q = str;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -122,7 +122,7 @@ str_t nyx_base64_encode(__NYX_NULLABLE__ size_t *result_len, __NYX_ZEROABLE__ si
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_base64_decode(__NYX_NULLABLE__ size_t *result_size, __NYX_ZEROABLE__ size_t len, __NYX_NULLABLE__ STR_t str)
+buff_t nyx_base64_decode(size_t *result_size, size_t len, STR_t str)
 {
     if(len == 0x00 || str == NULL)
     {
@@ -153,8 +153,8 @@ buff_t nyx_base64_decode(__NYX_NULLABLE__ size_t *result_size, __NYX_ZEROABLE__ 
         pad > 0 ? 1 : 0
     );
 
-    const /*----*/ char * restrict p = str;
-    /*-*/ unsigned char * restrict q = buff;
+    const /*----*/ char *p = str;
+    /*-*/ unsigned char *q = buff;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

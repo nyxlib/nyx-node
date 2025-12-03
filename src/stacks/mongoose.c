@@ -25,7 +25,7 @@ struct nyx_stack_s
 
     struct mg_connection *indi_connection;
     struct mg_connection *mqtt_connection;
-    struct mg_connection *redis_connection;
+    struct mg_connection *stream_connection;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -86,7 +86,7 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* INDI, MQTT & REDIS                                                                                                 */
+/* INDI, MQTT & STREAM                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
@@ -134,13 +134,13 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
+void internal_stream_pub(nyx_node_t *node, nyx_str_t message)
 {
-    if(node != NULL && node->stack->redis_connection != NULL)
+    if(node != NULL && node->stack->stream_connection != NULL)
     {
-        if(!mg_send(node->stack->redis_connection, message.buf, message.len))
+        if(!mg_send(node->stack->stream_connection, message.buf, message.len))
         {
-            NYX_LOG_ERROR("Cannot send message to Redis");
+            NYX_LOG_ERROR("Cannot send message to Nyx-Stream");
         }
     }
 }
@@ -234,7 +234,7 @@ static void _mqtt_handler(struct mg_connection *connection, int ev, void *ev_dat
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _redis_handler(struct mg_connection *connection, int ev, void *ev_data)
+static void _stream_handler(struct mg_connection *connection, int ev, void *ev_data)
 {
     nyx_node_t *node = connection->fn_data;
 
@@ -242,15 +242,13 @@ static void _redis_handler(struct mg_connection *connection, int ev, void *ev_da
     {
         NYX_LOG_INFO("%lu REDIS OPEN", connection->id);
 
-        node->stack->redis_connection = connection;
-
-        nyx_redis_auth(node, node->redis_username, node->redis_password);
+        node->stack->stream_connection = connection;
     }
     else if(ev == MG_EV_CLOSE)
     {
         NYX_LOG_INFO("%lu REDIS CLOSE", connection->id);
 
-        node->stack->redis_connection = NULL;
+        node->stack->stream_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
@@ -314,21 +312,21 @@ static void _retry_timer_handler(void *arg)
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* REDIS                                                                                                          */
+    /* STREAM                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(stack->redis_connection == NULL && node->redis_url != NULL && node->redis_url[0] != '\0')
+    if(stack->stream_connection == NULL && node->stream_url != NULL && node->stream_url[0] != '\0')
     {
-        stack->redis_connection = mg_connect(
+        stack->stream_connection = mg_connect(
             &stack->mgr,
-            node->redis_url,
-            _redis_handler,
+            node->stream_url,
+            _stream_handler,
             node
         );
 
-        if(stack->redis_connection != NULL)
+        if(stack->stream_connection != NULL)
         {
-            NYX_LOG_INFO("Redis support is enabled");
+            NYX_LOG_INFO("Nyx-Stream support is enabled");
         }
     }
 

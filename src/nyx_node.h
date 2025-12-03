@@ -2703,7 +2703,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @param name Property name.
  * @param label Property label.
  * @return The new property object.
- * @note If the property name ends with `.z`, the payload is automatically ZLib-compressed, see @ref nyx_stream_pub.
+ * @note If the property name ends with `.z`, the payload is automatically ZLib-compressed.
  */
 
 nyx_dict_t *nyx_stream_prop_new(
@@ -2736,17 +2736,14 @@ nyx_dict_t *nyx_stream_vector_new(
 /**
  * @brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
  * @param vector Nyx stream vector.
- * @param max_len Maximum number of entries to keep in the stream.
  * @param n_fields Number of field doublets (size, buffer), must be number of properties in the vector.
  * @param field_sizes Array of field sizes, on entry per property in the vector.
  * @param field_buffs Array of field buffers, on entry per property in the vector.
  * @return `true` if the provided fields match with the vector content.
- * @anchor nyx_stream_pub
  */
 
 bool nyx_stream_pub(
     const nyx_dict_t *vector,
-    size_t max_len,
     __NYX_ZEROABLE__ int n_fields,
     const size_t field_sizes[],
     const buff_t field_buffs[]
@@ -2863,12 +2860,10 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param vectors Array of vectors with `ǸULL` sentinel.
  * @param indi_url Optional INDI URL (e.g. tcp://0.0.0.0:7625).
  * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
+ * @param stream_url Optional Nyx-Stream URL (e.g. tcp://localhost:6379).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
  * @param mqtt_handler Optional MQTT handler.
- * @param redis_url Optional Redis URL (e.g. tcp://localhost:6379).
- * @param redis_username Optional Redis username.
- * @param redis_password Optional Redis password.
  * @param retry_ms Connect retry time [milliseconds].
  * @param enable_xml Enables the XML messages.
  * @return The new Nyx node.
@@ -2879,16 +2874,13 @@ __NYX_NULLABLE__ nyx_node_t *nyx_node_initialize(
     nyx_dict_t *vectors[],
     /**/
     __NYX_NULLABLE__ STR_t indi_url,
-    /**/
     __NYX_NULLABLE__ STR_t mqtt_url,
+    __NYX_NULLABLE__ STR_t stream_url,
+    /**/
     __NYX_NULLABLE__ STR_t mqtt_username,
     __NYX_NULLABLE__ STR_t mqtt_password,
     /**/
     __NYX_NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
-    /**/
-    __NYX_NULLABLE__ STR_t redis_url,
-    __NYX_NULLABLE__ STR_t redis_username,
-    __NYX_NULLABLE__ STR_t redis_password,
     /**/
     uint32_t retry_ms,
     bool enable_xml
@@ -3060,34 +3052,6 @@ void nyx_mqtt_pub(
     __NYX_ZEROABLE__ size_t message_size,
     __NYX_NULLABLE__ BUFF_t message_buff,
     int qos
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_node_t
- * @brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
- * @param node Nyx node.
- * @param device Device name.
- * @param stream Stream name.
- * @param max_len Maximum number of entries to keep in the stream.
- * @param n_fields Number of field triplets (name, size, buffer).
- * @param field_names Array of field names.
- * @param field_sizes Array of field sizes.
- * @param field_buffs Array of field buffers.
- * @warning Except if performance is critical, prefer using @ref nyx_stream_pub.
- * @note If a field name ends with `.z`, the payload is automatically ZLib-compressed.
- */
-
-void nyx_redis_pub(
-    nyx_node_t *node,
-    STR_t device,
-    STR_t stream,
-    size_t max_len,
-    __NYX_ZEROABLE__ int n_fields,
-    const str_t field_names[],
-    const size_t field_sizes[],
-    const buff_t field_buffs[]
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

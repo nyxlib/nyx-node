@@ -11,8 +11,8 @@
 
 nyx_dict_t *nyx_del_property_new(
     STR_t device,
-    __NYX_NULLABLE__ STR_t name,
-    __NYX_NULLABLE__ STR_t message
+    STR_t name,
+    STR_t message
 ) {
     nyx_dict_t *result = nyx_dict_new();
 

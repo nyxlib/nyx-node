@@ -13,7 +13,7 @@
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_prop_new(STR_t name, __NYX_NULLABLE__ STR_t label, __NYX_NULLABLE__ STR_t format, __NYX_NULLABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff, bool managed)
+nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size, BUFF_t buff, bool managed)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -51,7 +51,7 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, __NYX_NULLABLE__ STR_t label, __NYX_NU
 /* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_blob_prop_set_managed(nyx_dict_t *prop, __NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
+bool nyx_blob_prop_set_managed(nyx_dict_t *prop, size_t size, BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -64,7 +64,7 @@ bool nyx_blob_prop_set_managed(nyx_dict_t *prop, __NYX_ZEROABLE__ size_t size, _
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_blob_prop_set_unmanaged(nyx_dict_t *prop, __NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
+bool nyx_blob_prop_set_unmanaged(nyx_dict_t *prop, size_t size, BUFF_t buff)
 {
     if(size == 0x00 || buff == NULL)
     {
@@ -77,7 +77,7 @@ bool nyx_blob_prop_set_unmanaged(nyx_dict_t *prop, __NYX_ZEROABLE__ size_t size,
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_blob_prop_get(const nyx_dict_t *prop, __NYX_NULLABLE__ size_t *size, __NYX_NULLABLE__ buff_t *buff)
+void nyx_blob_prop_get(const nyx_dict_t *prop, size_t *size, buff_t *buff)
 {
     nyx_string_get_buff((nyx_string_t *) nyx_dict_get(prop, "$"), size, buff);
 }
@@ -92,7 +92,7 @@ nyx_dict_t *nyx_blob_vector_new(
     nyx_state_t state,
     nyx_perm_t perm,
     nyx_dict_t *props[],
-    __NYX_NULLABLE__ const nyx_opts_t *opts
+    const nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 

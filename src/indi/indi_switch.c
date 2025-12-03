@@ -13,7 +13,7 @@
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_switch_prop_new(STR_t name, __NYX_NULLABLE__ STR_t label, nyx_onoff_t value)
+nyx_dict_t *nyx_switch_prop_new(STR_t name, STR_t label, nyx_onoff_t value)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -63,7 +63,7 @@ nyx_dict_t *nyx_switch_vector_new(
     nyx_perm_t perm,
     nyx_rule_t rule,
     nyx_dict_t *props[],
-    __NYX_NULLABLE__ const nyx_opts_t *opts
+    const nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -84,7 +84,7 @@ static nyx_xmldoc_t *transform(const nyx_object_t *dict) // NOLINT(misc-no-recur
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_xmldoc_t *nyx_object_to_xmldoc(__NYX_NULLABLE__ const nyx_object_t *object)
+nyx_xmldoc_t *nyx_object_to_xmldoc(const nyx_object_t *object)
 {
     return object != NULL ? transform(object) : NULL;
 }

@@ -681,7 +681,7 @@ _err:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ nyx_object_t *nyx_object_parse_buff(__NYX_ZEROABLE__ size_t size, __NYX_NULLABLE__ BUFF_t buff)
+nyx_object_t *nyx_object_parse_buff(size_t size, BUFF_t buff)
 {
     if(size == 0x00
        ||
@@ -747,7 +747,7 @@ __NYX_NULLABLE__ nyx_object_t *nyx_object_parse_buff(__NYX_ZEROABLE__ size_t siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ nyx_object_t *nyx_object_parse(__NYX_NULLABLE__ STR_t string)
+nyx_object_t *nyx_object_parse(STR_t string)
 {
     return nyx_object_parse_buff(
         strlen(string),

@@ -26,7 +26,7 @@ nyx_xmldoc_t *nyx_xmldoc_new(nyx_xml_type_t type)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void nyx_xmldoc_delete_all(__NYX_NULLABLE__ nyx_xmldoc_t *xmldoc, bool itself, bool children, bool attributes) // NOLINT(*-no-recursion)
+static void nyx_xmldoc_delete_all(nyx_xmldoc_t *xmldoc, bool itself, bool children, bool attributes) // NOLINT(*-no-recursion)
 {
     if(xmldoc == NULL)
     {
@@ -83,21 +83,21 @@ static void nyx_xmldoc_delete_all(__NYX_NULLABLE__ nyx_xmldoc_t *xmldoc, bool it
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_free(__NYX_NULLABLE__ nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
+void nyx_xmldoc_free(nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 {
     nyx_xmldoc_delete_all(xmldoc, true, true, true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc)
+str_t nyx_xmldoc_get_name(const nyx_xmldoc_t *xmldoc)
 {
     return xmldoc->name;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ STR_t name)
+void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, STR_t name)
 {
     if(xmldoc->name != NULL)
     {
@@ -109,7 +109,7 @@ void nyx_xmldoc_set_name(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ STR_t name)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
+str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
 {
     for(nyx_xmldoc_t *curr_child = xmldoc->children, *next_child; curr_child; curr_child = next_child)
     {
@@ -128,7 +128,7 @@ __NYX_NULLABLE__ str_t nyx_xmldoc_get_content(const nyx_xmldoc_t *xmldoc)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ STR_t data)
+void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, STR_t data)
 {
     nyx_xmldoc_delete_all(xmldoc, false, true, false);
 
@@ -145,7 +145,7 @@ void nyx_xmldoc_set_content(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ STR_t data)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ nyx_xmldoc_t *child)
+void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, nyx_xmldoc_t *child)
 {
     if(child == NULL)
     {
@@ -212,7 +212,7 @@ void nyx_xmldoc_add_child(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ nyx_xmldoc_t *c
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_add_attribute(nyx_xmldoc_t *xmldoc, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t data)
+void nyx_xmldoc_add_attribute(nyx_xmldoc_t *xmldoc, STR_t name, STR_t data)
 {
     if(name != NULL
        &&

@@ -188,7 +188,7 @@ static void timer_stream(__NYX_UNUSED__ void *arg)
     size_t sizes[] = {sizeof(s_samp_rate), sizeof(s_frequency), n * sizeof(float)};
     BUFF_t buffs[] = {&s_samp_rate       , &s_frequency       , spectrum         };
 
-    nyx_stream_pub(stream_vector, 100, 3, sizes, buffs);
+    nyx_stream_pub(stream_vector, 3, sizes, buffs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -324,12 +324,10 @@ int main()
         vector_list,
         "tcp://0.0.0.0:7625",
         getenv("MQTT_URL"),
+        getenv("STREAM_URL"),
         getenv("MQTT_USERNAME"),
         getenv("MQTT_PASSWORD"),
         NULL,
-        getenv("REDIS_URL"),
-        getenv("REDIS_USERNAME"),
-        getenv("REDIS_PASSWORD"),
         3000,
         true
     );

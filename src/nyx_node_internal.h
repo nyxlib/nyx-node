@@ -403,16 +403,11 @@ struct nyx_node_s
     /**/
 
     __NYX_NULLABLE__ str_t indi_url;
-//  __NYX_NULLABLE__ str_t indi_username;
-//  __NYX_NULLABLE__ str_t indi_password;
-
     __NYX_NULLABLE__ str_t mqtt_url;
+    __NYX_NULLABLE__ str_t stream_url;
+
     __NYX_NULLABLE__ str_t mqtt_username;
     __NYX_NULLABLE__ str_t mqtt_password;
-
-    __NYX_NULLABLE__ str_t redis_url;
-    __NYX_NULLABLE__ str_t redis_username;
-    __NYX_NULLABLE__ str_t redis_password;
 
     /**/
 
@@ -470,7 +465,7 @@ void internal_mqtt_pub(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_redis_pub(
+void internal_stream_pub(
     nyx_node_t *node,
     nyx_str_t message
 );
@@ -492,16 +487,6 @@ void internal_stack_initialize(
 
 void internal_stack_finalize(
     nyx_node_t *node
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* REDIS                                                                                                              */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-void nyx_redis_auth(
-    nyx_node_t *node,
-    __NYX_NULLABLE__ STR_t username,
-    __NYX_NULLABLE__ STR_t password
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

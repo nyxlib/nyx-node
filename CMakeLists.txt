@@ -64,10 +64,10 @@ set(SOURCE_FILES
     src/nyx_node_internal.h
     #
     src/utils/addr.c
-    src/utils/base64.c
-    src/utils/zlib.c
-    src/utils/hash32.c
     src/utils/utf8.c
+    src/utils/base64.c
+    src/utils/hash.c
+    src/utils/zlib.c
     #
     src/log.c
     src/string_builder.c
@@ -103,7 +103,6 @@ set(SOURCE_FILES
     src/transform_xml_to_json.c
     #
     src/mqtt.c
-    src/redis.c
     #
     src/node.c
 )

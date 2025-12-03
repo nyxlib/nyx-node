@@ -82,7 +82,7 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _get_properties(nyx_node_t *node, __NYX_NULLABLE__ const nyx_dict_t *dict)
+static void _get_properties(nyx_node_t *node, const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
@@ -153,7 +153,7 @@ static void _get_properties(nyx_node_t *node, __NYX_NULLABLE__ const nyx_dict_t 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static int _get_client_index(nyx_node_t *node, __NYX_NULLABLE__ STR_t client)
+static int _get_client_index(nyx_node_t *node, STR_t client)
 {
     if(client == NULL)
     {
@@ -914,17 +914,14 @@ nyx_node_t *nyx_node_initialize(
     STR_t node_id,
     nyx_dict_t *vectors[],
     /**/
-    __NYX_NULLABLE__ STR_t indi_url,
+    STR_t indi_url,
+    STR_t mqtt_url,
+    STR_t stream_url,
     /**/
-    __NYX_NULLABLE__ STR_t mqtt_url,
-    __NYX_NULLABLE__ STR_t mqtt_username,
-    __NYX_NULLABLE__ STR_t mqtt_password,
+    STR_t mqtt_username,
+    STR_t mqtt_password,
     /**/
-    __NYX_NULLABLE__ nyx_mqtt_handler_t mqtt_handler,
-    /**/
-    __NYX_NULLABLE__ STR_t redis_url,
-    __NYX_NULLABLE__ STR_t redis_username,
-    __NYX_NULLABLE__ STR_t redis_password,
+    nyx_mqtt_handler_t mqtt_handler,
     /**/
     uint32_t retry_ms,
     bool enable_xml
@@ -990,16 +987,11 @@ nyx_node_t *nyx_node_initialize(
     /*----------------------------------------------------------------------------------------------------------------*/
 
     node->indi_url = _safe_dup(indi_url);
-    ////->indi_username = _safe_dup(indi_username);
-    ////->indi_password = _safe_dup(indi_password);
-
     node->mqtt_url = _safe_dup(mqtt_url);
+    node->stream_url = _safe_dup(stream_url);
+
     node->mqtt_username = _safe_dup(mqtt_username);
     node->mqtt_password = _safe_dup(mqtt_password);
-
-    node->redis_url = _safe_dup(redis_url);
-    node->redis_username = _safe_dup(redis_username);
-    node->redis_password = _safe_dup(redis_password);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1066,16 +1058,11 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_memory_free(node->indi_url);
-        ///_memory_free(node->indi_username);
-        ///_memory_free(node->indi_password);
-
         nyx_memory_free(node->mqtt_url);
+        nyx_memory_free(node->stream_url);
+
         nyx_memory_free(node->mqtt_username);
         nyx_memory_free(node->mqtt_password);
-
-        nyx_memory_free(node->redis_url);
-        nyx_memory_free(node->redis_username);
-        nyx_memory_free(node->redis_password);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -1103,7 +1090,7 @@ static bool _notify(nyx_object_t *object)
 {
     if(object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
     {
-        nyx_dict_t *vector = (nyx_dict_t *) object;
+        const nyx_dict_t *vector = (nyx_dict_t *) object;
 
         STR_t tag = nyx_dict_get_string(vector, "<>");
 
@@ -1165,7 +1152,7 @@ static bool _notify(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_node_notify(__NYX_NULLABLE__ nyx_object_t *object)
+bool nyx_node_notify(nyx_object_t *object)
 {
     for(; object != NULL; object = object->parent)
     {
@@ -1180,7 +1167,7 @@ bool nyx_node_notify(__NYX_NULLABLE__ nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _device_onoff(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message, nyx_onoff_t onoff)
+static void _device_onoff(nyx_node_t *node, STR_t device, STR_t name, STR_t message, nyx_onoff_t onoff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1247,21 +1234,21 @@ static void _device_onoff(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_enable(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message)
+void nyx_node_enable(nyx_node_t *node, STR_t device, STR_t name, STR_t message)
 {
     _device_onoff(node, device, name, message, NYX_ONOFF_ON);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_disable(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message)
+void nyx_node_disable(nyx_node_t *node, STR_t device, STR_t name, STR_t message)
 {
     _device_onoff(node, device, name, message, NYX_ONOFF_OFF);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_message(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t message)
+void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
 {
     if(node != NULL)
     {
@@ -1275,7 +1262,7 @@ void nyx_node_send_message(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_del_property(nyx_node_t *node, STR_t device, __NYX_NULLABLE__ STR_t name, __NYX_NULLABLE__ STR_t message)
+void nyx_node_send_del_property(nyx_node_t *node, STR_t device, STR_t name, STR_t message)
 {
     if(node != NULL)
     {

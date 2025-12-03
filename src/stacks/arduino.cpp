@@ -174,7 +174,7 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, __N
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_redis_pub(nyx_node_t *node, nyx_str_t message)
+void internal_stream_pub(nyx_node_t *node, nyx_str_t message)
 {
     auto stack = node->stack;
 

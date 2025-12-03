@@ -69,7 +69,7 @@ bool nyx_memory_finalize(void)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-size_t nyx_memory_free(__NYX_NULLABLE__ buff_t buff)
+size_t nyx_memory_free(buff_t buff)
 {
     if(buff == NULL)
     {
@@ -107,7 +107,7 @@ size_t nyx_memory_free(__NYX_NULLABLE__ buff_t buff)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_memory_alloc(__NYX_ZEROABLE__ size_t size)
+buff_t nyx_memory_alloc(size_t size)
 {
     if(size == 0x00)
     {
@@ -142,7 +142,7 @@ buff_t nyx_memory_alloc(__NYX_ZEROABLE__ size_t size)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-buff_t nyx_memory_realloc(__NYX_NULLABLE__ buff_t buff, __NYX_ZEROABLE__ size_t size)
+buff_t nyx_memory_realloc(buff_t buff, size_t size)
 {
     if(buff == NULL) {
         return nyx_memory_alloc(size);
@@ -210,7 +210,7 @@ str_t nyx_bool_dup(bool b)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ str_t nyx_double_dup(double d)
+str_t nyx_double_dup(double d)
 {
     if(!isnan(d))
     {
@@ -226,7 +226,7 @@ __NYX_NULLABLE__ str_t nyx_double_dup(double d)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ str_t nyx_string_dup(__NYX_NULLABLE__ STR_t s)
+str_t nyx_string_dup(STR_t s)
 {
     if(s != NULL)
     {
@@ -246,7 +246,7 @@ __NYX_NULLABLE__ str_t nyx_string_dup(__NYX_NULLABLE__ STR_t s)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_NULLABLE__ str_t nyx_string_ndup(__NYX_NULLABLE__ STR_t s, __NYX_ZEROABLE__ size_t n)
+str_t nyx_string_ndup(STR_t s, size_t n)
 {
     if(s != NULL)
     {
@@ -267,9 +267,9 @@ __NYX_NULLABLE__ str_t nyx_string_ndup(__NYX_NULLABLE__ STR_t s, __NYX_ZEROABLE_
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_str_t nyx_str_s(__NYX_NULLABLE__ STR_t s)
+nyx_str_t nyx_str_s(STR_t s)
 {
-    nyx_str_t str = {(char *) s, s == NULL ? 0x0000000 : strlen(s)};
+    nyx_str_t str = {(str_t) s, s == NULL ? 0x0000000 : strlen(s)};
 
     return str;
 }
@@ -278,7 +278,7 @@ nyx_str_t nyx_str_s(__NYX_NULLABLE__ STR_t s)
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_free(__NYX_NULLABLE__ nyx_object_t *object)
+void nyx_object_free(nyx_object_t *object)
 {
     if(object == NULL)
     {
@@ -323,7 +323,7 @@ void nyx_object_free(__NYX_NULLABLE__ nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_object_equal(__NYX_NULLABLE__ const nyx_object_t *object1, __NYX_NULLABLE__ const nyx_object_t *object2)
+bool nyx_object_equal(const nyx_object_t *object1, const nyx_object_t *object2)
 {
     if(object1 == NULL || object2 == NULL)
     {
@@ -355,13 +355,13 @@ bool nyx_object_equal(__NYX_NULLABLE__ const nyx_object_t *object1, __NYX_NULLAB
             return true;
 
         case NYX_TYPE_NUMBER:
-            return ((nyx_number_t *) object1)->value == ((nyx_number_t *) object2)->value;
+            return ((const nyx_number_t *) object1)->value == ((const nyx_number_t *) object2)->value;
 
         case NYX_TYPE_BOOLEAN:
-            return ((nyx_boolean_t *) object1)->value == ((nyx_boolean_t *) object2)->value;
+            return ((const nyx_boolean_t *) object1)->value == ((const nyx_boolean_t *) object2)->value;
 
         case NYX_TYPE_STRING:
-            return strcmp(((nyx_string_t *) object1)->value, ((nyx_string_t *) object2)->value) == 0;
+            return strcmp(((const nyx_string_t *) object1)->value, ((const nyx_string_t *) object2)->value) == 0;
 
         case NYX_TYPE_LIST:
         case NYX_TYPE_DICT:
@@ -386,7 +386,7 @@ bool nyx_object_equal(__NYX_NULLABLE__ const nyx_object_t *object1, __NYX_NULLAB
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_object_to_string(__NYX_NULLABLE__ const nyx_object_t *object)
+str_t nyx_object_to_string(const nyx_object_t *object)
 {
     if(object == NULL)
     {
@@ -403,22 +403,22 @@ str_t nyx_object_to_string(__NYX_NULLABLE__ const nyx_object_t *object)
     switch(object->type)
     {
         case NYX_TYPE_NULL:
-            return nyx_null_to_string((nyx_null_t *) object);
+            return nyx_null_to_string((const nyx_null_t *) object);
 
         case NYX_TYPE_NUMBER:
-            return nyx_number_to_string((nyx_number_t *) object);
+            return nyx_number_to_string((const nyx_number_t *) object);
 
         case NYX_TYPE_BOOLEAN:
-            return nyx_boolean_to_string((nyx_boolean_t *) object);
+            return nyx_boolean_to_string((const nyx_boolean_t *) object);
 
         case NYX_TYPE_STRING:
-            return nyx_string_to_string((nyx_string_t *) object);
+            return nyx_string_to_string((const nyx_string_t *) object);
 
         case NYX_TYPE_LIST:
-            return nyx_list_to_string((nyx_list_t *) object);
+            return nyx_list_to_string((const nyx_list_t *) object);
 
         case NYX_TYPE_DICT:
-            return nyx_dict_to_string((nyx_dict_t *) object);
+            return nyx_dict_to_string((const nyx_dict_t *) object);
 
         default:
             NYX_LOG_FATAL("Internal error");
@@ -429,7 +429,7 @@ str_t nyx_object_to_string(__NYX_NULLABLE__ const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-str_t nyx_object_to_cstring(__NYX_NULLABLE__ const nyx_object_t *object)
+str_t nyx_object_to_cstring(const nyx_object_t *object)
 {
     if(object == NULL)
     {
@@ -446,22 +446,22 @@ str_t nyx_object_to_cstring(__NYX_NULLABLE__ const nyx_object_t *object)
     switch(object->type)
     {
         case NYX_TYPE_NULL:
-            return nyx_null_to_string((nyx_null_t *) object);
+            return nyx_null_to_string((const nyx_null_t *) object);
 
         case NYX_TYPE_NUMBER:
-            return nyx_number_to_string((nyx_number_t *) object);
+            return nyx_number_to_string((const nyx_number_t *) object);
 
         case NYX_TYPE_BOOLEAN:
-            return nyx_boolean_to_string((nyx_boolean_t *) object);
+            return nyx_boolean_to_string((const nyx_boolean_t *) object);
 
         case NYX_TYPE_STRING:
-            return nyx_string_to_cstring((nyx_string_t *) object);
+            return nyx_string_to_cstring((const nyx_string_t *) object);
 
         case NYX_TYPE_LIST:
-            return nyx_list_to_string((nyx_list_t *) object);
+            return nyx_list_to_string((const nyx_list_t *) object);
 
         case NYX_TYPE_DICT:
-            return nyx_dict_to_string((nyx_dict_t *) object);
+            return nyx_dict_to_string((const nyx_dict_t *) object);
 
         default:
             NYX_LOG_FATAL("Internal error");

@@ -13,7 +13,7 @@
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_stream_prop_new(STR_t name, __NYX_NULLABLE__ STR_t label)
+nyx_dict_t *nyx_stream_prop_new(STR_t name, STR_t label)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -43,7 +43,7 @@ nyx_dict_t *nyx_stream_vector_new(
     STR_t name,
     nyx_state_t state,
     nyx_dict_t *props[],
-    __NYX_NULLABLE__ const nyx_opts_t *opts
+    const nyx_opts_t *opts
 ) {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -91,69 +91,7 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 /* PUBLISHER                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _get_field_names(STR_t field_names[], int n_fields, const nyx_dict_t *vector)
-{
-    nyx_object_t *list = nyx_dict_get(vector, "children");
-
-    if(list != NULL && list->type == NYX_TYPE_LIST)
-    {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        int expected_n_fields = (int) nyx_list_size((nyx_list_t *) list);
-
-        if(expected_n_fields != n_fields)
-        {
-            NYX_LOG_ERROR("%d expected fields but %d provided", expected_n_fields, n_fields);
-
-            return false;
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        size_t idx;
-
-        nyx_object_t *dict;
-
-        for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &dict);)
-        {
-            if(dict->type == NYX_TYPE_DICT)
-            {
-                nyx_object_t *string = nyx_dict_get((nyx_dict_t *) dict, "@name");
-
-                if(string != NULL && string->type == NYX_TYPE_STRING)
-                {
-                    field_names[idx] = nyx_string_get((nyx_string_t *) string);
-                }
-                else
-                {
-                    NYX_LOG_ERROR("Invalid stream property");
-
-                    return false;
-                }
-            }
-            else
-            {
-                NYX_LOG_ERROR("Invalid stream property");
-
-                return false;
-            }
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    }
-    else
-    {
-        NYX_LOG_ERROR("Invalid stream vector");
-
-        return false;
-    }
-
-    return true;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, int n_fields, const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */
@@ -168,7 +106,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, int n_fields, cons
     /* RETRIEVE INFORMATION                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_node_t *node = vector->base.node;
+    const nyx_node_t *node = vector->base.node;
 
     STR_t device = nyx_dict_get_string(vector, "@device");
     STR_t stream = nyx_dict_get_string(vector,  "@name" );
@@ -181,28 +119,10 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t max_len, int n_fields, cons
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    STR_t field_names[n_fields];
-
-    if(!_get_field_names(field_names, n_fields, vector))
-    {
-        return false;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
     /* PUBLISH STREAM                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_redis_pub(
-        node,
-        device,
-        stream,
-        max_len,
-        n_fields,
-        field_names,
-        field_sizes,
-        field_buffs
-    );
+    /* TODO */
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
