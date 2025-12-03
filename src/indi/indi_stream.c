@@ -6,6 +6,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <string.h>
 
 #include "../nyx_node_internal.h"
 
@@ -91,6 +92,10 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 /* PUBLISHER                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define NYX_STREAM_MAGIC 0x5358594EU
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -99,14 +104,14 @@ bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_s
 
     if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
     {
-        return true;
+        //return true;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* RETRIEVE INFORMATION                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const nyx_node_t *node = vector->base.node;
+    nyx_node_t *node = vector->base.node;
 
     STR_t device = nyx_dict_get_string(vector, "@device");
     STR_t stream = nyx_dict_get_string(vector,  "@name" );
@@ -122,7 +127,40 @@ bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_s
     /* PUBLISH STREAM                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    /* TODO */
+    size_t hash_size = strlen(device)
+                       + 1 +
+                       strlen(stream)
+    ;
+
+    char hash_buff[hash_size + 1];
+
+    snprintf(hash_buff, hash_size + 1, "%s/%s", device, stream);
+
+    uint32_t hash = nyx_hash(hash_size, hash_buff, NYX_STREAM_MAGIC);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uint32_t size = 0;
+
+    for(int i = 0; i < n_fields; i++)
+    {
+        size += (uint32_t) field_sizes[i];
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    uint32_t header[3] = {
+        NYX_STREAM_MAGIC,
+        hash,
+        size,
+    };
+
+    internal_stream_pub(node, NYX_STR_S(header, sizeof(header)));
+
+    for(int i = 0; i < n_fields; i++)
+    {
+        internal_stream_pub(node, NYX_STR_S(field_buffs[i], field_sizes[i]));
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

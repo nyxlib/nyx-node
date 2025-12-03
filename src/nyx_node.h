@@ -264,7 +264,7 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
  * \return The computed 32-bit hash.
  */
 
-uint32_t nyx_hash32(
+uint32_t nyx_hash(
     __NYX_ZEROABLE__ size_t size,
     __NYX_NULLABLE__ BUFF_t buff,
     uint32_t seed

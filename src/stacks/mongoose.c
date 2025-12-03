@@ -240,19 +240,19 @@ static void _stream_handler(struct mg_connection *connection, int ev, void *ev_d
 
     /**/ if(ev == MG_EV_OPEN)
     {
-        NYX_LOG_INFO("%lu REDIS OPEN", connection->id);
+        NYX_LOG_INFO("%lu STREAM OPEN", connection->id);
 
         node->stack->stream_connection = connection;
     }
     else if(ev == MG_EV_CLOSE)
     {
-        NYX_LOG_INFO("%lu REDIS CLOSE", connection->id);
+        NYX_LOG_INFO("%lu STREAM CLOSE", connection->id);
 
         node->stack->stream_connection = NULL;
     }
     else if(ev == MG_EV_ERROR)
     {
-        NYX_LOG_ERROR("%lu REDIS ERROR %s", connection->id, (STR_t) ev_data);
+        NYX_LOG_ERROR("%lu STREAM ERROR %s", connection->id, (STR_t) ev_data);
     }
     else if(ev == MG_EV_READ)
     {

@@ -162,7 +162,7 @@ static int _get_client_index(nyx_node_t *node, STR_t client)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t hash = nyx_hash32(strlen(client), client, NYX_OBJECT_MAGIC);
+    uint32_t hash = nyx_hash(strlen(client), client, NYX_OBJECT_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -424,7 +424,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                     bool vector_modified = false;
 
-                    uint32_t hash = nyx_hash32(strlen(tag2), tag2, 0);
+                    uint32_t hash = nyx_hash(strlen(tag2), tag2, 0);
 
                     /*------------------------------------------------------------------------------------------------*/
 
