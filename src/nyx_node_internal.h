@@ -404,7 +404,7 @@ struct nyx_node_s
 
     __NYX_NULLABLE__ str_t indi_url;
     __NYX_NULLABLE__ str_t mqtt_url;
-    __NYX_NULLABLE__ str_t stream_url;
+    __NYX_NULLABLE__ str_t nss_url;
 
     __NYX_NULLABLE__ str_t mqtt_username;
     __NYX_NULLABLE__ str_t mqtt_password;

@@ -231,12 +231,10 @@ public:
             vectors.data(),
             indiURL,
             mqttURL,
+            nssURL,
             mqttUsername,
             mqttPassword,
             nullptr,
-            redisURL,
-            redisUsername,
-            redisPassword,
             3000,
             true
         );
@@ -274,14 +272,11 @@ protected:
     /*----------------------------------------------------------------------------------------------------------------*/
 
     virtual STR_t indiURL() const = 0;
-
     virtual STR_t mqttURL() const = 0;
+    virtual STR_t nssURL() const = 0;
+
     virtual STR_t mqttUsername() const = 0;
     virtual STR_t mqttPassword() const = 0;
-
-    virtual STR_t redisURL() const = 0;
-    virtual STR_t redisUsername() const = 0;
-    virtual STR_t redisPassword() const = 0;
 
     virtual int nodeTimeoutMS() const = 0;
 

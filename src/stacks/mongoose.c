@@ -315,11 +315,11 @@ static void _retry_timer_handler(void *arg)
     /* STREAM                                                                                                         */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(stack->stream_connection == NULL && node->stream_url != NULL && node->stream_url[0] != '\0')
+    if(stack->stream_connection == NULL && node->nss_url != NULL && node->nss_url[0] != '\0')
     {
         stack->stream_connection = mg_connect(
             &stack->mgr,
-            node->stream_url,
+            node->nss_url,
             _stream_handler,
             node
         );

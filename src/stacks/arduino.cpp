@@ -278,7 +278,7 @@ static void _retry_timer_handler(void *arg)
     /* REDIS                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->stream_url != nullptr && node->stream_url[0] != '\0' && !stack->stream_client.connected())
+    if(node->nss_url != nullptr && node->nss_url[0] != '\0' && !stack->stream_client.connected())
     {
         if(stack->stream_client.connect(stack->stream_ip, stack->stream_port))
         {
@@ -417,9 +417,9 @@ void internal_stack_initialize(nyx_node_t *node, uint32_t retry_ms)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->stream_url != nullptr && node->stream_url[0] != '\0')
+    if(node->nss_url != nullptr && node->nss_url[0] != '\0')
     {
-        if(_parse_host_port(node->stream_url, stack->stream_ip, stack->stream_port, 8888))
+        if(_parse_host_port(node->nss_url, stack->stream_ip, stack->stream_port, 8888))
         {
             NYX_LOG_INFO("Stream ip: %d:%d:%d:%d, port: %d",
                 stack->stream_ip[0],
@@ -433,7 +433,7 @@ void internal_stack_initialize(nyx_node_t *node, uint32_t retry_ms)
         {
             NYX_LOG_ERROR("Cannot initialize Nyx-Stream client: bad address");
 
-            node->stream_url = nullptr;
+            node->nss_url = nullptr;
         }
     }
 

@@ -2865,7 +2865,7 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param vectors Array of vectors with `ǸULL` sentinel.
  * @param indi_url Optional INDI URL (e.g. tcp://0.0.0.0:7625).
  * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
- * @param stream_url Optional Nyx-Stream URL (e.g. tcp://localhost:6379).
+ * @param nss_url Optional Nyx-Stream URL (e.g. tcp://localhost:6379).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
  * @param mqtt_handler Optional MQTT handler.
@@ -2880,7 +2880,7 @@ __NYX_NULLABLE__ nyx_node_t *nyx_node_initialize(
     /**/
     __NYX_NULLABLE__ STR_t indi_url,
     __NYX_NULLABLE__ STR_t mqtt_url,
-    __NYX_NULLABLE__ STR_t stream_url,
+    __NYX_NULLABLE__ STR_t nss_url,
     /**/
     __NYX_NULLABLE__ STR_t mqtt_username,
     __NYX_NULLABLE__ STR_t mqtt_password,
