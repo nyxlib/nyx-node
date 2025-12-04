@@ -89,11 +89,9 @@ public:
         STR_t prog,
         STR_t indiURL,
         STR_t mqttURL,
-        STR_t redisURL,
+        STR_t nssURL,
         STR_t mqttUsername,
         STR_t mqttPassword,
-        STR_t redisUsername,
-        STR_t redisPassword,
         int node_timeout
     ) {
         std::fprintf(
@@ -101,23 +99,19 @@ public:
             "Usage: %s [options]\n"
             "\n"
             "Options:\n"
-            "  -i URL   INDI server URL (default: %s)\n"
-            "  -m URL   MQTT broker URL (default: %s)\n"
-            "  -r URL   Redis server URL (default: %s)\n"
-            "  -u USER  MQTT username (default: %s)\n"
-            "  -p PASS  MQTT password (default: %s)\n"
-            "  -U USER  Redis username (default: %s)\n"
-            "  -P PASS  Redis password (default: %s)\n"
-            "  -t MS    Node poll timeout (default: %d)\n"
-            "  -h       Show this help and exit\n",
+            "  -i <url>       INDI server URL (default: %s)\n"
+            "  -m <url>       MQTT broker URL (default: %s)\n"
+            "  -s <url>       Stream server URL (default: %s)\n"
+            "  -u <username>  MQTT username (default: %s)\n"
+            "  -p <password>  MQTT password (default: %s)\n"
+            "  -t <ms>        Node poll timeout (default: %d)\n"
+            "  -h             Show this help and exit\n",
             prog,
             indiURL != NULL && indiURL[0] != '\0' ? indiURL : "none",
             mqttURL != NULL && mqttURL[0] != '\0' ? mqttURL : "none",
-            redisURL != NULL && redisURL[0] != '\0' ? redisURL : "none",
+            nssURL != NULL && nssURL[0] != '\0' ? nssURL : "none",
             mqttUsername != NULL && mqttUsername[0] != '\0' ? mqttUsername : "none",
             mqttPassword != NULL && mqttPassword[0] != '\0' ? mqttPassword : "none",
-            redisUsername != NULL && redisUsername[0] != '\0' ? redisUsername : "none",
-            redisPassword != NULL && redisPassword[0] != '\0' ? redisPassword : "none",
             node_timeout
         );
     }
@@ -130,12 +124,10 @@ public:
 
         STR_t indiURL = this->indiURL();
         STR_t mqttURL = this->mqttURL();
-        STR_t redisURL = this->redisURL();
+        STR_t nssURL = this->nssURL();
 
         STR_t mqttUsername = this->mqttUsername();
         STR_t mqttPassword = this->mqttPassword();
-        STR_t redisUsername = this->redisUsername();
-        STR_t redisPassword = this->redisPassword();
 
         int nodeTimeoutMS = this->nodeTimeoutMS();
 
@@ -143,7 +135,7 @@ public:
 
         int opt;
 
-        while((opt = getopt(argc, argv, "i:m:r:u:p:U:P:t:h")) != -1)
+        while((opt = getopt(argc, argv, "i:m:s:u:p:t:h")) != -1)
         {
             switch (opt)
             {
@@ -153,20 +145,14 @@ public:
             case 'm':
                 mqttURL = optarg;
                 break;
-            case 'r':
-                redisURL = optarg;
+            case 's':
+                nssURL = optarg;
                 break;
             case 'u':
                 mqttUsername = optarg;
                 break;
             case 'p':
                 mqttPassword = optarg;
-                break;
-            case 'U':
-                redisUsername = optarg;
-                break;
-            case 'P':
-                redisPassword = optarg;
                 break;
             case 't':
                 nodeTimeoutMS = std::atoi(optarg);
@@ -177,11 +163,9 @@ public:
                     argv[0],
                     indiURL,
                     mqttURL,
-                    redisURL,
+                    nssURL,
                     mqttUsername,
                     mqttPassword,
-                    redisUsername,
-                    redisPassword,
                     nodeTimeoutMS
                 );
 
