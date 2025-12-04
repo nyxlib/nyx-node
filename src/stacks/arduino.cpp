@@ -49,12 +49,12 @@ struct nyx_stack_s
 
     #ifdef NYX_HAS_WIFI
     WiFiClient tcp_client;
-    WiFiClient redis_client;
+    WiFiClient stream_client;
     #endif
 
     #ifdef NYX_HAS_ETHERNET
     EthernetClient tcp_client;
-    EthernetClient redis_client;
+    EthernetClient stream_client;
     #endif
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -63,8 +63,8 @@ struct nyx_stack_s
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    IPAddress redis_ip;
-    int redis_port = 6379;
+    IPAddress stream_ip;
+    int stream_port = 6379;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -178,9 +178,9 @@ void internal_stream_pub(nyx_node_t *node, nyx_str_t message)
 {
     auto stack = node->stack;
 
-    if(stack->redis_client.connected())
+    if(stack->stream_client.connected())
     {
-        stack->redis_client.write(message.buf, message.len);
+        stack->stream_client.write(message.buf, message.len);
     }
 }
 
@@ -278,17 +278,11 @@ static void _retry_timer_handler(void *arg)
     /* REDIS                                                                                                          */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->redis_url != nullptr && node->redis_url[0] != '\0' && !stack->redis_client.connected())
+    if(node->stream_url != nullptr && node->stream_url[0] != '\0' && !stack->stream_client.connected())
     {
-        if(stack->redis_client.connect(stack->redis_ip, stack->redis_port))
+        if(stack->stream_client.connect(stack->stream_ip, stack->stream_port))
         {
-            NYX_LOG_INFO("Redis support is enabled");
-
-            nyx_redis_auth(
-                node,
-                node->redis_username,
-                node->redis_password
-            );
+            NYX_LOG_INFO("Nyx-Stream support is enabled");
         }
     }
 
@@ -423,23 +417,23 @@ void internal_stack_initialize(nyx_node_t *node, uint32_t retry_ms)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(node->redis_url != nullptr && node->redis_url[0] != '\0')
+    if(node->stream_url != nullptr && node->stream_url[0] != '\0')
     {
-        if(_parse_host_port(node->redis_url, stack->redis_ip, stack->redis_port, 6379))
+        if(_parse_host_port(node->stream_url, stack->stream_ip, stack->stream_port, 8888))
         {
-            NYX_LOG_INFO("Redis ip: %d:%d:%d:%d, port: %d",
-                stack->redis_ip[0],
-                stack->redis_ip[1],
-                stack->redis_ip[2],
-                stack->redis_ip[3],
-                stack->redis_port
+            NYX_LOG_INFO("Stream ip: %d:%d:%d:%d, port: %d",
+                stack->stream_ip[0],
+                stack->stream_ip[1],
+                stack->stream_ip[2],
+                stack->stream_ip[3],
+                stack->stream_port
             );
         }
         else
         {
-            NYX_LOG_ERROR("Cannot initialize Redis client: bad address");
+            NYX_LOG_ERROR("Cannot initialize Nyx-Stream client: bad address");
 
-            node->redis_url = nullptr;
+            node->stream_url = nullptr;
         }
     }
 
