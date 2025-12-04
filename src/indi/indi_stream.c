@@ -222,7 +222,16 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /* PUBLISH STREAM                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t hash = nyx_hash(strlen(stream), buffof(stream), NYX_STREAM_MAGIC);
+    size_t path_size = strlen(device)
+                       + 1 +
+                       strlen(stream)
+    ;
+
+    char path_buff[path_size + 1];
+
+    snprintf(path_buff, path_size + 1, "%s/%s", device, stream);
+
+    uint32_t hash = nyx_hash(path_size, path_buff, NYX_STREAM_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -237,7 +246,8 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
     uint32_t header1[3] = {
         NYX_STREAM_MAGIC,
-        hash, size,
+        hash,
+        size,
     };
 
     internal_stream_pub(node, NYX_STR_S(buffof(header1), sizeof(header1)));
