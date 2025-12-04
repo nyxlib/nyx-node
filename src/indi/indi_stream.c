@@ -138,20 +138,22 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /* PREPROCESS DATA                                                                                                */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t prepd_sizes[n_fields] = {};
-    buff_t prepd_buffs[n_fields] = {};
+    size_t idx = 0;
 
-    uint32_t prepd_hashes[n_fields] = {};
+    nyx_object_t *dict;
+
+    size_t prepd_sizes[n_fields];
+    buff_t prepd_buffs[n_fields];
+
+    uint32_t prepd_hashes[n_fields];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_object_t *list = nyx_dict_get(vector, "children");
 
     if(list != NULL && list->type == NYX_TYPE_LIST)
     {
         /*------------------------------------------------------------------------------------------------------------*/
-
-        size_t idx;
-
-        nyx_object_t *dict;
 
         for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &dict);)
         {
@@ -226,6 +228,15 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     else
     {
         NYX_LOG_ERROR("Invalid stream vector");
+
+        return false;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(n_fields != idx + 1)
+    {
+        NYX_LOG_ERROR("Missing fields, %d expected, %d provided", (int) n_fields, (int) idx + 1);
 
         return false;
     }
