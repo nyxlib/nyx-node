@@ -127,6 +127,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /* PREPROCESS DATA                                                                                                */
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    uint32_t prepd_hashes[n_fields] = {};
     size_t prepd_sizes[n_fields] = {};
     buff_t prepd_buffs[n_fields] = {};
 
@@ -156,6 +157,12 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
                     size_t field_size = field_sizes[idx];
                     BUFF_t field_buff = field_buffs[idx];
+
+                    /*------------------------------------------------------------------------------------------------*/
+                    /* COMPUTE HASH                                                                                   */
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    prepd_hashes[idx] = nyx_hash(field_name_len, field_name_buf, NYX_STREAM_MAGIC);
 
                     /*------------------------------------------------------------------------------------------------*/
                     /* BASE64 PAYLOAD                                                                                 */
@@ -232,7 +239,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
     for(size_t i = 0; i < n_fields; i++)
     {
-        size += 4U + (uint32_t) prepd_sizes[i];
+        size += 8U + (uint32_t) prepd_sizes[i];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -249,8 +256,9 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
     for(size_t i = 0; i < n_fields; i++)
     {
-        uint32_t header2[1] = {
-            prepd_sizes[i] & 0xFFFFFFFF
+        uint32_t header2[2] = {
+            prepd_hashes[i] & 0xFFFFFFFF,
+            prepd_sizes[i] & 0xFFFFFFFF,
         };
 
         internal_stream_pub(node, NYX_STR_S(buffof(header2), sizeof(header2)));
