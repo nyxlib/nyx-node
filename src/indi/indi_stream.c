@@ -11,6 +11,10 @@
 #include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+#define STREAM_MAGIC 0x5358594EU
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -23,11 +27,22 @@ nyx_dict_t *nyx_stream_prop_new(STR_t name, STR_t label)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    char hash[8 + 1];
+
+    snprintf(hash, sizeof(hash), "%08X", nyx_hash(
+        strlen(name),
+        buffof(name),
+        STREAM_MAGIC
+    ));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     nyx_dict_t *result = nyx_dict_new();
 
     nyx_dict_set(result, "<>", nyx_string_from_dup("defStream"));
 
     nyx_dict_set(result, "@name", nyx_string_from_dup(name));
+    nyx_dict_set(result, "@hash", nyx_string_from_dup(hash));
     nyx_dict_set(result, "@label", nyx_string_from_dup(label));
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -92,10 +107,6 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 /* PUBLISHER                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_STREAM_MAGIC 0x5358594EU
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -127,9 +138,10 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /* PREPROCESS DATA                                                                                                */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t prepd_hashes[n_fields] = {};
     size_t prepd_sizes[n_fields] = {};
     buff_t prepd_buffs[n_fields] = {};
+
+    uint32_t prepd_hashes[n_fields] = {};
 
     nyx_object_t *list = nyx_dict_get(vector, "children");
 
@@ -162,7 +174,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
                     /* COMPUTE HASH                                                                                   */
                     /*------------------------------------------------------------------------------------------------*/
 
-                    prepd_hashes[idx] = nyx_hash(field_name_len, field_name_buf, NYX_STREAM_MAGIC);
+                    prepd_hashes[idx] = nyx_hash(field_name_len, field_name_buf, STREAM_MAGIC);
 
                     /*------------------------------------------------------------------------------------------------*/
                     /* BASE64 PAYLOAD                                                                                 */
@@ -231,7 +243,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
     snprintf(path_buff, path_size + 1, "%s/%s", device, stream);
 
-    uint32_t hash = nyx_hash(path_size, path_buff, NYX_STREAM_MAGIC);
+    uint32_t hash = nyx_hash(path_size, path_buff, STREAM_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -245,7 +257,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uint32_t header1[3] = {
-        NYX_STREAM_MAGIC,
+        STREAM_MAGIC,
         hash,
         size,
     };
