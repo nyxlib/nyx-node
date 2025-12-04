@@ -232,21 +232,29 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
     for(size_t i = 0; i < n_fields; i++)
     {
-        size += (uint32_t) prepd_sizes[i];
+        size += 4U + (uint32_t) prepd_sizes[i];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t header[3] = {
+    uint32_t header1[3] = {
         NYX_STREAM_MAGIC,
         hash,
         size,
     };
 
-    internal_stream_pub(node, NYX_STR_S(buffof(header), sizeof(header)));
+    internal_stream_pub(node, NYX_STR_S(buffof(header1), sizeof(header1)));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     for(size_t i = 0; i < n_fields; i++)
     {
+        uint32_t header2[1] = {
+            prepd_sizes[i] & 0xFFFFFFFF
+        };
+
+        internal_stream_pub(node, NYX_STR_S(buffof(header2), sizeof(header2)));
+
         internal_stream_pub(node, NYX_STR_S(prepd_buffs[i], prepd_sizes[i]));
 
         if(prepd_buffs[i] != field_buffs[i])
