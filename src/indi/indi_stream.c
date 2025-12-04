@@ -142,10 +142,10 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
     nyx_object_t *dict;
 
-    size_t prepd_sizes[n_fields];
-    buff_t prepd_buffs[n_fields];
-
     uint32_t prepd_hashes[n_fields];
+
+    size_t prepd_sizes[n_fields];
+    BUFF_t prepd_buffs[n_fields];
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -245,52 +245,15 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /* PUBLISH STREAM                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t path_size = strlen(device)
-                       + 1 +
-                       strlen(stream)
-    ;
-
-    char path_buff[path_size + 1];
-
-    snprintf(path_buff, path_size + 1, "%s/%s", device, stream);
-
-    uint32_t hash = nyx_hash(path_size, path_buff, STREAM_MAGIC);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    uint32_t size = 0;
-
-    for(size_t i = 0; i < n_fields; i++)
-    {
-        size += 8U + (uint32_t) prepd_sizes[i];
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    uint32_t header1[3] = {
-        STREAM_MAGIC,
-        hash,
-        size,
-    };
-
-    internal_stream_pub(node, NYX_STR_S(buffof(header1), sizeof(header1)));
+    nyx_nss_pub(node, device, stream, n_fields, prepd_hashes, prepd_sizes, prepd_buffs);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(size_t i = 0; i < n_fields; i++)
     {
-        uint32_t header2[2] = {
-            prepd_hashes[i] & 0xFFFFFFFF,
-            prepd_sizes[i] & 0xFFFFFFFF,
-        };
-
-        internal_stream_pub(node, NYX_STR_S(buffof(header2), sizeof(header2)));
-
-        internal_stream_pub(node, NYX_STR_S(prepd_buffs[i], prepd_sizes[i]));
-
         if(prepd_buffs[i] != field_buffs[i])
         {
-            nyx_memory_free(prepd_buffs[i]);
+            nyx_memory_free((buff_t) prepd_buffs[i]);
         }
     }
 

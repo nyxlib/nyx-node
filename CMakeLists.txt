@@ -103,6 +103,7 @@ set(SOURCE_FILES
     src/transform_xml_to_json.c
     #
     src/mqtt.c
+    src/nss.c
     #
     src/node.c
 )
