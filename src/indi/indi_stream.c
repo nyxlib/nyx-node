@@ -96,7 +96,7 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_sizes[], const buff_t field_buffs[])
+bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* CHECK IF STREAM IS ENABLED                                                                                     */
@@ -104,7 +104,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_s
 
     if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
     {
-        //return true;
+        return true;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -124,27 +124,115 @@ bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_s
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* PREPROCESS DATA                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    size_t prepd_sizes[n_fields] = {};
+    buff_t prepd_buffs[n_fields] = {};
+
+    nyx_object_t *list = nyx_dict_get(vector, "children");
+
+    if(list != NULL && list->type == NYX_TYPE_LIST)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        size_t idx;
+
+        nyx_object_t *dict;
+
+        for(nyx_list_iter_t iter = NYX_LIST_ITER(list); nyx_list_iterate(&iter, &idx, &dict);)
+        {
+            if(dict->type == NYX_TYPE_DICT && idx < n_fields)
+            {
+                nyx_object_t *string = nyx_dict_get((nyx_dict_t *) dict, "@name");
+
+                if(string != NULL && string->type == NYX_TYPE_STRING)
+                {
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    STR_t field_name_buf = nyx_string_get((nyx_string_t *) string);
+
+                    size_t field_name_len = strlen(field_name_buf);
+
+                    size_t field_size = field_sizes[idx];
+                    BUFF_t field_buff = field_buffs[idx];
+
+                    /*------------------------------------------------------------------------------------------------*/
+                    /* BASE64 PAYLOAD                                                                                 */
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    if(field_name_len > 2 && field_name_buf[field_name_len - 2] == '.' && field_name_buf[field_name_len - 1] == 'b')
+                    {
+                        prepd_buffs[idx] = nyx_base64_encode(&prepd_sizes[idx], field_size, field_buff);
+                    }
+
+                    /*------------------------------------------------------------------------------------------------*/
+                    /* ZLIB PAYLOAD                                                                                   */
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    if(field_name_len > 2 && field_name_buf[field_name_len - 2] == '.' && field_name_buf[field_name_len - 1] == 'z')
+                    {
+                        prepd_buffs[idx] = nyx_zlib_deflate(&prepd_sizes[idx], field_size, field_buff);
+                    }
+
+                    /*------------------------------------------------------------------------------------------------*/
+                    /* RAW PAYLOAD                                                                                    */
+                    /*------------------------------------------------------------------------------------------------*/
+
+                    else
+                    {
+                        prepd_sizes[idx] = (size_t) field_size;
+                        prepd_buffs[idx] = (buff_t) field_buff;
+                    }
+
+                    /*------------------------------------------------------------------------------------------------*/
+                }
+                else
+                {
+                    NYX_LOG_ERROR("Invalid stream property");
+
+                    return false;
+                }
+            }
+            else
+            {
+                NYX_LOG_ERROR("Invalid stream property");
+
+                return false;
+            }
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        NYX_LOG_ERROR("Invalid stream vector");
+
+        return false;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
     /* PUBLISH STREAM                                                                                                 */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    size_t hash_size = strlen(device)
+    size_t path_size = strlen(device)
                        + 1 +
                        strlen(stream)
     ;
 
-    char hash_buff[hash_size + 1];
+    char path_buff[path_size + 1];
 
-    snprintf(hash_buff, hash_size + 1, "%s/%s", device, stream);
+    snprintf(path_buff, path_size + 1, "%s/%s", device, stream);
 
-    uint32_t hash = nyx_hash(hash_size, hash_buff, NYX_STREAM_MAGIC);
+    uint32_t hash = nyx_hash(path_size, path_buff, NYX_STREAM_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uint32_t size = 0;
 
-    for(int i = 0; i < n_fields; i++)
+    for(size_t i = 0; i < n_fields; i++)
     {
-        size += (uint32_t) field_sizes[i];
+        size += (uint32_t) prepd_sizes[i];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -155,11 +243,16 @@ bool nyx_stream_pub(const nyx_dict_t *vector, int n_fields, const size_t field_s
         size,
     };
 
-    internal_stream_pub(node, NYX_STR_S(header, sizeof(header)));
+    internal_stream_pub(node, NYX_STR_S(buffof(header), sizeof(header)));
 
-    for(int i = 0; i < n_fields; i++)
+    for(size_t i = 0; i < n_fields; i++)
     {
-        internal_stream_pub(node, NYX_STR_S(field_buffs[i], field_sizes[i]));
+        internal_stream_pub(node, NYX_STR_S(prepd_buffs[i], prepd_sizes[i]));
+
+        if(prepd_buffs[i] != field_buffs[i])
+        {
+            nyx_memory_free(prepd_buffs[i]);
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

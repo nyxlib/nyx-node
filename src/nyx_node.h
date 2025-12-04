@@ -72,6 +72,11 @@ double nan(const char *tag);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define buffof(p) \
+            ((buff_t *) (p))
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief Initialize the memory subsystem.
  */
@@ -2744,7 +2749,7 @@ nyx_dict_t *nyx_stream_vector_new(
 
 bool nyx_stream_pub(
     const nyx_dict_t *vector,
-    __NYX_ZEROABLE__ int n_fields,
+    __NYX_ZEROABLE__ size_t n_fields,
     const size_t field_sizes[],
     const buff_t field_buffs[]
 );

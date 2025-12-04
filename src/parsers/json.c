@@ -751,7 +751,7 @@ nyx_object_t *nyx_object_parse(STR_t string)
 {
     return nyx_object_parse_buff(
         strlen(string),
-        /*--*/(string)
+        buffof(string)
     );
 }
 

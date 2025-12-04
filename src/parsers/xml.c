@@ -903,7 +903,7 @@ nyx_xmldoc_t *nyx_xmldoc_parse(STR_t string)
 {
     return nyx_xmldoc_parse_buff(
         strlen(string),
-        /*--*/(string)
+        buffof(string)
     );
 }
 
