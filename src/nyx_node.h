@@ -2708,6 +2708,7 @@ nyx_dict_t *nyx_blob_set_vector_new(
  * @param name Property name.
  * @param label Property label.
  * @return The new property object.
+ * @note If the property name ends with `.b`, the payload is automatically base64-encoded.
  * @note If the property name ends with `.z`, the payload is automatically ZLib-compressed.
  */
 
@@ -2739,7 +2740,7 @@ nyx_dict_t *nyx_stream_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief If Redis is enabled, publishes an entry to a stream, see https://redis.io/commands/xadd/.
+ * @brief If Nyx-Stream is enabled, publishes an entry to a stream.
  * @param vector Nyx stream vector.
  * @param n_fields Number of field doublets (size, buffer), must be number of properties in the vector.
  * @param field_sizes Array of field sizes, on entry per property in the vector.
@@ -3060,6 +3061,20 @@ void nyx_mqtt_pub(
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_node_t
+ * @brief If Nyx-Stream is enabled, publishes an entry to a stream.
+ * @param node Nyx node.
+ * @param device Device name.
+ * @param stream Stream name.
+ * @param n_fields Number of field triplets (hash, size, buffer).
+ * @param field_hashes Array of field hashes.
+ * @param field_sizes Array of field sizes.
+ * @param field_buffs Array of field buffers.
+ * @warning Except if performance is critical, prefer using @ref nyx_stream_pub.
+ * @warning Field hashes are computed with @ref nyx_hash.
+ */
 
 void nyx_nss_pub(
     nyx_node_t *node,
