@@ -18,16 +18,16 @@ void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, 
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        size_t path_size = strlen(device)
-                           + 1 +
-                           strlen(stream)
+        size_t path_len = strlen(device)
+                          + 1 +
+                          strlen(stream)
         ;
 
-        char path_buff[path_size + 1];
+        char path_buff[path_len + 1];
 
-        snprintf(path_buff, path_size + 1, "%s/%s", device, stream);
+        snprintf(path_buff, path_len + 1, "%s/%s", device, stream);
 
-        uint32_t path_hash = nyx_hash(path_size, path_buff, NYX_STREAM_MAGIC);
+        uint32_t path_hash = nyx_hash(path_len, path_buff, NYX_STREAM_MAGIC);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
