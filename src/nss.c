@@ -35,7 +35,7 @@ void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, 
 
         for(size_t i = 0; i < n_fields; i++)
         {
-            size += 8U + (uint32_t) field_sizes[i];
+            size += 8 + (uint32_t) field_sizes[i];
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -53,8 +53,8 @@ void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, 
         for(size_t i = 0; i < n_fields; i++)
         {
             uint32_t header2[2] = {
-                field_hashes[i] & 0xFFFFFFFF,
-                field_sizes[i] & 0xFFFFFFFF,
+                field_hashes[i] & 0xFFFFFFFFLU,
+                field_sizes[i] & 0xFFFFFFFFLU,
             };
 
             internal_stream_pub(node, NYX_STR_S(buffof(header2), sizeof(header2)));
