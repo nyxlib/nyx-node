@@ -11,10 +11,6 @@
 #include "../nyx_node_internal.h"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-#define STREAM_MAGIC 0x5358594EU
-
-/*--------------------------------------------------------------------------------------------------------------------*/
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -32,7 +28,7 @@ nyx_dict_t *nyx_stream_prop_new(STR_t name, STR_t label)
     snprintf(hash, sizeof(hash), "%08X", nyx_hash(
         strlen(name),
         buffof(name),
-        STREAM_MAGIC
+        NYX_STREAM_MAGIC
     ));
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -176,7 +172,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
                     /* COMPUTE HASH                                                                                   */
                     /*------------------------------------------------------------------------------------------------*/
 
-                    prepd_hashes[idx] = nyx_hash(field_name_len, field_name_buf, STREAM_MAGIC);
+                    prepd_hashes[idx] = nyx_hash(field_name_len, field_name_buf, NYX_STREAM_MAGIC);
 
                     /*------------------------------------------------------------------------------------------------*/
                     /* BASE64 PAYLOAD                                                                                 */

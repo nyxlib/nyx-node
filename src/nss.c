@@ -12,10 +12,6 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define STREAM_MAGIC 0x5358594EU
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, const uint32_t field_hashes[], const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -29,7 +25,7 @@ void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, 
 
     snprintf(path_buff, path_size + 1, "%s/%s", device, stream);
 
-    uint32_t hash = nyx_hash(path_size, path_buff, STREAM_MAGIC);
+    uint32_t hash = nyx_hash(path_size, path_buff, NYX_STREAM_MAGIC);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -43,7 +39,7 @@ void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     uint32_t header1[3] = {
-        STREAM_MAGIC,
+        NYX_STREAM_MAGIC,
         hash,
         size,
     };
