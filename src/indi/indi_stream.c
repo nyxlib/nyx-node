@@ -106,10 +106,10 @@ nyx_dict_t *nyx_stream_set_vector_new(const nyx_dict_t *vector)
 bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t field_sizes[], const buff_t field_buffs[])
 {
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* CHECK IF STREAM IS ENABLED                                                                                     */
+    /* CHECK IF STREAM IS ENABLED OR EMPTY                                                                            */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0)
+    if((vector->base.flags & NYX_FLAGS_STREAM_MASK) == 0 || n_fields == 0)
     {
         return true;
     }
