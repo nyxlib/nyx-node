@@ -2,7 +2,7 @@
 
 This page describes the **Nyx protocol**, a thin and backward-compatible overlay on the **INDI protocol**. INDI was originally designed to control astronomical hardware but is quite generic. Nyx preserves the INDI property/state model and message semantics while modernizing transport and serialization. By default, Nyx exchanges **JSON** messages over an **MQTT broker**, with a 1:1 mapping to INDI’s XML messages. It can also speak the original INDI XML directly over **TCP** for strict compatibility.
 
-In addition, Nyx introduces an **additional low-latency streaming system**, based on **Redis**, to deliver data to multiple clients.
+In addition, Nyx introduces an **additional streaming system**, to deliver data to multiple clients.
 
 ## INDI protocol
 
@@ -172,7 +172,7 @@ In any `defXXXVector` message, Nyx supports an optional `@hints` attribute carry
 
 ### Stream vectors
 
-Nyx adds a feature for describing **stream vectors** metadata. Stream payloads are not transported in JSON, a dedicated API delivers them to clients, using **Redis** for low-latency caching and streaming server. This capability is specific to Nyx and not part of INDI.
+Nyx adds a feature for describing **stream vectors** metadata. Stream payloads are not transported in JSON, a dedicated API delivers them to clients. This capability is specific to Nyx and not part of INDI.
 
 ### Nyx message grammar
 
