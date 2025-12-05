@@ -3072,8 +3072,8 @@ void nyx_mqtt_pub(
  * @param field_hashes Array of field hashes.
  * @param field_sizes Array of field sizes.
  * @param field_buffs Array of field buffers.
- * @warning Except if performance is critical, prefer using @ref nyx_stream_pub.
- * @warning Field hashes are computed with @ref nyx_hash.
+ * @warning Unless performance is critical, prefer using @ref nyx_stream_pub.
+ * @warning Field hashes must be computed with @ref nyx_hash.
  */
 
 void nyx_nss_pub(
