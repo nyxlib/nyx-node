@@ -49,6 +49,7 @@ jobs:
                     sleep 3
                     mosquitto_pub -t 'demo/exit' -m 'bye'
                     
+                    sleep 3
                     gcovr -r .. --sonarqube coverage.xml --exclude '../src/stacks/external/.*' --gcov-ignore-parse-errors=all
 
             -   name: SonarQube Scan
