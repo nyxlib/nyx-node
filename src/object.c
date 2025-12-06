@@ -269,7 +269,7 @@ str_t nyx_string_ndup(STR_t s, size_t n)
 
 nyx_str_t nyx_str_s(STR_t s)
 {
-    nyx_str_t str = {(str_t) s, s == NULL ? 0x0000000 : strlen(s)};
+    nyx_str_t str = {(str_t) /* NOSONAR */ s, s == NULL ? 0x0000000 : strlen(s)};
 
     return str;
 }

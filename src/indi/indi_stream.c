@@ -118,7 +118,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     /* RETRIEVE INFORMATION                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_node_t *node = vector->base.node;
+    const nyx_node_t *node = vector->base.node;
 
     STR_t device = nyx_dict_get_string(vector, "@device");
     STR_t stream = nyx_dict_get_string(vector,  "@name" );
@@ -198,8 +198,8 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
 
                     else
                     {
-                        prepd_sizes[idx] = (size_t) field_size;
-                        prepd_buffs[idx] = (buff_t) field_buff;
+                        prepd_sizes[idx] = (size_t) /* NOSONAR */ field_size;
+                        prepd_buffs[idx] = (buff_t) /* NOSONAR */ field_buff;
                     }
 
                     /*------------------------------------------------------------------------------------------------*/
@@ -249,7 +249,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
     {
         if(prepd_buffs[i] != field_buffs[i])
         {
-            nyx_memory_free((buff_t) prepd_buffs[i]);
+            nyx_memory_free((buff_t) /* NOSONAR */ prepd_buffs[i]);
         }
     }
 

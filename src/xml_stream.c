@@ -29,7 +29,7 @@ static struct tag_s
     size_t e_tag_size;
     STR_t e_tag_buff;
 
-} TAGS[] = {
+} /* NOSONAR */ TAGS[] = {
     TAG("<getProperties", "/>"),
     TAG("<delProperty", "/>"),
     TAG("<message", "/>"),

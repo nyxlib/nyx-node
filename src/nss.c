@@ -12,9 +12,9 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_nss_pub(nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, const uint32_t field_hashes[], const size_t field_sizes[], const buff_t field_buffs[])
+void nyx_nss_pub(const nyx_node_t *node, STR_t device, STR_t stream, size_t n_fields, const uint32_t field_hashes[], const size_t field_sizes[], const buff_t field_buffs[])
 {
-    if(node != NULL && n_fields > 0)
+    if(n_fields > 0)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 

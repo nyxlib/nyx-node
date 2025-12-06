@@ -41,7 +41,7 @@ static const nyx_str_t SPECIAL_TOPICS[] = {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
+static void _sub_object(const nyx_node_t *node, const nyx_object_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     #if !defined(ARDUINO)
@@ -82,7 +82,7 @@ static void _sub_object(struct nyx_node_s *node, const nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _get_properties(nyx_node_t *node, const nyx_dict_t *dict)
+static void _get_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GET PROPERTIES                                                                                                 */
@@ -253,7 +253,7 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_BLOB_STATE_ENABLED:
-                    vector->base.flags |= (UINT64_C(1) << (2 + 0 * 31 + index));
+                    vector->base.flags |= UINT64_C(1) << (2 + 0 * 31 + index);
                     break;
 
                 case NYX_BLOB_STATE_DISABLED:
@@ -265,7 +265,7 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
                 /*----------------------------------------------------------------------------------------------------*/
 
                 case NYX_STREAM_STATE_ENABLED:
-                    vector->base.flags |= (UINT64_C(1) << (2 + 1 * 31 + index));
+                    vector->base.flags |= UINT64_C(1) << (2 + 1 * 31 + index);
                     break;
 
                 case NYX_STREAM_STATE_DISABLED:
@@ -299,14 +299,14 @@ static void _enable_xxx(nyx_node_t *node, const nyx_dict_t *dict, STR_t tag, int
 
 __NYX_INLINE__ void _enable_blob(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) nyx_str_to_blob_state, NYX_FLAGS_BLOB_MASK);
+    _enable_xxx(node, dict, "defBLOBVector", (int (*)(STR_t)) &nyx_str_to_blob_state, NYX_FLAGS_BLOB_MASK);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 __NYX_INLINE__ void _enable_stream(nyx_node_t *node, const nyx_dict_t *dict)
 {
-    _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) nyx_str_to_stream_state, NYX_FLAGS_STREAM_MASK);
+    _enable_xxx(node, dict, "defStreamVector", (int (*)(STR_t)) &nyx_str_to_stream_state, NYX_FLAGS_STREAM_MASK);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -342,7 +342,7 @@ static nyx_string_t OFF = {
     .base = NYX_OBJECT(NYX_TYPE_STRING),
     .managed = false,
     .length = 0x000003,
-    .value = (str_t) "Off",
+    .value = (str_t) /* NOSONAR */ "Off",
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1074,14 +1074,11 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_ping(nyx_node_t *node)
+void nyx_node_ping(const nyx_node_t *node)
 {
-    if(node != NULL)
-    {
-        internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id, 0);
+    internal_mqtt_pub(node, nyx_str_s("nyx/ping/node"), node->node_id, 0);
 
-        internal_mqtt_pub(node, node->master_client_topic, node->master_client_message, 0);
-    }
+    internal_mqtt_pub(node, node->master_client_topic, node->master_client_message, 0);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1167,7 +1164,7 @@ bool nyx_node_notify(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static void _device_onoff(nyx_node_t *node, STR_t device, STR_t name, STR_t message, nyx_onoff_t onoff)
+static void _device_onoff(const nyx_node_t *node, STR_t device, STR_t name, STR_t message, nyx_onoff_t onoff)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -1234,44 +1231,38 @@ static void _device_onoff(nyx_node_t *node, STR_t device, STR_t name, STR_t mess
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_enable(nyx_node_t *node, STR_t device, STR_t name, STR_t message)
+void nyx_node_enable(const nyx_node_t *node, STR_t device, STR_t name, STR_t message)
 {
     _device_onoff(node, device, name, message, NYX_ONOFF_ON);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_disable(nyx_node_t *node, STR_t device, STR_t name, STR_t message)
+void nyx_node_disable(const nyx_node_t *node, STR_t device, STR_t name, STR_t message)
 {
     _device_onoff(node, device, name, message, NYX_ONOFF_OFF);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_message(nyx_node_t *node, STR_t device, STR_t message)
+void nyx_node_send_message(const nyx_node_t *node, STR_t device, STR_t message)
 {
-    if(node != NULL)
-    {
-        nyx_dict_t *dict = nyx_message_new(device, message);
+    nyx_dict_t *dict = nyx_message_new(device, message);
 
-        _sub_object(node, (nyx_object_t *) dict);
+    _sub_object(node, (nyx_object_t *) dict);
 
-        nyx_dict_free(dict);
-    }
+    nyx_dict_free(dict);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_send_del_property(nyx_node_t *node, STR_t device, STR_t name, STR_t message)
+void nyx_node_send_del_property(const nyx_node_t *node, STR_t device, STR_t name, STR_t message)
 {
-    if(node != NULL)
-    {
-        nyx_dict_t *dict = nyx_del_property_new(device, name, message);
+    nyx_dict_t *dict = nyx_del_property_new(device, name, message);
 
-        _sub_object(node, (nyx_object_t *) dict);
+    _sub_object(node, (nyx_object_t *) dict);
 
-        nyx_dict_free(dict);
-    }
+    nyx_dict_free(dict);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

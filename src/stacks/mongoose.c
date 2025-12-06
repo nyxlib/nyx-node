@@ -86,12 +86,12 @@ void nyx_log(nyx_log_level_t level, STR_t file, STR_t func, int line, STR_t fmt,
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* INDI, MQTT & STREAM                                                                                                */
+/* INDI, MQTT & NSS                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
+void internal_indi_pub(const nyx_node_t *node, nyx_str_t message)
 {
-    if(node != NULL && node->stack->indi_connection != NULL)
+    if(node->stack->indi_connection != NULL)
     {
         if(!mg_send(node->stack->indi_connection, message.buf, message.len))
         {
@@ -102,9 +102,9 @@ void internal_indi_pub(nyx_node_t *node, nyx_str_t message)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
+void internal_mqtt_sub(const nyx_node_t *node, nyx_str_t topic, int qos)
 {
-    if(node != NULL && node->stack->mqtt_connection != NULL)
+    if(node->stack->mqtt_connection != NULL)
     {
         struct mg_mqtt_opts opts = {0};
 
@@ -118,9 +118,9 @@ void internal_mqtt_sub(nyx_node_t *node, nyx_str_t topic, int qos)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos)
+void internal_mqtt_pub(const nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int qos)
 {
-    if(node != NULL && node->stack->mqtt_connection != NULL)
+    if(node->stack->mqtt_connection != NULL)
     {
         struct mg_mqtt_opts opts = {0};
 
@@ -134,7 +134,7 @@ void internal_mqtt_pub(nyx_node_t *node, nyx_str_t topic, nyx_str_t message, int
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_stream_pub(nyx_node_t *node, nyx_str_t message)
+void internal_stream_pub(const nyx_node_t *node, nyx_str_t message)
 {
     if(node != NULL && node->stack->stream_connection != NULL)
     {
@@ -378,34 +378,25 @@ void internal_stack_initialize(nyx_node_t *node, uint32_t retry_ms)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void internal_stack_finalize(nyx_node_t *node)
+void internal_stack_finalize(const nyx_node_t *node)
 {
-    if(node != NULL)
-    {
-        mg_mgr_free(&node->stack->mgr);
+    mg_mgr_free(&node->stack->mgr);
 
-        nyx_memory_free(node->stack);
-    }
+    nyx_memory_free(node->stack);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_add_timer(nyx_node_t *node, uint32_t interval_ms, void(* callback)(void *), void *arg)
+void nyx_node_add_timer(const nyx_node_t *node, uint32_t interval_ms, void(* callback)(void *), void *arg)
 {
-    if(node != NULL)
-    {
-        mg_timer_add(&node->stack->mgr, interval_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, callback, arg);
-    }
+    mg_timer_add(&node->stack->mgr, interval_ms, MG_TIMER_REPEAT | MG_TIMER_RUN_NOW, callback, arg);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_node_poll(nyx_node_t *node, uint32_t timeout_ms)
+void nyx_node_poll(const nyx_node_t *node, uint32_t timeout_ms)
 {
-    if(node != NULL)
-    {
-        mg_mgr_poll(&node->stack->mgr, timeout_ms == 0 ? (int) timeout_ms : 10);
-    }
+    mg_mgr_poll(&node->stack->mgr, timeout_ms == 0 ? (int) timeout_ms : 10);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

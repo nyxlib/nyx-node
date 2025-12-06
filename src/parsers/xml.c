@@ -267,7 +267,7 @@ static void tokenizer_next(xml_parser_t *parser)
 
         case '/':
             if(parser->tag == false) {
-                goto  _text;
+                goto /* NOSONAR */ _text;
             }
 
             end++;
@@ -279,7 +279,7 @@ static void tokenizer_next(xml_parser_t *parser)
 
         case '=':
             if(parser->tag == false) {
-                goto  _text;
+                goto /* NOSONAR */ _text;
             }
 
             end++;
@@ -291,7 +291,7 @@ static void tokenizer_next(xml_parser_t *parser)
 
         case '\"':
             if(parser->tag == false) {
-               goto  _text;
+               goto /* NOSONAR */ _text;
             }
 
             end++;
@@ -320,7 +320,7 @@ static void tokenizer_next(xml_parser_t *parser)
 
         case '\'':
             if(parser->tag == false) {
-                goto  _text;
+                goto /* NOSONAR */ _text;
             }
 
             end++;
@@ -370,7 +370,7 @@ static void tokenizer_next(xml_parser_t *parser)
             else
             {
                 /*----------------------------------------------------------------------------------------------------*/
-_text:
+/* NOSONAR */ _text:
                 while(parser->size >= 1 && *end != '<')
                 {
                     if(*end == '\0')

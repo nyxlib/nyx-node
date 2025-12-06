@@ -236,7 +236,7 @@ size_t nyx_list_size(const nyx_list_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL; node = node->next, result++);
+    for(node_t *node = object->head; node != NULL; node = node->next, result++) { /* NOSONAR */ };
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

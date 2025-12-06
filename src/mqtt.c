@@ -9,47 +9,41 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_sub(nyx_node_t *node, STR_t topic, int qos)
+void nyx_mqtt_sub(const nyx_node_t *node, STR_t topic, int qos)
 {
-    if(node != NULL)
+    if(node->mqtt_handler == NULL)
     {
-        if(node->mqtt_handler == NULL)
-        {
-            NYX_LOG_ERROR("MQTT handler has not been set");
-        }
-        else
-        {
-            nyx_str_t _topic = nyx_str_s(topic);
+        NYX_LOG_ERROR("MQTT handler has not been set");
+    }
+    else
+    {
+        nyx_str_t _topic = nyx_str_s(topic);
 
-            internal_mqtt_sub(
-                node,
-                _topic,
-                qos
-            );
-        }
+        internal_mqtt_sub(
+            node,
+            _topic,
+            qos
+        );
     }
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_mqtt_pub(nyx_node_t *node, STR_t topic, size_t message_size, BUFF_t message_buff, int qos)
+void nyx_mqtt_pub(const nyx_node_t *node, STR_t topic, size_t message_size, BUFF_t message_buff, int qos)
 {
-    if(node != NULL)
-    {
-        nyx_str_t _topic = nyx_str_s(topic);
+    nyx_str_t _topic = nyx_str_s(topic);
 
-        nyx_str_t _message = NYX_STR_S(
-            message_buff,
-            message_size
-        );
+    nyx_str_t _message = NYX_STR_S(
+        message_buff,
+        message_size
+    );
 
-        internal_mqtt_pub(
-            node,
-            _topic,
-            _message,
-            qos
-        );
-    }
+    internal_mqtt_pub(
+        node,
+        _topic,
+        _message,
+        qos
+    );
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

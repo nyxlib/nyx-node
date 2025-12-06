@@ -60,7 +60,7 @@ nyx_variant_t nyx_number_prop_get(const nyx_dict_t *prop)
 {
     STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
 
-    nyx_string_t *string = (nyx_string_t *) nyx_dict_get(prop, "$");
+    const nyx_string_t *string = (nyx_string_t *) nyx_dict_get(prop, "$");
 
     return internal_string_to_variant(format, string);
 }

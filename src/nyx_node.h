@@ -2919,7 +2919,7 @@ void nyx_node_finalize(
  */
 
 void nyx_node_add_timer(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     uint32_t interval_ms,
     void(* callback)(void *),
     void *arg
@@ -2935,7 +2935,7 @@ void nyx_node_add_timer(
  */
 
 void nyx_node_poll(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     uint32_t timeout_ms
 );
 
@@ -2963,8 +2963,8 @@ bool nyx_node_notify(
  */
 
 void nyx_node_enable(
-    nyx_node_t *node,
-    /*--------*/ STR_t device,
+    const nyx_node_t *node,
+    /*------------*/ STR_t device,
     __NYX_NULLABLE__ STR_t name,
     __NYX_NULLABLE__ STR_t message
 );
@@ -2981,8 +2981,8 @@ void nyx_node_enable(
  */
 
 void nyx_node_disable(
-    nyx_node_t *node,
-    /*--------*/ STR_t device,
+    const nyx_node_t *node,
+    /*------------*/ STR_t device,
     __NYX_NULLABLE__ STR_t name,
     __NYX_NULLABLE__ STR_t message
 );
@@ -2999,7 +2999,7 @@ void nyx_node_disable(
  */
 
 void nyx_node_send_message(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     STR_t device,
     __NYX_NULLABLE__ STR_t message
 );
@@ -3017,7 +3017,7 @@ void nyx_node_send_message(
  */
 
 void nyx_node_send_del_property(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     STR_t device,
     __NYX_NULLABLE__ STR_t name,
     __NYX_NULLABLE__ STR_t message
@@ -3035,7 +3035,7 @@ void nyx_node_send_del_property(
  */
 
 void nyx_mqtt_sub(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     STR_t topic,
     int qos
 );
@@ -3053,7 +3053,7 @@ void nyx_mqtt_sub(
  */
 
 void nyx_mqtt_pub(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     STR_t topic,
     __NYX_ZEROABLE__ size_t message_size,
     __NYX_NULLABLE__ BUFF_t message_buff,
@@ -3077,7 +3077,7 @@ void nyx_mqtt_pub(
  */
 
 void nyx_nss_pub(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     STR_t device,
     STR_t stream,
     __NYX_ZEROABLE__ size_t n_fields,

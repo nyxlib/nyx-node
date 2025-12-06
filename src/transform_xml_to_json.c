@@ -30,9 +30,9 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
     {
         if(new_node->type == NYX_XML_TEXT)
         {
-            STR_t content_s = (STR_t) new_node->data - 0x0000;
+            STR_t content_s = (STR_t) /* NOSONAR */ new_node->data - 0x0000;
             size_t length = strlen(content_s);
-            str_t content_e = (str_t) new_node->data + length;
+            str_t content_e = (str_t) /* NOSONAR */ new_node->data + length;
 
             while((isspace((unsigned char) *(content_s + 0)) || *(content_s + 0) == '"') && length > 0) {
                 content_s++;

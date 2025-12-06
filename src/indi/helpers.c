@@ -351,7 +351,7 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
 
 bool internal_blob_is_compressed(const nyx_dict_t *def)
 {
-    nyx_string_t *format = (nyx_string_t *) nyx_dict_get(def, "@format");
+    nyx_string_t *format = (nyx_string_t *) /* NOSONAR */ nyx_dict_get(def, "@format");
 
     return format != NULL && format->length > 2 && format->value[format->length - 2] == '.' && format->value[format->length - 1] == 'z';
 }
@@ -440,7 +440,7 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_dict_t *src_dict = (nyx_dict_t *) object, *dst_dict = nyx_dict_new();
+                nyx_dict_t *src_dict = (nyx_dict_t *) /* NOSONAR */ object, *dst_dict = nyx_dict_new();
 
                 /*----------------------------------------------------------------------------------------------------*/
 

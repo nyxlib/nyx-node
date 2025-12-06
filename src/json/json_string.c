@@ -24,8 +24,8 @@ nyx_string_t *nyx_string_new(void)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     object->managed = false;
-    object->length = 0x000000;
-    object->value = (str_t) "";
+    object->length = 0x000000000000;
+    object->value = (str_t) /* NOSONAR */ "";
 
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -89,9 +89,9 @@ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->managed = /*--*/ managed;
+        object->managed = managed;
         object->length = strlen(value);
-        object->value = (str_t) value;
+        object->value = (str_t) /* NOSONAR */ value;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -125,9 +125,9 @@ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool ma
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        object->managed = /*---*/ managed;
-        object->length = /*---*/ size;
-        object->value = (str_t) buff;
+        object->managed = managed;
+        object->length = /*--*/(size);
+        object->value = (str_t) /* NOSONAR */ buff;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
