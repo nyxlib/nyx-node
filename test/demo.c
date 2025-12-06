@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <string.h>
 
 #include "../src/nyx_node.h"
 
@@ -195,6 +196,31 @@ static void timer_stream(__NYX_UNUSED__ void *arg)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void mqtt_callback(
+    nyx_node_t *node,
+    nyx_event_type_t event_type,
+    size_t topic_size,
+    BUFF_t topic_buff,
+    __NYX_UNUSED__ size_t message_size,
+    __NYX_UNUSED__ BUFF_t message_buff
+) {
+    printf("*\n");
+
+    /**/ if(event_type == NYX_NODE_EVENT_OPEN)
+    {
+        nyx_mqtt_sub(node, "demo", 0);
+    }
+    else if(event_type == NYX_NODE_EVENT_MSG)
+    {
+        if(topic_size == 4 && memcmp(topic_buff, "demo", 4) == 0)
+        {
+            s_signo = 1;
+        }
+    }
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 int main()
 {
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -327,7 +353,7 @@ int main()
         getenv("STREAM_URL"),
         getenv("MQTT_USERNAME"),
         getenv("MQTT_PASSWORD"),
-        NULL,
+        mqtt_callback,
         3000,
         true
     );
@@ -339,14 +365,9 @@ int main()
 
     nyx_node_add_timer(node, 50, timer_stream, NULL);
 
-    for(int i = 0; s_signo == 0; i++)
+    while(s_signo == 0)
     {
         nyx_node_poll(node, 25);
-
-        if(i > 100 && getenv("CI_BREAK") != NULL)
-        {
-            break;
-        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
