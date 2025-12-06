@@ -41,7 +41,11 @@ jobs:
                     make all
                     make docs
 
-                    MQTT_URL=mqtt://localhost:1883 CI_BREAK=ON ./demo
+                    MQTT_URL=mqtt://localhost:1883 CI_BREAK=ON ./demo&
+
+                    sleep 2
+
+                    mosquitto_pub -t "nyx/cmd/json" -m '{"<>": "getProperties", "@version": "1.7"}'
 
                     gcovr -r .. --sonarqube coverage.xml --exclude '../src/stacks/external/.*' --gcov-ignore-parse-errors=all
 

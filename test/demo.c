@@ -343,7 +343,7 @@ int main()
     {
         nyx_node_poll(node, 25);
 
-        if(i > 10 && getenv("CI_BREAK") != NULL)
+        if(i > 100 && getenv("CI_BREAK") != NULL)
         {
             break;
         }
