@@ -210,7 +210,7 @@ static void mqtt_callback(
     }
     else if(event_type == NYX_NODE_EVENT_MSG)
     {
-        if(topic_size == 4 && memcmp(topic_buff, "demo/exit", 4) == 0)
+        if(topic_size == 9 && memcmp(topic_buff, "demo/exit", 9) == 0)
         {
             s_signo = 1;
         }
