@@ -204,15 +204,13 @@ static void mqtt_callback(
     __NYX_UNUSED__ size_t message_size,
     __NYX_UNUSED__ BUFF_t message_buff
 ) {
-    printf("*\n");
-
     /**/ if(event_type == NYX_NODE_EVENT_OPEN)
     {
-        nyx_mqtt_sub(node, "demo", 0);
+        nyx_mqtt_sub(node, "demo/exit", 0);
     }
     else if(event_type == NYX_NODE_EVENT_MSG)
     {
-        if(topic_size == 4 && memcmp(topic_buff, "demo", 4) == 0)
+        if(topic_size == 4 && memcmp(topic_buff, "demo/exit", 4) == 0)
         {
             s_signo = 1;
         }
