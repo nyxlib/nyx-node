@@ -19,7 +19,7 @@ jobs:
             -   name: Install dependencies
                 run: |
                     apt-get update
-                    apt-get install -y gcc git bash make cmake gcovr rsync unzip doxygen graphviz mosquitto openssh-client
+                    apt-get install -y gcc git bash make cmake gcovr rsync unzip doxygen graphviz mosquitto openssh-client mosquitto-clients
 
             -   name: Start MQTT broker
                 run: |
