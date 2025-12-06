@@ -43,7 +43,7 @@ jobs:
 
                     MQTT_URL=mqtt://localhost:1883 CI_BREAK=ON ./demo&
 
-                    sleep 2
+                    sleep 4
 
                     mosquitto_pub -t "nyx/cmd/json" -m '{"<>": "getProperties", "@version": "1.7"}'
 
