@@ -45,7 +45,7 @@ jobs:
 
                     sleep 4
 
-                    mosquitto_pub -t "nyx/cmd/json" -m '{"<>": "getProperties", "@version": "1.7"}'
+                    mosquitto_pub -t 'nyx/cmd/json' -m '{"<>": "getProperties", "@version": "1.7"}'
 
                     gcovr -r .. --sonarqube coverage.xml --exclude '../src/stacks/external/.*' --gcov-ignore-parse-errors=all
 
