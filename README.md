@@ -28,9 +28,7 @@ The core library is written in C11 and targets POSIX, Windows, and Arduino envir
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx-std.drawio.svg" style="width: 600px;" />
 </div> 
 
-<div style="text-align: center;">
-    Standard Nyx architecture.
-</div>
+> Standard Nyx architecture.
 
 <hr />
 
@@ -38,9 +36,7 @@ The core library is written in C11 and targets POSIX, Windows, and Arduino envir
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx-indiserver.drawio.svg" style="width: 600px;" />
 </div>
 
-<div style="text-align: center;">
-    Any Nyx driver can be loaded by indiserver, via TCP, and used by an INDI 1.7-compliant client.
-</div>
+> Any Nyx driver can be loaded by indiserver, via TCP, and used by an INDI 1.7-compliant client.
 
 <hr />
 
@@ -48,9 +44,7 @@ The core library is written in C11 and targets POSIX, Windows, and Arduino envir
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx-indi-bridge.drawio.svg" style="width: 600px;" />
 </div>
 
-<div style="text-align: center;">
-    Any existing INDI driver can be connected to the Nyx network via “INDI → Nyx Bridge”.
-</div>
+> Any existing INDI driver can be connected to the Nyx network via “INDI → Nyx Bridge”.
 
 # Build instructions
 
