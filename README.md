@@ -22,19 +22,37 @@ It enhances INDI by supporting multiple independent nodes, each embedding its ow
 
 The core library is written in C11 and targets POSIX, Windows, and Arduino environments, with no external dependencies; [Zlib](https://zlib.net/) is only required when compression is enabled.<br />Its low footprint makes Nyx suitable for deployment on microcontrollers (ESP32, Cortex-M, …).
 
-# Typical architecture
+# Typical architectures
 
 <div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx-std.drawio.svg" style="width: 600px;" />
 </div> 
 
 <div style="text-align: center;">
+    Standard Nyx architecture.
+</div>
+
+<hr />
+
+<div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx-indiserver.drawio.svg" style="width: 600px;" />
-</div> 
+</div>
+
+<div style="text-align: center;">
+    Any Nyx driver can be loaded by indiserver, via TCP, and used by an INDI 1.7-compliant client.
+</div>
+
+<hr />
 
 <div style="text-align: center;">
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/refs/heads/main/docs/img/nyx-indi-bridge.drawio.svg" style="width: 600px;" />
-</div> 
+</div>
+
+<div style="text-align: center;">
+    Any existing INDI driver can be connected to the Nyx network via “INDI → Nyx Bridge”.
+</div>
+
+<hr />
 
 # Build instructions
 
