@@ -178,7 +178,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
                     /* BASE64 PAYLOAD                                                                                 */
                     /*------------------------------------------------------------------------------------------------*/
 
-                    if(field_name_len > 2 && field_name_buf[field_name_len - 2] == '.' && field_name_buf[field_name_len - 1] == 'b')
+                    /**/ if(field_name_len > 2 && field_name_buf[field_name_len - 2] == '.' && field_name_buf[field_name_len - 1] == 'b')
                     {
                         prepd_buffs[idx] = nyx_base64_encode(&prepd_sizes[idx], field_size, field_buff);
                     }
@@ -187,7 +187,7 @@ bool nyx_stream_pub(const nyx_dict_t *vector, size_t n_fields, const size_t fiel
                     /* ZLIB PAYLOAD                                                                                   */
                     /*------------------------------------------------------------------------------------------------*/
 
-                    if(field_name_len > 2 && field_name_buf[field_name_len - 2] == '.' && field_name_buf[field_name_len - 1] == 'z')
+                    else if(field_name_len > 2 && field_name_buf[field_name_len - 2] == '.' && field_name_buf[field_name_len - 1] == 'z')
                     {
                         prepd_buffs[idx] = nyx_zlib_deflate(&prepd_sizes[idx], field_size, field_buff);
                     }
