@@ -34,12 +34,12 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
             size_t length = strlen(content_s);
             str_t content_e = (str_t) /* NOSONAR */ new_node->data + length;
 
-            while((isspace((unsigned char) *(content_s + 0)) || *(content_s + 0) == '"') && length > 0) {
+            while(length > 0 && (isspace((unsigned char) *(content_s + 0)) || *(content_s + 0) == '"')) {
                 content_s++;
                 length--;
             }
 
-            while((isspace((unsigned char) *(content_e - 1)) || *(content_e - 1) == '"') && length > 0) {
+            while(length > 0 && (isspace((unsigned char) *(content_e - 1)) || *(content_e - 1) == '"')) {
                 content_e--;
                 length--;
             }
