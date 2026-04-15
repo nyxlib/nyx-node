@@ -145,6 +145,10 @@ static void tokenizer_next(xml_parser_t *parser)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    PEEK().value = NULL;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     while(parser->size > 0 && isspace((unsigned char) *parser->buff))
     {
         parser->buff++;
@@ -352,7 +356,7 @@ static void tokenizer_next(xml_parser_t *parser)
             {
                 /*----------------------------------------------------------------------------------------------------*/
 
-                while(parser->size >= 1 && XML_IDENT_TAB[(int) *end])
+                while(parser->size >= 1 && XML_IDENT_TAB[(unsigned int) *end & 0xFFU])
                 {
                     if(*end == '\0')
                     {
@@ -739,6 +743,8 @@ static bool xml_parse_closing_tag(xml_parser_t *parser, const nyx_xmldoc_t *curr
 
         nyx_memory_free(PEEK().value);
 
+        PEEK().value = NULL;
+
         if(bad) {
             return false;
         }
@@ -771,7 +777,7 @@ static nyx_xmldoc_t *xml_parse_element_node(xml_parser_t *parser, nyx_xmldoc_t *
 
     if(result == NULL)
     {
-        nyx_xmldoc_free(result);
+        ///_xmldoc_free(result);
         return NULL;
     }
 
@@ -885,8 +891,15 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(size_t size, BUFF_t buff)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(result != NULL && CHECK(XML_TOKEN_EOF) == false)
+    if(result == NULL || CHECK(XML_TOKEN_EOF) == false)
     {
+        if(parser->curr_token.value != NULL)
+        {
+            nyx_memory_free(parser->curr_token.value);
+
+            parser->curr_token.value = NULL;
+        }
+
         nyx_xmldoc_free(result);
 
         result = NULL;
@@ -901,6 +914,11 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(size_t size, BUFF_t buff)
 
 nyx_xmldoc_t *nyx_xmldoc_parse(STR_t string)
 {
+    if(string == NULL)
+    {
+        return NULL;
+    }
+
     return nyx_xmldoc_parse_buff(
         strlen(string),
         buffof(string)

@@ -89,12 +89,12 @@ typedef struct
     ({                                                                                      \
         size_t result = (size_t) (e) - (size_t) (s);                                        \
                                                                                             \
-        while((isspace((unsigned char) *((s) + 0)) || *((s) + 0) == '"') && result > 0) {   \
+        while(result > 0 && (isspace((unsigned char) *((s) + 0)) || *((s) + 0) == '"')) {   \
             (s)++;                                                                          \
             result--;                                                                       \
         }                                                                                   \
                                                                                             \
-        while((isspace((unsigned char) *((e) - 1)) || *((e) - 1) == '"') && result > 0) {   \
+        while(result > 0 && (isspace((unsigned char) *((e) - 1)) || *((e) - 1) == '"')) {   \
             (e)--;                                                                          \
             result--;                                                                       \
         }                                                                                   \
@@ -137,8 +137,8 @@ static bool jsoncpy(str_t p, STR_t s, STR_t e)
 
                             uint32_t unicode_char = (uint32_t) strtol(hex, NULL, 16);
 
-                            s += 0x0000000000000000000000000000000004;
                             p += nyx_unicode_to_utf8(p, unicode_char);
+                            s += 0x0000000000000000000000000000000004;
                         }
                         else
                         {
@@ -171,6 +171,10 @@ static bool jsoncpy(str_t p, STR_t s, STR_t e)
 
 static void tokenizer_next(json_parser_t *parser)
 {
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    PEEK().value = NULL;
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     while(parser->size > 0 && isspace((unsigned char) *parser->buff))
@@ -735,6 +739,13 @@ nyx_object_t *nyx_object_parse_buff(size_t size, BUFF_t buff)
 
     if(result != NULL && CHECK(JSON_TOKEN_EOF) == false)
     {
+        if(parser->curr_token.value != NULL)
+        {
+            nyx_memory_free(parser->curr_token.value);
+
+            parser->curr_token.value = NULL;
+        }
+
         nyx_object_free(result);
 
         result = NULL;
@@ -749,6 +760,11 @@ nyx_object_t *nyx_object_parse_buff(size_t size, BUFF_t buff)
 
 nyx_object_t *nyx_object_parse(STR_t string)
 {
+    if(string == NULL)
+    {
+        return NULL;
+    }
+
     return nyx_object_parse_buff(
         strlen(string),
         buffof(string)
