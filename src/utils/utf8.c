@@ -13,32 +13,50 @@ int nyx_unicode_to_utf8(str_t result, uint32_t unicode_char)
 {
     uint8_t *up = (uint8_t *) result;
 
-    /**/ if(unicode_char <= 0x7F)
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    /* ignore surrogates */
+
+    if(unicode_char >= 0xD800U && unicode_char <= 0xDFFFU)
     {
-        *up = unicode_char & 0xFF;
+        return 0;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(unicode_char <= 0x7FU)
+    {
+        *up = (uint8_t) (0x00U | ((unicode_char >> 0) & 0x7FU));
         return 1;
     }
-    else if(unicode_char <= 0x7FF)
+
+    if(unicode_char <= 0x7FFU)
     {
-        *up++ = 0xC0 | ((unicode_char >> 6) & 0x1F);
-        *up   = 0x80 | ((unicode_char >> 0) & 0x3F);
+        *up++ = (uint8_t) (0xC0U | ((unicode_char >> 6) & 0x1FU));
+        *up   = (uint8_t) (0x80U | ((unicode_char >> 0) & 0x3FU));
         return 2;
     }
-    else if(unicode_char <= 0xFFFF)
+
+    if(unicode_char <= 0xFFFFU)
     {
-        *up++ = 0xE0 | ((unicode_char >> 12) & 0x0F);
-        *up++ = 0x80 | ((unicode_char >> 6) & 0x3F);
-        *up   = 0x80 | ((unicode_char >> 0) & 0x3F);
+        *up++ = (uint8_t) (0xE0U | ((unicode_char >> 12) & 0x0FU));
+        *up++ = (uint8_t) (0x80U | ((unicode_char >> 6) & 0x3FU));
+        *up   = (uint8_t) (0x80U | ((unicode_char >> 0) & 0x3FU));
         return 3;
     }
-    else
+
+    if(unicode_char <= 0x10FFFFU)
     {
-        *up++ = 0xF0 | ((unicode_char >> 18) & 0x07);
-        *up++ = 0x80 | ((unicode_char >> 12) & 0x3F);
-        *up++ = 0x80 | ((unicode_char >> 6) & 0x3F);
-        *up   = 0x80 | ((unicode_char >> 0) & 0x3F);
+        *up++ = (uint8_t) (0xF0U | ((unicode_char >> 18) & 0x07U));
+        *up++ = (uint8_t) (0x80U | ((unicode_char >> 12) & 0x3FU));
+        *up++ = (uint8_t) (0x80U | ((unicode_char >> 6) & 0x3FU));
+        *up   = (uint8_t) (0x80U | ((unicode_char >> 0) & 0x3FU));
         return 4;
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return 0;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
