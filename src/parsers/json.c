@@ -116,14 +116,14 @@ static bool jsoncpy(str_t p, STR_t s, STR_t e)
             {
                 switch(*s)
                 {
-                    case '\"': *p = '\"'; break;
-                    case '\\': *p = '\\'; break;
-                    case '/': *p = '/'; break;
-                    case 'b': *p = '\b'; break;
-                    case 'f': *p = '\f'; break;
-                    case 'n': *p = '\n'; break;
-                    case 'r': *p = '\r'; break;
-                    case 't': *p = '\t'; break;
+                    case '\"': *p++ = '\"'; s++; break;
+                    case '\\': *p++ = '\\'; s++; break;
+                    case '/': *p++ = '/' ; s++; break;
+                    case 'b': *p++ = '\b'; s++; break;
+                    case 'f': *p++ = '\f'; s++; break;
+                    case 'n': *p++ = '\n'; s++; break;
+                    case 'r': *p++ = '\r'; s++; break;
+                    case 't': *p++ = '\t'; s++; break;
                     case 'u':
                         s++;
 
