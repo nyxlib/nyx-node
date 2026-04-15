@@ -425,7 +425,7 @@ static nyx_boolean_t *json_parse_false(json_parser_t *parser)
 
 static nyx_number_t *json_parse_number(json_parser_t *parser)
 {
-    if(CHECK(JSON_TOKEN_NUMBER == false))
+    if(CHECK(JSON_TOKEN_NUMBER) == false)
     {
         return NULL;
     }
@@ -684,7 +684,7 @@ _err:
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+#include <stdio.h>
 nyx_object_t *nyx_object_parse_buff(size_t size, BUFF_t buff)
 {
     if(size == 0x00
@@ -737,7 +737,7 @@ nyx_object_t *nyx_object_parse_buff(size_t size, BUFF_t buff)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(result != NULL && CHECK(JSON_TOKEN_EOF) == false)
+    if(result == NULL || CHECK(JSON_TOKEN_EOF) == false)
     {
         if(parser->curr_token.value != NULL)
         {
