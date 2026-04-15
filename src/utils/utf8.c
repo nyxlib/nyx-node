@@ -17,9 +17,11 @@ int nyx_unicode_to_utf8(str_t result, uint32_t unicode_char)
 
     /* ignore surrogates */
 
-    if(unicode_char >= 0xD800U && unicode_char <= 0xDFFFU)
-    {
-        return 0;
+    if(unicode_char >= 0xD800U
+       &&
+       unicode_char <= 0xDFFFU
+    ) {
+        goto _error;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -56,7 +58,10 @@ int nyx_unicode_to_utf8(str_t result, uint32_t unicode_char)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return 0;
+/* NOSONAR */ _error:
+    *up = '?';
+
+    return 1;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
