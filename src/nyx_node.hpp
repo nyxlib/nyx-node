@@ -224,7 +224,7 @@ public:
         );
 
         for(const auto &uptr: this->m_devices) uptr->initialize(node);
-        while(s_signo == 0) nyx_node_poll(node, nodeTimeoutMS);
+        while(s_signo == 0) { nyx_node_poll(node, nodeTimeoutMS); this->poll(node); }
         for(const auto &uptr: this->m_devices) uptr->finalize(node);
 
         nyx_node_finalize(node, true);
@@ -263,6 +263,10 @@ protected:
     virtual STR_t mqttPassword() const = 0;
 
     virtual int nodeTimeoutMS() const = 0;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    virtual void poll(nyx_node_t *node) = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
