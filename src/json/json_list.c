@@ -70,6 +70,8 @@ static void internal_list_clear(nyx_list_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        temp->value->parent = NULL;
+
         nyx_object_unref(temp->value);
 
         nyx_memory_free(temp);
@@ -114,6 +116,15 @@ void nyx_list_del(nyx_list_t *object, size_t idx)
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
+
+            if(curr_node == object->tail)
+            {
+                object->tail = prev_node;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            curr_node->value->parent = NULL;
 
             nyx_object_unref(curr_node->value);
 
@@ -183,18 +194,36 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((nyx_object_t *) value)->parent = (nyx_object_t *) object;
+    if(((nyx_object_t *) value)->parent != NULL)
+    {
+        NYX_LOG_ERROR("Object already has a parent");
+
+        return false;
+    }
+
+    for(nyx_object_t *parent = (nyx_object_t *) object; parent != NULL; parent = parent->parent)
+    {
+        if(parent == (nyx_object_t *) value)
+        {
+            NYX_LOG_ERROR("An object cannot be its own parent");
+
+            return false;
+        }
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     bool modified = true;
 
-    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    for(node_t *curr_node = /* NOSONAR */ object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
             modified = !nyx_object_equal(curr_node->value, value);
 
+            curr_node->value->parent = NULL;
+
+            nyx_object_ref(/*-*/ value /*-*/);
             nyx_object_unref(curr_node->value);
 
             curr_node->value = value;
@@ -206,6 +235,8 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
     /*----------------------------------------------------------------------------------------------------------------*/
 
     node_t *node = nyx_memory_alloc(sizeof(node_t));
+
+    nyx_object_ref(value);
 
     node->value = value;
     node->next = NULL;
@@ -225,6 +256,8 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 _ok:
+    ((nyx_object_t *) value)->parent = (nyx_object_t *) object;
+
     return modified;
 }
 

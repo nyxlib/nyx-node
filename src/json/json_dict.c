@@ -74,6 +74,8 @@ static void internal_dict_clear(nyx_dict_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
+        temp->value->parent = NULL;
+
         nyx_object_unref(temp->value);
 
         nyx_memory_free(temp);
@@ -118,6 +120,15 @@ void nyx_dict_del(nyx_dict_t *object, STR_t key)
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
+
+            if(curr_node == object->tail)
+            {
+                object->tail = prev_node;
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            curr_node->value->parent = NULL;
 
             nyx_object_unref(curr_node->value);
 
@@ -187,18 +198,36 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    ((nyx_object_t *) value)->parent = (nyx_object_t *) object;
+    if(((nyx_object_t *) value)->parent != NULL)
+    {
+        NYX_LOG_ERROR("Object already has a parent");
+
+        return false;
+    }
+
+    for(nyx_object_t *parent = (nyx_object_t *) object; parent != NULL; parent = parent->parent)
+    {
+        if(parent == (nyx_object_t *) value)
+        {
+            NYX_LOG_ERROR("An object cannot be its own parent");
+
+            return false;
+        }
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     bool modified = true;
 
-    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
+    for(node_t *curr_node = /* NOSONAR */ object->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
             modified = !nyx_object_equal(curr_node->value, value);
 
+            curr_node->value->parent = NULL;
+
+            nyx_object_ref(/*-*/ value /*-*/);
             nyx_object_unref(curr_node->value);
 
             curr_node->value = value;
@@ -212,6 +241,8 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
     node_t *node = nyx_memory_alloc(sizeof(node_t) + strlen(key) + 1);
 
     node->key = strcpy((str_t) (node + 1), key);
+
+    nyx_object_ref(value);
 
     node->value = value;
     node->next = NULL;
@@ -231,6 +262,8 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 _ok:
+    ((nyx_object_t *) value)->parent = (nyx_object_t *) object;
+
     return modified;
 }
 
