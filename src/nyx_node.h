@@ -1960,9 +1960,9 @@ nyx_perm_t nyx_str_to_perm(
 
 typedef enum
 {
-    NYX_RULE_ONE_OF_MANY = 600,                                                                 //!< Only one switch of many can be ON (e.g. radio buttons).
+    NYX_RULE_ONE_OF_MANY = 600,                                                                 //!< Only one switch of many can be ON (e.g., radio buttons).
     NYX_RULE_AT_MOST_ONE = 601,                                                                 //!< At most one switch can be ON, but all switches can be off.
-    NYX_RULE_ANY_OF_MANY = 602,                                                                 //!< Any number of switches can be ON (e.g. check boxes).
+    NYX_RULE_ANY_OF_MANY = 602,                                                                 //!< Any number of switches can be ON (e.g., check boxes).
 
 } nyx_rule_t;
 
@@ -2976,9 +2976,9 @@ typedef void (* nyx_mqtt_handler_t)(
  * @brief Allocates and initializes a new Nyx node.
  * @param node_id Unique node identifier.
  * @param vectors Array of vectors with `ǸULL` sentinel.
- * @param indi_url Optional INDI URL (e.g. tcp://0.0.0.0:7625).
- * @param mqtt_url Optional MQTT URL (e.g. mqtt://localhost:1883).
- * @param nss_url Optional Nyx-Stream URL (e.g. tcp://localhost:6379).
+ * @param indi_url Optional INDI URL (e.g., tcp://0.0.0.0:7625).
+ * @param mqtt_url Optional MQTT URL (e.g., mqtt://localhost:1883).
+ * @param nss_url Optional Nyx-Stream URL (e.g., tcp://localhost:6379).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
  * @param mqtt_handler Optional MQTT handler.
