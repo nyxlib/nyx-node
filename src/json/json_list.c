@@ -9,16 +9,6 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct nyx_list_node_s
-{
-    nyx_object_t *value;
-
-    struct nyx_list_node_s *next;
-
-} node_t;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 static void internal_list_clear(
     nyx_list_t *object
 );
@@ -60,11 +50,11 @@ static void internal_list_clear(nyx_list_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL;)
+    for(nyx_list_node_t *node = object->head; node != NULL;)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        node_t *temp = node;
+        nyx_list_node_t *temp = node;
 
         node = node->next;
 
@@ -100,7 +90,7 @@ void nyx_list_del(nyx_list_t *object, size_t idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
+    for(nyx_list_node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -168,7 +158,7 @@ nyx_object_t *nyx_list_get(const nyx_list_t *object, size_t idx)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    for(nyx_list_node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -215,7 +205,7 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
 
     bool modified = true;
 
-    for(node_t *curr_node = /* NOSONAR */ object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
+    for(nyx_list_node_t *curr_node = /* NOSONAR */ object->head; curr_node != NULL; curr_node = curr_node->next, idx--)
     {
         if(idx == 0)
         {
@@ -234,7 +224,7 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node_t *node = nyx_memory_alloc(sizeof(node_t));
+    nyx_list_node_t *node = nyx_memory_alloc(sizeof(nyx_list_node_t));
 
     nyx_object_ref(value);
 
@@ -269,7 +259,7 @@ size_t nyx_list_size(const nyx_list_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL; node = node->next, result++) { /* NOSONAR */ };
+    for(nyx_list_node_t *node = object->head; node != NULL; node = node->next, result++) { /* NOSONAR */ };
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -284,7 +274,7 @@ str_t nyx_list_to_string(const nyx_list_t *object)
 
     /**/    nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "[");
     /**/
-    /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
+    /**/    for(nyx_list_node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
     /**/        /*----------------------------------------------------------------------------------------------------*/
     /**/

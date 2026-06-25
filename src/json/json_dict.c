@@ -11,18 +11,6 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-typedef struct nyx_dict_node_s
-{
-    STR_t key;
-
-    nyx_object_t *value;
-
-    struct nyx_dict_node_s *next;
-
-} node_t;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 static void internal_dict_clear(
     nyx_dict_t *object
 );
@@ -64,11 +52,11 @@ static void internal_dict_clear(nyx_dict_t *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL;)
+    for(nyx_dict_node_t *node = object->head; node != NULL;)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        node_t *temp = node;
+        nyx_dict_node_t *temp = node;
 
         node = node->next;
 
@@ -104,7 +92,7 @@ void nyx_dict_del(nyx_dict_t *object, STR_t key)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next)
+    for(nyx_dict_node_t *prev_node = NULL, *curr_node = object->head; curr_node != NULL; prev_node = curr_node, curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
@@ -172,7 +160,7 @@ nyx_object_t *nyx_dict_get(const nyx_dict_t *object, STR_t key)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
+    for(nyx_dict_node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
@@ -219,7 +207,7 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 
     bool modified = true;
 
-    for(node_t *curr_node = /* NOSONAR */ object->head; curr_node != NULL; curr_node = curr_node->next)
+    for(nyx_dict_node_t *curr_node = /* NOSONAR */ object->head; curr_node != NULL; curr_node = curr_node->next)
     {
         if(strcmp(curr_node->key, key) == 0)
         {
@@ -238,7 +226,7 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    node_t *node = nyx_memory_alloc(sizeof(node_t) + strlen(key) + 1);
+    nyx_dict_node_t *node = nyx_memory_alloc(sizeof(nyx_dict_node_t) + strlen(key) + 1);
 
     node->key = strcpy((str_t) (node + 1), key);
 
@@ -275,7 +263,7 @@ size_t nyx_dict_size(const nyx_dict_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(node_t *node = object->head; node != NULL; node = node->next, result++) { /* NOSONAR */ }
+    for(nyx_dict_node_t *node = object->head; node != NULL; node = node->next, result++) { /* NOSONAR */ }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -290,7 +278,7 @@ str_t nyx_dict_to_string(const nyx_dict_t *object)
 
     /**/    nyx_string_builder_append(sb, NYX_SB_NO_ESCAPE, "{");
     /**/
-    /**/    for(node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
+    /**/    for(nyx_dict_node_t *curr_node = object->head; curr_node != NULL; curr_node = curr_node->next)
     /**/    {
     /**/        /*----------------------------------------------------------------------------------------------------*/
     /**/

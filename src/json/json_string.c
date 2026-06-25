@@ -27,7 +27,6 @@ nyx_string_t *nyx_string_new(void)
     object->length = 0x000000000000;
     object->value = (str_t) /* NOSONAR */ "";
 
-
     /*----------------------------------------------------------------------------------------------------------------*/
 
     return object;

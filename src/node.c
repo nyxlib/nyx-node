@@ -949,7 +949,7 @@ nyx_node_t *nyx_node_initialize(
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set(vector, "@client", nyx_string_from_dup(node_id));
+        nyx_dict_set_string(vector, "@client", nyx_string_dup(node_id), true);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -1046,7 +1046,7 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
         {
             for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
             {
-                nyx_dict_free(*vector_ptr);
+                nyx_object_free_recursive((nyx_object_t *) *vector_ptr);
             }
         }
 

@@ -1302,17 +1302,17 @@ __NYX_INLINE__ bool nyx_dict_get_boolean(const nyx_dict_t *object, STR_t key)
 /**
  * @memberof nyx_dict_t
  * @brief Gets a number value of the provided key.
- * @param object JSON dict object.
+ * @param dict JSON dict object.
  * @param key Key.
  * @return The related number value or `NaN` if absent or wrong type.
  */
 
-__NYX_INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
+__NYX_INLINE__ double nyx_dict_get_number(const nyx_dict_t *dict, STR_t key)
 {
-    nyx_object_t *value = nyx_dict_get(object, key);
+    nyx_object_t *object = nyx_dict_get(dict, key);
 
-    return value != NULL && value->type == NYX_TYPE_NUMBER ? nyx_number_get((nyx_number_t *) value)
-                                                           : nan("1")
+    return object != NULL && object->type == NYX_TYPE_NUMBER ? nyx_number_get((nyx_number_t *) object)
+                                                             : nan("1")
     ;
 }
 
@@ -1321,17 +1321,58 @@ __NYX_INLINE__ double nyx_dict_get_number(const nyx_dict_t *object, STR_t key)
 /**
  * @memberof nyx_dict_t
  * @brief Gets a C string value of the provided key.
- * @param object JSON dict object.
+ * @param dict JSON dict object.
  * @param key Key.
  * @return The related C string value or `NULL` if absent or wrong type.
  */
 
-__NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *object, STR_t key)
+__NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *dict, STR_t key)
 {
-    nyx_object_t *value = nyx_dict_get(object, key);
+    nyx_object_t *object = nyx_dict_get(dict, key);
 
-    return value != NULL && value->type == NYX_TYPE_STRING ? nyx_string_get((nyx_string_t *) value)
-                                                           : NULL
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_get((nyx_string_t *) object)
+                                                             : NULL
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
+ * @brief Sets a number value of an existing key holding a number.
+ * @param dict JSON dict object.
+ * @param key Existing key holding a number.
+ * @param value Number value to set.
+ * @return true if the value was modified, false otherwise.
+ */
+
+__NYX_INLINE__ bool nyx_dict_set_number(const nyx_dict_t *dict, STR_t key, double value)
+{
+    nyx_object_t *object = nyx_dict_get(dict, key);
+
+    return object != NULL && object->type == NYX_TYPE_NUMBER ? nyx_number_set((nyx_number_t *) object, value)
+                                                             : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
+ * @brief Sets a C string value of an existing key holding a string.
+ * @param dict JSON dict object.
+ * @param key Existing key holding a string.
+ * @param value C string value to set.
+ * @param nanaged Whether the C string is managed.
+ * @return true if the value was modified, false otherwise.
+ */
+
+__NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t value, bool nanaged)
+{
+    nyx_object_t *object = nyx_dict_get(dict, key);
+
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set((nyx_string_t *) object, value, nanaged)
+                                                             : false
     ;
 }
 
