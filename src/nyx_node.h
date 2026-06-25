@@ -449,6 +449,9 @@ typedef struct nyx_object_s
 
     uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
     uint64_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX definitions.
+    int32_t ref;                                                                                //!< Reference counter for memory allocation.
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
@@ -560,12 +563,37 @@ __NYX_NULLABLE__ nyx_object_t *nyx_object_parse(
 
 /**
  * @memberof nyx_object_t
- * @brief Frees memory of the provided JSON object.
+ * @brief Increments the reference counter of the provided JSON object.
  * @param object JSON object.
  */
 
-void nyx_object_free(
+void nyx_object_ref(
     __NYX_NULLABLE__ nyx_object_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_object_t
+ * @brief Decrements the reference counter of the provided JSON object and frees it when it reaches zero.
+ * @param object JSON object.
+ */
+
+void nyx_object_unref(
+    __NYX_NULLABLE__ nyx_object_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_object_t
+ * @brief Gets the type of the provided JSON object.
+ * @param object JSON object.
+ * @return The type of the provided JSON object.
+ */
+
+nyx_type_t nyx_object_get_type(
+    const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -647,18 +675,6 @@ nyx_null_t *nyx_null_new(void);
 
 /**
  * @memberof nyx_null_t
- * @brief Frees memory of the provided JSON null object.
- * @param object JSON null object.
- */
-
-void nyx_null_free(
-    /*-*/ nyx_null_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_null_t
  * @brief Returns a string representing the provided JSON null object.
  * @param object JSON null object.
  * @return A newly allocated string that represents the provided JSON null object.
@@ -702,18 +718,6 @@ typedef struct
  */
 
 nyx_number_t *nyx_number_new(void);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_number_t
- * @brief Frees memory of the provided JSON number object.
- * @param object JSON number object.
- */
-
-void nyx_number_free(
-    /*-*/ nyx_number_t *object
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -813,18 +817,6 @@ nyx_boolean_t *nyx_boolean_new(void);
 
 /**
  * @memberof nyx_boolean_t
- * @brief Frees memory of the provided JSON boolean object.
- * @param object JSON boolean object.
- */
-
-void nyx_boolean_free(
-    /*-*/ nyx_boolean_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_boolean_t
  * @brief Get the value of the provided JSON boolean object.
  * @param object JSON boolean object.
  * @return The value of the provided JSON boolean object.
@@ -915,18 +907,6 @@ typedef struct
  */
 
 nyx_string_t *nyx_string_new(void);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_string_t
- * @brief Frees memory of the provided JSON string object.
- * @param object JSON string object.
- */
-
-void nyx_string_free(
-    /*-*/ nyx_string_t *object
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1190,18 +1170,6 @@ nyx_dict_t *nyx_dict_new(void);
 
 /**
  * @memberof nyx_dict_t
- * @brief Frees memory of the provided JSON dict object.
- * @param object JSON dict object.
- */
-
-void nyx_dict_free(
-    /*-*/ nyx_dict_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_dict_t
  * @brief Clears the content of the provided JSON dict object.
  * @param object JSON dict object.
  */
@@ -1425,18 +1393,6 @@ typedef struct
  */
 
 nyx_list_t *nyx_list_new(void);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_list_t
- * @brief Frees memory of the provided JSON list object.
- * @param object JSON list object.
- */
-
-void nyx_list_free(
-    /*-*/ nyx_list_t *object
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

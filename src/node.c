@@ -732,7 +732,7 @@ static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const 
                     {
                         _process_message(node, object);
 
-                        nyx_object_free(object);
+                        nyx_object_unref(object);
                     }
 
                     nyx_xmldoc_free(xmldoc);
@@ -854,7 +854,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                         {
                             _process_message(node, object);
 
-                            nyx_object_free(object);
+                            nyx_object_unref(object);
                         }
 
                         /*--------------------------------------------------------------------------------------------*/
@@ -877,7 +877,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                             {
                                 _process_message(node, object);
 
-                                nyx_object_free(object);
+                                nyx_object_unref(object);
                             }
 
                             nyx_xmldoc_free(xmldoc);

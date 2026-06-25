@@ -70,7 +70,7 @@ static void internal_list_clear(nyx_list_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_object_free(temp->value);
+        nyx_object_unref(temp->value);
 
         nyx_memory_free(temp);
 
@@ -115,7 +115,7 @@ void nyx_list_del(nyx_list_t *object, size_t idx)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_object_free(curr_node->value);
+            nyx_object_unref(curr_node->value);
 
             nyx_memory_free(curr_node);
 
@@ -195,7 +195,7 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
         {
             modified = !nyx_object_equal(curr_node->value, value);
 
-            nyx_object_free(curr_node->value);
+            nyx_object_unref(curr_node->value);
 
             curr_node->value = value;
 

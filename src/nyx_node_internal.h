@@ -105,6 +105,32 @@ int nyx_unicode_to_utf8(
             })
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+void nyx_null_free(
+    /*-*/ nyx_null_t *object
+);
+
+void nyx_number_free(
+    /*-*/ nyx_number_t *object
+);
+
+void nyx_boolean_free(
+    /*-*/ nyx_boolean_t *object
+);
+
+void nyx_string_free(
+    /*-*/ nyx_string_t *object
+);
+
+void nyx_dict_free(
+    /*-*/ nyx_dict_t *object
+);
+
+void nyx_list_free(
+    /*-*/ nyx_list_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* STRING BUILDER                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 

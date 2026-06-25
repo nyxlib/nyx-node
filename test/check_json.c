@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     printf("%s\n", string);
 
     nyx_memory_free(string);
-    nyx_object_free(object);
+    nyx_object_unref(object);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

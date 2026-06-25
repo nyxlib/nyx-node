@@ -74,7 +74,7 @@ static void internal_dict_clear(nyx_dict_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_object_free(temp->value);
+        nyx_object_unref(temp->value);
 
         nyx_memory_free(temp);
 
@@ -119,7 +119,7 @@ void nyx_dict_del(nyx_dict_t *object, STR_t key)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_object_free(curr_node->value);
+            nyx_object_unref(curr_node->value);
 
             nyx_memory_free(curr_node);
 
@@ -199,7 +199,7 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
         {
             modified = !nyx_object_equal(curr_node->value, value);
 
-            nyx_object_free(curr_node->value);
+            nyx_object_unref(curr_node->value);
 
             curr_node->value = value;
 
