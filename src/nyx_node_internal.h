@@ -97,6 +97,7 @@ int nyx_unicode_to_utf8(
             ((nyx_object_t) {                   \
                 .magic = NYX_OBJECT_MAGIC,      \
                 .flags = 0x00000000000000,      \
+                .ref = 1,                       \
                 .type = (Type),                 \
                 .node = NULL,                   \
                 .parent = NULL,                 \
