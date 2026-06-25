@@ -1351,9 +1351,29 @@ __NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *dict, STR_t key)
 
 /**
  * @memberof nyx_dict_t
+ * @brief Sets a number value of an existing key holding a boolean.
+ * @param dict JSON dict object.
+ * @param key Key.
+ * @param value Number value to set.
+ * @return true if the value was modified, false otherwise.
+ */
+
+__NYX_INLINE__ bool nyx_dict_set_boolean(const nyx_dict_t *dict, STR_t key, bool value)
+{
+    nyx_object_t *object = nyx_dict_get(dict, key);
+
+    return object != NULL && object->type == NYX_TYPE_BOOLEAN ? nyx_boolean_set((nyx_boolean_t *) object, value)
+                                                              : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
  * @brief Sets a number value of an existing key holding a number.
  * @param dict JSON dict object.
- * @param key Existing key holding a number.
+ * @param key Key.
  * @param value Number value to set.
  * @return true if the value was modified, false otherwise.
  */
@@ -1373,7 +1393,7 @@ __NYX_INLINE__ bool nyx_dict_set_number(const nyx_dict_t *dict, STR_t key, doubl
  * @memberof nyx_dict_t
  * @brief Sets a C string value of an existing key holding a string.
  * @param dict JSON dict object.
- * @param key Existing key holding a string.
+ * @param key Key.
  * @param value C string value to set.
  * @param managed Whether the C string is managed.
  * @return true if the value was modified, false otherwise.
@@ -1384,6 +1404,17 @@ __NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t
     nyx_object_t *object = nyx_dict_get(dict, key);
 
     return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set((nyx_string_t *) object, value, managed)
+                                                             : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__NYX_INLINE__ bool nyx_dict_set_string_buff(const nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
+{
+    nyx_object_t *object = nyx_dict_get(dict, key);
+
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set_buff((nyx_string_t *) object, size, buff, managed)
                                                              : false
     ;
 }
@@ -1581,10 +1612,10 @@ str_t nyx_list_to_string(
 
 __NYX_INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 {
-    nyx_object_t *boolean = nyx_list_get(object, idx);
+    nyx_object_t *value = nyx_list_get(object, idx);
 
-    return boolean != NULL && boolean->type == NYX_TYPE_BOOLEAN ? nyx_boolean_get((nyx_boolean_t *) boolean)
-                                                                : false
+    return value != NULL && value->type == NYX_TYPE_BOOLEAN ? nyx_boolean_get((nyx_boolean_t *) value)
+                                                            : false
     ;
 }
 
@@ -1593,16 +1624,16 @@ __NYX_INLINE__ bool nyx_list_get_boolean(const nyx_list_t *object, size_t idx)
 /**
  * @memberof nyx_list_t
  * @brief Gets a number value at the provided index.
- * @param object JSON list object.
+ * @param list JSON list object.
  * @param idx Index.
  * @return The related number value or `NaN` if absent or wrong type.
  */
 
-__NYX_INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
+__NYX_INLINE__ double nyx_list_get_number(const nyx_list_t *list, size_t idx)
 {
-    nyx_object_t *number = nyx_list_get(object, idx);
+    nyx_object_t *object = nyx_list_get(list, idx);
 
-    return number != NULL && number->type == NYX_TYPE_NUMBER ? nyx_number_get((nyx_number_t *) number)
+    return object != NULL && object->type == NYX_TYPE_NUMBER ? nyx_number_get((nyx_number_t *) object)
                                                              : nan("1")
     ;
 }
@@ -1612,25 +1643,86 @@ __NYX_INLINE__ double nyx_list_get_number(const nyx_list_t *object, size_t idx)
 /**
  * @memberof nyx_list_t
  * @brief Gets a C string value at the provided index.
- * @param object JSON list object.
+ * @param list JSON list object.
  * @param idx Index.
  * @return The related C string value or `NULL` if absent or wrong type.
  */
 
-__NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
+__NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *list, size_t idx)
 {
-    nyx_object_t *string = nyx_list_get(object, idx);
+    nyx_object_t *object = nyx_list_get(list, idx);
 
-    return string != NULL && string->type == NYX_TYPE_STRING ? nyx_string_get((nyx_string_t *) string)
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_get((nyx_string_t *) object)
                                                              : NULL
     ;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-__NYX_INLINE__ bool nyx_dict_set_string_buff(const nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
+/**
+ * @memberof nyx_list_t
+ * @brief Sets a number value of an existing index holding a boolean.
+ * @param list JSON list object.
+ * @param idx Index.
+ * @param value Number value to set.
+ * @return true if the value was modified, false otherwise.
+ */
+
+__NYX_INLINE__ bool nyx_list_set_boolean(const nyx_list_t *list, size_t idx, bool value)
 {
-    nyx_object_t *object = nyx_dict_get(dict, key);
+    nyx_object_t *object = nyx_list_get(list, idx);
+
+    return object != NULL && object->type == NYX_TYPE_BOOLEAN ? nyx_boolean_set((nyx_boolean_t *) object, value)
+                                                              : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_list_t
+ * @brief Sets a number value of an existing index holding a number.
+ * @param list JSON list object.
+ * @param idx Index.
+ * @param value Number value to set.
+ * @return true if the value was modified, false otherwise.
+ */
+
+__NYX_INLINE__ bool nyx_list_set_number(const nyx_list_t *list, size_t idx, double value)
+{
+    nyx_object_t *object = nyx_list_get(list, idx);
+
+    return object != NULL && object->type == NYX_TYPE_NUMBER ? nyx_number_set((nyx_number_t *) object, value)
+                                                             : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_list_t
+ * @brief Sets a C string value of an existing index holding a string.
+ * @param list JSON list object.
+ * @param idx Index.
+ * @param value C string value to set.
+ * @param managed Whether the C string is managed.
+ * @return true if the value was modified, false otherwise.
+ */
+
+__NYX_INLINE__ bool nyx_list_set_string(const nyx_list_t *list, size_t idx, STR_t value, bool managed)
+{
+    nyx_object_t *object = nyx_list_get(list, idx);
+
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set((nyx_string_t *) object, value, managed)
+                                                             : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+__NYX_INLINE__ bool nyx_list_set_string_buff(const nyx_list_t *list, size_t idx, size_t size, BUFF_t buff, bool managed)
+{
+    nyx_object_t *object = nyx_list_get(list, idx);
 
     return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set_buff((nyx_string_t *) object, size, buff, managed)
                                                              : false
