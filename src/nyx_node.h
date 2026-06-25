@@ -587,6 +587,18 @@ void nyx_object_unref(
 
 /**
  * @memberof nyx_object_t
+ * @brief Frees the provided JSON object and all its children recursively.
+ * @param object JSON object.
+ */
+
+void nyx_object_free_recursive(
+    /*-*/ nyx_object_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_object_t
  * @brief Gets the type of the provided JSON object.
  * @param object JSON object.
  * @return The type of the provided JSON object.
