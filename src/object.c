@@ -280,7 +280,6 @@ nyx_str_t nyx_str_s(STR_t s)
 
 __NYX_INLINE__ void _object_free(nyx_object_t *object)
 {
-
     switch(object->type)
     {
         case NYX_TYPE_NULL:
@@ -308,7 +307,7 @@ __NYX_INLINE__ void _object_free(nyx_object_t *object)
             break;
 
         default:
-            NYX_LOG_FATAL("Internal error");
+            NYX_LOG_FATAL("Invalid object type");
     }
 }
 
@@ -440,7 +439,7 @@ bool nyx_object_equal(const nyx_object_t *object1, const nyx_object_t *object2)
             }
 
         default:
-            NYX_LOG_FATAL("Internal error");
+            NYX_LOG_FATAL("Invalid object type");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -483,7 +482,7 @@ str_t nyx_object_to_string(const nyx_object_t *object)
             return nyx_dict_to_string((const nyx_dict_t *) object);
 
         default:
-            NYX_LOG_FATAL("Internal error");
+            NYX_LOG_FATAL("Invalid object type");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -526,7 +525,7 @@ str_t nyx_object_to_cstring(const nyx_object_t *object)
             return nyx_dict_to_string((const nyx_dict_t *) object);
 
         default:
-            NYX_LOG_FATAL("Internal error");
+            NYX_LOG_FATAL("Invalid object type");
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
