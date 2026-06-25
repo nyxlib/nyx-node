@@ -746,7 +746,7 @@ nyx_object_t *nyx_object_parse_buff(size_t size, BUFF_t buff)
             parser->curr_token.value = NULL;
         }
 
-        nyx_object_unref(result);
+        nyx_object_free_recursive(result);
 
         result = NULL;
     }
