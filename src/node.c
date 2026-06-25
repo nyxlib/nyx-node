@@ -62,7 +62,7 @@ static void _sub_object(const nyx_node_t *node, const nyx_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_xmldoc_free(xmldoc);
+            nyx_xmldoc_free_recursive(xmldoc);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -486,34 +486,34 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
                                                             {
                                                                 STR_t format = nyx_string_get((nyx_string_t *) format_string);
 
-                                                                nyx_variant_t old_val = internal_string_to_variant(format, (nyx_string_t *) old_value);
-                                                                nyx_variant_t new_val = internal_string_to_variant(format, (nyx_string_t *) new_value);
+                                                                nyx_variant_t old_val = internal_string_to_variant(format, nyx_string_get((nyx_string_t *) old_value));
+                                                                nyx_variant_t new_val = internal_string_to_variant(format, nyx_string_get((nyx_string_t *) new_value));
 
                                                                 switch(new_val.type)
                                                                 {
                                                                     case NYX_VARIANT_TYPE_INT:
                                                                         if((success = object2->in_callback._int == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, new_val.value._int, old_val.value._int))) {
-                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
+                                                                            modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), true);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_UINT:
                                                                         if((success = object2->in_callback._uint == NULL || object2->in_callback._uint(vector, (nyx_dict_t *) object2, new_val.value._uint, old_val.value._uint))) {
-                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
+                                                                            modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), true);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_LONG:
                                                                         if((success = object2->in_callback._long == NULL || object2->in_callback._long(vector, (nyx_dict_t *) object2, new_val.value._long, old_val.value._long))) {
-                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
+                                                                            modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), true);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_ULONG:
                                                                         if((success = object2->in_callback._ulong == NULL || object2->in_callback._ulong(vector, (nyx_dict_t *) object2, new_val.value._ulong, old_val.value._ulong))) {
-                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
+                                                                            modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), true);
                                                                         }
                                                                         break;
                                                                     case NYX_VARIANT_TYPE_DOUBLE:
                                                                         if((success = object2->in_callback._double == NULL || object2->in_callback._double(vector, (nyx_dict_t *) object2, new_val.value._double, old_val.value._double))) {
-                                                                            modified = nyx_dict_set((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val));
+                                                                            modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", internal_variant_to_string(format, new_val), true);
                                                                         }
                                                                         break;
                                                                 }
@@ -531,7 +531,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._str == NULL || object2->in_callback._str(vector, (nyx_dict_t *) object2, new_val, old_val)))
                                                             {
-                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_dup(new_val));
+                                                                modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", nyx_string_dup(new_val), true);
                                                             }
                                                         }
 
@@ -546,7 +546,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._int == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, (int) new_val, (int) old_val)))
                                                             {
-                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_unmanaged(nyx_state_to_str(new_val)));
+                                                                modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", nyx_state_to_str(new_val), false);
                                                             }
                                                         }
 
@@ -561,10 +561,9 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._int == NULL || object2->in_callback._int(vector, (nyx_dict_t *) object2, (int) new_val, (int) old_val)))
                                                             {
-                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_unmanaged(nyx_onoff_to_str(new_val)));
+                                                                modified = nyx_dict_set_string((nyx_dict_t *) object2, "$", nyx_onoff_to_str(new_val), false);
                                                             }
                                                         }
-
                                                         break;
 
                                                     /*----------------------------------------------------------------*/
@@ -594,7 +593,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->in_callback._buffer == NULL || object2->in_callback._buffer(vector, (nyx_dict_t *) object2, dst_size, dst_buff)))
                                                             {
-                                                                modified = nyx_dict_set((nyx_dict_t *) object2, "$", nyx_string_from_buff_managed(dst_size, dst_buff));
+                                                                modified = nyx_dict_set_string_buff((nyx_dict_t *) object2, "$", dst_size, dst_buff, true);
                                                             }
                                                             else
                                                             {
@@ -732,10 +731,10 @@ static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const 
                     {
                         _process_message(node, object);
 
-                        nyx_object_unref(object);
+                        nyx_object_free_recursive(object);
                     }
 
-                    nyx_xmldoc_free(xmldoc);
+                    nyx_xmldoc_free_recursive(xmldoc);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -854,7 +853,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                         {
                             _process_message(node, object);
 
-                            nyx_object_unref(object);
+                            nyx_object_free_recursive(object);
                         }
 
                         /*--------------------------------------------------------------------------------------------*/
@@ -877,10 +876,10 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                             {
                                 _process_message(node, object);
 
-                                nyx_object_unref(object);
+                                nyx_object_free_recursive(object);
                             }
 
-                            nyx_xmldoc_free(xmldoc);
+                            nyx_xmldoc_free_recursive(xmldoc);
                         }
 
                         /*--------------------------------------------------------------------------------------------*/
@@ -1141,7 +1140,7 @@ static bool _notify(nyx_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_dict_free(set_vector);
+            nyx_object_free_recursive(&set_vector->base);
 
             /*--------------------------------------------------------------------------------------------------------*/
 

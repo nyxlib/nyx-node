@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     printf("%s\n", string);
 
     nyx_memory_free(string);
-    nyx_xmldoc_free(xmldoc);
+    nyx_xmldoc_free_recursive(xmldoc);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

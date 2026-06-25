@@ -30,11 +30,11 @@ nyx_dict_t *nyx_number_prop_new(STR_t name, STR_t label, STR_t format, nyx_varia
     nyx_dict_set(result, "@label", nyx_string_from_dup(label));
     nyx_dict_set(result, "@format", nyx_string_from_dup(format));
 
-    nyx_dict_set(result, "@min", internal_variant_to_string(format, min));
-    nyx_dict_set(result, "@max", internal_variant_to_string(format, max));
-    nyx_dict_set(result, "@step", internal_variant_to_string(format, step));
+    nyx_dict_set(result, "@min", nyx_string_from_managed(internal_variant_to_string(format, min)));
+    nyx_dict_set(result, "@max", nyx_string_from_managed(internal_variant_to_string(format, max)));
+    nyx_dict_set(result, "@step", nyx_string_from_managed(internal_variant_to_string(format, step)));
 
-    nyx_dict_set(result, "$", internal_variant_to_string(format, value));
+    nyx_dict_set(result, "$", nyx_string_from_managed(internal_variant_to_string(format, value)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -47,22 +47,18 @@ nyx_dict_t *nyx_number_prop_new(STR_t name, STR_t label, STR_t format, nyx_varia
 
 bool nyx_number_prop_set(nyx_dict_t *prop, nyx_variant_t value)
 {
-    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
+    STR_t format = nyx_dict_get_string(prop, "@format");
 
-    nyx_string_t *string = internal_variant_to_string(format, value);
-
-    return nyx_dict_set(prop, "$", string);
+    return nyx_dict_set_string(prop, "$", internal_variant_to_string(format, value), true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_variant_t nyx_number_prop_get(const nyx_dict_t *prop)
 {
-    STR_t format = nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "@format"));
+    STR_t format = nyx_dict_get_string(prop, "@format");
 
-    const nyx_string_t *string = (nyx_string_t *) nyx_dict_get(prop, "$");
-
-    return internal_string_to_variant(format, string);
+    return internal_string_to_variant(format, nyx_dict_get_string(prop, "$"));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

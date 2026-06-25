@@ -335,7 +335,7 @@ bool internal_blob_is_compressed(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_string_t *internal_variant_to_string(
+str_t internal_variant_to_string(
     STR_t format,
     nyx_variant_t value
 );
@@ -344,7 +344,7 @@ nyx_string_t *internal_variant_to_string(
 
 nyx_variant_t internal_string_to_variant(
     STR_t format,
-    const nyx_string_t *value
+    STR_t value
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

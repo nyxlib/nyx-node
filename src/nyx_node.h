@@ -627,7 +627,7 @@ bool nyx_object_equal(
 
 /**
  * @memberof nyx_object_t
- * @brief Returns a string, with special character escaping, representing the provided JSON object.
+ * @brief Returns a string, with the special character escaping, representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
  * @note Must be freed.
@@ -998,7 +998,7 @@ size_t nyx_string_length(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a C string, with special character escaping, representing the provided JSON string object.
+ * @brief Returns a C string, with the special character escaping, representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
  * @note Must be freed.
@@ -1375,15 +1375,15 @@ __NYX_INLINE__ bool nyx_dict_set_number(const nyx_dict_t *dict, STR_t key, doubl
  * @param dict JSON dict object.
  * @param key Existing key holding a string.
  * @param value C string value to set.
- * @param nanaged Whether the C string is managed.
+ * @param managed Whether the C string is managed.
  * @return true if the value was modified, false otherwise.
  */
 
-__NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t value, bool nanaged)
+__NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t value, bool managed)
 {
     nyx_object_t *object = nyx_dict_get(dict, key);
 
-    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set((nyx_string_t *) object, value, nanaged)
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set((nyx_string_t *) object, value, managed)
                                                              : false
     ;
 }
@@ -1627,6 +1627,17 @@ __NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *object, size_t idx)
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+__NYX_INLINE__ bool nyx_dict_set_string_buff(const nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
+{
+    nyx_object_t *object = nyx_dict_get(dict, key);
+
+    return object != NULL && object->type == NYX_TYPE_STRING ? nyx_string_set_buff((nyx_string_t *) object, size, buff, managed)
+                                                             : false
+    ;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* XMLDOC                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 #if !defined(ARDUINO)
@@ -1712,7 +1723,7 @@ __NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
  * @param xmldoc The provided XML document.
  */
 
-void nyx_xmldoc_free(
+void nyx_xmldoc_free_recursive(
     __NYX_NULLABLE__ nyx_xmldoc_t *xmldoc
 );
 

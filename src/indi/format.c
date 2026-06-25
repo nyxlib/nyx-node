@@ -327,7 +327,7 @@ static int snprintm(str_t dst_str, size_t dst_len, int w, int f, double value)
 /* NUMBER FORMATTER                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
+str_t internal_variant_to_string(STR_t format, nyx_variant_t value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -350,9 +350,12 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
                ||
                (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintm(buffer, sizeof(buffer), w, f, value.value._double)) >= 0)
             ) {
-                for(int i = 0; i < l; i++) if(buffer[i] == ',') buffer[i] = '.';
+                if((size_t) l < sizeof(buffer))
+                {
+                    for(int i = 0; i < l; i++) if(buffer[i] == ',') buffer[i] = '.';
 
-                return nyx_string_from_dup(buffer);
+                    return nyx_string_dup(buffer);
+                }
             }
         }
         else if(lcnt == 0)
@@ -365,9 +368,12 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
                ||
                (value.type == NYX_VARIANT_TYPE_DOUBLE && (conv == 'm' /*----------------------------------------------------------------------------------------------------*/) && (l = snprintm(buffer, sizeof(buffer), w, f, value.value._double)) >= 0)
             ) {
-                for(int i = 0; i < l; i++) if(buffer[i] == ',') buffer[i] = '.';
+                if((size_t) l < sizeof(buffer))
+                {
+                    for(int i = 0; i < l; i++) if(buffer[i] == ',') buffer[i] = '.';
 
-                return nyx_string_from_dup(buffer);
+                    return nyx_string_dup(buffer);
+                }
             }
         }
     }
@@ -378,14 +384,14 @@ nyx_string_t *internal_variant_to_string(STR_t format, nyx_variant_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return nyx_string_from_dup("0");
+    return nyx_string_dup("0");
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value)
+nyx_variant_t internal_string_to_variant(STR_t format, STR_t value)
 {
     char conv;
     int lcnt;
@@ -393,11 +399,11 @@ nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value
     if(_parse_format(&conv, &lcnt, NULL, NULL, format))
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        
+
         if(conv == 'd')
         {
-            return lcnt > 0 ? NYX_VARIANT_FROM_LONG((int64_t) strtol(value->value, NULL, 10))
-                            : NYX_VARIANT_FROM_INT((int32_t) strtol(value->value, NULL, 10))
+            return lcnt > 0 ? NYX_VARIANT_FROM_LONG((int64_t) strtol(value, NULL, 10))
+                            : NYX_VARIANT_FROM_INT((int32_t) strtol(value, NULL, 10))
             ;
         }
 
@@ -405,8 +411,8 @@ nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value
 
         if(conv == 'u')
         {
-            return lcnt > 0 ? NYX_VARIANT_FROM_ULONG((uint64_t) strtoul(value->value, NULL, 10))
-                            : NYX_VARIANT_FROM_UINT((uint32_t) strtoul(value->value, NULL, 10))
+            return lcnt > 0 ? NYX_VARIANT_FROM_ULONG((uint64_t) strtoul(value, NULL, 10))
+                            : NYX_VARIANT_FROM_UINT((uint32_t) strtoul(value, NULL, 10))
             ;
         }
 
@@ -414,8 +420,8 @@ nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value
 
         if(conv == 'o')
         {
-            return lcnt > 0 ? NYX_VARIANT_FROM_ULONG((uint64_t) strtoul(value->value, NULL, 8))
-                            : NYX_VARIANT_FROM_UINT((uint32_t) strtoul(value->value, NULL, 8))
+            return lcnt > 0 ? NYX_VARIANT_FROM_ULONG((uint64_t) strtoul(value, NULL, 8))
+                            : NYX_VARIANT_FROM_UINT((uint32_t) strtoul(value, NULL, 8))
             ;
         }
 
@@ -423,21 +429,21 @@ nyx_variant_t internal_string_to_variant(STR_t format, const nyx_string_t *value
 
         if(conv == 'x' || conv == 'X')
         {
-            return lcnt > 0 ? NYX_VARIANT_FROM_ULONG((uint64_t) strtoul(value->value, NULL, 16))
-                            : NYX_VARIANT_FROM_UINT((uint32_t) strtoul(value->value, NULL, 16))
+            return lcnt > 0 ? NYX_VARIANT_FROM_ULONG((uint64_t) strtoul(value, NULL, 16))
+                            : NYX_VARIANT_FROM_UINT((uint32_t) strtoul(value, NULL, 16))
             ;
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        
+
         if(conv == 'f' || conv == 'F' || conv == 'e' || conv == 'E' || conv == 'g' || conv == 'G' || conv == 'a' || conv == 'A')
         {
-            return NYX_VARIANT_FROM_DOUBLE(strtod(value->value, NULL));
+            return NYX_VARIANT_FROM_DOUBLE(strtod(value, NULL));
         }
 
         if(conv == 'm' /*----------------------------------------------------------------------------------------------------*/)
         {
-            return NYX_VARIANT_FROM_DOUBLE(sextod(value->value));
+            return NYX_VARIANT_FROM_DOUBLE(sextod(value));
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
