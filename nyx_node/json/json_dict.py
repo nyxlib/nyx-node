@@ -15,15 +15,15 @@ from .. import obj
 
 if typing.TYPE_CHECKING:
 
-    from .json_null import nyx_object_null_t
-    from .json_boolean import nyx_object_boolean_t
-    from .json_number import nyx_object_number_t
-    from .json_string import nyx_object_string_t
+    from .json_null import NyxNull
+    from .json_boolean import NyxBoolean
+    from .json_number import NyxNumber
+    from .json_string import NyxString
     from .json_list import nyx_object_list_t
 
 ########################################################################################################################
 
-class nyx_object_dict_t(obj.nyx_object_t):
+class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
@@ -49,7 +49,7 @@ class nyx_object_dict_t(obj.nyx_object_t):
 
     ####################################################################################################################
 
-    def get(self, key: str) -> nyx_object_null_t | nyx_object_boolean_t | nyx_object_number_t | nyx_object_string_t | nyx_object_dict_t | nyx_object_list_t:
+    def get(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | nyx_object_list_t:
 
         ################################################################################################################
 
@@ -74,24 +74,24 @@ class nyx_object_dict_t(obj.nyx_object_t):
             ############################################################################################################
 
             if object_type == 200: # NYX_TYPE_NULL
-                from .json_null import nyx_object_null_t
-                return nyx_object_null_t(ptr)
+                from .json_null import NyxNull
+                return NyxNull(ptr)
 
             if object_type == 201: # NYX_TYPE_BOOLEAN
-                from .json_boolean import nyx_object_boolean_t
-                return nyx_object_boolean_t(ptr)
+                from .json_boolean import NyxBoolean
+                return NyxBoolean(ptr)
 
             if object_type == 202: # NYX_TYPE_NUMBER
-                from .json_number import nyx_object_number_t
-                return nyx_object_number_t(ptr)
+                from .json_number import NyxNumber
+                return NyxNumber(ptr)
 
             if object_type == 203: # NYX_TYPE_STRING
-                from .json_string import nyx_object_string_t
-                return nyx_object_string_t(ptr)
+                from .json_string import NyxString
+                return NyxString(ptr)
 
             if object_type == 204: # NYX_TYPE_DICT
                 #### .dict import nyx_object_dict_t
-                return nyx_object_dict_t(ptr)
+                return NyxDict(ptr)
 
             if object_type == 205: # NYX_TYPE_LIST
                 from .json_list import nyx_object_list_t
@@ -111,9 +111,9 @@ class nyx_object_dict_t(obj.nyx_object_t):
 
     ####################################################################################################################
 
-    def set(self, key: str, value: obj.nyx_object_t) -> bool:
+    def set(self, key: str, value: obj.NyxObject) -> bool:
 
-        if not isinstance(value, obj.nyx_object_t):
+        if not isinstance(value, obj.NyxObject):
 
             raise TypeError('value must be a nyx_object_t')
 
@@ -127,6 +127,6 @@ class nyx_object_dict_t(obj.nyx_object_t):
 
 ########################################################################################################################
 
-__all__ = ['nyx_object_dict_t']
+__all__ = ['NyxDict']
 
 ########################################################################################################################

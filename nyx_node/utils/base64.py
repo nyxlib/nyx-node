@@ -56,6 +56,6 @@ def nyx_base64_decode(data: typing.Optional[str | bytes]) -> typing.Optional[byt
 
 ########################################################################################################################
 
-__all__ = [name for name in globals() if name.startswith('nyx_') or name.startswith('NYX_')]
+__all__ = [name for name in globals() if name.lower().startswith('nyx')]
 
 ########################################################################################################################

@@ -27,6 +27,6 @@ def nyx_hash(string: str, seed: int) -> int:
 
 ########################################################################################################################
 
-__all__ = [name for name in globals() if name.startswith('nyx_') or name.startswith('NYX_')]
+__all__ = [name for name in globals() if name.lower().startswith('nyx')]
 
 ########################################################################################################################

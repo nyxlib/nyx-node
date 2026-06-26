@@ -14,6 +14,6 @@ from .json_boolean import *
 
 ########################################################################################################################
 
-__all__ = [name for name in globals() if name.startswith('nyx_') or name.startswith('NYX_')]
+__all__ = [name for name in globals() if name.lower().startswith('nyx')]
 
 ########################################################################################################################

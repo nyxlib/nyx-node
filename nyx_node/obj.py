@@ -16,7 +16,7 @@ from . import ffi
 # OBJECT                                                                                                               #
 ########################################################################################################################
 
-class nyx_object_t:
+class NyxObject:
 
     ####################################################################################################################
 
@@ -50,9 +50,9 @@ class nyx_object_t:
     ####################################################################################################################
 
     @staticmethod
-    def from_string(string: str) -> nyx_object_t:
+    def from_string(string: str) -> NyxObject:
 
-        return nyx_object_t(ffi.lib.nyx_object_parse(ffi.as_bytes(string, allow_none = False)))
+        return NyxObject(ffi.lib.nyx_object_parse(ffi.as_bytes(string, allow_none = False)))
 
     ####################################################################################################################
 
@@ -68,13 +68,13 @@ class nyx_object_t:
 
     ####################################################################################################################
 
-    def to_xmldoc(self, object: nyx_object_t) -> nyx_xmldoc_t:
+    def to_xmldoc(self, object: NyxObject) -> NyxXMLDoc:
 
-        return nyx_xmldoc_t(ffi.lib.nyx_object_to_xmldoc(object.ptr))
+        return NyxXMLDoc(ffi.lib.nyx_object_to_xmldoc(object.ptr))
 
     ####################################################################################################################
 
-    def __enter__(self) -> nyx_object_t:
+    def __enter__(self) -> NyxObject:
 
         return self
 
@@ -88,7 +88,7 @@ class nyx_object_t:
 
     def __eq__(self, other):
 
-        if not isinstance(other, nyx_object_t):
+        if not isinstance(other, NyxObject):
 
             return NotImplemented
 
@@ -108,7 +108,7 @@ class nyx_object_t:
 # XMLDOC                                                                                                               #
 ########################################################################################################################
 
-class nyx_xmldoc_t:
+class NyxXMLDoc:
 
     ####################################################################################################################
 
@@ -142,9 +142,9 @@ class nyx_xmldoc_t:
     ####################################################################################################################
 
     @staticmethod
-    def from_string(string: str) -> nyx_xmldoc_t:
+    def from_string(string: str) -> NyxXMLDoc:
 
-        return nyx_xmldoc_t(ffi.lib.nyx_xmldoc_parse(ffi.as_bytes(string, allow_none = False)))
+        return NyxXMLDoc(ffi.lib.nyx_xmldoc_parse(ffi.as_bytes(string, allow_none = False)))
 
     ####################################################################################################################
 
@@ -154,13 +154,13 @@ class nyx_xmldoc_t:
 
     ####################################################################################################################
 
-    def to_json(self, xmldoc: nyx_xmldoc_t) -> nyx_object_t:
+    def to_json(self, xmldoc: NyxXMLDoc) -> NyxObject:
 
-        return nyx_object_t(ffi.lib.nyx_xmldoc_to_object(xmldoc.ptr))
+        return NyxObject(ffi.lib.nyx_xmldoc_to_object(xmldoc.ptr))
 
     ####################################################################################################################
 
-    def __enter__(self) -> nyx_xmldoc_t:
+    def __enter__(self) -> NyxXMLDoc:
 
         return self
 
@@ -174,7 +174,7 @@ class nyx_xmldoc_t:
 
     def __eq__(self, other):
 
-        if not isinstance(other, nyx_xmldoc_t):
+        if not isinstance(other, NyxXMLDoc):
 
             return NotImplemented
 
@@ -192,6 +192,6 @@ class nyx_xmldoc_t:
 
 ########################################################################################################################
 
-__all__ = [name for name in globals() if name.startswith('nyx_') or name.startswith('NYX_')]
+__all__ = [name for name in globals() if name.lower().startswith('nyx')]
 
 ########################################################################################################################

@@ -32,6 +32,6 @@ def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
 
 ########################################################################################################################
 
-__all__ = [name for name in globals() if name.startswith('nyx_') or name.startswith('NYX_')]
+__all__ = [name for name in globals() if name.lower().startswith('nyx')]
 
 ########################################################################################################################
