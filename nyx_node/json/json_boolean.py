@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 from .. import obj
 
 ########################################################################################################################
@@ -17,7 +17,7 @@ class NyxBoolean(obj.NyxObject):
 
         if ptr is None:
 
-            ptr = ffi.lib.nyx_boolean_new()
+            ptr = bind.lib.nyx_boolean_new()
 
         super().__init__(ptr)
 
@@ -25,13 +25,13 @@ class NyxBoolean(obj.NyxObject):
 
     def get(self) -> bool:
 
-        return bool(ffi.lib.nyx_boolean_get(self.ptr))
+        return bool(bind.lib.nyx_boolean_get(self.ptr))
 
     ####################################################################################################################
 
     def set(self, value: bool) -> bool:
 
-        return bool(ffi.lib.nyx_boolean_set(self.ptr, bool(value)))
+        return bool(bind.lib.nyx_boolean_set(self.ptr, bool(value)))
 
 ########################################################################################################################
 

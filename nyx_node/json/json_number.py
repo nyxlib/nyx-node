@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 from .. import obj
 
 ########################################################################################################################
@@ -17,7 +17,7 @@ class NyxNumber(obj.NyxObject):
 
         if ptr is None:
 
-            ptr = ffi.lib.nyx_number_new()
+            ptr = bind.lib.nyx_number_new()
 
         super().__init__(ptr)
 
@@ -25,13 +25,13 @@ class NyxNumber(obj.NyxObject):
 
     def get(self) -> float:
 
-        return float(ffi.lib.nyx_number_get(self.ptr))
+        return float(bind.lib.nyx_number_get(self.ptr))
 
     ####################################################################################################################
 
     def set(self, value: float) -> bool:
 
-        return bool(ffi.lib.nyx_number_set(self.ptr, float(value)))
+        return bool(bind.lib.nyx_number_set(self.ptr, float(value)))
 
 ########################################################################################################################
 

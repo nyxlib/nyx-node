@@ -8,7 +8,7 @@ import typing
 
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 from .. import obj
 
 ########################################################################################################################
@@ -21,7 +21,7 @@ class NyxNull(obj.NyxObject):
 
         if ptr is None:
 
-            ptr = ffi.lib.nyx_null_new()
+            ptr = bind.lib.nyx_null_new()
 
         super().__init__(ptr)
 

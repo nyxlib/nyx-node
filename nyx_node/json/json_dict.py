@@ -12,7 +12,7 @@ import typing
 
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 from .. import obj
 
 if typing.TYPE_CHECKING:
@@ -33,7 +33,7 @@ class NyxDict(obj.NyxObject):
 
         if ptr is None:
 
-            ptr = ffi.lib.nyx_dict_new()
+            ptr = bind.lib.nyx_dict_new()
 
         super().__init__(ptr)
 
@@ -41,13 +41,13 @@ class NyxDict(obj.NyxObject):
 
     def clear(self) -> None:
 
-        ffi.lib.nyx_dict_clear(self.ptr)
+        bind.lib.nyx_dict_clear(self.ptr)
 
     ####################################################################################################################
 
     def delete(self, key: str) -> None:
 
-        ffi.lib.nyx_dict_del(self.ptr, ffi.as_bytes(key, allow_none = False))
+        bind.lib.nyx_dict_del(self.ptr, bind.as_bytes(key, allow_none = False))
 
     ####################################################################################################################
 
@@ -55,7 +55,7 @@ class NyxDict(obj.NyxObject):
 
         ################################################################################################################
 
-        ptr = ffi.lib.nyx_dict_get(self.ptr, ffi.as_bytes(key, allow_none = False))
+        ptr = bind.lib.nyx_dict_get(self.ptr, bind.as_bytes(key, allow_none = False))
 
         if not ptr:
 
@@ -63,7 +63,7 @@ class NyxDict(obj.NyxObject):
 
         ################################################################################################################
 
-        ffi.lib.nyx_object_ref(ptr)
+        bind.lib.nyx_object_ref(ptr)
 
         ################################################################################################################
 
@@ -71,7 +71,7 @@ class NyxDict(obj.NyxObject):
 
             ############################################################################################################
 
-            object_type = ffi.lib.nyx_object_get_type(ptr)
+            object_type = bind.lib.nyx_object_get_type(ptr)
 
             ############################################################################################################
 
@@ -107,7 +107,7 @@ class NyxDict(obj.NyxObject):
 
         except BaseException:
 
-            ffi.lib.nyx_object_unref(ptr)
+            bind.lib.nyx_object_unref(ptr)
 
             raise
 
@@ -119,13 +119,13 @@ class NyxDict(obj.NyxObject):
 
             raise TypeError('value must be a nyx_object_t')
 
-        return bool(ffi.lib.nyx_dict_set(self.ptr, ffi.as_bytes(key, allow_none = False), value.ptr))
+        return bool(bind.lib.nyx_dict_set(self.ptr, bind.as_bytes(key, allow_none = False), value.ptr))
 
     ####################################################################################################################
 
     def size(self) -> int:
 
-        return int(ffi.lib.nyx_dict_size(self.ptr))
+        return int(bind.lib.nyx_dict_size(self.ptr))
 
 ########################################################################################################################
 

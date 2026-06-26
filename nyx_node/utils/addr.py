@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 
 ########################################################################################################################
 
@@ -13,13 +13,13 @@ def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
 
     ####################################################################################################################
 
-    node_id = ffi.as_bytes(node_id, allow_none = False)
+    node_id = bind.as_bytes(node_id, allow_none = False)
 
     ####################################################################################################################
 
-    result_mac = (ffi.c_uint8 * 6)()
+    result_mac = (bind.c_uint8 * 6)()
 
-    ffi.lib.nyx_generate_mac_addr(
+    bind.lib.nyx_generate_mac_addr(
         result_mac,
         mac0 & 0xFF,
         mac1 & 0xFF,

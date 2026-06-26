@@ -12,21 +12,6 @@ import typing
 import pathlib
 
 ########################################################################################################################
-# ALIASES                                                                                                              #
-########################################################################################################################
-
-c_size_t = ctypes.c_size_t
-c_void_p = ctypes.c_void_p
-c_char_p = ctypes.c_char_p
-c_bool = ctypes.c_bool
-c_uint8 = ctypes.c_uint8
-c_uint32 = ctypes.c_uint32
-c_int32 = ctypes.c_int32
-c_uint64 = ctypes.c_uint64
-c_int64 = ctypes.c_int64
-c_double = ctypes.c_double
-
-########################################################################################################################
 # ERRORS                                                                                                               #
 ########################################################################################################################
 
@@ -36,8 +21,201 @@ class NyxError(RuntimeError):
 class NyxLibraryError(NyxError):
     """Raised when the C shared library cannot be loaded or used."""
 
-class NyxNullPointerError(NyxError):
-    """Raised when the C library returns NULL for a required object."""
+########################################################################################################################
+# ALIASES                                                                                                              #
+########################################################################################################################
+
+c_size_t = ctypes.c_size_t
+c_void_p = ctypes.c_void_p
+c_char_p = ctypes.c_char_p
+c_bool = ctypes.c_bool
+c_uint = ctypes.c_uint
+c_int = ctypes.c_int
+c_ulong = ctypes.c_ulong
+c_long = ctypes.c_long
+
+c_uint8 = ctypes.c_uint8
+c_int8 = ctypes.c_int8
+c_uint32 = ctypes.c_uint32
+c_int32 = ctypes.c_int32
+c_uint64 = ctypes.c_uint64
+c_int64 = ctypes.c_int64
+
+c_float = ctypes.c_float
+c_double = ctypes.c_double
+
+########################################################################################################################
+# CALLBACKS                                                                                                            #
+########################################################################################################################
+
+class nyx_dict_t(ctypes.Structure):
+
+    pass
+
+########################################################################################################################
+
+nyx_dict_p = ctypes.POINTER(nyx_dict_t)
+
+########################################################################################################################
+
+nyx_callback_int_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_int,
+    c_int,
+)
+
+nyx_callback_uint_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_uint,
+    c_uint,
+)
+
+nyx_callback_long_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_long,
+    c_long,
+)
+
+nyx_callback_ulong_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_ulong,
+    c_ulong,
+)
+
+nyx_callback_double_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_double,
+    c_double,
+)
+
+nyx_callback_str_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_char_p,
+    c_char_p,
+)
+
+nyx_callback_buffer_t = ctypes.CFUNCTYPE(
+    c_bool,
+    nyx_dict_p,
+    nyx_dict_p,
+    c_size_t,
+    c_void_p,
+)
+
+nyx_callback_vector_t = ctypes.CFUNCTYPE(
+    None,
+    nyx_dict_p,
+    c_bool,
+)
+
+########################################################################################################################
+
+class nyx_object_t(ctypes.Structure):
+
+    _fields_ = [
+        ('magic', c_uint32),
+        ('flags', c_uint64),
+        ('ref', c_int32),
+        ('type', c_int32),
+        ('node', c_void_p),
+        ('parent', c_void_p),
+        ('in_callback', c_void_p),
+        ('ctx', c_void_p),
+    ]
+
+########################################################################################################################
+
+nyx_dict_t._fields_ = [
+    ('base', nyx_object_t),
+]
+
+########################################################################################################################
+# HELPERS                                                                                                              #
+########################################################################################################################
+
+def as_bytes(value: str | bytes | bytearray | memoryview | None, *, allow_none: bool = True) -> bytes | None:
+
+    ####################################################################################################################
+
+    if value is None:
+
+        if not allow_none:
+
+            raise TypeError('None is not allowed here')
+
+        return None
+
+    ####################################################################################################################
+
+    if isinstance(value, (bytes, bytearray, memoryview)):
+
+        return bytes(value)
+
+    if isinstance(value, str):
+
+        return value.encode('utf-8')
+
+    ####################################################################################################################
+
+    raise TypeError(f'expected str or bytes, got {type(value).__name__}')
+
+########################################################################################################################
+
+def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
+
+    ####################################################################################################################
+
+    if isinstance(ptr, c_void_p):
+
+        if ptr.value:
+
+            return ptr
+
+    elif ptr:
+
+        # noinspection PyTypeChecker
+        return c_void_p(ptr)
+
+    ####################################################################################################################
+
+    raise TypeError(f'{what} is NULL')
+
+########################################################################################################################
+
+def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
+
+    cptr = check_ptr(ptr, 'C buffer')
+
+    try:
+        return ctypes.string_at(cptr, size)
+    finally:
+        lib.nyx_memory_free(cptr)
+
+########################################################################################################################
+
+def take_string(ptr: int | c_void_p | None, size: int | None = None) -> str:
+
+    cptr = check_ptr(ptr, 'C string')
+
+    try:
+        if size is None:
+            return ctypes.string_at(cptr).decode('utf-8')
+        else:
+            return ctypes.string_at(cptr, size).decode('utf-8')
+    finally:
+        lib.nyx_memory_free(cptr)
 
 ########################################################################################################################
 # LOAD LIBRARY                                                                                                         #
@@ -133,7 +311,7 @@ def _bind(name: str, restype, argtypes: typing.Sequence[object]) -> None:
 
 ########################################################################################################################
 
-# UTILS
+## UTILS ##
 
 _bind('nyx_hash', ctypes.c_uint32, [c_size_t, c_void_p, c_uint32])
 
@@ -144,7 +322,7 @@ _bind('nyx_base64_decode', c_void_p, [ctypes.POINTER(c_size_t), c_size_t, c_void
 
 ########################################################################################################################
 
-# OBJECT & XMLDOC
+## OBJECT ##
 
 _bind('nyx_object_parse', c_void_p, [c_char_p])
 _bind('nyx_object_ref', None, [c_void_p])
@@ -153,13 +331,17 @@ _bind('nyx_object_get_type', c_int32, [c_void_p])
 _bind('nyx_object_to_string', c_char_p, [c_void_p])
 _bind('nyx_object_to_cstring', c_char_p, [c_void_p])
 
+########################################################################################################################
+
+## XMLDOC ##
+
 _bind('nyx_xmldoc_parse', c_void_p, [c_char_p])
 _bind('nyx_xmldoc_free_recursive', None, [c_void_p])
 _bind('nyx_xmldoc_to_string', c_char_p, [c_void_p])
 
 ########################################################################################################################
 
-# JSON
+## JSON ##
 
 _bind("nyx_null_new", c_void_p, [])
 
@@ -188,81 +370,5 @@ _bind('nyx_list_del', None, [c_void_p, c_size_t])
 _bind('nyx_list_get', c_void_p, [c_void_p, c_size_t])
 _bind('nyx_list_set', c_bool, [c_void_p, c_size_t, c_void_p])
 _bind('nyx_list_size', c_size_t, [c_void_p])
-
-########################################################################################################################
-# HELPERS                                                                                                              #
-########################################################################################################################
-
-def as_bytes(value: str | bytes | bytearray | memoryview | None, *, allow_none: bool = True) -> bytes | None:
-
-    ####################################################################################################################
-
-    if value is None:
-
-        if not allow_none:
-
-            raise TypeError('None is not allowed here')
-
-        return None
-
-    ####################################################################################################################
-
-    if isinstance(value, (bytes, bytearray, memoryview)):
-
-        return bytes(value)
-
-    if isinstance(value, str):
-
-        return value.encode('utf-8')
-
-    ####################################################################################################################
-
-    raise TypeError(f'expected str or bytes, got {type(value).__name__}')
-
-########################################################################################################################
-
-def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
-
-    ####################################################################################################################
-
-    if isinstance(ptr, c_void_p):
-
-        if ptr.value:
-
-            return ptr
-
-    elif ptr:
-
-        # noinspection PyTypeChecker
-        return c_void_p(ptr)
-
-    ####################################################################################################################
-
-    raise NyxNullPointerError(f'{what} is NULL')
-
-########################################################################################################################
-
-def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
-
-    cptr = check_ptr(ptr, 'C buffer')
-
-    try:
-        return ctypes.string_at(cptr, size)
-    finally:
-        lib.nyx_memory_free(cptr)
-
-########################################################################################################################
-
-def take_string(ptr: int | c_void_p | None, size: int | None = None) -> str:
-
-    cptr = check_ptr(ptr, 'C string')
-
-    try:
-        if size is None:
-            return ctypes.string_at(cptr).decode('utf-8')
-        else:
-            return ctypes.string_at(cptr, size).decode('utf-8')
-    finally:
-        lib.nyx_memory_free(cptr)
 
 ########################################################################################################################

@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 
 ########################################################################################################################
 
@@ -17,9 +17,9 @@ def nyx_hash(string: str, seed: int) -> int:
 
     ####################################################################################################################
 
-    data = ffi.as_bytes(string, allow_none = False)
+    data = bind.as_bytes(string, allow_none = False)
 
-    return int(ffi.lib.nyx_hash(len(data), data, int(seed) & 0xFFFFFFFF))
+    return int(bind.lib.nyx_hash(len(data), data, int(seed) & 0xFFFFFFFF))
 
 ########################################################################################################################
 

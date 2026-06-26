@@ -8,7 +8,7 @@ import ctypes
 
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 from .. import obj
 
 ########################################################################################################################
@@ -21,7 +21,7 @@ class NyxString(obj.NyxObject):
 
         if ptr is None:
 
-            ptr = ffi.lib.nyx_string_new()
+            ptr = bind.lib.nyx_string_new()
 
         super().__init__(ptr)
 
@@ -29,7 +29,7 @@ class NyxString(obj.NyxObject):
 
     def get(self) -> str:
 
-        return ffi.lib.nyx_string_get(self.ptr).decode('utf-8')
+        return bind.lib.nyx_string_get(self.ptr).decode('utf-8')
 
     ####################################################################################################################
 
@@ -37,11 +37,11 @@ class NyxString(obj.NyxObject):
 
         ################################################################################################################
 
-        data = ffi.lib.nyx_string_dup(ffi.as_bytes(value, allow_none = False))
+        data = bind.lib.nyx_string_dup(bind.as_bytes(value, allow_none = False))
 
         ################################################################################################################
 
-        return bool(ffi.lib.nyx_string_set(self.ptr, ctypes.cast(data, ffi.c_char_p), True))
+        return bool(bind.lib.nyx_string_set(self.ptr, ctypes.cast(data, bind.c_char_p), True))
 
 ########################################################################################################################
 

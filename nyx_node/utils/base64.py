@@ -10,7 +10,7 @@ import typing
 
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 
 ########################################################################################################################
 
@@ -22,15 +22,15 @@ def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str
 
     ####################################################################################################################
 
-    data = ffi.as_bytes(data, allow_none = False)
+    data = bind.as_bytes(data, allow_none = False)
 
     ####################################################################################################################
 
-    result_size = ffi.c_size_t()
+    result_size = bind.c_size_t()
 
-    result_buff = ffi.lib.nyx_base64_encode(ctypes.byref(result_size), len(data), data)
+    result_buff = bind.lib.nyx_base64_encode(ctypes.byref(result_size), len(data), data)
 
-    return ffi.take_string(result_buff, result_size.value)
+    return bind.take_string(result_buff, result_size.value)
 
 ########################################################################################################################
 
@@ -42,15 +42,15 @@ def nyx_base64_decode(data: typing.Optional[str | bytes]) -> typing.Optional[byt
 
     ####################################################################################################################
 
-    data = ffi.as_bytes(data, allow_none = False)
+    data = bind.as_bytes(data, allow_none = False)
 
     ####################################################################################################################
 
-    result_size = ffi.c_size_t()
+    result_size = bind.c_size_t()
 
-    result_buff = ffi.lib.nyx_base64_decode(ctypes.byref(result_size), len(data), data)
+    result_buff = bind.lib.nyx_base64_decode(ctypes.byref(result_size), len(data), data)
 
-    return ffi.take_bytes(result_buff, result_size.value)
+    return bind.take_bytes(result_buff, result_size.value)
 
 ########################################################################################################################
 

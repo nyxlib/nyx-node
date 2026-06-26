@@ -12,7 +12,7 @@ import typing
 
 ########################################################################################################################
 
-from .. import ffi
+from .. import bind
 from .. import obj
 
 if typing.TYPE_CHECKING:
@@ -33,7 +33,7 @@ class NyxList(obj.NyxObject):
 
         if ptr is None:
 
-            ptr = ffi.lib.nyx_list_new()
+            ptr = bind.lib.nyx_list_new()
 
         super().__init__(ptr)
 
@@ -41,13 +41,13 @@ class NyxList(obj.NyxObject):
 
     def clear(self) -> None:
 
-        ffi.lib.nyx_list_clear(self.ptr)
+        bind.lib.nyx_list_clear(self.ptr)
 
     ####################################################################################################################
 
     def delete(self, idx: int) -> None:
 
-        ffi.lib.nyx_list_del(self.ptr, idx)
+        bind.lib.nyx_list_del(self.ptr, idx)
 
     ####################################################################################################################
 
@@ -55,7 +55,7 @@ class NyxList(obj.NyxObject):
 
         ################################################################################################################
 
-        ptr = ffi.lib.nyx_list_get(self.ptr, idx)
+        ptr = bind.lib.nyx_list_get(self.ptr, idx)
 
         if not ptr:
 
@@ -63,7 +63,7 @@ class NyxList(obj.NyxObject):
 
         ################################################################################################################
 
-        ffi.lib.nyx_object_ref(ptr)
+        bind.lib.nyx_object_ref(ptr)
 
         ################################################################################################################
 
@@ -71,7 +71,7 @@ class NyxList(obj.NyxObject):
 
             ############################################################################################################
 
-            object_type = ffi.lib.nyx_object_get_type(ptr)
+            object_type = bind.lib.nyx_object_get_type(ptr)
 
             ############################################################################################################
 
@@ -107,7 +107,7 @@ class NyxList(obj.NyxObject):
 
         except BaseException:
 
-            ffi.lib.nyx_object_unref(ptr)
+            bind.lib.nyx_object_unref(ptr)
 
             raise
 
@@ -119,7 +119,7 @@ class NyxList(obj.NyxObject):
 
             raise TypeError('value must be a nyx_object_t')
 
-        return bool(ffi.lib.nyx_list_set(self.ptr, idx, value.ptr))
+        return bool(bind.lib.nyx_list_set(self.ptr, idx, value.ptr))
 
     ####################################################################################################################
 
@@ -129,13 +129,13 @@ class NyxList(obj.NyxObject):
 
             raise TypeError('value must be a nyx_object_t')
 
-        return bool(ffi.lib.nyx_list_set(self.ptr, -1, value.ptr))
+        return bool(bind.lib.nyx_list_set(self.ptr, -1, value.ptr))
 
     ####################################################################################################################
 
     def size(self) -> int:
 
-        return int(ffi.lib.nyx_list_size(self.ptr))
+        return int(bind.lib.nyx_list_size(self.ptr))
 
 ########################################################################################################################
 
