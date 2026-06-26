@@ -35,6 +35,10 @@ class NyxDict(obj.NyxObject):
 
             ptr = bind.lib.nyx_dict_new()
 
+        elif bind.lib.nyx_object_get_type(ptr) != 0x65656504:
+
+            raise TypeError('Not a pointer to a Nyx dict object')
+
         super().__init__(ptr)
 
     ####################################################################################################################

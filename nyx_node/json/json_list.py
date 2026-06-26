@@ -35,6 +35,10 @@ class NyxList(obj.NyxObject):
 
             ptr = bind.lib.nyx_list_new()
 
+        elif bind.lib.nyx_object_get_type(ptr) != 0x65656505:
+
+            raise TypeError('Not a pointer to a Nyx list object')
+
         super().__init__(ptr)
 
     ####################################################################################################################
