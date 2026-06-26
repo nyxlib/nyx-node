@@ -4,6 +4,10 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
+from __future__ import annotations
+
+########################################################################################################################
+
 import weakref
 
 ########################################################################################################################
@@ -32,6 +36,7 @@ class NyxObject:
 
             self._ptr = None
 
+            # noinspection PyCallingNonCallable
             self._finalizer()
 
     ####################################################################################################################
@@ -66,9 +71,9 @@ class NyxObject:
 
     ####################################################################################################################
 
-    def to_xmldoc(self, object: NyxObject) -> NyxXMLDoc:
+    def to_xmldoc(self) -> NyxXMLDoc:
 
-        return NyxXMLDoc(ffi.lib.nyx_object_to_xmldoc(object.ptr))
+        return NyxXMLDoc(ffi.lib.nyx_object_to_xmldoc(self.ptr))
 
     ####################################################################################################################
 
@@ -124,6 +129,7 @@ class NyxXMLDoc:
 
             self._ptr = None
 
+            # noinspection PyCallingNonCallable
             self._finalizer()
 
     ####################################################################################################################
@@ -152,9 +158,9 @@ class NyxXMLDoc:
 
     ####################################################################################################################
 
-    def to_json(self, xmldoc: NyxXMLDoc) -> NyxObject:
+    def to_json(self) -> NyxObject:
 
-        return NyxObject(ffi.lib.nyx_xmldoc_to_object(xmldoc.ptr))
+        return NyxObject(ffi.lib.nyx_xmldoc_to_object(self.ptr))
 
     ####################################################################################################################
 
