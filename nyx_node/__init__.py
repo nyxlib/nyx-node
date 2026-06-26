@@ -7,6 +7,7 @@
 
 from .nss import *
 from .obj import *
+from .indi import *
 from .json import *
 from .node import *
 from .mqtt import *

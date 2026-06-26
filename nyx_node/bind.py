@@ -342,15 +342,15 @@ _bind('nyx_xmldoc_to_string', c_char_p, [c_void_p])
 
 ## JSON ##
 
-_bind("nyx_null_new", c_void_p, [])
+_bind('nyx_null_new', c_void_p, [])
 
-_bind("nyx_boolean_new", c_void_p, [])
-_bind("nyx_boolean_get", c_bool, [c_void_p])
-_bind("nyx_boolean_set", c_bool, [c_void_p, c_bool])
+_bind('nyx_boolean_new', c_void_p, [])
+_bind('nyx_boolean_get', c_bool, [c_void_p])
+_bind('nyx_boolean_set', c_bool, [c_void_p, c_bool])
 
-_bind("nyx_string_new", c_void_p, [])
+_bind('nyx_string_new', c_void_p, [])
 _bind('nyx_string_get', c_char_p, [c_void_p])
-_bind("nyx_string_set", c_bool, [c_void_p, c_char_p, c_bool])
+_bind('nyx_string_set', c_bool, [c_void_p, c_char_p, c_bool])
 
 _bind('nyx_number_new', c_void_p, [])
 _bind('nyx_number_get', c_double, [c_void_p])
@@ -369,5 +369,15 @@ _bind('nyx_list_del', None, [c_void_p, c_size_t])
 _bind('nyx_list_get', c_void_p, [c_void_p, c_size_t])
 _bind('nyx_list_set', c_bool, [c_void_p, c_size_t, c_void_p])
 _bind('nyx_list_size', c_size_t, [c_void_p])
+
+########################################################################################################################
+
+## NYX MESSAGE ##
+
+_bind('nyx_message_new', c_void_p, [c_char_p, c_char_p])
+
+## NYX DEL PROPERTY ##
+
+_bind('nyx_del_property_new', c_void_p, [c_char_p, c_char_p, c_char_p])
 
 ########################################################################################################################
