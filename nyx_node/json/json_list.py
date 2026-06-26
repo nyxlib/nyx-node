@@ -25,7 +25,7 @@ if typing.TYPE_CHECKING:
 
 ########################################################################################################################
 
-class nyx_object_list_t(obj.NyxObject):
+class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
@@ -51,7 +51,7 @@ class nyx_object_list_t(obj.NyxObject):
 
     ####################################################################################################################
 
-    def get(self, idx: int) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | nyx_object_list_t:
+    def get(self, idx: int) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
 
         ################################################################################################################
 
@@ -96,8 +96,8 @@ class nyx_object_list_t(obj.NyxObject):
                 return NyxDict(ptr)
 
             if object_type == 205: # NYX_TYPE_LIST
-                #### .list import nyx_object_list_t
-                return nyx_object_list_t(ptr)
+                #### .json_list import NyxList
+                return NyxList(ptr)
 
             ############################################################################################################
 
@@ -139,6 +139,6 @@ class nyx_object_list_t(obj.NyxObject):
 
 ########################################################################################################################
 
-__all__ = ['nyx_object_list_t']
+__all__ = ['NyxList']
 
 ########################################################################################################################

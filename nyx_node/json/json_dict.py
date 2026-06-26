@@ -21,7 +21,7 @@ if typing.TYPE_CHECKING:
     from .json_boolean import NyxBoolean
     from .json_number import NyxNumber
     from .json_string import NyxString
-    from .json_list import nyx_object_list_t
+    from .json_list import NyxList
 
 ########################################################################################################################
 
@@ -51,7 +51,7 @@ class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
-    def get(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | nyx_object_list_t:
+    def get(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
 
         ################################################################################################################
 
@@ -92,12 +92,12 @@ class NyxDict(obj.NyxObject):
                 return NyxString(ptr)
 
             if object_type == 204: # NYX_TYPE_DICT
-                #### .dict import nyx_object_dict_t
+                #### .json_dict import NyxDict
                 return NyxDict(ptr)
 
             if object_type == 205: # NYX_TYPE_LIST
-                from .json_list import nyx_object_list_t
-                return nyx_object_list_t(ptr)
+                from .json_list import NyxList
+                return NyxList(ptr)
 
             ############################################################################################################
 
