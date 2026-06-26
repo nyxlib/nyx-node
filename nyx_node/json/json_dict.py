@@ -75,27 +75,27 @@ class NyxDict(obj.NyxObject):
 
             ############################################################################################################
 
-            if object_type == 200: # NYX_TYPE_NULL
+            if object_type == 0x65656500: # NYX_TYPE_NULL
                 from .json_null import NyxNull
                 return NyxNull(ptr)
 
-            if object_type == 201: # NYX_TYPE_BOOLEAN
+            if object_type == 0x65656501: # NYX_TYPE_BOOLEAN
                 from .json_boolean import NyxBoolean
                 return NyxBoolean(ptr)
 
-            if object_type == 202: # NYX_TYPE_NUMBER
+            if object_type == 0x65656502: # NYX_TYPE_NUMBER
                 from .json_number import NyxNumber
                 return NyxNumber(ptr)
 
-            if object_type == 203: # NYX_TYPE_STRING
+            if object_type == 0x65656503: # NYX_TYPE_STRING
                 from .json_string import NyxString
                 return NyxString(ptr)
 
-            if object_type == 204: # NYX_TYPE_DICT
+            if object_type == 0x65656504: # NYX_TYPE_DICT
                 #### .json_dict import NyxDict
                 return NyxDict(ptr)
 
-            if object_type == 205: # NYX_TYPE_LIST
+            if object_type == 0x65656505: # NYX_TYPE_LIST
                 from .json_list import NyxList
                 return NyxList(ptr)
 
