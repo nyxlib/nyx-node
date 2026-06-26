@@ -322,7 +322,7 @@ void nyx_object_ref(nyx_object_t *object)
         return;
     }
 
-    if(object->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(object))
     {
         NYX_LOG_FATAL("Invalid object");
     }
@@ -354,7 +354,7 @@ void nyx_object_unref(nyx_object_t *object)
         return;
     }
 
-    if(object->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(object))
     {
         NYX_LOG_FATAL("Invalid object");
     }
@@ -386,7 +386,7 @@ void nyx_object_free_recursive(nyx_object_t *object)
         return;
     }
 
-    if(object->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(object))
     {
         NYX_LOG_FATAL("Invalid object");
     }
@@ -478,7 +478,7 @@ bool nyx_object_equal(const nyx_object_t *object1, const nyx_object_t *object2)
         return false;
     }
 
-    if(object1->magic != NYX_OBJECT_MAGIC || object2->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(object1) || !NYX_OBJECT_CHECK_MAGIC(object2))
     {
         NYX_LOG_FATAL("Invalid object");
     }
@@ -541,7 +541,7 @@ str_t nyx_object_to_string(const nyx_object_t *object)
         return NULL;
     }
 
-    if(object->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(object))
     {
         NYX_LOG_FATAL("Invalid object");
     }
@@ -584,7 +584,7 @@ str_t nyx_object_to_cstring(const nyx_object_t *object)
         return NULL;
     }
 
-    if(object->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(object))
     {
         NYX_LOG_FATAL("Invalid object");
     }

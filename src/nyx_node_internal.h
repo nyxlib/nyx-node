@@ -93,15 +93,19 @@ int nyx_unicode_to_utf8(
 /* OBJECT                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#define NYX_OBJECT_CHECK_MAGIC(object) \
+            ((((nyx_object_t *) (object))->type & 0xFFFFFF00) == NYX_OBJECT_MAGIC)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 #define NYX_OBJECT(Type) \
             ((nyx_object_t) {                   \
-                .magic = NYX_OBJECT_MAGIC,      \
-                .flags = 0x00000000000000,      \
-                .ref = 1,                       \
                 .type = (Type),                 \
+                .flags = 0,                     \
+                .ref = 1,                       \
                 .node = NULL,                   \
                 .parent = NULL,                 \
-                .in_callback = {0},             \
+                .callback = {0},                \
                 .ctx = NULL                     \
             })
 

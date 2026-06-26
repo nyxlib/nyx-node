@@ -25,7 +25,6 @@ class NyxLibraryError(NyxError):
 # ALIASES                                                                                                              #
 ########################################################################################################################
 
-c_size_t = ctypes.c_size_t
 c_void_p = ctypes.c_void_p
 c_char_p = ctypes.c_char_p
 c_bool = ctypes.c_bool
@@ -40,6 +39,7 @@ c_uint32 = ctypes.c_uint32
 c_int32 = ctypes.c_int32
 c_uint64 = ctypes.c_uint64
 c_int64 = ctypes.c_int64
+c_size_t = ctypes.c_size_t
 
 c_float = ctypes.c_float
 c_double = ctypes.c_double
@@ -125,13 +125,12 @@ nyx_callback_vector_t = ctypes.CFUNCTYPE(
 class nyx_object_t(ctypes.Structure):
 
     _fields_ = [
-        ('magic', c_uint32),
+        ('type', c_int32),
         ('flags', c_uint64),
         ('ref', c_int32),
-        ('type', c_int32),
         ('node', c_void_p),
         ('parent', c_void_p),
-        ('in_callback', c_void_p),
+        ('callback', c_void_p),
         ('ctx', c_void_p),
     ]
 

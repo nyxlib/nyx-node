@@ -239,7 +239,7 @@ int main()
 
     nyx_dict_t *run_prop = nyx_switch_prop_new("run", "Run", NYX_ONOFF_OFF);
 
-    run_prop->base.in_callback._int = run_callback;
+    run_prop->base.callback._int = run_callback;
 
     nyx_dict_t *run_props[] = {run_prop, NULL};
 
@@ -259,9 +259,9 @@ int main()
     nyx_dict_t *mode_delta_prop = nyx_switch_prop_new("mode_delta", "Dirac delta", NYX_ONOFF_OFF);
     nyx_dict_t *mode_comb_prop = nyx_switch_prop_new("mode_comb", "Dirac comb", NYX_ONOFF_OFF);
 
-    mode_noise_prop->base.in_callback._int = mode_noise_callback;
-    mode_delta_prop->base.in_callback._int = mode_delta_callback;
-    mode_comb_prop->base.in_callback._int = mode_comb_callback;
+    mode_noise_prop->base.callback._int = mode_noise_callback;
+    mode_delta_prop->base.callback._int = mode_delta_callback;
+    mode_comb_prop->base.callback._int = mode_comb_callback;
 
     nyx_dict_t *mode_props[] = {mode_noise_prop, mode_delta_prop, mode_comb_prop, NULL};
 
@@ -281,9 +281,9 @@ int main()
     nyx_dict_t *frequency_prop = nyx_number_prop_new_double("frequency", "Frequency [Hz]", "%.0f", 1000000.0, 2000000000.0, 1000.0, s_frequency);
     nyx_dict_t *power_prop = nyx_number_prop_new_double("power", "Power (dB)", "%.1f", -150.0, 20.0, 1.0, s_power);
 
-    samp_rate_prop->base.in_callback._double = samp_rate_callback;
-    frequency_prop->base.in_callback._double = frequency_callback;
-    power_prop->base.in_callback._double = power_callback;
+    samp_rate_prop->base.callback._double = samp_rate_callback;
+    frequency_prop->base.callback._double = frequency_callback;
+    power_prop->base.callback._double = power_callback;
 
     nyx_dict_t *signal_props[] = {samp_rate_prop, frequency_prop, power_prop, NULL};
 
@@ -300,7 +300,7 @@ int main()
 
     nyx_dict_t *fft_size_prop = nyx_number_prop_new_uint("fft_size", "FFT size", "%u", 1U, 4096U, 1U, s_fft_size);
 
-    fft_size_prop->base.in_callback._uint = fftsize_callback;
+    fft_size_prop->base.callback._uint = fftsize_callback;
 
     nyx_dict_t *fft_props[] = {fft_size_prop, NULL};
 

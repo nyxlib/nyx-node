@@ -398,7 +398,7 @@ __NYX_NULLABLE__ buff_t nyx_zlib_base64_inflate(
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#define NYX_OBJECT_MAGIC      UINT32_C(0x65656565)                                              //!< Magic number for identifying JSON objects.
+#define NYX_OBJECT_MAGIC      UINT32_C(0x65656500)                                              //!< Magic number for identifying JSON objects.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -419,12 +419,12 @@ __NYX_NULLABLE__ buff_t nyx_zlib_base64_inflate(
 
 typedef enum
 {
-    NYX_TYPE_NULL = 200,                                                                        //!< Null object.
-    NYX_TYPE_BOOLEAN = 201,                                                                     //!< Boolean object.
-    NYX_TYPE_NUMBER = 202,                                                                      //!< Number object.
-    NYX_TYPE_STRING = 203,                                                                      //!< String object.
-    NYX_TYPE_DICT = 204,                                                                        //!< Dict object.
-    NYX_TYPE_LIST = 205,                                                                        //!< List object.
+    NYX_TYPE_NULL    = NYX_OBJECT_MAGIC | 0,                                                       //!< Null object.
+    NYX_TYPE_BOOLEAN = NYX_OBJECT_MAGIC | 1,                                                       //!< Boolean object.
+    NYX_TYPE_NUMBER  = NYX_OBJECT_MAGIC | 2,                                                       //!< Number object.
+    NYX_TYPE_STRING  = NYX_OBJECT_MAGIC | 3,                                                       //!< String object.
+    NYX_TYPE_DICT    = NYX_OBJECT_MAGIC | 4,                                                       //!< Dict object.
+    NYX_TYPE_LIST    = NYX_OBJECT_MAGIC | 5,                                                       //!< List object.
 
 } nyx_type_t;
 
@@ -447,13 +447,9 @@ typedef struct nyx_object_s
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    uint32_t magic;                                                                             //!< Magic number, must always be @ref NYX_OBJECT_MAGIC.
+    nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
     uint64_t flags;                                                                             //!< Mask of flags, see NYX_FLAGS_XXX definitions.
     int32_t ref;                                                                                //!< Reference counter for memory allocation.
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_type_t type;                                                                            //!< Type of object, see @ref nyx_type_t.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -521,7 +517,7 @@ typedef struct nyx_object_s
             bool modified                                                                       //!< Indicates whether the vector has been modified.
         );
 
-    } in_callback;                                                                              //!< Callback triggered when the client modifies this object.
+    } callback;                                                                                 //!< Callback triggered when the client modifies this object.
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

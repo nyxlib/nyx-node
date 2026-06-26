@@ -179,7 +179,7 @@ bool nyx_dict_set(nyx_dict_t *object, STR_t key, void *value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(((nyx_object_t *) value)->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(value))
     {
         NYX_LOG_FATAL("Invalid object");
     }

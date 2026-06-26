@@ -177,7 +177,7 @@ bool nyx_list_set(nyx_list_t *object, size_t idx, void *value)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(((nyx_object_t *) value)->magic != NYX_OBJECT_MAGIC)
+    if(!NYX_OBJECT_CHECK_MAGIC(value))
     {
         NYX_LOG_FATAL("Invalid object");
     }
