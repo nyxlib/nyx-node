@@ -83,7 +83,7 @@ class NyxTextVector(json.json_dict.NyxDict):
 
         ################################################################################################################
 
-        children = self['children']
+        children: json.NyxList = self['children']
 
         for prop in props:
 

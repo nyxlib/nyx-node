@@ -49,13 +49,13 @@ class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
-    def delete(self, idx: int) -> None:
+    def __delitem__(self, idx: int) -> None:
 
         bind.lib.nyx_list_del(self.ptr, idx)
 
     ####################################################################################################################
 
-    def get(self, idx: int) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
+    def __getitem__(self, idx: int) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
 
         ################################################################################################################
 
@@ -117,7 +117,7 @@ class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
-    def set(self, idx: int, value: obj.NyxObject) -> bool:
+    def __setitem__(self, idx: int, value: obj.NyxObject) -> bool:
 
         if not isinstance(value, obj.NyxObject):
 
@@ -137,19 +137,9 @@ class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
-    def size(self) -> int:
+    def __len__(self) -> int:
 
         return int(bind.lib.nyx_list_size(self.ptr))
-
-    ####################################################################################################################
-
-    def __getitem__(self, idx):
-
-        return self.get(idx)
-
-    def __setitem__(self, idx, value):
-
-        self.set(idx, value)
 
 ########################################################################################################################
 

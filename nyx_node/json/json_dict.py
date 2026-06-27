@@ -49,13 +49,13 @@ class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
-    def delete(self, key: str) -> None:
+    def __delitem__(self, key: str) -> None:
 
         bind.lib.nyx_dict_del(self.ptr, bind.as_bytes(key, allow_none = False))
 
     ####################################################################################################################
 
-    def get(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
+    def __getitem__(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
 
         ################################################################################################################
 
@@ -117,7 +117,7 @@ class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
-    def set(self, key: str, value: obj.NyxObject) -> bool:
+    def __setitem__(self, key: str, value: obj.NyxObject) -> bool:
 
         if not isinstance(value, obj.NyxObject):
 
@@ -127,19 +127,9 @@ class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
-    def size(self) -> int:
+    def __len__(self) -> int:
 
         return int(bind.lib.nyx_dict_size(self.ptr))
-
-    ####################################################################################################################
-
-    def __getitem__(self, key):
-
-        return self.get(key)
-
-    def __setitem__(self, key, value):
-
-        self.set(key, value)
 
 ########################################################################################################################
 
