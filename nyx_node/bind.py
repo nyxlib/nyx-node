@@ -341,6 +341,13 @@ def _bind(name: str, restype, argtypes: typing.Sequence[object]) -> None:
 
 ########################################################################################################################
 
+## HELPER ##
+
+_bind('nyx_string_ndup', c_void_p, [c_void_p, c_size_t])
+_bind('nyx_buffer_ndup', c_void_p, [c_void_p, c_size_t])
+
+########################################################################################################################
+
 ## UTILS ##
 
 _bind('nyx_hash', ctypes.c_uint32, [c_size_t, c_void_p, c_uint32])
