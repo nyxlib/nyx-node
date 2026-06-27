@@ -46,6 +46,13 @@ void nyx_string_free(nyx_string_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+bool nyx_string_is_managed(const nyx_string_t *object)
+{
+    return object->managed;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 STR_t nyx_string_get(const nyx_string_t *object)
 {
     return object->value;

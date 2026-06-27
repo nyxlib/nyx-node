@@ -129,11 +129,7 @@ class NyxList(obj.NyxObject):
 
     def push(self, value: obj.NyxObject) -> bool:
 
-        if not isinstance(value, obj.NyxObject):
-
-            raise TypeError('value must be a nyx_object_t')
-
-        return bool(bind.lib.nyx_list_set(self.ptr, -1, value.ptr))
+        return self.__setitem__(-1, value)
 
     ####################################################################################################################
 

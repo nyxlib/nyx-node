@@ -92,6 +92,7 @@ class NyxSwitchVector(json.json_dict.NyxDict):
 
         ################################################################################################################
 
+        # noinspection PyTypeChecker
         children: json.NyxList = self['children']
 
         for prop in props:
