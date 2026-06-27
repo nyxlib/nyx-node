@@ -84,7 +84,7 @@ set(SOURCE_FILES
     src/json/json_number.c
     src/json/json_string.c
     #
-    src/indi/helpers.c
+    src/indi/utils.c
     src/indi/format.c
     src/indi/indi_blob.c
     src/indi/indi_del_property.c
