@@ -5,11 +5,84 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from .. import bind
-from ..json import json_dict
+import ctypes
+import typing
 
 ########################################################################################################################
 
+from .. import bind
+from .. import json
+
+from . import enums
+from . import utils
+
+########################################################################################################################
+
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'label',
+    '@label',
+)
+@utils.nyx_property(
+    'value',
+    '$',
+    getter = enums.nyx_state,
+    setter = enums.nyx_state_str,
+)
+class NyxLightProp(json.json_dict.NyxDict):
+
+    ####################################################################################################################
+
+    def __init__(self, name: str, label: str | None = None, value: enums.NyxState | int | str = enums.NyxState.NYX_STATE_IDLE):
+
+        super().__init__(bind.lib.nyx_light_prop_new(
+            bind.as_bytes(name, allow_none = False),
+            bind.as_bytes(label),
+            enums.nyx_state(value),
+        ))
+
+########################################################################################################################
+
+@utils.nyx_property(
+    'device',
+    '@device',
+)
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'state',
+    '@state',
+    getter = enums.nyx_state,
+    setter = enums.nyx_state_str,
+)
+class NyxLightVector(json.json_dict.NyxDict):
+
+    ####################################################################################################################
+
+    def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxLightProp], **opts: typing.Any):
+
+        ################################################################################################################
+
+        super().__init__(bind.lib.nyx_light_vector_new(
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(name, allow_none = False),
+            enums.nyx_state(state),
+            ctypes.c_void_p(),
+            bind.as_opts(opts),
+        ))
+
+        ################################################################################################################
+
+        children = self['children']
+
+        for prop in props:
+
+            children.push(prop)
 
 ########################################################################################################################
 

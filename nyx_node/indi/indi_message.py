@@ -6,11 +6,21 @@
 ########################################################################################################################
 
 from .. import bind
-from ..json import json_dict
+from .. import json
+
+from . import utils
 
 ########################################################################################################################
 
-class NyxMessage(json_dict.NyxDict):
+@utils.nyx_property(
+    'device',
+    '@device',
+)
+@utils.nyx_property(
+    'message',
+    '@message',
+)
+class NyxMessage(json.json_dict.NyxDict):
 
     ####################################################################################################################
 

@@ -5,11 +5,77 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from .. import bind
-from ..json import json_dict
+import ctypes
+import typing
 
 ########################################################################################################################
 
+from .. import bind
+from .. import json
+
+from . import enums
+from . import utils
+
+########################################################################################################################
+
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'label',
+    '@label',
+)
+class NyxStreamProp(json.json_dict.NyxDict):
+
+    ####################################################################################################################
+
+    def __init__(self, name: str, label: str | None = None):
+
+        super().__init__(bind.lib.nyx_stream_prop_new(
+            bind.as_bytes(name, allow_none = False),
+            bind.as_bytes(label),
+        ))
+
+########################################################################################################################
+
+@utils.nyx_property(
+    'device',
+    '@device',
+)
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'state',
+    '@state',
+    getter = enums.nyx_state,
+    setter = enums.nyx_state_str,
+)
+class NyxStreamVector(json.json_dict.NyxDict):
+
+    ####################################################################################################################
+
+    def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxStreamProp], **opts: typing.Any):
+
+        ################################################################################################################
+
+        super().__init__(bind.lib.nyx_stream_vector_new(
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(name, allow_none = False),
+            enums.nyx_state(state),
+            ctypes.c_void_p(),
+            bind.as_opts(opts),
+        ))
+
+        ################################################################################################################
+
+        children = self['children']
+
+        for prop in props:
+
+            children.push(prop)
 
 ########################################################################################################################
 

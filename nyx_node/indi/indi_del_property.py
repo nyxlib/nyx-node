@@ -6,11 +6,25 @@
 ########################################################################################################################
 
 from .. import bind
-from ..json import json_dict
+from .. import json
+
+from . import utils
 
 ########################################################################################################################
 
-class NyxDelProperty(json_dict.NyxDict):
+@utils.nyx_property(
+    'device',
+    '@device',
+)
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'message',
+    '@message',
+)
+class NyxDelProperty(json.json_dict.NyxDict):
 
     ####################################################################################################################
 

@@ -80,10 +80,6 @@ class NyxSwitchVector(json.json_dict.NyxDict):
 
         ################################################################################################################
 
-        opts_p = bind.as_opts(opts)
-
-        ################################################################################################################
-
         super().__init__(bind.lib.nyx_switch_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
@@ -91,7 +87,7 @@ class NyxSwitchVector(json.json_dict.NyxDict):
             enums.nyx_perm(perm),
             enums.nyx_rule(rule),
             ctypes.c_void_p(),
-            opts_p,
+            bind.as_opts(opts),
         ))
 
         ################################################################################################################
