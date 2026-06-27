@@ -48,6 +48,7 @@ c_double = ctypes.c_double
 # CALLBACKS                                                                                                            #
 ########################################################################################################################
 
+# noinspection PyPep8Naming
 class nyx_dict_t(ctypes.Structure):
 
     pass
@@ -131,6 +132,7 @@ NYX_TYPE_LIST = 0x65656505
 
 ########################################################################################################################
 
+# noinspection PyPep8Naming
 class nyx_object_t(ctypes.Structure):
 
     _fields_ = [
@@ -145,6 +147,7 @@ class nyx_object_t(ctypes.Structure):
 
 ########################################################################################################################
 
+# noinspection PyPep8Naming
 class nyx_opts_t(ctypes.Structure):
 
     _fields_ = [
@@ -159,7 +162,29 @@ class nyx_opts_t(ctypes.Structure):
 # HELPERS                                                                                                              #
 ########################################################################################################################
 
-def as_bytes(value: str | bytes | bytearray | memoryview | None, *, allow_none: bool = True) -> bytes | None:
+@typing.overload
+def as_bytes(value: str | bytes, *, allow_none: bool = True) -> bytes:
+    ...
+
+@typing.overload
+def as_bytes(value: None, *, allow_none: typing.Literal[True] = True) -> None:
+    ...
+
+@typing.overload
+def as_bytes(value: None, *, allow_none: typing.Literal[False]) -> typing.NoReturn:
+    ...
+
+@typing.overload
+def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[False]) -> bytes:
+    ...
+
+@typing.overload
+def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[True] = True) -> bytes | None:
+    ...
+
+########################################################################################################################
+
+def as_bytes(value: str | bytes | None, *, allow_none: bool = True) -> bytes | None:
 
     ####################################################################################################################
 
@@ -173,13 +198,13 @@ def as_bytes(value: str | bytes | bytearray | memoryview | None, *, allow_none: 
 
     ####################################################################################################################
 
-    if isinstance(value, (bytes, bytearray, memoryview)):
-
-        return bytes(value)
-
     if isinstance(value, str):
 
         return value.encode('utf-8')
+
+    if isinstance(value, bytes):
+
+        return value#.encode('utf-8')
 
     ####################################################################################################################
 
@@ -226,26 +251,26 @@ def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
 
 def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
 
-    cptr = check_ptr(ptr, 'C buffer')
+    ptr = check_ptr(ptr, 'C buffer')
 
     try:
-        return ctypes.string_at(cptr, size)
+        return ctypes.string_at(ptr, size)
     finally:
-        lib.nyx_memory_free(cptr)
+        lib.nyx_memory_free(ptr)
 
 ########################################################################################################################
 
 def take_string(ptr: int | c_void_p | None, size: int | None = None) -> str:
 
-    cptr = check_ptr(ptr, 'C string')
+    ptr = check_ptr(ptr, 'C string')
 
     try:
         if size is None:
-            return ctypes.string_at(cptr).decode('utf-8')
+            return ctypes.string_at(ptr).decode('utf-8')
         else:
-            return ctypes.string_at(cptr, size).decode('utf-8')
+            return ctypes.string_at(ptr, size).decode('utf-8')
     finally:
-        lib.nyx_memory_free(cptr)
+        lib.nyx_memory_free(ptr)
 
 ########################################################################################################################
 # LOAD LIBRARY                                                                                                         #
