@@ -5,11 +5,14 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-from enum import IntEnum
+import enum
+import typing
 
 ########################################################################################################################
+# TYPES                                                                                                                #
+########################################################################################################################
 
-class NyxState(IntEnum):
+class NyxState(enum.IntEnum):
 
     NYX_STATE_IDLE = 400
     NYX_STATE_OK = 401
@@ -18,7 +21,7 @@ class NyxState(IntEnum):
 
 ########################################################################################################################
 
-class NyxPerm(IntEnum):
+class NyxPerm(enum.IntEnum):
 
     NYX_PERM_RO = 500
     NYX_PERM_WO = 501
@@ -26,7 +29,7 @@ class NyxPerm(IntEnum):
 
 ########################################################################################################################
 
-class NyxRule(IntEnum):
+class NyxRule(enum.IntEnum):
 
     NYX_RULE_ONE_OF_MANY = 600
     NYX_RULE_AT_MOST_ONE = 601
@@ -34,10 +37,54 @@ class NyxRule(IntEnum):
 
 ########################################################################################################################
 
-class NyxOnOff(IntEnum):
+class NyxOnOff(enum.IntEnum):
 
     NYX_ONOFF_ON = 700
     NYX_ONOFF_OFF = 701
+
+########################################################################################################################
+# PRIVATE HELPERS                                                                                                      #
+########################################################################################################################
+
+_NyxEnum = typing.TypeVar('_NyxEnum', bound = enum.IntEnum)
+
+########################################################################################################################
+
+def _nyx_enum(value: _NyxEnum | int | str, enum_type: type[_NyxEnum], from_str: typing.Mapping[str, _NyxEnum], name: str) -> int:
+
+    ####################################################################################################################
+
+    if isinstance(value, enum_type):
+
+        return int(value)
+
+    ####################################################################################################################
+
+    if type(value) is int:
+
+        try:
+            return int(enum_type(value))
+        except ValueError:
+            raise ValueError(f'Invalid Nyx {name}: {value!r}') from None
+
+    ####################################################################################################################
+
+    if isinstance(value, str):
+
+        try:
+            return int(from_str[value])
+        except KeyError:
+            raise ValueError(f'Invalid Nyx {name}: {value!r}') from None
+
+    ####################################################################################################################
+
+    raise TypeError(f'Expected {enum_type.__name__}, int or str, got {type(value).__name__}')
+
+########################################################################################################################
+
+def _nyx_enum_str(value: _NyxEnum | int | str, enum_type: type[_NyxEnum], to_str: typing.Mapping[_NyxEnum, str], from_str: typing.Mapping[str, _NyxEnum], name: str) -> str:
+
+    return to_str[enum_type(_nyx_enum(value, enum_type, from_str, name))]
 
 ########################################################################################################################
 
@@ -80,52 +127,42 @@ _ONOFF_TO_STR = {
 _ONOFF_FROM_STR = {value: key for key, value in _ONOFF_TO_STR.items()}
 
 ########################################################################################################################
+# PUBLIC                                                                                                               #
+########################################################################################################################
 
 def nyx_state(value: NyxState | int | str) -> int:
 
-    if isinstance(value, str):
-
-        return int(_STATE_FROM_STR[value])
-
-    return int(NyxState(value))
+    return _nyx_enum(value, NyxState, _STATE_FROM_STR, 'state')
 
 ########################################################################################################################
 
 def nyx_state_str(value: NyxState | int | str) -> str:
 
-    return _STATE_TO_STR[NyxState(nyx_state(value))]
+    return _nyx_enum_str(value, NyxState, _STATE_TO_STR, _STATE_FROM_STR, 'state')
 
 ########################################################################################################################
 
 def nyx_perm(value: NyxPerm | int | str) -> int:
 
-    if isinstance(value, str):
-
-        return int(_PERM_FROM_STR[value])
-
-    return int(NyxPerm(value))
+    return _nyx_enum(value, NyxPerm, _PERM_FROM_STR, 'permission')
 
 ########################################################################################################################
 
 def nyx_perm_str(value: NyxPerm | int | str) -> str:
 
-    return _PERM_TO_STR[NyxPerm(nyx_perm(value))]
+    return _nyx_enum_str(value, NyxPerm, _PERM_TO_STR, _PERM_FROM_STR, 'permission')
 
 ########################################################################################################################
 
 def nyx_rule(value: NyxRule | int | str) -> int:
 
-    if isinstance(value, str):
-
-        return int(_RULE_FROM_STR[value])
-
-    return int(NyxRule(value))
+    return _nyx_enum(value, NyxRule, _RULE_FROM_STR, 'rule')
 
 ########################################################################################################################
 
 def nyx_rule_str(value: NyxRule | int | str) -> str:
 
-    return _RULE_TO_STR[NyxRule(nyx_rule(value))]
+    return _nyx_enum_str(value, NyxRule, _RULE_TO_STR, _RULE_FROM_STR, 'rule')
 
 ########################################################################################################################
 
@@ -135,11 +172,7 @@ def nyx_onoff(value: NyxOnOff | int | str | bool) -> int:
 
         return int(NyxOnOff.NYX_ONOFF_ON if value else NyxOnOff.NYX_ONOFF_OFF)
 
-    if isinstance(value, str):
-
-        return int(_ONOFF_FROM_STR[value])
-
-    return int(NyxOnOff(value))
+    return _nyx_enum(value, NyxOnOff, _ONOFF_FROM_STR, 'OnOff value')
 
 ########################################################################################################################
 

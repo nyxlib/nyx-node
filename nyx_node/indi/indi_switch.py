@@ -11,42 +11,72 @@ import typing
 ########################################################################################################################
 
 from .. import bind
-from ..json import json_dict
-from . import helpers
+from .. import json
+
+from . import enums
+from . import utils
 
 ########################################################################################################################
 
-class NyxSwitchProp(json_dict.NyxDict):
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'label',
+    '@label',
+)
+@utils.nyx_property(
+    'value',
+    '$',
+    getter = enums.nyx_onoff,
+    setter = enums.nyx_onoff_str,
+)
+class NyxSwitchProp(json.json_dict.NyxDict):
 
     ####################################################################################################################
 
-    def __init__(self, name: str, label: str | None = None, value: helpers.NyxOnOff | int | str | bool = helpers.NyxOnOff.NYX_ONOFF_OFF):
+    def __init__(self, name: str, label: str | None = None, value: enums.NyxOnOff | int | str | bool = enums.NyxOnOff.NYX_ONOFF_OFF):
 
         super().__init__(bind.lib.nyx_switch_prop_new(
             bind.as_bytes(name, allow_none = False),
             bind.as_bytes(label),
-            helpers.nyx_onoff(value),
+            enums.nyx_onoff(value),
         ))
-
-    ####################################################################################################################
-
-    def get_value(self) -> helpers.NyxOnOff:
-
-        return helpers.nyx_onoff(self['$'].get())
-
-    ####################################################################################################################
-
-    def set_value(self, value: helpers.NyxOnOff | int | str | bool) -> bool:
-
-        return self['$'].set(helpers.nyx_onoff_str(value))
 
 ########################################################################################################################
 
-class NyxSwitchVector(json_dict.NyxDict):
+@utils.nyx_property(
+    'device',
+    '@device',
+)
+@utils.nyx_property(
+    'name',
+    '@name',
+)
+@utils.nyx_property(
+    'state',
+    '@state',
+    getter = enums.nyx_state,
+    setter = enums.nyx_state_str,
+)
+@utils.nyx_property(
+    'perm',
+    '@perm',
+    getter = enums.nyx_perm,
+    setter = enums.nyx_perm_str,
+)
+@utils.nyx_property(
+    'rule',
+    '@rule',
+    getter = enums.nyx_rule,
+    setter = enums.nyx_rule_str,
+)
+class NyxSwitchVector(json.json_dict.NyxDict):
 
     ####################################################################################################################
 
-    def __init__(self, device: str, name: str, state: helpers.NyxState | int | str, perm: helpers.NyxPerm | int | str, rule: helpers.NyxRule | int | str, props: typing.Iterable[NyxSwitchProp], **opts: typing.Any):
+    def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, rule: enums.NyxRule | int | str, props: typing.Iterable[NyxSwitchProp], **opts: typing.Any):
 
         ################################################################################################################
 
@@ -57,9 +87,9 @@ class NyxSwitchVector(json_dict.NyxDict):
         super().__init__(bind.lib.nyx_switch_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            helpers.nyx_state(state),
-            helpers.nyx_perm(perm),
-            helpers.nyx_rule(rule),
+            enums.nyx_state(state),
+            enums.nyx_perm(perm),
+            enums.nyx_rule(rule),
             ctypes.c_void_p(),
             opts_p,
         ))

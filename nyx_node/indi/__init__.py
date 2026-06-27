@@ -5,6 +5,8 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
+from .enums import *
+
 from .indi_blob import *
 from .indi_text import *
 from .indi_light import *
