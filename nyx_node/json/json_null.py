@@ -23,7 +23,7 @@ class NyxNull(obj.NyxObject):
 
             ptr = bind.lib.nyx_null_new()
 
-        elif bind.lib.nyx_object_get_type(ptr) != 0x65656500:
+        elif bind.lib.nyx_object_get_type(ptr) != bind.NYX_TYPE_NULL:
 
             raise TypeError('Not a pointer to a Nyx null object')
 

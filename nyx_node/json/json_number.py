@@ -19,7 +19,7 @@ class NyxNumber(obj.NyxObject):
 
             ptr = bind.lib.nyx_number_new()
 
-        elif bind.lib.nyx_object_get_type(ptr) != 0x65656502:
+        elif bind.lib.nyx_object_get_type(ptr) != bind.NYX_TYPE_BOOLEAN:
 
             raise TypeError('Not a pointer to a Nyx number object')
 
