@@ -82,6 +82,10 @@ class NyxLightVector(json.json_dict.NyxDict):
 
         for prop in props:
 
+            if not isinstance(prop, NyxLightProp):
+
+                raise TypeError(f'Expected NyxLightProp')
+
             children.push(prop)
 
 ########################################################################################################################

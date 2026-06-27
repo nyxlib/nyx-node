@@ -75,6 +75,10 @@ class NyxStreamVector(json.json_dict.NyxDict):
 
         for prop in props:
 
+            if not isinstance(prop, NyxStreamProp):
+
+                raise TypeError(f'Expected NyxStreamProp')
+
             children.push(prop)
 
 ########################################################################################################################
