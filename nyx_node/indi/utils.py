@@ -23,7 +23,7 @@ def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typi
 
         def get_value(self):
 
-            value = self[key].get()
+            value = self[key].value
 
             if getter is not None:
 
@@ -39,7 +39,7 @@ def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typi
 
                 value = setter(value)
 
-            self[key].set(value)
+            self[key].value = value
 
         ################################################################################################################
 
