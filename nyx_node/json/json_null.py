@@ -31,13 +31,16 @@ class NyxNull(obj.NyxObject):
 
     ####################################################################################################################
 
-    def get(self) -> typing.Any:
+    @property
+    def value(self) -> None:
 
         return None
 
     ####################################################################################################################
 
-    def set(self, value: typing.Any) -> bool:
+    # noinspection PyUnusedLocal
+    @value.setter
+    def value(self, value: typing.Any) -> bool:
 
         return False
 

@@ -27,13 +27,15 @@ class NyxNumber(obj.NyxObject):
 
     ####################################################################################################################
 
-    def get(self) -> float:
+    @property
+    def value(self) -> float:
 
         return float(bind.lib.nyx_number_get(self.ptr))
 
     ####################################################################################################################
 
-    def set(self, value: float) -> bool:
+    @value.setter
+    def value(self, value: float) -> bool:
 
         return bool(bind.lib.nyx_number_set(self.ptr, float(value)))
 

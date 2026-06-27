@@ -27,13 +27,15 @@ class NyxBoolean(obj.NyxObject):
 
     ####################################################################################################################
 
-    def get(self) -> bool:
+    @property
+    def value(self) -> bool:
 
         return bool(bind.lib.nyx_boolean_get(self.ptr))
 
     ####################################################################################################################
 
-    def set(self, value: bool) -> bool:
+    @value.setter
+    def value(self, value: bool) -> bool:
 
         return bool(bind.lib.nyx_boolean_set(self.ptr, bool(value)))
 
