@@ -6,17 +6,21 @@
 ########################################################################################################################
 
 from .. import bind
-from .. import obj
+from ..json import json_dict
 
 ########################################################################################################################
 
-def nyx_del_property_new(device: str, name: str | None = None, message: str | None = None) -> obj.NyxObject:
+class NyxDelProperty(json_dict.NyxDict):
 
-    return obj.NyxObject(bind.lib.nyx_del_property_new(
-        bind.as_bytes(device, allow_none = False),
-        bind.as_bytes(name),
-        bind.as_bytes(message),
-    ))
+    ####################################################################################################################
+
+    def __init__(self, device: str, name: str | None = None, message: str | None = None):
+
+        super().__init__(bind.lib.nyx_del_property_new(
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(name),
+            bind.as_bytes(message),
+        ))
 
 ########################################################################################################################
 

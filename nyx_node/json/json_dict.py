@@ -131,6 +131,16 @@ class NyxDict(obj.NyxObject):
 
         return int(bind.lib.nyx_dict_size(self.ptr))
 
+    ####################################################################################################################
+
+    def __getitem__(self, key):
+
+        return self.get(key)
+
+    def __setitem__(self, key, value):
+
+        self.set(key, value)
+
 ########################################################################################################################
 
 __all__ = ['NyxDict']

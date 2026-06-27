@@ -141,6 +141,16 @@ class NyxList(obj.NyxObject):
 
         return int(bind.lib.nyx_list_size(self.ptr))
 
+    ####################################################################################################################
+
+    def __getitem__(self, idx):
+
+        return self.get(idx)
+
+    def __setitem__(self, idx, value):
+
+        self.set(idx, value)
+
 ########################################################################################################################
 
 __all__ = ['NyxList']

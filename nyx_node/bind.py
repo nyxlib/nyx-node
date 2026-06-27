@@ -136,9 +136,15 @@ class nyx_object_t(ctypes.Structure):
 
 ########################################################################################################################
 
-nyx_dict_t._fields_ = [
-    ('base', nyx_object_t),
-]
+class nyx_opts_t(ctypes.Structure):
+
+    _fields_ = [
+        ('group', c_char_p),
+        ('label', c_char_p),
+        ('hints', c_char_p),
+        ('message', c_char_p),
+        ('timeout', c_double),
+    ]
 
 ########################################################################################################################
 # HELPERS                                                                                                              #
@@ -169,6 +175,22 @@ def as_bytes(value: str | bytes | bytearray | memoryview | None, *, allow_none: 
     ####################################################################################################################
 
     raise TypeError(f'expected str or bytes, got {type(value).__name__}')
+
+########################################################################################################################
+
+def as_opts(opts: dict[str, typing.Any] | None) -> nyx_opts_t | None:
+
+    if opts is None:
+
+        return None
+
+    return nyx_opts_t(
+        as_bytes(opts.get('group')),
+        as_bytes(opts.get('label')),
+        as_bytes(opts.get('hints')),
+        as_bytes(opts.get('message')),
+        float(opts.get('timeout', 0.0)),
+    )
 
 ########################################################################################################################
 
@@ -379,5 +401,11 @@ _bind('nyx_message_new', c_void_p, [c_char_p, c_char_p])
 ## NYX DEL PROPERTY ##
 
 _bind('nyx_del_property_new', c_void_p, [c_char_p, c_char_p, c_char_p])
+
+## NYX SWITCH ##
+
+_bind('nyx_switch_prop_new', c_void_p, [c_char_p, c_char_p, c_int32])
+
+_bind('nyx_switch_vector_new', c_void_p, [c_char_p, c_char_p, c_int32, c_int32, c_int32, c_void_p, ctypes.POINTER(nyx_opts_t)])
 
 ########################################################################################################################

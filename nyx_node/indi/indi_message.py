@@ -6,16 +6,20 @@
 ########################################################################################################################
 
 from .. import bind
-from .. import obj
+from ..json import json_dict
 
 ########################################################################################################################
 
-def nyx_message_new(device: str, message: str | None = None) -> obj.NyxObject:
+class NyxMessage(json_dict.NyxDict):
 
-    return obj.NyxObject(bind.lib.nyx_message_new(
-        bind.as_bytes(device, allow_none = False),
-        bind.as_bytes(message)
-    ))
+    ####################################################################################################################
+
+    def __init__(self, device: str, message: str | None = None):
+
+        super().__init__(bind.lib.nyx_message_new(
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(message)
+        ))
 
 ########################################################################################################################
 
