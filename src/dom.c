@@ -83,7 +83,7 @@ static void nyx_xmldoc_delete_all(nyx_xmldoc_t *xmldoc, bool itself, bool childr
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_xmldoc_free_recursive(nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
+void nyx_xmldoc_free(nyx_xmldoc_t *xmldoc) // NOLINT(*-no-recursion)
 {
     nyx_xmldoc_delete_all(xmldoc, true, true, true);
 }

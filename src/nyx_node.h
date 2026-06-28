@@ -1781,7 +1781,7 @@ __NYX_NULLABLE__ nyx_xmldoc_t *nyx_xmldoc_parse(
  * @param xmldoc The provided XML document.
  */
 
-void nyx_xmldoc_free_recursive(
+void nyx_xmldoc_free(
     __NYX_NULLABLE__ nyx_xmldoc_t *xmldoc
 );
 

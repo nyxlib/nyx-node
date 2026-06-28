@@ -62,7 +62,7 @@ static void _sub_object(const nyx_node_t *node, const nyx_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_xmldoc_free_recursive(xmldoc);
+            nyx_xmldoc_free(xmldoc);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -734,7 +734,7 @@ static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const 
                         nyx_object_unref(object);
                     }
 
-                    nyx_xmldoc_free_recursive(xmldoc);
+                    nyx_xmldoc_free(xmldoc);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -879,7 +879,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                                 nyx_object_unref(object);
                             }
 
-                            nyx_xmldoc_free_recursive(xmldoc);
+                            nyx_xmldoc_free(xmldoc);
                         }
 
                         /*--------------------------------------------------------------------------------------------*/

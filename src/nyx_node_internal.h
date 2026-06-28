@@ -151,6 +151,8 @@ typedef struct nyx_dict_node_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+bool nyx_dict_set_boolean_unref(nyx_dict_t *dict, STR_t key, bool value);
+
 bool nyx_dict_set_number_unref(nyx_dict_t *dict, STR_t key, double value);
 
 bool nyx_dict_set_string_unref(nyx_dict_t *dict, STR_t key, STR_t value, bool managed);
@@ -321,14 +323,6 @@ int internal_get_timestamp(
 void internal_set_opts(
     /*--------*/ /*-*/ nyx_dict_t *dict,
     __NYX_NULLABLE__ const nyx_opts_t *opts
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool internal_copy(
-    /*-*/ nyx_dict_t *dst,
-    const nyx_dict_t *src,
-    STR_t key
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

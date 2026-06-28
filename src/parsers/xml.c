@@ -709,7 +709,7 @@ _err:
     {
         nyx_xmldoc_t *tmp_attr = first_attr;
         first_attr = first_attr->next;
-        nyx_xmldoc_free_recursive(tmp_attr);
+        nyx_xmldoc_free(tmp_attr);
     }
 
     nyx_memory_free(name);
@@ -791,7 +791,7 @@ static nyx_xmldoc_t *xml_parse_element_node(xml_parser_t *parser, nyx_xmldoc_t *
 
     if(okay == false)
     {
-        nyx_xmldoc_free_recursive(result);
+        nyx_xmldoc_free(result);
         return NULL;
     }
 
@@ -900,7 +900,7 @@ nyx_xmldoc_t *nyx_xmldoc_parse_buff(size_t size, BUFF_t buff)
             parser->curr_token.value = NULL;
         }
 
-        nyx_xmldoc_free_recursive(result);
+        nyx_xmldoc_free(result);
 
         result = NULL;
     }

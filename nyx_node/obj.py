@@ -201,10 +201,10 @@ class NyxObject:
     @staticmethod
     def _finalize(ptr) -> None:
 
-        object_ptr = ctypes.cast(ptr, ctypes.POINTER(bind.nyx_object_t))
+        ptr = ctypes.cast(ptr, ctypes.POINTER(bind.nyx_object_t))
 
-        object_ptr.contents.callback = None
-        object_ptr.contents.   ctx   = None
+        ptr.contents.callback = None
+        ptr.contents.   ctx   = None
 
         bind.lib.nyx_object_unref(ptr)
 
@@ -277,13 +277,13 @@ class NyxObject:
 
     def to_string(self) -> str:
 
-        return bind.lib.nyx_object_to_string(self.ptr).decode('utf-8')
+        return bind.take_string(bind.lib.nyx_object_to_string(self.ptr))
 
     ####################################################################################################################
 
     def to_cstring(self) -> str:
 
-        return bind.lib.nyx_object_to_cstring(self.ptr).decode('utf-8')
+        return bind.take_string(bind.lib.nyx_object_to_cstring(self.ptr))
 
     ####################################################################################################################
 
@@ -323,7 +323,14 @@ class NyxXMLDoc:
 
         self._ptr = bind.check_ptr(ptr, 'nyx_xmldoc_t')
 
-        self._finalizer = weakref.finalize(self, bind.lib.nyx_xmldoc_free_recursive, self._ptr)
+        self._finalizer = weakref.finalize(self, NyxXMLDoc._finalize, self._ptr)
+
+    ####################################################################################################################
+
+    @staticmethod
+    def _finalize(ptr) -> None:
+
+        bind.lib.nyx_xmldoc_free(ptr)
 
     ####################################################################################################################
 
@@ -347,7 +354,7 @@ class NyxXMLDoc:
 
     def to_string(self) -> str:
 
-        return bind.lib.nyx_xmldoc_to_string(self.ptr).decode('utf-8')
+        return bind.take_string(bind.lib.nyx_xmldoc_to_string(self.ptr))
 
     ####################################################################################################################
 

@@ -366,7 +366,10 @@ def _bind(name: str, restype, argtypes: typing.Sequence[object]) -> None:
 
 ########################################################################################################################
 
-## HELPER ##
+## MEMORY ##
+
+_bind('nyx_memory_initialize', None, [])
+_bind('nyx_memory_finalize', None, [])
 
 _bind('nyx_string_ndup', c_void_p, [c_void_p, c_size_t])
 _bind('nyx_buffer_ndup', c_void_p, [c_void_p, c_size_t])
@@ -390,16 +393,16 @@ _bind('nyx_object_parse', c_void_p, [c_char_p])
 _bind('nyx_object_ref', None, [c_void_p])
 _bind('nyx_object_unref', None, [c_void_p])
 _bind('nyx_object_get_type', c_int32, [c_void_p])
-_bind('nyx_object_to_string', c_char_p, [c_void_p])
-_bind('nyx_object_to_cstring', c_char_p, [c_void_p])
+_bind('nyx_object_to_string', c_void_p, [c_void_p])
+_bind('nyx_object_to_cstring', c_void_p, [c_void_p])
 
 ########################################################################################################################
 
 ## XMLDOC ##
 
 _bind('nyx_xmldoc_parse', c_void_p, [c_char_p])
-_bind('nyx_xmldoc_free_recursive', None, [c_void_p])
-_bind('nyx_xmldoc_to_string', c_char_p, [c_void_p])
+_bind('nyx_xmldoc_free', None, [c_void_p])
+_bind('nyx_xmldoc_to_string', c_void_p, [c_void_p])
 
 ########################################################################################################################
 
