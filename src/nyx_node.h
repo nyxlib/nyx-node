@@ -561,10 +561,11 @@ __NYX_NULLABLE__ nyx_object_t *nyx_object_parse(
  * @memberof nyx_object_t
  * @brief Increments the reference counter of the provided JSON object.
  * @param object JSON object.
+ * @return The input JSON object of NULL.
  */
 
-void nyx_object_ref(
-    __NYX_NULLABLE__ nyx_object_t *object
+__NYX_NULLABLE__ nyx_object_t *nyx_object_ref(
+    __NYX_NULLABLE__ void *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -573,22 +574,11 @@ void nyx_object_ref(
  * @memberof nyx_object_t
  * @brief Decrements the reference counter of the provided JSON object and frees it when it reaches zero.
  * @param object JSON object.
+ * @return The input JSON object of NULL.
  */
 
-void nyx_object_unref(
-    __NYX_NULLABLE__ nyx_object_t *object
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_object_t
- * @brief Frees the provided JSON object and all its children recursively.
- * @param object JSON object.
- */
-
-void nyx_object_free_recursive(
-    /*-*/ nyx_object_t *object
+__NYX_NULLABLE__ nyx_object_t *nyx_object_unref(
+    __NYX_NULLABLE__ void *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1047,7 +1037,7 @@ __NYX_INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
  * @note The provided C string is **freed** with this object.
  */
 
-__NYX_INLINE__ nyx_string_t *nyx_string_from_managed(STR_t value)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_managed(str_t value)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -1086,7 +1076,7 @@ __NYX_INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
  * @note The provided buffer is **freed** with this object.
  */
 
-__NYX_INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, BUFF_t buff)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, buff_t buff)
 {
     nyx_string_t *result = nyx_string_new();
 
@@ -2717,7 +2707,7 @@ nyx_dict_t *nyx_blob_prop_new(
     __NYX_NULLABLE__ STR_t label,
     __NYX_NULLABLE__ STR_t format,
     __NYX_ZEROABLE__ size_t size,
-    __NYX_NULLABLE__ BUFF_t buff,
+    __NYX_NULLABLE__ buff_t buff,
     bool managed
 );
 
@@ -2735,7 +2725,7 @@ nyx_dict_t *nyx_blob_prop_new(
 bool nyx_blob_prop_set_managed(
     nyx_dict_t *prop,
     __NYX_ZEROABLE__ size_t size,
-    __NYX_NULLABLE__ BUFF_t buff
+    __NYX_NULLABLE__ buff_t buff
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
