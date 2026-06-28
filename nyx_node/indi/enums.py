@@ -14,33 +14,33 @@ import typing
 
 class NyxState(enum.IntEnum):
 
-    NYX_STATE_IDLE = 400
-    NYX_STATE_OK = 401
-    NYX_STATE_BUSY = 402
-    NYX_STATE_ALERT = 403
+    IDLE = 400
+    OK = 401
+    BUSY = 402
+    ALERT = 403
 
 ########################################################################################################################
 
 class NyxPerm(enum.IntEnum):
 
-    NYX_PERM_RO = 500
-    NYX_PERM_WO = 501
-    NYX_PERM_RW = 502
+    RO = 500
+    WO = 501
+    RW = 502
 
 ########################################################################################################################
 
 class NyxRule(enum.IntEnum):
 
-    NYX_RULE_ONE_OF_MANY = 600
-    NYX_RULE_AT_MOST_ONE = 601
-    NYX_RULE_ANY_OF_MANY = 602
+    ONE_OF_MANY = 600
+    AT_MOST_ONE = 601
+    ANY_OF_MANY = 602
 
 ########################################################################################################################
 
 class NyxOnOff(enum.IntEnum):
 
-    NYX_ONOFF_ON = 700
-    NYX_ONOFF_OFF = 701
+    ON = 700
+    OFF = 701
 
 ########################################################################################################################
 # PRIVATE HELPERS                                                                                                      #
@@ -89,10 +89,10 @@ def _nyx_enum_str(value: _NyxEnum | int | str, enum_type: type[_NyxEnum], to_str
 ########################################################################################################################
 
 _STATE_TO_STR = {
-    NyxState.NYX_STATE_IDLE: 'Idle',
-    NyxState.NYX_STATE_OK: 'Ok',
-    NyxState.NYX_STATE_BUSY: 'Busy',
-    NyxState.NYX_STATE_ALERT: 'Alert',
+    NyxState.IDLE: 'Idle',
+    NyxState.OK: 'Ok',
+    NyxState.BUSY: 'Busy',
+    NyxState.ALERT: 'Alert',
 }
 
 _STATE_FROM_STR = {value: key for key, value in _STATE_TO_STR.items()}
@@ -100,9 +100,9 @@ _STATE_FROM_STR = {value: key for key, value in _STATE_TO_STR.items()}
 ########################################################################################################################
 
 _PERM_TO_STR = {
-    NyxPerm.NYX_PERM_RO: 'ro',
-    NyxPerm.NYX_PERM_WO: 'wo',
-    NyxPerm.NYX_PERM_RW: 'rw',
+    NyxPerm.RO: 'ro',
+    NyxPerm.WO: 'wo',
+    NyxPerm.RW: 'rw',
 }
 
 _PERM_FROM_STR = {value: key for key, value in _PERM_TO_STR.items()}
@@ -110,9 +110,9 @@ _PERM_FROM_STR = {value: key for key, value in _PERM_TO_STR.items()}
 ########################################################################################################################
 
 _RULE_TO_STR = {
-    NyxRule.NYX_RULE_ONE_OF_MANY: 'OneOfMany',
-    NyxRule.NYX_RULE_AT_MOST_ONE: 'AtMostOne',
-    NyxRule.NYX_RULE_ANY_OF_MANY: 'AnyOfMany',
+    NyxRule.ONE_OF_MANY: 'OneOfMany',
+    NyxRule.AT_MOST_ONE: 'AtMostOne',
+    NyxRule.ANY_OF_MANY: 'AnyOfMany',
 }
 
 _RULE_FROM_STR = {value: key for key, value in _RULE_TO_STR.items()}
@@ -120,8 +120,8 @@ _RULE_FROM_STR = {value: key for key, value in _RULE_TO_STR.items()}
 ########################################################################################################################
 
 _ONOFF_TO_STR = {
-    NyxOnOff.NYX_ONOFF_ON: 'On',
-    NyxOnOff.NYX_ONOFF_OFF: 'Off',
+    NyxOnOff.ON: 'On',
+    NyxOnOff.OFF: 'Off',
 }
 
 _ONOFF_FROM_STR = {value: key for key, value in _ONOFF_TO_STR.items()}
@@ -170,7 +170,7 @@ def nyx_onoff(value: NyxOnOff | int | str | bool) -> int:
 
     if isinstance(value, bool):
 
-        return int(NyxOnOff.NYX_ONOFF_ON if value else NyxOnOff.NYX_ONOFF_OFF)
+        return int(NyxOnOff.ON if value else NyxOnOff.OFF)
 
     return _nyx_enum(value, NyxOnOff, _ONOFF_FROM_STR, 'OnOff value')
 

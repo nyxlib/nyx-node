@@ -36,7 +36,7 @@ class NyxLightProp(json.json_dict.NyxDict):
 
     ####################################################################################################################
 
-    def __init__(self, name: str, label: str | None = None, value: enums.NyxState | int | str = enums.NyxState.NYX_STATE_IDLE):
+    def __init__(self, name: str, label: str | None = None, value: enums.NyxState | int | str = enums.NyxState.IDLE):
 
         super().__init__(bind.lib.nyx_light_prop_new(
             bind.as_bytes(name, allow_none = False),

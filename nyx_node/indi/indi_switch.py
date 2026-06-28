@@ -36,7 +36,7 @@ class NyxSwitchProp(json.json_dict.NyxDict):
 
     ####################################################################################################################
 
-    def __init__(self, name: str, label: str | None = None, value: enums.NyxOnOff | int | str | bool = enums.NyxOnOff.NYX_ONOFF_OFF):
+    def __init__(self, name: str, label: str | None = None, value: enums.NyxOnOff | int | str | bool = enums.NyxOnOff.OFF):
 
         super().__init__(bind.lib.nyx_switch_prop_new(
             bind.as_bytes(name, allow_none = False),

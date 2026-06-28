@@ -42,13 +42,13 @@ class NyxNode:
 
             if not isinstance(vector, obj.NyxObject):
 
-                raise TypeError('Expected NyxObject')
+                raise TypeError('Expected list NyxObject')
 
             vectors_ptr[index] = ctypes.cast(vector.ptr, bind.nyx_dict_p)
 
         ################################################################################################################
 
-        self._ptr = bind.check_ptr(bind.lib.nyx_node_initialize(
+        self._ptr = bind.lib.nyx_node_initialize(
             bind.as_bytes(node_id, allow_none = False),
             vectors_ptr,
             bind.as_bytes(indi_url),
@@ -56,10 +56,10 @@ class NyxNode:
             bind.as_bytes(nss_url),
             bind.as_bytes(mqtt_username),
             bind.as_bytes(mqtt_password),
-            None,
+            bind.nyx_mqtt_handler_t(0),
             retry_ms,
             enable_xml,
-        ), 'nyx_node_t')
+        )
 
     ####################################################################################################################
 
@@ -70,7 +70,7 @@ class NyxNode:
 
     ####################################################################################################################
 
-    def nyx_node_finalize(self) -> None:
+    def finalize(self) -> None:
 
         bind.lib.nyx_node_finalize(self.ptr, False)
 
