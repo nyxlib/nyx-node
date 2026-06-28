@@ -172,7 +172,7 @@ def nyx_onoff(value: NyxOnOff | int | str | bool) -> int:
 
         return int(NyxOnOff.ON if value else NyxOnOff.OFF)
 
-    return _nyx_enum(value, NyxOnOff, _ONOFF_FROM_STR, 'OnOff value')
+    return _nyx_enum(value, NyxOnOff, _ONOFF_FROM_STR, 'onoff')
 
 ########################################################################################################################
 
