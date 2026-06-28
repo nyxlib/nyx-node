@@ -67,15 +67,11 @@ nyx_dict_t *nyx_light_vector_new(
 ) {
     nyx_dict_t *result = nyx_dict_new();
 
+    nyx_list_t *children = nyx_list_new();
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defLightVector"));
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    nyx_list_t *children = nyx_list_new();
-    nyx_dict_set(result, "children", children);
-    nyx_object_unref(children);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -91,7 +87,16 @@ nyx_dict_t *nyx_light_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(props) for(; *props != NULL; props++) nyx_list_push(children, *props);
+    nyx_dict_set(result, "children", children);
+
+    if(props) for(; *props != NULL; props++)
+    {
+        nyx_list_push(children, *props);
+
+        nyx_object_unref(*props);
+    }
+
+    nyx_object_unref(children);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
