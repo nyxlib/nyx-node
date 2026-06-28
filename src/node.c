@@ -731,7 +731,7 @@ static size_t _tcp_handler(nyx_node_t *node, nyx_event_type_t event_type, const 
                     {
                         _process_message(node, object);
 
-                        nyx_object_free_recursive(object);
+                        nyx_object_unref(object);
                     }
 
                     nyx_xmldoc_free_recursive(xmldoc);
@@ -853,7 +853,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                         {
                             _process_message(node, object);
 
-                            nyx_object_free_recursive(object);
+                            nyx_object_unref(object);
                         }
 
                         /*--------------------------------------------------------------------------------------------*/
@@ -876,7 +876,7 @@ static void _mqtt_handler(nyx_node_t *node, nyx_event_type_t event_type, const n
                             {
                                 _process_message(node, object);
 
-                                nyx_object_free_recursive(object);
+                                nyx_object_unref(object);
                             }
 
                             nyx_xmldoc_free_recursive(xmldoc);
@@ -1045,7 +1045,7 @@ void nyx_node_finalize(nyx_node_t *node, bool free_vectors)
         {
             for(nyx_dict_t **vector_ptr = node->vectors; *vector_ptr != NULL; vector_ptr++)
             {
-                nyx_object_free_recursive((nyx_object_t *) *vector_ptr);
+                nyx_object_unref(*vector_ptr);
             }
         }
 
@@ -1140,7 +1140,7 @@ static bool _notify(nyx_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            nyx_object_free_recursive(&set_vector->base);
+            nyx_object_unref(&set_vector->base);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
