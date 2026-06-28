@@ -451,7 +451,9 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from_dup(set_tag));
+    nyx_dict_set_string_unref(result, "<>", set_tag, false);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     internal_copy(result, vector, "@client");
     internal_copy(result, vector, "@device");
@@ -460,6 +462,8 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
     internal_copy(result, vector, "@timeout");
     internal_copy(result, vector, "@timestamp");
     internal_copy(result, vector, "@message");
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_set(result, "children", children);
 
@@ -483,7 +487,7 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                nyx_dict_set(dst_dict, "<>", nyx_string_from_dup(one_tag));
+                nyx_dict_set_string_unref(dst_dict, "<>", one_tag, false);
 
                 internal_copy(dst_dict, src_dict, "@name");
 
@@ -498,10 +502,16 @@ nyx_dict_t *internal_prop_to_set_vector(const nyx_dict_t *vector, STR_t set_tag,
 
                 nyx_list_push(children, dst_dict);
 
+                nyx_object_unref(dst_dict);
+
                 /*----------------------------------------------------------------------------------------------------*/
             }
         }
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_object_unref(children);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
