@@ -60,9 +60,9 @@ static void internal_list_clear(nyx_list_t *object)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_object_unref(temp->value);
-
         temp->value->parent = NULL;
+
+        nyx_object_unref(temp->value);
 
         nyx_memory_free(temp);
 

@@ -84,7 +84,7 @@ bool nyx_string_set(nyx_string_t *object, STR_t value, bool managed)
 
     bool modified = strcmp(object->value, value) != 0;
 
-    if(modified || object->managed == false)
+    if(modified || object->managed)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -120,7 +120,7 @@ bool nyx_string_set_buff(nyx_string_t *object, size_t size, BUFF_t buff, bool ma
 
     bool modified = object->length != size || memcmp(object->value, buff, size) != 0;
 
-    if(modified || object->managed == false)
+    if(modified || object->managed)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 

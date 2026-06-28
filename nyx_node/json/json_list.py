@@ -121,7 +121,7 @@ class NyxList(obj.NyxObject):
 
         if not isinstance(value, obj.NyxObject):
 
-            raise TypeError('value must be a nyx_object_t')
+            raise TypeError('value must be a Nyx object')
 
         return bool(bind.lib.nyx_list_set(self.ptr, idx, value.ptr))
 
