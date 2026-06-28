@@ -329,13 +329,13 @@ __NYX_INLINE__ void _object_free(nyx_object_t *object)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_ref(nyx_object_t *object)
+nyx_object_t *nyx_object_ref(void *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(object == NULL)
     {
-        return;
+        return NULL;
     }
 
     if(!NYX_OBJECT_CHECK_MAGIC(object))
@@ -345,29 +345,31 @@ void nyx_object_ref(nyx_object_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(object->ref <= 0)
+    if(((nyx_object_t *) object)->ref <= 0)
     {
-        object->ref = 1;
+        ((nyx_object_t *) object)->ref = 1;
 
-        /* Nothing to do */
+        /* always returns the input object */
     }
     else
     {
-        object->ref++;
+        ((nyx_object_t *) object)->ref++;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void nyx_object_unref(nyx_object_t *object)
+nyx_object_t *nyx_object_unref(void *object)
 {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(object == NULL)
     {
-        return;
+        return NULL;
     }
 
     if(!NYX_OBJECT_CHECK_MAGIC(object))
@@ -377,18 +379,20 @@ void nyx_object_unref(nyx_object_t *object)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(object->ref <= 1)
+    if(((nyx_object_t *) object)->ref <= 1)
     {
-        object->ref = 0;
+        ((nyx_object_t *) object)->ref = 0;
 
-        _object_free(object);
+        _object_free(object); object = NULL;
     }
     else
     {
-        object->ref--;
+        ((nyx_object_t *) object)->ref--;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    return object;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
