@@ -36,7 +36,7 @@ nyx_dict_t *nyx_number_prop_new(STR_t name, STR_t label, STR_t format, nyx_varia
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_number_prop_set(result, value);
+    nyx_dict_set_string_managed_unref(result, "$", internal_variant_to_string(format, value));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

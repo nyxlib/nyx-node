@@ -20,6 +20,11 @@ nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, STR_t value)
         label = name;
     }
 
+    if(value == NULL)
+    {
+        value = "";
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_t *result = nyx_dict_new();
@@ -31,7 +36,7 @@ nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, STR_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_text_prop_set(result, value);
+    nyx_dict_set_string_managed_unref(result, "$", nyx_string_dup(value));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

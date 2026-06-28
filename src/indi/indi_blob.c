@@ -25,6 +25,12 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size
         format = "raw";
     }
 
+    if(size == 0x00 || buff == NULL)
+    {
+        size = 0x00;
+        buff = ("");
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_t *result = nyx_dict_new();
@@ -38,10 +44,10 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(managed) {
-        nyx_blob_prop_set_managed(result, size, buff);
+        nyx_dict_set_buff_managed_unref(result, "$", size, buff);
     }
     else {
-        nyx_blob_prop_set_unmanaged(result, size, buff);
+        nyx_dict_set_buff_unmanaged_unref(result, "$", size, buff);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

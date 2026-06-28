@@ -31,7 +31,7 @@ nyx_dict_t *nyx_switch_prop_new(STR_t name, STR_t label, nyx_onoff_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_switch_prop_set(result, value);
+    nyx_dict_set_string_managed_unref(result, "$", nyx_string_dup(nyx_onoff_to_str(value)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
