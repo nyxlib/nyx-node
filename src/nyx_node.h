@@ -1033,54 +1033,15 @@ __NYX_INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
  * @memberof nyx_string_t
  * @brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return The new JSON string object.
- * @note The provided C string is **freed** with this object.
  */
 
-__NYX_INLINE__ nyx_string_t *nyx_string_from_managed(str_t value)
+__NYX_INLINE__ nyx_string_t *nyx_string_from(STR_t value, bool managed)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set(result, value, true);
-
-    return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided string (unmanaged reference).
- * @param value Value for the new JSON string object.
- * @return The new JSON string object.
- * @note The provided C string is **not freed** with this object.
- */
-
-__NYX_INLINE__ nyx_string_t *nyx_string_from_unmanaged(STR_t value)
-{
-    nyx_string_t *result = nyx_string_new();
-
-    nyx_string_set(result, value, false);
-
-    return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided buffer (managed reference).
- * @param size Buffer size for the new JSON string object.
- * @param buff Buffer pointer for the new JSON string object.
- * @return The new JSON string object.
- * @note The provided buffer is **freed** with this object.
- */
-
-__NYX_INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, buff_t buff)
-{
-    nyx_string_t *result = nyx_string_new();
-
-    nyx_string_set_buff(result, size, buff, true);
+    nyx_string_set(result, value, managed);
 
     return result;
 }
@@ -1092,15 +1053,15 @@ __NYX_INLINE__ nyx_string_t *nyx_string_from_buff_managed(size_t size, buff_t bu
  * @brief Returns a JSON string object holding the value of the provided buffer (unmanaged reference).
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return The new JSON string object.
- * @note The provided buffer is **not freed** with this object.
  */
 
-__NYX_INLINE__ nyx_string_t *nyx_string_from_buff_unmanaged(size_t size, BUFF_t buff)
+__NYX_INLINE__ nyx_string_t *nyx_string_from_buff(size_t size, BUFF_t buff, bool managed)
 {
     nyx_string_t *result = nyx_string_new();
 
-    nyx_string_set_buff(result, size, buff, false);
+    nyx_string_set_buff(result, size, buff, managed);
 
     return result;
 }
@@ -1400,7 +1361,7 @@ __NYX_INLINE__ bool nyx_dict_set_number(const nyx_dict_t *dict, STR_t key, doubl
  * @param dict JSON dict object.
  * @param key Key.
  * @param value C string value to set.
- * @param managed Whether the C string is managed.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return true if the value was modified, false otherwise.
  */
 
@@ -1710,7 +1671,7 @@ __NYX_INLINE__ bool nyx_list_set_number(const nyx_list_t *list, size_t idx, doub
  * @param list JSON list object.
  * @param idx Index.
  * @param value C string value to set.
- * @param managed Whether the C string is managed.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return true if the value was modified, false otherwise.
  */
 
@@ -2275,7 +2236,7 @@ __NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_double(STR_t name,__NYX_NULLABLE_
  */
 
 bool nyx_number_prop_set(
-    nyx_dict_t *prop,
+    const nyx_dict_t *prop,
     nyx_variant_t value
 );
 
@@ -2476,7 +2437,7 @@ nyx_dict_t *nyx_number_set_vector_new(
 nyx_dict_t *nyx_text_prop_new(
     STR_t name,
     __NYX_NULLABLE__ STR_t label,
-    __NYX_NULLABLE__ str_t value,
+    __NYX_NULLABLE__ STR_t value,
     bool managed
 );
 
@@ -2486,12 +2447,14 @@ nyx_dict_t *nyx_text_prop_new(
  * @brief Sets the new value of the provided property object.
  * @param prop Property object.
  * @param value New value.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return `true` if the value was modified, `false` otherwise.
  */
 
 bool nyx_text_prop_set(
-    nyx_dict_t *prop,
-    __NYX_NULLABLE__ STR_t value
+    const nyx_dict_t *prop,
+    __NYX_NULLABLE__ STR_t value,
+    bool managed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2571,7 +2534,7 @@ nyx_dict_t *nyx_light_prop_new(
  */
 
 bool nyx_light_prop_set(
-    nyx_dict_t *prop,
+    const nyx_dict_t *prop,
     nyx_state_t value
 );
 
@@ -2650,7 +2613,7 @@ nyx_dict_t *nyx_switch_prop_new(
  */
 
 bool nyx_switch_prop_set(
-    nyx_dict_t *prop,
+    const nyx_dict_t *prop,
     nyx_onoff_t value
 );
 
@@ -2726,7 +2689,7 @@ nyx_dict_t *nyx_blob_prop_new(
     __NYX_NULLABLE__ STR_t label,
     __NYX_NULLABLE__ STR_t format,
     __NYX_ZEROABLE__ size_t size,
-    __NYX_NULLABLE__ buff_t buff,
+    __NYX_NULLABLE__ BUFF_t buff,
     bool managed
 );
 
@@ -2737,31 +2700,15 @@ nyx_dict_t *nyx_blob_prop_new(
  * @param prop Property object.
  * @param size Size of the new payload content.
  * @param buff Pointer to the new payload content.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return `true` if the value was modified, `false` otherwise.
- * @note The provided buffer is **freed** with this object.
  */
 
-bool nyx_blob_prop_set_managed(
-    nyx_dict_t *prop,
+bool nyx_blob_prop_set(
+    const nyx_dict_t *prop,
     __NYX_ZEROABLE__ size_t size,
-    __NYX_NULLABLE__ buff_t buff
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @brief Sets the new value of the provided property object.
- * @param prop Property object.
- * @param size Size of the new payload content.
- * @param buff Pointer to the new payload content.
- * @return `true` if the value was modified, `false` otherwise.
- * @note The provided buffer is **not freed** with this object.
- */
-
-bool nyx_blob_prop_set_unmanaged(
-    nyx_dict_t *prop,
-    __NYX_ZEROABLE__ size_t size,
-    __NYX_NULLABLE__ BUFF_t buff
+    __NYX_NULLABLE__ BUFF_t buff,
+    bool managed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
