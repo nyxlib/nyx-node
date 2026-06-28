@@ -253,6 +253,8 @@ int main()
         &opt
     );
 
+    nyx_object_unref(run_prop);
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_t *mode_noise_prop = nyx_switch_prop_new("mode_noise", "Noise only", NYX_ONOFF_ON);
@@ -275,6 +277,10 @@ int main()
         &opt
     );
 
+    nyx_object_unref(mode_noise_prop);
+    nyx_object_unref(mode_delta_prop);
+    nyx_object_unref(mode_comb_prop);
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_t *samp_rate_prop = nyx_number_prop_new_double("samp_rate", "Sample rate [Hz]", "%.0f", 1000.0, 50000000.0, 1000.0, s_samp_rate);
@@ -296,6 +302,10 @@ int main()
         &opt
     );
 
+    nyx_object_unref(samp_rate_prop);
+    nyx_object_unref(frequency_prop);
+    nyx_object_unref(power_prop);
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     nyx_dict_t *fft_size_prop = nyx_number_prop_new_uint("fft_size", "FFT size", "%u", 1U, 4096U, 1U, s_fft_size);
@@ -313,12 +323,18 @@ int main()
         &opt
     );
 
+    nyx_object_unref(fft_size_prop);
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    nyx_dict_t *stream_samp_rate_prop = nyx_stream_prop_new("samp_rate", "Sample rate [Hz]");
+    nyx_dict_t *stream_frequency_prop = nyx_stream_prop_new("frequency", "Frequency [Hz]");
+    nyx_dict_t *stream_samples_prop = nyx_stream_prop_new("samples", "Samples");
+
     nyx_dict_t *spectrum_props[] = {
-        nyx_stream_prop_new("samp_rate", "Sample rate [Hz]"),
-        nyx_stream_prop_new("frequency", "Frequency [Hz]"),
-        nyx_stream_prop_new("samples", "Samples"),
+        stream_samp_rate_prop,
+        stream_frequency_prop,
+        stream_samples_prop,
         NULL,
     };
 
@@ -329,6 +345,10 @@ int main()
         spectrum_props,
         &opt
     );
+
+    nyx_object_unref(stream_samp_rate_prop);
+    nyx_object_unref(stream_frequency_prop);
+    nyx_object_unref(stream_samples_prop);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
