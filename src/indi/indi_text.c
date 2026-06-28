@@ -13,7 +13,7 @@
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, STR_t value)
+nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, str_t value, bool managed)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -23,6 +23,8 @@ nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, STR_t value)
     if(value == NULL)
     {
         value = "";
+
+        managed = false;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -36,7 +38,12 @@ nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, STR_t value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "$", nyx_string_dup(value));
+    if(managed) {
+        nyx_dict_set_string_managed_unref(result, "$", value);
+    }
+    else {
+        nyx_dict_set_string_unmanaged_unref(result, "$", value);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -49,19 +56,27 @@ nyx_dict_t *nyx_text_prop_new(STR_t name, STR_t label, STR_t value)
 
 bool nyx_text_prop_set(nyx_dict_t *prop, STR_t value)
 {
+    bool managed;
+
     if(value == NULL)
     {
         value = "";
+
+        managed = false;
+    }
+    else
+    {
+        managed = true;
     }
 
-    return  nyx_dict_set_string_managed_unref(prop, "$", nyx_string_dup(value));
+    return nyx_dict_set_string(prop, "$", nyx_string_dup(value), managed);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 STR_t nyx_text_prop_get(const nyx_dict_t *prop)
 {
-    return nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$"));
+    return nyx_dict_get_string(prop, "$");
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

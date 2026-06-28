@@ -51,7 +51,7 @@ bool nyx_number_prop_set(nyx_dict_t *prop, nyx_variant_t value)
 {
     STR_t format = nyx_dict_get_string(prop, "@format");
 
-    return nyx_dict_set_string_managed_unref(prop, "$", internal_variant_to_string(format, value));
+    return nyx_dict_set_string(prop, "$", internal_variant_to_string(format, value), true);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

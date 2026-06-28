@@ -29,6 +29,8 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size
     {
         size = 0x00;
         buff = ("");
+
+        managed = false;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -61,33 +63,50 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size
 
 bool nyx_blob_prop_set_managed(nyx_dict_t *prop, size_t size, buff_t buff)
 {
+    bool managed;
+
     if(size == 0x00 || buff == NULL)
     {
         size = 0x00;
         buff = ("");
+
+        managed = false;
+    }
+    else
+    {
+        managed = true;
     }
 
-    return nyx_dict_set_buff_managed_unref(prop, "$", size, buff);
+    return nyx_dict_set_string_buff(prop, "$", size, buff, managed);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 bool nyx_blob_prop_set_unmanaged(nyx_dict_t *prop, size_t size, BUFF_t buff)
 {
+    bool managed;
+
     if(size == 0x00 || buff == NULL)
     {
         size = 0x00;
         buff = ("");
+
+        managed = false;
+    }
+    else
+    {
+        managed = false;
     }
 
-    return nyx_dict_set_buff_unmanaged_unref(prop, "$", size, buff);
+
+    return nyx_dict_set_string_buff(prop, "$", size, buff, managed);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_blob_prop_get(const nyx_dict_t *prop, size_t *size, buff_t *buff)
 {
-    nyx_string_get_buff((nyx_string_t *) nyx_dict_get(prop, "$"), size, buff);
+    return nyx_dict_get_buff(prop, "$", size, buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

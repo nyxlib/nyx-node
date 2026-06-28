@@ -44,14 +44,14 @@ nyx_dict_t *nyx_light_prop_new(STR_t name, STR_t label, nyx_state_t value)
 
 bool nyx_light_prop_set(nyx_dict_t *prop, nyx_state_t value)
 {
-    return nyx_dict_set_string_managed_unref(prop, "$", nyx_string_dup(nyx_state_to_str(value)));
+    return nyx_dict_set_string(prop, "$", nyx_state_to_str(value), false);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 nyx_state_t nyx_light_prop_get(const nyx_dict_t *prop)
 {
-    return nyx_str_to_state(nyx_string_get((nyx_string_t *) nyx_dict_get(prop, "$")));
+    return nyx_str_to_state(nyx_dict_get_string(prop, "$"));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -1337,6 +1337,25 @@ __NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *dict, STR_t key)
 
 /**
  * @memberof nyx_dict_t
+ * @brief Gets a C string value of the provided key.
+ * @param dict JSON dict object.
+ * @param key Key.
+ * @param size ???.
+ * @param buff ???.
+ * @return The related C string value or `NULL` if absent or wrong type.
+ */
+
+__NYX_INLINE__ void nyx_dict_get_buff(const nyx_dict_t *dict, STR_t key, size_t *size, buff_t *buff)
+{
+    nyx_object_t *object = nyx_dict_get(dict, key);
+
+    if(object != NULL && object->type == NYX_TYPE_STRING) nyx_string_get_buff((nyx_string_t *) object, size, buff);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
  * @brief Sets a number value of an existing key holding a boolean.
  * @param dict JSON dict object.
  * @param key Key.
@@ -2450,14 +2469,15 @@ nyx_dict_t *nyx_number_set_vector_new(
  * @param name Property name.
  * @param label Property label.
  * @param value Initial value.
+ * @param managed If `true`, the provided buffer is freed with this object.
  * @return The new property object.
- * @note The provided C string is duplicated.
  */
 
 nyx_dict_t *nyx_text_prop_new(
     STR_t name,
     __NYX_NULLABLE__ STR_t label,
-    __NYX_NULLABLE__ STR_t value
+    __NYX_NULLABLE__ str_t value,
+    bool managed
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2467,7 +2487,6 @@ nyx_dict_t *nyx_text_prop_new(
  * @param prop Property object.
  * @param value New value.
  * @return `true` if the value was modified, `false` otherwise.
- * @note The provided C string is duplicated.
  */
 
 bool nyx_text_prop_set(
