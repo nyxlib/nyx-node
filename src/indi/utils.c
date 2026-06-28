@@ -226,6 +226,19 @@ nyx_stream_state_t nyx_str_to_stream_state(STR_t stream)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+bool nyx_dict_set_boolean_unref(nyx_dict_t *dict, STR_t key, bool value)
+{
+    nyx_boolean_t *boolean = nyx_boolean_from(value);
+
+    bool result = nyx_dict_set(dict, key, boolean);
+
+    nyx_object_unref(boolean);
+
+    return result;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 bool nyx_dict_set_number_unref(nyx_dict_t *dict, STR_t key, double value)
 {
     nyx_number_t *number = nyx_number_from(value);
@@ -283,17 +296,17 @@ bool internal_copy(nyx_dict_t *dst, const nyx_dict_t *src, STR_t key)
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_NUMBER:
-                return nyx_dict_set(dst, key, nyx_number_from(nyx_number_get((nyx_number_t *) src_object)));
+                return nyx_dict_set_number_unref(dst, key, nyx_number_get((nyx_number_t *) src_object));
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_BOOLEAN:
-                return nyx_dict_set(dst, key, nyx_boolean_from(nyx_boolean_get((nyx_boolean_t *) src_object)));
+                return nyx_dict_set_boolean_unref(dst, key, nyx_boolean_get((nyx_boolean_t *) src_object));
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             case NYX_TYPE_STRING:
-                return nyx_dict_set(dst, key, nyx_string_from_dup(nyx_string_get((nyx_string_t *) src_object)));
+                return nyx_dict_set_string_unref(dst, key, nyx_string_dup(nyx_string_get((nyx_string_t *) src_object)), true);
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -372,7 +385,9 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
             nyx_dict_set_string_unref(dict, "@message", nyx_string_dup(opts->message), true);
         }
 
-        if(opts->timeout > 0.000000000000000000000000000000) {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(opts->timeout > 0.0) {
             nyx_dict_set_number_unref(dict, "@timeout", opts->timeout);
         }
 
@@ -392,7 +407,7 @@ bool internal_blob_is_compressed(const nyx_dict_t *def)
 {
     nyx_string_t *format = (nyx_string_t *) /* NOSONAR */ nyx_dict_get(def, "@format");
 
-    return format != NULL && format->length > 2 && format->value[format->length - 2] == '.' && format->value[format->length - 1] == 'z';
+    return format != NULL && format->base.type == NYX_TYPE_STRING && format->length > 2 && format->value[format->length - 2] == '.' && format->value[format->length - 1] == 'z';
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
