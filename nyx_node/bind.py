@@ -159,6 +159,28 @@ class nyx_opts_t(ctypes.Structure):
     ]
 
 ########################################################################################################################
+
+class nyx_node_t(ctypes.Structure):
+
+    pass
+
+########################################################################################################################
+
+nyx_node_p = ctypes.POINTER(nyx_node_t)
+
+########################################################################################################################
+
+nyx_mqtt_handler_t = ctypes.CFUNCTYPE(
+    None,
+    nyx_node_p,
+    c_int,
+    c_size_t,
+    c_void_p,
+    c_size_t,
+    c_void_p,
+)
+
+########################################################################################################################
 # HELPERS                                                                                                              #
 ########################################################################################################################
 
@@ -468,5 +490,34 @@ _bind("nyx_blob_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes
 
 _bind("nyx_stream_prop_new", c_void_p, [c_char_p, c_char_p])
 _bind("nyx_stream_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+
+########################################################################################################################
+
+## NYX NODE ##
+
+_bind('nyx_node_initialize', nyx_node_p, [
+    c_char_p,
+    ctypes.POINTER(nyx_dict_p),
+    c_char_p,
+    c_char_p,
+    c_char_p,
+    c_char_p,
+    c_char_p,
+    nyx_mqtt_handler_t,
+    c_uint32,
+    c_bool,
+])
+
+_bind('nyx_node_finalize', None, [nyx_node_p, c_bool])
+
+_bind('nyx_node_poll', None, [nyx_node_p, c_uint32])
+
+_bind('nyx_node_notify', c_bool, [c_void_p])
+
+_bind('nyx_node_enable', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
+_bind('nyx_node_disable', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
+
+_bind('nyx_node_send_message', None, [nyx_node_p, c_char_p, c_char_p])
+_bind('nyx_node_send_del_property', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
 
 ########################################################################################################################
