@@ -45,8 +45,6 @@ class NyxBLOBProp(json.json_dict.NyxDict):
 
         data = bind.as_bytes(value, allow_none = False)
 
-        ################################################################################################################
-
         buff = ctypes.cast(bind.lib.nyx_buffer_ndup(data, len(data)), bind.c_void_p)
 
         ################################################################################################################

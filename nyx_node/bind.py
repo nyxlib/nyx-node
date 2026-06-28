@@ -45,13 +45,43 @@ c_float = ctypes.c_float
 c_double = ctypes.c_double
 
 ########################################################################################################################
-# CALLBACKS                                                                                                            #
+# TYPES                                                                                                                #
+########################################################################################################################
+
+NYX_TYPE_NULL = 0x65656500
+NYX_TYPE_BOOLEAN = 0x65656501
+NYX_TYPE_NUMBER = 0x65656502
+NYX_TYPE_STRING = 0x65656503
+NYX_TYPE_DICT = 0x65656504
+NYX_TYPE_LIST = 0x65656505
+
+########################################################################################################################
+
+# noinspection PyPep8Naming
+class nyx_object_t(ctypes.Structure):
+
+    _fields_ = [
+        ('type', c_int32),
+        ('flags', c_uint64),
+        ('ref', c_int32),
+        ('node', c_void_p),
+        ('parent', c_void_p),
+        ('callback', c_void_p),
+        ('ctx', c_void_p),
+    ]
+
+########################################################################################################################
+
+nyx_object_p = ctypes.POINTER(nyx_object_t)
+
 ########################################################################################################################
 
 # noinspection PyPep8Naming
 class nyx_dict_t(ctypes.Structure):
 
-    pass
+    _fields_ = [
+        ('base', nyx_object_t),
+    ]
 
 ########################################################################################################################
 
@@ -120,30 +150,6 @@ nyx_callback_vector_t = ctypes.CFUNCTYPE(
     nyx_dict_p,
     c_bool,
 )
-
-########################################################################################################################
-
-NYX_TYPE_NULL = 0x65656500
-NYX_TYPE_BOOLEAN = 0x65656501
-NYX_TYPE_NUMBER = 0x65656502
-NYX_TYPE_STRING = 0x65656503
-NYX_TYPE_DICT = 0x65656504
-NYX_TYPE_LIST = 0x65656505
-
-########################################################################################################################
-
-# noinspection PyPep8Naming
-class nyx_object_t(ctypes.Structure):
-
-    _fields_ = [
-        ('type', c_int32),
-        ('flags', c_uint64),
-        ('ref', c_int32),
-        ('node', c_void_p),
-        ('parent', c_void_p),
-        ('callback', c_void_p),
-        ('ctx', c_void_p),
-    ]
 
 ########################################################################################################################
 
@@ -495,19 +501,7 @@ _bind("nyx_stream_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POIN
 
 ## NYX NODE ##
 
-_bind('nyx_node_initialize', nyx_node_p, [
-    c_char_p,
-    ctypes.POINTER(nyx_dict_p),
-    c_char_p,
-    c_char_p,
-    c_char_p,
-    c_char_p,
-    c_char_p,
-    nyx_mqtt_handler_t,
-    c_uint32,
-    c_bool,
-])
-
+_bind('nyx_node_initialize', nyx_node_p, [c_char_p, ctypes.POINTER(nyx_dict_p), c_char_p, c_char_p, c_char_p, c_char_p, c_char_p, nyx_mqtt_handler_t, c_uint32, c_bool])
 _bind('nyx_node_finalize', None, [nyx_node_p, c_bool])
 
 _bind('nyx_node_poll', None, [nyx_node_p, c_uint32])

@@ -43,7 +43,7 @@ class NyxNode:
 
             if not isinstance(vector, json.NyxDict):
 
-                raise TypeError('Expected Nyx Dict')
+                raise TypeError('Expected Nyx Dict object')
 
             self._vectors_ptr[index] = ctypes.cast(vector.ptr, bind.nyx_dict_p)
 

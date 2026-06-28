@@ -201,7 +201,7 @@ class NyxObject:
     @staticmethod
     def _finalize(ptr) -> None:
 
-        ptr = ctypes.cast(ptr, ctypes.POINTER(bind.nyx_object_t))
+        ptr = ctypes.cast(ptr, bind.nyx_object_p)
 
         ptr.contents.callback = None
         ptr.contents.   ctx   = None
