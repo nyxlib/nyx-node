@@ -151,13 +151,13 @@ typedef struct nyx_dict_node_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_number_and_unref(nyx_dict_t *dict, STR_t key, double value);
+bool nyx_dict_set_number_unref(nyx_dict_t *dict, STR_t key, double value);
 
-bool nyx_dict_set_string_managed_and_unref(nyx_dict_t *dict, STR_t key, str_t value);
+bool nyx_dict_set_string_managed_unref(nyx_dict_t *dict, STR_t key, str_t value);
 
-bool nyx_dict_set_buff_managed_and_unref(nyx_dict_t *dict, STR_t key, size_t size, buff_t buff);
+bool nyx_dict_set_buff_managed_unref(nyx_dict_t *dict, STR_t key, size_t size, buff_t buff);
 
-bool nyx_dict_set_buff_unmanaged_and_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff);
+bool nyx_dict_set_buff_unmanaged_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* LIST                                                                                                               */

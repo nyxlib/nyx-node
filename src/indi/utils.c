@@ -226,7 +226,7 @@ nyx_stream_state_t nyx_str_to_stream_state(STR_t stream)
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_number_and_unref(nyx_dict_t *dict, STR_t key, double value)
+bool nyx_dict_set_number_unref(nyx_dict_t *dict, STR_t key, double value)
 {
     nyx_number_t *number = nyx_number_from(value);
 
@@ -239,7 +239,7 @@ bool nyx_dict_set_number_and_unref(nyx_dict_t *dict, STR_t key, double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_string_managed_and_unref(nyx_dict_t *dict, STR_t key, str_t value)
+bool nyx_dict_set_string_managed_unref(nyx_dict_t *dict, STR_t key, str_t value)
 {
     nyx_string_t *string = nyx_string_from_managed(value);
 
@@ -252,7 +252,7 @@ bool nyx_dict_set_string_managed_and_unref(nyx_dict_t *dict, STR_t key, str_t va
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_buff_managed_and_unref(nyx_dict_t *dict, STR_t key, size_t size, buff_t buff)
+bool nyx_dict_set_buff_managed_unref(nyx_dict_t *dict, STR_t key, size_t size, buff_t buff)
 {
     nyx_string_t *string = nyx_string_from_buff_managed(size, buff);
 
@@ -265,7 +265,7 @@ bool nyx_dict_set_buff_managed_and_unref(nyx_dict_t *dict, STR_t key, size_t siz
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_buff_unmanaged_and_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff)
+bool nyx_dict_set_buff_unmanaged_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff)
 {
     nyx_string_t *string = nyx_string_from_buff_unmanaged(size, buff);
 
@@ -356,7 +356,7 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
 
     internal_get_timestamp(sizeof(timestamp), timestamp);
 
-    nyx_dict_set_string_managed_and_unref(dict, "@timestamp", nyx_string_dup(timestamp));
+    nyx_dict_set_string_managed_unref(dict, "@timestamp", nyx_string_dup(timestamp));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -374,19 +374,19 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
         /*------------------------------------------------------------------------------------------------------------*/
 
         if(opts->label != NULL && opts->label[0] != '\0') {
-            nyx_dict_set_string_managed_and_unref(dict, "@label", nyx_string_dup(opts->label));
+            nyx_dict_set_string_managed_unref(dict, "@label", nyx_string_dup(opts->label));
         }
 
         if(opts->hints != NULL && opts->hints[0] != '\0') {
-            nyx_dict_set_string_managed_and_unref(dict, "@hints", nyx_string_dup(opts->hints));
+            nyx_dict_set_string_managed_unref(dict, "@hints", nyx_string_dup(opts->hints));
         }
 
         if(opts->message != NULL && opts->message[0] != '\0') {
-            nyx_dict_set_string_managed_and_unref(dict, "@message", nyx_string_dup(opts->message));
+            nyx_dict_set_string_managed_unref(dict, "@message", nyx_string_dup(opts->message));
         }
 
         if(opts->timeout > 0.000000000000000000000000000000) {
-            nyx_dict_set_number_and_unref(dict, "@timeout", opts->timeout);
+            nyx_dict_set_number_unref(dict, "@timeout", opts->timeout);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -394,7 +394,7 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_and_unref(dict, "@group", nyx_string_dup(group));
+    nyx_dict_set_string_managed_unref(dict, "@group", nyx_string_dup(group));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }

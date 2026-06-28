@@ -24,15 +24,15 @@ nyx_dict_t *nyx_number_prop_new(STR_t name, STR_t label, STR_t format, nyx_varia
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set_string_managed_and_unref(result, "<>", nyx_string_dup("defNumber"));
+    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defNumber"));
 
-    nyx_dict_set_string_managed_and_unref(result, "@name", nyx_string_dup(name));
-    nyx_dict_set_string_managed_and_unref(result, "@label", nyx_string_dup(label));
-    nyx_dict_set_string_managed_and_unref(result, "@format", nyx_string_dup(format));
+    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_managed_unref(result, "@label", nyx_string_dup(label));
+    nyx_dict_set_string_managed_unref(result, "@format", nyx_string_dup(format));
 
-    nyx_dict_set_string_managed_and_unref(result, "@min", internal_variant_to_string(format, min));
-    nyx_dict_set_string_managed_and_unref(result, "@max", internal_variant_to_string(format, max));
-    nyx_dict_set_string_managed_and_unref(result, "@step", internal_variant_to_string(format, step));
+    nyx_dict_set_string_managed_unref(result, "@min", internal_variant_to_string(format, min));
+    nyx_dict_set_string_managed_unref(result, "@max", internal_variant_to_string(format, max));
+    nyx_dict_set_string_managed_unref(result, "@step", internal_variant_to_string(format, step));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -51,7 +51,7 @@ bool nyx_number_prop_set(nyx_dict_t *prop, nyx_variant_t value)
 {
     STR_t format = nyx_dict_get_string(prop, "@format");
 
-    return nyx_dict_set_string_managed_and_unref(prop, "$", internal_variant_to_string(format, value));
+    return nyx_dict_set_string_managed_unref(prop, "$", internal_variant_to_string(format, value));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -79,7 +79,7 @@ nyx_dict_t *nyx_number_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_and_unref(result, "<>", nyx_string_dup("defNumberVector"));
+    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defNumberVector"));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -89,12 +89,12 @@ nyx_dict_t *nyx_number_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_and_unref(result, "@client", nyx_string_dup("unknown"));
-    nyx_dict_set_string_managed_and_unref(result, "@device", nyx_string_dup(device));
-    nyx_dict_set_string_managed_and_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_managed_unref(result, "@client", nyx_string_dup("unknown"));
+    nyx_dict_set_string_managed_unref(result, "@device", nyx_string_dup(device));
+    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
 
-    nyx_dict_set_string_managed_and_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
-    nyx_dict_set_string_managed_and_unref(result, "@perm", nyx_string_dup(nyx_perm_to_str(perm)));
+    nyx_dict_set_string_managed_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
+    nyx_dict_set_string_managed_unref(result, "@perm", nyx_string_dup(nyx_perm_to_str(perm)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -539,6 +539,8 @@ static nyx_dict_t *json_parse_dict(json_parser_t *parser) // NOLINT(misc-no-recu
 
         nyx_dict_set(result, key, value);
 
+        nyx_object_unref(value);
+
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_memory_free(key);
@@ -639,6 +641,8 @@ static nyx_list_t *json_parse_list(json_parser_t *parser) // NOLINT(misc-no-recu
         /*------------------------------------------------------------------------------------------------------------*/
 
         nyx_list_push(result, value);
+
+        nyx_object_unref(value);
 
         /*------------------------------------------------------------------------------------------------------------*/
 

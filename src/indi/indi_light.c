@@ -24,10 +24,10 @@ nyx_dict_t *nyx_light_prop_new(STR_t name, STR_t label, nyx_state_t value)
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set_string_managed_and_unref(result, "<>", nyx_string_dup("defLight"));
+    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defLight"));
 
-    nyx_dict_set_string_managed_and_unref(result, "@name", nyx_string_dup(name));
-    nyx_dict_set_string_managed_and_unref(result, "@label", nyx_string_dup(label));
+    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_managed_unref(result, "@label", nyx_string_dup(label));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -44,7 +44,7 @@ nyx_dict_t *nyx_light_prop_new(STR_t name, STR_t label, nyx_state_t value)
 
 bool nyx_light_prop_set(nyx_dict_t *prop, nyx_state_t value)
 {
-    return nyx_dict_set_string_managed_and_unref(prop, "$", nyx_string_dup(nyx_state_to_str(value)));
+    return nyx_dict_set_string_managed_unref(prop, "$", nyx_string_dup(nyx_state_to_str(value)));
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -69,7 +69,7 @@ nyx_dict_t *nyx_light_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_and_unref(result, "<>", nyx_string_dup("defLightVector"));
+    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defLightVector"));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -79,11 +79,11 @@ nyx_dict_t *nyx_light_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_and_unref(result, "@client", nyx_string_dup("unknown"));
-    nyx_dict_set_string_managed_and_unref(result, "@device", nyx_string_dup(device));
-    nyx_dict_set_string_managed_and_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_managed_unref(result, "@client", nyx_string_dup("unknown"));
+    nyx_dict_set_string_managed_unref(result, "@device", nyx_string_dup(device));
+    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
 
-    nyx_dict_set_string_managed_and_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
+    nyx_dict_set_string_managed_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
