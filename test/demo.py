@@ -36,9 +36,43 @@ def main():
 
     ####################################################################################################################
 
+    mode_noise_prop = nyx_node.NyxSwitchProp(
+        'mode_noise',
+        'Noise only',
+        nyx_node.NyxOnOff.ON,
+    )
+
+    mode_delta_prop = nyx_node.NyxSwitchProp(
+        'mode_delta',
+        'Dirac delta',
+        nyx_node.NyxOnOff.OFF,
+    )
+
+    mode_comb_prop = nyx_node.NyxSwitchProp(
+        'mode_comb',
+        'Dirac comb',
+        nyx_node.NyxOnOff.OFF,
+    )
+
+    mode_vector = nyx_node.NyxSwitchVector(
+        'Demo',
+        'signal_mode',
+        nyx_node.NyxState.OK,
+        nyx_node.NyxPerm.RW,
+        nyx_node.NyxRule.ONE_OF_MANY,
+        [
+            mode_noise_prop,
+            mode_delta_prop,
+            mode_comb_prop,
+        ],
+        group = 'Demo',
+    )
+
+    ####################################################################################################################
+
     node = nyx_node.NyxNode(
         'NYX_DEMO_PY',
-        [run_vector],
+        [mode_vector, run_vector],
         'tcp://0.0.0.0:7625',
         os.getenv('MQTT_URL'),
         os.getenv('STREAM_URL'),

@@ -11,7 +11,7 @@ import typing
 ########################################################################################################################
 
 from . import bind
-from . import obj
+from . import json
 
 ########################################################################################################################
 
@@ -22,7 +22,7 @@ class NyxNode:
     def __init__(
             self,
             node_id: str,
-            vectors: typing.List[obj.NyxObject],
+            vectors: typing.List[json.NyxDict],
             indi_url: str | None,
             mqtt_url: str | None,
             nss_url: str | None,
@@ -34,23 +34,26 @@ class NyxNode:
 
         ################################################################################################################
 
-        vectors_ptr = (bind.nyx_dict_p * (len(vectors) + 1))()
+        # noinspection PyCallingNonCallable
+        self._vectors_ptr = (bind.nyx_dict_p * (len(vectors) + 1))()
 
         ################################################################################################################
 
         for index, vector in enumerate(vectors):
 
-            if not isinstance(vector, obj.NyxObject):
+            if not isinstance(vector, json.NyxDict):
 
-                raise TypeError('Expected list NyxObject')
+                raise TypeError('Expected Nyx Dict')
 
-            vectors_ptr[index] = ctypes.cast(vector.ptr, bind.nyx_dict_p)
+            self._vectors_ptr[index] = ctypes.cast(vector.ptr, bind.nyx_dict_p)
+
+        self._vectors_ptr[-1] = bind.nyx_dict_p()
 
         ################################################################################################################
 
         self._ptr = bind.lib.nyx_node_initialize(
             bind.as_bytes(node_id, allow_none = False),
-            vectors_ptr,
+            self._vectors_ptr,
             bind.as_bytes(indi_url),
             bind.as_bytes(mqtt_url),
             bind.as_bytes(nss_url),
@@ -82,9 +85,9 @@ class NyxNode:
 
     ####################################################################################################################
 
-    def notify(self, object: obj.NyxObject | None = None) -> bool:
+    def notify(self, object: json.NyxDict | None = None) -> bool:
 
-        return bool(bind.lib.nyx_node_notify(object.ptr)) if object is not None else False
+        return bool(bind.lib.nyx_node_notify(self.ptr, object.ptr)) if object is not None else False
 
     ####################################################################################################################
 
