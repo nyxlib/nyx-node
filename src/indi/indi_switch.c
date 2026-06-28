@@ -24,14 +24,18 @@ nyx_dict_t *nyx_switch_prop_new(STR_t name, STR_t label, nyx_onoff_t value)
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defSwitch"));
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
-    nyx_dict_set_string_managed_unref(result, "@label", nyx_string_dup(label));
+    nyx_dict_set_string_unref(result, "<>", "defSwitch", false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "$", nyx_string_dup(nyx_onoff_to_str(value)));
+    nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
+    nyx_dict_set_string_unref(result, "@label", nyx_string_dup(label), true);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_dict_set_string_unref(result, "$", nyx_onoff_to_str(value), false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -42,7 +46,7 @@ nyx_dict_t *nyx_switch_prop_new(STR_t name, STR_t label, nyx_onoff_t value)
 /* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_switch_prop_set(nyx_dict_t *prop, nyx_onoff_t value)
+bool nyx_switch_prop_set(const nyx_dict_t *prop, nyx_onoff_t value)
 {
     return nyx_dict_set_string(prop, "$", nyx_onoff_to_str(value), false);
 }
@@ -73,17 +77,17 @@ nyx_dict_t *nyx_switch_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defSwitchVector"));
+    nyx_dict_set_string_unref(result, "<>", "defSwitchVector", false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "@client", nyx_string_dup("unknown"));
-    nyx_dict_set_string_managed_unref(result, "@device", nyx_string_dup(device));
-    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_unref(result, "@client", "unknown", false);
+    nyx_dict_set_string_unref(result, "@device", nyx_string_dup(device), true);
+    nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
 
-    nyx_dict_set_string_managed_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
-    nyx_dict_set_string_managed_unref(result, "@perm", nyx_string_dup(nyx_perm_to_str(perm)));
-    nyx_dict_set_string_managed_unref(result, "@rule", nyx_string_dup(nyx_rule_to_str(rule)));
+    nyx_dict_set_string_unref(result, "@state", nyx_state_to_str(state), false);
+    nyx_dict_set_string_unref(result, "@perm", nyx_perm_to_str(perm), false);
+    nyx_dict_set_string_unref(result, "@rule", nyx_rule_to_str(rule), false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -13,7 +13,7 @@
 /* PROP                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size, buff_t buff, bool managed)
+nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size, BUFF_t buff, bool managed)
 {
     if(label == NULL || label[0] == '\0')
     {
@@ -37,20 +37,19 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defBLOB"));
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
-    nyx_dict_set_string_managed_unref(result, "@label", nyx_string_dup(label));
-    nyx_dict_set_string_managed_unref(result, "@format", nyx_string_dup(format));
+    nyx_dict_set_string_unref(result, "<>", "defBLOB", false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(managed) {
-        nyx_dict_set_buff_managed_unref(result, "$", size, buff);
-    }
-    else {
-        nyx_dict_set_buff_unmanaged_unref(result, "$", size, buff);
-    }
+    nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
+    nyx_dict_set_string_unref(result, "@label", nyx_string_dup(label), true);
+    nyx_dict_set_string_unref(result, "@format", nyx_string_dup(format), true);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_dict_set_buff_unref(result, "$", size, buff, managed);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -61,10 +60,8 @@ nyx_dict_t *nyx_blob_prop_new(STR_t name, STR_t label, STR_t format, size_t size
 /* PROP SETTER & GETTER                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_blob_prop_set_managed(nyx_dict_t *prop, size_t size, buff_t buff)
+bool nyx_blob_prop_set(const nyx_dict_t *prop, size_t size, BUFF_t buff, bool managed)
 {
-    bool managed;
-
     if(size == 0x00 || buff == NULL)
     {
         size = 0x00;
@@ -72,32 +69,6 @@ bool nyx_blob_prop_set_managed(nyx_dict_t *prop, size_t size, buff_t buff)
 
         managed = false;
     }
-    else
-    {
-        managed = true;
-    }
-
-    return nyx_dict_set_string_buff(prop, "$", size, buff, managed);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_blob_prop_set_unmanaged(nyx_dict_t *prop, size_t size, BUFF_t buff)
-{
-    bool managed;
-
-    if(size == 0x00 || buff == NULL)
-    {
-        size = 0x00;
-        buff = ("");
-
-        managed = false;
-    }
-    else
-    {
-        managed = false;
-    }
-
 
     return nyx_dict_set_string_buff(prop, "$", size, buff, managed);
 }
@@ -127,16 +98,16 @@ nyx_dict_t *nyx_blob_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defBLOBVector"));
+    nyx_dict_set_string_unref(result, "<>", "defBLOBVector", false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "@client", nyx_string_dup("unknown"));
-    nyx_dict_set_string_managed_unref(result, "@device", nyx_string_dup(device));
-    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_unref(result, "@client", "unknown", false);
+    nyx_dict_set_string_unref(result, "@device", nyx_string_dup(device), true);
+    nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
 
-    nyx_dict_set_string_managed_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
-    nyx_dict_set_string_managed_unref(result, "@perm", nyx_string_dup(nyx_perm_to_str(perm)));
+    nyx_dict_set_string_unref(result, "@state", nyx_state_to_str(state), false);
+    nyx_dict_set_string_unref(result, "@perm", nyx_perm_to_str(perm), false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

@@ -24,20 +24,22 @@ nyx_dict_t *nyx_del_property_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("delProperty"));
+    nyx_dict_set_string_unref(result, "<>", "delProperty", false);
 
-    nyx_dict_set_string_managed_unref(result, "@client", nyx_string_dup("unknown"));
-    nyx_dict_set_string_managed_unref(result, "@device", nyx_string_dup(device));
-    nyx_dict_set_string_managed_unref(result, "@timestamp", nyx_string_dup(timestamp));
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_dict_set_string_unref(result, "@client", "unknown", false);
+    nyx_dict_set_string_unref(result, "@device", nyx_string_dup(device), true);
+    nyx_dict_set_string_unref(result, "@timestamp", nyx_string_dup(timestamp), true);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     if(name != NULL) {
-        nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
+        nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
     }
 
     if(message != NULL) {
-        nyx_dict_set_string_managed_unref(result, "@message", nyx_string_dup(message));
+        nyx_dict_set_string_unref(result, "@message", nyx_string_dup(message), true);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

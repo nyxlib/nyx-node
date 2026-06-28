@@ -239,9 +239,9 @@ bool nyx_dict_set_number_unref(nyx_dict_t *dict, STR_t key, double value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_string_managed_unref(nyx_dict_t *dict, STR_t key, str_t value)
+bool nyx_dict_set_string_unref(nyx_dict_t *dict, STR_t key, STR_t value, bool managed)
 {
-    nyx_string_t *string = nyx_string_from_managed(value);
+    nyx_string_t *string = nyx_string_from(value, managed);
 
     bool result = nyx_dict_set(dict, key, string);
 
@@ -252,22 +252,9 @@ bool nyx_dict_set_string_managed_unref(nyx_dict_t *dict, STR_t key, str_t value)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_buff_managed_unref(nyx_dict_t *dict, STR_t key, size_t size, buff_t buff)
+bool nyx_dict_set_buff_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
 {
-    nyx_string_t *string = nyx_string_from_buff_managed(size, buff);
-
-    bool result = nyx_dict_set(dict, key, string);
-
-    nyx_object_unref(string);
-
-    return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_dict_set_buff_unmanaged_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff)
-{
-    nyx_string_t *string = nyx_string_from_buff_unmanaged(size, buff);
+    nyx_string_t *string = nyx_string_from_buff(size, buff, managed);
 
     bool result = nyx_dict_set(dict, key, string);
 
@@ -356,7 +343,7 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
 
     internal_get_timestamp(sizeof(timestamp), timestamp);
 
-    nyx_dict_set_string_managed_unref(dict, "@timestamp", nyx_string_dup(timestamp));
+    nyx_dict_set_string_unref(dict, "@timestamp", nyx_string_dup(timestamp), true);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -374,15 +361,15 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
         /*------------------------------------------------------------------------------------------------------------*/
 
         if(opts->label != NULL && opts->label[0] != '\0') {
-            nyx_dict_set_string_managed_unref(dict, "@label", nyx_string_dup(opts->label));
+            nyx_dict_set_string_unref(dict, "@label", nyx_string_dup(opts->label), true);
         }
 
         if(opts->hints != NULL && opts->hints[0] != '\0') {
-            nyx_dict_set_string_managed_unref(dict, "@hints", nyx_string_dup(opts->hints));
+            nyx_dict_set_string_unref(dict, "@hints", nyx_string_dup(opts->hints), true);
         }
 
         if(opts->message != NULL && opts->message[0] != '\0') {
-            nyx_dict_set_string_managed_unref(dict, "@message", nyx_string_dup(opts->message));
+            nyx_dict_set_string_unref(dict, "@message", nyx_string_dup(opts->message), true);
         }
 
         if(opts->timeout > 0.000000000000000000000000000000) {
@@ -394,7 +381,7 @@ void internal_set_opts(nyx_dict_t *dict, const nyx_opts_t *opts)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(dict, "@group", nyx_string_dup(group));
+    nyx_dict_set_string_unref(dict, "@group", nyx_string_dup(group), true);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 }
@@ -444,7 +431,7 @@ static void internal_copy_blob(nyx_dict_t *dst_dict, const nyx_dict_t *src_dict)
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        nyx_dict_set(dst_dict, "$", nyx_string_from_buff_managed(dst_len, dst_str));
+        nyx_dict_set(dst_dict, "$", nyx_string_from_buff(dst_len, dst_str, true));
 
         /*------------------------------------------------------------------------------------------------------------*/
     }

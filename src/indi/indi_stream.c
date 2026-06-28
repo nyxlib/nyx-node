@@ -35,11 +35,15 @@ nyx_dict_t *nyx_stream_prop_new(STR_t name, STR_t label)
 
     nyx_dict_t *result = nyx_dict_new();
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defStream"));
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
-    nyx_dict_set_string_managed_unref(result, "@hash", nyx_string_dup(hash));
-    nyx_dict_set_string_managed_unref(result, "@label", nyx_string_dup(label));
+    nyx_dict_set_string_unref(result, "<>", "defStream", false);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
+    nyx_dict_set_string_unref(result, "@hash", nyx_string_dup(hash), true);
+    nyx_dict_set_string_unref(result, "@label", nyx_string_dup(label), true);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -63,15 +67,15 @@ nyx_dict_t *nyx_stream_vector_new(
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "<>", nyx_string_dup("defStreamVector"));
+    nyx_dict_set_string_unref(result, "<>", "defStreamVector", false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set_string_managed_unref(result, "@client", nyx_string_dup("unknown"));
-    nyx_dict_set_string_managed_unref(result, "@device", nyx_string_dup(device));
-    nyx_dict_set_string_managed_unref(result, "@name", nyx_string_dup(name));
+    nyx_dict_set_string_unref(result, "@client", "unknown", false);
+    nyx_dict_set_string_unref(result, "@device", nyx_string_dup(device), true);
+    nyx_dict_set_string_unref(result, "@name", nyx_string_dup(name), true);
 
-    nyx_dict_set_string_managed_unref(result, "@state", nyx_string_dup(nyx_state_to_str(state)));
+    nyx_dict_set_string_unref(result, "@state", nyx_state_to_str(state), false);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
