@@ -1089,7 +1089,7 @@ void nyx_node_ping(const nyx_node_t *node)
 
 static bool _notify(nyx_object_t *object)
 {
-    if(object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
+    if(object->node != NULL && object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
     {
         const nyx_dict_t *vector = (nyx_dict_t *) object;
 

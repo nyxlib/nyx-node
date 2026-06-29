@@ -85,12 +85,6 @@ class NyxNode:
 
     ####################################################################################################################
 
-    def notify(self, object: json.NyxDict | None = None) -> bool:
-
-        return bool(bind.lib.nyx_node_notify(self.ptr, object.ptr)) if object is not None else False
-
-    ####################################################################################################################
-
     def enable(self, device: str, name: str | None = None, message: str | None = None) -> None:
 
         bind.lib.nyx_node_enable(self.ptr, bind.as_bytes(device, allow_none = False), bind.as_bytes(name), bind.as_bytes(message))
