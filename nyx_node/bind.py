@@ -474,25 +474,49 @@ _bind('nyx_message_new', c_void_p, [c_char_p, c_char_p])
 
 _bind('nyx_del_property_new', c_void_p, [c_char_p, c_char_p, c_char_p])
 
-## NYX SWITCH ##
+## NYX NUMBER ##
 
-#_bind("nyx_number_prop_new", c_void_p, [c_char_p, c_char_p, c_char_p, NyxVariant, NyxVariant, NyxVariant, NyxVariant])
-#_bind("nyx_number_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+_bind('nyx_number_prop_new_int', c_void_p, [c_char_p, c_char_p, c_char_p, c_int32, c_int32, c_int32, c_int32])
+_bind('nyx_number_prop_new_uint', c_void_p, [c_char_p, c_char_p, c_char_p, c_uint32, c_uint32, c_uint32, c_uint32])
+_bind('nyx_number_prop_new_long', c_void_p, [c_char_p, c_char_p, c_char_p, c_int64, c_int64, c_int64, c_int64])
+_bind('nyx_number_prop_new_ulong', c_void_p, [c_char_p, c_char_p, c_char_p, c_uint64, c_uint64, c_uint64, c_uint64])
+_bind('nyx_number_prop_new_double', c_void_p, [c_char_p, c_char_p, c_char_p, c_double, c_double, c_double, c_double])
+
+_bind('nyx_number_prop_set_int', c_bool, [c_void_p, c_int32])
+_bind('nyx_number_prop_set_uint', c_bool, [c_void_p, c_uint32])
+_bind('nyx_number_prop_set_long', c_bool, [c_void_p, c_int64])
+_bind('nyx_number_prop_set_ulong', c_bool, [c_void_p, c_uint64])
+_bind('nyx_number_prop_set_double', c_bool, [c_void_p, c_double])
+
+_bind('nyx_number_prop_get_int', c_int32, [c_void_p])
+_bind('nyx_number_prop_get_uint', c_uint32, [c_void_p])
+_bind('nyx_number_prop_get_long', c_int64, [c_void_p])
+_bind('nyx_number_prop_get_ulong', c_uint64, [c_void_p])
+_bind('nyx_number_prop_get_double', c_double, [c_void_p])
+
+_bind('nyx_number_vector_new', c_void_p, [c_char_p, c_char_p, c_int, c_int, c_void_p, ctypes.POINTER(nyx_opts_t)])
+
+## NYX TEXT ##
 
 _bind("nyx_text_prop_new", c_void_p, [c_char_p, c_char_p, c_char_p])
 _bind("nyx_text_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
 
+## NYX LIGHT ##
+
 _bind("nyx_light_prop_new", c_void_p, [c_char_p, c_char_p, c_int])
 _bind("nyx_light_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
 
-_bind('nyx_switch_prop_new', c_void_p, [c_char_p, c_char_p, c_int32])
-_bind('nyx_switch_vector_new', c_void_p, [c_char_p, c_char_p, c_int32, c_int32, c_int32, c_void_p, ctypes.POINTER(nyx_opts_t)])
+## NYX TEXT ##
 
 _bind("nyx_switch_prop_new", c_void_p, [c_char_p, c_char_p, c_int])
 _bind("nyx_switch_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
 
+## NYX BLOB ##
+
 _bind("nyx_blob_prop_new", c_void_p, [c_char_p, c_char_p, c_char_p, c_size_t, c_void_p, c_bool])
 _bind("nyx_blob_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+
+## NYX STREAM ##
 
 _bind("nyx_stream_prop_new", c_void_p, [c_char_p, c_char_p])
 _bind("nyx_stream_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
