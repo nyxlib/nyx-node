@@ -310,6 +310,115 @@ void nyx_xmldoc_add_attribute(
 /*--------------------------------------------------------------------------------------------------------------------*/
 #endif
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* VARIANT                                                                                                            */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    enum
+    {
+        NYX_VARIANT_TYPE_INT = 1000,
+        NYX_VARIANT_TYPE_UINT = 1001,
+        NYX_VARIANT_TYPE_LONG = 1002,
+        NYX_VARIANT_TYPE_ULONG = 1003,
+        NYX_VARIANT_TYPE_DOUBLE = 1004,
+
+    } type;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    union
+    {
+        int32_t _int;
+        uint32_t _uint;
+        int64_t _long;
+        uint64_t _ulong;
+        double _double;
+
+    } value;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+} nyx_variant_t;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
+
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_INT(int32_t value)
+{
+    #ifndef __cplusplus
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_INT, {._int = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_INT, {._int = value}};
+    #endif
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
+
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_UINT(uint32_t value)
+{
+    #ifndef __cplusplus
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_UINT, {._uint = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_UINT, {._uint = value}};
+    #endif
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
+
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_LONG(int64_t value)
+{
+    #ifndef __cplusplus
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_LONG, {._long = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_LONG, {._long = value}};
+    #endif
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
+
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_ULONG(uint64_t value)
+{
+    #ifndef __cplusplus
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_ULONG, {._ulong = value}};
+    #endif
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @private
+ */
+
+__NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
+{
+    #ifndef __cplusplus
+    return (nyx_variant_t) {NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
+    #else
+    return (nyx_variant_t) {nyx_variant_t::NYX_VARIANT_TYPE_DOUBLE, {._double = value}};
+    #endif
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* HELPERS                                                                                                            */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
