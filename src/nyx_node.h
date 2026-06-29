@@ -2119,21 +2119,6 @@ __NYX_INLINE__ nyx_variant_t NYX_VARIANT_FROM_DOUBLE(double value)
   * Nyx Number messages
   * @{
   */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @private
- */
-
-nyx_dict_t *nyx_number_prop_new(
-    STR_t name,
-    __NYX_NULLABLE__ STR_t label,
-    STR_t format,
-    nyx_variant_t min,
-    nyx_variant_t max,
-    nyx_variant_t step,
-    nyx_variant_t value
-);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2149,10 +2134,15 @@ nyx_dict_t *nyx_number_prop_new(
  * @return The new property object.
  */
 
-__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
-{
-    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
-}
+nyx_dict_t *nyx_number_prop_new_int(
+    STR_t name,
+    __NYX_NULLABLE__ STR_t label,
+    STR_t format,
+    int32_t min,
+    int32_t max,
+    int32_t step,
+    int32_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2168,10 +2158,15 @@ __NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_int(STR_t name,__NYX_NULLABLE__ S
  * @return The new property object.
  */
 
-__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
-{
-    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
-}
+nyx_dict_t *nyx_number_prop_new_uint(
+    STR_t name,
+    __NYX_NULLABLE__ STR_t label,
+    STR_t format,
+    uint32_t min,
+    uint32_t max,
+    uint32_t step,
+    uint32_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2187,10 +2182,15 @@ __NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_uint(STR_t name,__NYX_NULLABLE__ 
  * @return The new property object.
  */
 
-__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
-{
-    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
-}
+nyx_dict_t *nyx_number_prop_new_long(
+    STR_t name,
+    __NYX_NULLABLE__ STR_t label,
+    STR_t format,
+    int64_t min,
+    int64_t max,
+    int64_t step,
+    int64_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2206,10 +2206,15 @@ __NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_long(STR_t name,__NYX_NULLABLE__ 
  * @return The new property object.
  */
 
-__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
-{
-    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
-}
+nyx_dict_t *nyx_number_prop_new_ulong(
+    STR_t name,
+    __NYX_NULLABLE__ STR_t label,
+    STR_t format,
+    uint64_t min,
+    uint64_t max,
+    uint64_t step,
+    uint64_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2225,10 +2230,15 @@ __NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_ulong(STR_t name,__NYX_NULLABLE__
  * @return The new property object.
  */
 
-__NYX_INLINE__ nyx_dict_t *nyx_number_prop_new_double(STR_t name,__NYX_NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
-{
-    return nyx_number_prop_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
-}
+nyx_dict_t *nyx_number_prop_new_double(
+    STR_t name,
+    __NYX_NULLABLE__ STR_t label,
+    STR_t format,
+    double min,
+    double max,
+    double step,
+    double value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2245,7 +2255,29 @@ bool nyx_number_prop_set(
 /** @private
  */
 
-nyx_variant_t nyx_number_prop_get(
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Sets the new value of the provided property object.
+ * @param prop Property object.
+ * @param value New value.
+ * @return `true` if the value was modified, `false` otherwise.
+ */
+
+bool nyx_number_prop_set_int(
+    nyx_dict_t *prop,
+    int32_t value
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Gets the current value of the provided property object.
+ * @param prop Property object.
+ * @return The current value.
+ */
+
+int32_t nyx_number_prop_get_int(
     const nyx_dict_t *prop
 );
 
@@ -2258,10 +2290,10 @@ nyx_variant_t nyx_number_prop_get(
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
-{
-    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_INT(value));
-}
+bool nyx_number_prop_set_uint(
+    nyx_dict_t *prop,
+    uint32_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2271,10 +2303,9 @@ __NYX_INLINE__ bool nyx_number_prop_set_int(nyx_dict_t *prop, int32_t value)
  * @return The current value.
  */
 
-__NYX_INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
-{
-    return nyx_number_prop_get(prop).value._int;
-}
+uint32_t nyx_number_prop_get_uint(
+    const nyx_dict_t *prop
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2285,10 +2316,10 @@ __NYX_INLINE__ int32_t nyx_number_prop_get_int(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
-{
-    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_UINT(value));
-}
+bool nyx_number_prop_set_long(
+    nyx_dict_t *prop,
+    int64_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2298,10 +2329,9 @@ __NYX_INLINE__ bool nyx_number_prop_set_uint(nyx_dict_t *prop, uint32_t value)
  * @return The current value.
  */
 
-__NYX_INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
-{
-    return nyx_number_prop_get(prop).value._uint;
-}
+int64_t nyx_number_prop_get_long(
+    const nyx_dict_t *prop
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2312,10 +2342,10 @@ __NYX_INLINE__ uint32_t nyx_number_prop_get_uint(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
-{
-    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_LONG(value));
-}
+bool nyx_number_prop_set_ulong(
+    nyx_dict_t *prop,
+    uint64_t value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2325,10 +2355,9 @@ __NYX_INLINE__ bool nyx_number_prop_set_long(nyx_dict_t *prop, int64_t value)
  * @return The current value.
  */
 
-__NYX_INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
-{
-    return nyx_number_prop_get(prop).value._long;
-}
+uint64_t nyx_number_prop_get_ulong(
+    const nyx_dict_t *prop
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2339,10 +2368,10 @@ __NYX_INLINE__ int64_t nyx_number_prop_get_long(const nyx_dict_t *prop)
  * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
-{
-    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_ULONG(value));
-}
+bool nyx_number_prop_set_double(
+    nyx_dict_t *prop,
+    double value
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2352,37 +2381,9 @@ __NYX_INLINE__ bool nyx_number_prop_set_ulong(nyx_dict_t *prop, uint64_t value)
  * @return The current value.
  */
 
-__NYX_INLINE__ uint64_t nyx_number_prop_get_ulong(const nyx_dict_t *prop)
-{
-    return nyx_number_prop_get(prop).value._ulong;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @brief Sets the new value of the provided property object.
- * @param prop Property object.
- * @param value New value.
- * @return `true` if the value was modified, `false` otherwise.
- */
-
-__NYX_INLINE__ bool nyx_number_prop_set_double(nyx_dict_t *prop, double value)
-{
-    return nyx_number_prop_set(prop, NYX_VARIANT_FROM_DOUBLE(value));
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @brief Gets the current value of the provided property object.
- * @param prop Property object.
- * @return The current value.
- */
-
-__NYX_INLINE__ double nyx_number_prop_get_double(const nyx_dict_t *prop)
-{
-    return nyx_number_prop_get(prop).value._double;
-}
+double nyx_number_prop_get_double(
+    const nyx_dict_t *prop
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
