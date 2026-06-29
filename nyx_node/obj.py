@@ -270,7 +270,7 @@ class NyxObject:
 
     def notify(self) -> bool:
 
-        return bool(bind.lib.nyx_node_notify(self.ptr))
+        return bool(bind.lib.nyx_object_notify(self.ptr))
 
     ####################################################################################################################
 

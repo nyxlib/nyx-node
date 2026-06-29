@@ -419,6 +419,7 @@ _bind('nyx_object_parse', c_void_p, [c_char_p])
 _bind('nyx_object_ref', None, [c_void_p])
 _bind('nyx_object_unref', None, [c_void_p])
 _bind('nyx_object_get_type', c_int32, [c_void_p])
+_bind('nyx_object_notify', c_bool, [c_void_p])
 _bind('nyx_object_to_string', c_void_p, [c_void_p])
 _bind('nyx_object_to_cstring', c_void_p, [c_void_p])
 
@@ -527,8 +528,6 @@ _bind('nyx_node_initialize', nyx_node_p, [c_char_p, ctypes.POINTER(nyx_dict_p), 
 _bind('nyx_node_finalize', None, [nyx_node_p, c_bool])
 
 _bind('nyx_node_poll', None, [nyx_node_p, c_uint32])
-
-_bind('nyx_node_notify', c_bool, [c_void_p])
 
 _bind('nyx_node_enable', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
 _bind('nyx_node_disable', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
