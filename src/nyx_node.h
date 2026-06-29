@@ -922,7 +922,11 @@ STR_t nyx_string_get(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @private
+ * @memberof nyx_string_t
+ * @brief Get the value of the provided JSON string object.
+ * @param object JSON string object.
+ * @param result_size ???.
+ * @param result_buff ???.
  */
 
 void nyx_string_get_buff(
