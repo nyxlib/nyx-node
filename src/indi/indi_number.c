@@ -49,27 +49,27 @@ static nyx_dict_t *_prop_new(STR_t name, STR_t label, STR_t format, nyx_variant_
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-nyx_dict_t *nyx_number_prop_new_int(STR_t name, __NYX_NULLABLE__ STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
+nyx_dict_t *nyx_number_prop_new_int(STR_t name, STR_t label, STR_t format, int32_t min, int32_t max, int32_t step, int32_t value)
 {
     return _prop_new(name, label, format, NYX_VARIANT_FROM_INT(min), NYX_VARIANT_FROM_INT(max), NYX_VARIANT_FROM_INT(step), NYX_VARIANT_FROM_INT(value));
 }
 
-nyx_dict_t *nyx_number_prop_new_uint(STR_t name, __NYX_NULLABLE__ STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
+nyx_dict_t *nyx_number_prop_new_uint(STR_t name, STR_t label, STR_t format, uint32_t min, uint32_t max, uint32_t step, uint32_t value)
 {
     return _prop_new(name, label, format, NYX_VARIANT_FROM_UINT(min), NYX_VARIANT_FROM_UINT(max), NYX_VARIANT_FROM_UINT(step), NYX_VARIANT_FROM_UINT(value));
 }
 
-nyx_dict_t *nyx_number_prop_new_long(STR_t name, __NYX_NULLABLE__ STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
+nyx_dict_t *nyx_number_prop_new_long(STR_t name, STR_t label, STR_t format, int64_t min, int64_t max, int64_t step, int64_t value)
 {
     return _prop_new(name, label, format, NYX_VARIANT_FROM_LONG(min), NYX_VARIANT_FROM_LONG(max), NYX_VARIANT_FROM_LONG(step), NYX_VARIANT_FROM_LONG(value));
 }
 
-nyx_dict_t *nyx_number_prop_new_ulong(STR_t name, __NYX_NULLABLE__ STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
+nyx_dict_t *nyx_number_prop_new_ulong(STR_t name, STR_t label, STR_t format, uint64_t min, uint64_t max, uint64_t step, uint64_t value)
 {
     return _prop_new(name, label, format, NYX_VARIANT_FROM_ULONG(min), NYX_VARIANT_FROM_ULONG(max), NYX_VARIANT_FROM_ULONG(step), NYX_VARIANT_FROM_ULONG(value));
 }
 
-nyx_dict_t *nyx_number_prop_new_double(STR_t name, __NYX_NULLABLE__ STR_t label, STR_t format, double min, double max, double step, double value)
+nyx_dict_t *nyx_number_prop_new_double(STR_t name, STR_t label, STR_t format, double min, double max, double step, double value)
 {
     return _prop_new(name, label, format, NYX_VARIANT_FROM_DOUBLE(min), NYX_VARIANT_FROM_DOUBLE(max), NYX_VARIANT_FROM_DOUBLE(step), NYX_VARIANT_FROM_DOUBLE(value));
 }

@@ -644,7 +644,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                     if(vector->base.callback._vector != NULL) vector->base.callback._vector(vector, vector_modified);
 
-                    nyx_node_notify(&vector->base);
+                    nyx_object_notify(&vector->base);
 
                     break; /* property found */
 
@@ -1087,7 +1087,7 @@ void nyx_node_ping(const nyx_node_t *node)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-static bool _notify(nyx_object_t *object)
+bool internal_notify(const nyx_object_t *object)
 {
     if(object->node != NULL && object->type == NYX_TYPE_DICT && (object->flags & NYX_FLAGS_DISABLED) == 0)
     {
@@ -1144,21 +1144,6 @@ static bool _notify(nyx_object_t *object)
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-bool nyx_node_notify(nyx_object_t *object)
-{
-    for(; object != NULL; object = object->parent)
-    {
-        if(_notify(object))
-        {
             return true;
         }
     }

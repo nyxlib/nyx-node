@@ -591,7 +591,19 @@ __NYX_NULLABLE__ nyx_object_t *nyx_object_unref(
  */
 
 nyx_type_t nyx_object_get_type(
-    const nyx_object_t *object
+    __NYX_NULLABLE__ const nyx_object_t *object
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_object_t
+ * @brief Notifies the provided Nyx / INDI object to the clients.
+ * @param object The provided Nyx / INDI object.
+ */
+
+bool nyx_object_notify(
+    __NYX_NULLABLE__ const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2861,18 +2873,6 @@ void nyx_node_add_timer(
 void nyx_node_poll(
     const nyx_node_t *node,
     uint32_t timeout_ms
-);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_node_t
- * @brief Notifies the provided Nyx / INDI object to the clients.
- * @param object The provided Nyx / INDI object.
- */
-
-bool nyx_node_notify(
-    __NYX_NULLABLE__ nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

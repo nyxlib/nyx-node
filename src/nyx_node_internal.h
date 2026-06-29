@@ -30,7 +30,7 @@ extern "C" {
 /* MEMORY                                                                                                             */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-/*--------*/ str_t nyx_bool_dup(
+/*------------*/ str_t nyx_bool_dup(
     bool b
 );
 
@@ -112,23 +112,23 @@ int nyx_unicode_to_utf8(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 void nyx_null_free(
-    /*-*/ nyx_null_t *object
+    nyx_null_t *object
 );
 
 void nyx_number_free(
-    /*-*/ nyx_number_t *object
+    nyx_number_t *object
 );
 
 void nyx_boolean_free(
-    /*-*/ nyx_boolean_t *object
+    nyx_boolean_t *object
 );
 
 void nyx_string_free(
-    /*-*/ nyx_string_t *object
+    nyx_string_t *object
 );
 
 void nyx_dict_free(
-    /*-*/ nyx_dict_t *object
+    nyx_dict_t *object
 );
 
 void nyx_list_free(
@@ -151,13 +151,32 @@ typedef struct nyx_dict_node_s
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-bool nyx_dict_set_boolean_unref(nyx_dict_t *dict, STR_t key, bool value);
+bool nyx_dict_set_boolean_unref(
+    nyx_dict_t *dict,
+    STR_t key,
+    bool value
+);
 
-bool nyx_dict_set_number_unref(nyx_dict_t *dict, STR_t key, double value);
+bool nyx_dict_set_number_unref(
+    nyx_dict_t *dict,
+    STR_t key,
+    double value
+);
 
-bool nyx_dict_set_string_unref(nyx_dict_t *dict, STR_t key, STR_t value, bool managed);
+bool nyx_dict_set_string_unref(
+    nyx_dict_t *dict,
+    STR_t key,
+    STR_t value,
+    bool managed
+);
 
-bool nyx_dict_set_buff_unref(nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed);
+bool nyx_dict_set_buff_unref(
+    nyx_dict_t *dict,
+    STR_t key,
+    size_t size,
+    BUFF_t buff,
+    bool managed
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* LIST                                                                                                               */
@@ -661,6 +680,12 @@ void internal_stack_initialize(
 
 void internal_stack_finalize(
     const nyx_node_t *node
+);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool internal_notify(
+    const nyx_object_t *object
 );
 
 /*--------------------------------------------------------------------------------------------------------------------*/

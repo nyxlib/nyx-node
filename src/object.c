@@ -399,7 +399,22 @@ nyx_object_t *nyx_object_unref(void *object)
 
 nyx_type_t nyx_object_get_type(const nyx_object_t *object)
 {
-    return object->type;
+    return object != NULL ? object->type : 0x00;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+bool nyx_object_notify(const nyx_object_t *object)
+{
+    for(; object != NULL; object = object->parent)
+    {
+        if(internal_notify(object))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
