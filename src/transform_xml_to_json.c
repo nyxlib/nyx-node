@@ -22,7 +22,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    nyx_dict_set(result, "<>", nyx_string_from_dup(curr_node->name));
+    nyx_dict_set(result, "<>", nyx_string_from(nyx_string_dup(curr_node->name), true));
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -48,7 +48,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
             {
                 *content_e = '\0';
 
-                nyx_dict_set(result, "$", nyx_string_from_dup(content_s));
+                nyx_dict_set(result, "$", nyx_string_from(nyx_string_dup(content_s), true));
             }
 
             break;
@@ -64,7 +64,7 @@ static nyx_object_t *transform(const nyx_xmldoc_t *curr_node) // NOLINT(misc-no-
         /**/    str_t attribute_name = nyx_string_builder_to_string(sb);
         /**/
         /**/    /**/
-        /**/    /**/    nyx_dict_set(result, attribute_name, nyx_string_from_dup(attribute->data));
+        /**/    /**/    nyx_dict_set(result, attribute_name, nyx_string_from(nyx_string_dup(attribute->data), true));
         /**/    /**/
         /**/
         /**/    nyx_memory_free(attribute_name);

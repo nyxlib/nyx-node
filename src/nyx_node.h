@@ -1016,25 +1016,6 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided string (managed duplication).
- * @param value Value for the new JSON string object.
- * @return The new JSON string object.
- * @note The duplicated C string is **freed** with this object.
- */
-
-__NYX_INLINE__ nyx_string_t *nyx_string_from_dup(STR_t value)
-{
-    nyx_string_t *result = nyx_string_new();
-
-    nyx_string_set(result, nyx_string_dup(value), true);
-
-    return result;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @memberof nyx_string_t
  * @brief Returns a JSON string object holding the value of the provided string (managed reference).
  * @param value Value for the new JSON string object.
  * @param managed If `true`, the provided buffer is freed with this object.
