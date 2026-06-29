@@ -70,16 +70,117 @@ def main():
 
     ####################################################################################################################
 
+    samp_rate_prop = nyx_node.NyxNumberDoubleProp(
+        'samp_rate',
+        'Sample rate [Hz]',
+        '%.0f',
+        1000.0,
+        50000000.0,
+        1000.0,
+        2000000.0,
+    )
+
+    frequency_prop = nyx_node.NyxNumberDoubleProp(
+        'frequency',
+        'Frequency [Hz]',
+        '%.0f',
+        1000000.0,
+        2000000000.0,
+        1000.0,
+        143050000.0,
+    )
+
+    power_prop = nyx_node.NyxNumberDoubleProp(
+        'power',
+        'Power (dB)',
+        '%.1f',
+        -150.0,
+        20.0,
+        1.0,
+        -30.0,
+    )
+
+    signal_vector = nyx_node.NyxNumberVector(
+        'Demo',
+        'signal_params',
+        nyx_node.NyxState.OK,
+        nyx_node.NyxPerm.RW,
+        [
+            samp_rate_prop,
+            frequency_prop,
+            power_prop,
+        ],
+        group = 'Demo',
+    )
+
+    ####################################################################################################################
+
+    fft_size_prop = nyx_node.NyxNumberUIntProp(
+        'fft_size',
+        'FFT size',
+        '%u',
+        1,
+        4096,
+        1,
+        512,
+    )
+
+    fft_vector = nyx_node.NyxNumberVector(
+        'Demo',
+        'fft_params',
+        nyx_node.NyxState.OK,
+        nyx_node.NyxPerm.RW,
+        [fft_size_prop],
+        group = 'Demo',
+    )
+
+    ####################################################################################################################
+
+    stream_samp_rate_prop = nyx_node.NyxStreamProp(
+        'samp_rate',
+        'Sample rate [Hz]',
+    )
+
+    stream_frequency_prop = nyx_node.NyxStreamProp(
+        'frequency',
+        'Frequency [Hz]',
+    )
+
+    stream_samples_prop = nyx_node.NyxStreamProp(
+        'samples',
+        'Samples',
+    )
+
+    stream_vector = nyx_node.NyxStreamVector(
+        'Demo',
+        'spectrum',
+        nyx_node.NyxState.OK,
+        [
+            stream_samp_rate_prop,
+            stream_frequency_prop,
+            stream_samples_prop,
+        ],
+        group = 'Demo',
+    )
+
+    ####################################################################################################################
+
     node = nyx_node.NyxNode(
         'NYX_DEMO_PY',
-        [mode_vector, run_vector],
+        [
+            mode_vector,
+            run_vector,
+            signal_vector,
+            fft_vector,
+            stream_vector,
+        ],
         'tcp://0.0.0.0:7625',
         os.getenv('MQTT_URL'),
         os.getenv('STREAM_URL'),
         os.getenv('MQTT_USERNAME'),
         os.getenv('MQTT_PASSWORD'),
         3000,
-        True
+        True,
     )
 
     ####################################################################################################################
