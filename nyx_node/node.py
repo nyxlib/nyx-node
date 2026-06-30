@@ -6,12 +6,17 @@
 ########################################################################################################################
 
 import ctypes
+import queue
 import typing
 
 ########################################################################################################################
 
 from . import bind
 from . import json
+
+########################################################################################################################
+
+NyxMQTTEvent = bind.NyxMQTTEvent
 
 ########################################################################################################################
 
@@ -31,6 +36,14 @@ class NyxNode:
             retry_ms: int,
             enable_xml: bool,
     ):
+
+        ################################################################################################################
+
+        self._mqtt_handlers = {}
+
+        self._mqtt_events = queue.SimpleQueue()
+
+        self._mqtt_callback = bind.nyx_mqtt_handler_t(self._on_mqtt)
 
         ################################################################################################################
 
@@ -59,7 +72,7 @@ class NyxNode:
             bind.as_bytes(nss_url, allow_none = True),
             bind.as_bytes(mqtt_username, allow_none = True),
             bind.as_bytes(mqtt_password, allow_none = True),
-            bind.nyx_mqtt_handler_t(0),
+            self._mqtt_callback,
             retry_ms,
             enable_xml,
         )
@@ -73,7 +86,91 @@ class NyxNode:
 
     ####################################################################################################################
 
-    def finalize(self) -> None:
+    def _on_mqtt(
+            self,
+            _,
+            event_type: int,
+            topic_size: int,
+            topic_buff: bind.c_void_p,
+            message_size: int,
+            message_buff: bind.c_void_p,
+    ) -> None:
+
+        ################################################################################################################
+
+        event_type = NyxMQTTEvent(event_type)
+
+        if event_type not in self._mqtt_handlers:
+
+            return
+
+        ################################################################################################################
+
+        topic = ctypes.string_at(topic_buff, topic_size) if topic_size else b''
+        message = ctypes.string_at(message_buff, message_size) if message_size else b''
+
+        ################################################################################################################
+
+        topic = topic.decode('utf-8')
+
+        self._mqtt_events.put((
+            event_type,
+            topic,
+            message,
+        ))
+
+    ####################################################################################################################
+
+    def _dispatch_mqtt(self) -> None:
+
+        ################################################################################################################
+
+        while True:
+
+            try:
+
+                event_type, topic, message = self._mqtt_events.get_nowait()
+
+            except queue.Empty:
+
+                return
+
+            ############################################################################################################
+
+            for callback in tuple(self._mqtt_handlers.get(event_type, ())):
+
+                # noinspection PyCallingNonCallable
+                callback(self, event_type, topic, message)
+
+    ####################################################################################################################
+
+    def on_mqtt(self, event_type: NyxMQTTEvent):
+
+        ################################################################################################################
+
+        if not isinstance(event_type, NyxMQTTEvent):
+
+            raise TypeError('Expected NyxMQTTEvent')
+
+        ################################################################################################################
+
+        def decorate(callback: typing.Callable) -> typing.Callable:
+
+            if not callable(callback):
+
+                raise TypeError('Expected a callable MQTT handler')
+
+            self._mqtt_handlers.setdefault(event_type, []).append(callback)
+
+            return callback
+
+        ################################################################################################################
+
+        return decorate
+
+    ####################################################################################################################
+
+    def close(self) -> None:
 
         bind.lib.nyx_node_finalize(self.ptr, False)
 
@@ -82,6 +179,8 @@ class NyxNode:
     def poll(self, timeout_ms: int) -> None:
 
         bind.lib.nyx_node_poll(self.ptr, timeout_ms)
+
+        self._dispatch_mqtt()
 
     ####################################################################################################################
 
@@ -149,6 +248,18 @@ class NyxNode:
             message,
             qos
         )
+
+    ####################################################################################################################
+
+    def __enter__(self):
+
+        return self
+
+    ####################################################################################################################
+
+    def __exit__(self, exc_type, exc_value, traceback):
+
+        self.close()
 
 ########################################################################################################################
 

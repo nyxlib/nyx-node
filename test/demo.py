@@ -166,7 +166,7 @@ def main():
 
     ####################################################################################################################
 
-    node = nyx_node.NyxNode(
+    with nyx_node.NyxNode(
         'NYX_DEMO_PY',
         [
             mode_vector,
@@ -182,23 +182,17 @@ def main():
         os.getenv('MQTT_PASSWORD'),
         3000,
         True,
-    )
+    ) as node:
 
-    ####################################################################################################################
+        try:
 
-    try:
+            while True:
 
-        while True:
+                node.poll(25)
 
-            node.poll(25)
+        except KeyboardInterrupt:
 
-    except KeyboardInterrupt:
-
-        pass
-
-    finally:
-
-        node.finalize()
+            pass
 
     ####################################################################################################################
 

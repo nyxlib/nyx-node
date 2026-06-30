@@ -35,7 +35,7 @@ class NyxDict(obj.NyxObject):
 
             ptr = bind.lib.nyx_dict_new()
 
-        elif bind.lib.nyx_object_get_type(ptr) != bind.NYX_TYPE_DICT:
+        elif bind.lib.nyx_object_get_type(ptr) != bind.NyxObjectType.DICT:
 
             raise TypeError('Not a pointer to a Nyx dict object')
 
@@ -79,27 +79,27 @@ class NyxDict(obj.NyxObject):
 
             ############################################################################################################
 
-            if object_type == bind.NYX_TYPE_NULL:
+            if object_type == bind.NyxObjectType.NULL:
                 from .json_null import NyxNull
                 return NyxNull(ptr)
 
-            if object_type == bind.NYX_TYPE_BOOLEAN:
+            if object_type == bind.NyxObjectType.BOOLEAN:
                 from .json_boolean import NyxBoolean
                 return NyxBoolean(ptr)
 
-            if object_type == bind.NYX_TYPE_NUMBER:
+            if object_type == bind.NyxObjectType.NUMBER:
                 from .json_number import NyxNumber
                 return NyxNumber(ptr)
 
-            if object_type == bind.NYX_TYPE_STRING:
+            if object_type == bind.NyxObjectType.STRING:
                 from .json_string import NyxString
                 return NyxString(ptr)
 
-            if object_type == bind.NYX_TYPE_DICT:
+            if object_type == bind.NyxObjectType.DICT:
                 #### .json_dict import NyxDict
                 return NyxDict(ptr)
 
-            if object_type == bind.NYX_TYPE_LIST:
+            if object_type == bind.NyxObjectType.LIST:
                 from .json_list import NyxList
                 return NyxList(ptr)
 

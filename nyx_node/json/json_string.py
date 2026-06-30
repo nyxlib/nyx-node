@@ -23,7 +23,7 @@ class NyxString(obj.NyxObject):
 
             ptr = bind.lib.nyx_string_new()
 
-        elif bind.lib.nyx_object_get_type(ptr) != bind.NYX_TYPE_STRING:
+        elif bind.lib.nyx_object_get_type(ptr) != bind.NyxObjectType.STRING:
 
             raise TypeError('Not a pointer to a Nyx string object')
 
