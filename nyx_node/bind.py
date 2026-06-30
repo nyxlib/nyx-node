@@ -520,6 +520,8 @@ _bind("nyx_blob_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes
 _bind("nyx_stream_prop_new", c_void_p, [c_char_p, c_char_p])
 _bind("nyx_stream_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
 
+_bind('nyx_stream_pub', c_bool, [c_void_p, c_size_t, ctypes.POINTER(c_size_t), ctypes.POINTER(c_void_p)])
+
 ########################################################################################################################
 
 ## NYX NODE ##

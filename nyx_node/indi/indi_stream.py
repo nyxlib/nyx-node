@@ -82,6 +82,39 @@ class NyxStreamVector(json.json_dict.NyxDict):
 
             children.push(prop)
 
+    ####################################################################################################################
+
+    def stream_pub(self, field_values: typing.Sequence[bytes]) -> bool:
+
+        ################################################################################################################
+
+        field_values = [bind.as_bytes(value, allow_none = False) for value in field_values]
+
+        ################################################################################################################
+
+        cast = lambda value: ctypes.cast(ctypes.c_char_p(value), bind.c_void_p)
+
+        ################################################################################################################
+
+        n_fields = len(field_values)
+
+        field_sizes = (bind.c_size_t * n_fields)(
+            *(len(value) for value in field_values),
+        )
+
+        field_buffs = (bind.c_void_p * n_fields)(
+            *(cast(value) for value in field_values),
+        )
+
+        ################################################################################################################
+
+        return bool(bind.lib.nyx_stream_pub(
+            self.ptr,
+            n_fields,
+            field_sizes,
+            field_buffs,
+        ))
+
 ########################################################################################################################
 
 __all__ = [name for name in globals() if name.lower().startswith('nyx')]
