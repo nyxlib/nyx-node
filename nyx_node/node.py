@@ -139,8 +139,13 @@ class NyxNode:
 
             for callback in tuple(self._mqtt_handlers.get(event_type, ())):
 
-                # noinspection PyCallingNonCallable
-                callback(self, topic, message)
+                if event_type == NyxMQTTEvent.OPEN:
+                    # noinspection PyCallingNonCallable
+                    callback(              )
+
+                if event_type == NyxMQTTEvent.MSG:
+                    # noinspection PyCallingNonCallable
+                    callback(topic, message)
 
     ####################################################################################################################
 

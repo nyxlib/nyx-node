@@ -184,6 +184,16 @@ def main():
         True,
     ) as node:
 
+        @node.on_mqtt(nyx_node.NyxMQTTEvent.OPEN)
+        def on_mqtt_open():
+
+            node.mqtt_sub('foo')
+
+        @node.on_mqtt(nyx_node.NyxMQTTEvent.MSG)
+        def on_mqtt_msg(topic, message):
+
+            print('MQTT message', topic, message)
+
         try:
 
             while True:
