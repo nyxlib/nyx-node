@@ -140,7 +140,7 @@ class NyxNode:
             for callback in tuple(self._mqtt_handlers.get(event_type, ())):
 
                 # noinspection PyCallingNonCallable
-                callback(self, event_type, topic, message)
+                callback(self, topic, message)
 
     ####################################################################################################################
 
@@ -150,7 +150,7 @@ class NyxNode:
 
         if not isinstance(event_type, NyxMQTTEvent):
 
-            raise TypeError('Expected NyxMQTTEvent')
+            raise TypeError('Expected NyxMQTTEvent enum')
 
         ################################################################################################################
 
@@ -263,6 +263,6 @@ class NyxNode:
 
 ########################################################################################################################
 
-__all__ = ['NyxNode']
+__all__ = ['NyxMQTTEvent', 'NyxNode']
 
 ########################################################################################################################
