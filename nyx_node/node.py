@@ -39,6 +39,10 @@ class NyxNode:
 
         ################################################################################################################
 
+        self._vectors = vectors
+
+        ################################################################################################################
+
         self._mqtt_handlers = {}
 
         self._mqtt_events = queue.SimpleQueue()
@@ -48,17 +52,17 @@ class NyxNode:
         ################################################################################################################
 
         # noinspection PyCallingNonCallable
-        self._vectors_ptr = (bind.nyx_dict_p * (len(vectors) + 1))()
+        self._vectors_ptr = (bind.nyx_dict_p * (len(self._vectors) + 1))()
 
         ################################################################################################################
 
-        for index, vector in enumerate(vectors):
+        for i, vector in enumerate(self._vectors):
 
             if not isinstance(vector, json.NyxDict):
 
                 raise TypeError('Expected Nyx Dict object')
 
-            self._vectors_ptr[index] = ctypes.cast(vector.ptr, bind.nyx_dict_p)
+            self._vectors_ptr[i] = ctypes.cast(vector.ptr, bind.nyx_dict_p)
 
         self._vectors_ptr[-1] = bind.nyx_dict_p()
 
