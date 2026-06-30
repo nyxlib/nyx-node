@@ -72,7 +72,7 @@ class NyxLightVector(json.json_dict.NyxDict):
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
             enums.nyx_state(state),
-            ctypes.c_void_p(),
+            bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))
 

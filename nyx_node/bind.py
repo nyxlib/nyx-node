@@ -405,7 +405,7 @@ def _bind(name: str, restype, argtypes: typing.Sequence[object]) -> None:
 ## MEMORY ##
 
 _bind('nyx_memory_initialize', None, [])
-_bind('nyx_memory_finalize', None, [])
+_bind('nyx_memory_finalize', c_bool, [])
 
 _bind('nyx_string_ndup', c_void_p, [c_void_p, c_size_t])
 _bind('nyx_buffer_ndup', c_void_p, [c_void_p, c_size_t])
@@ -426,8 +426,8 @@ _bind('nyx_base64_decode', c_void_p, [ctypes.POINTER(c_size_t), c_size_t, c_void
 ## OBJECT ##
 
 _bind('nyx_object_parse', c_void_p, [c_char_p])
-_bind('nyx_object_ref', None, [c_void_p])
-_bind('nyx_object_unref', None, [c_void_p])
+_bind('nyx_object_ref', c_void_p, [c_void_p])
+_bind('nyx_object_unref', c_void_p, [c_void_p])
 _bind('nyx_object_get_type', c_int32, [c_void_p])
 _bind('nyx_object_notify', c_bool, [c_void_p])
 _bind('nyx_object_to_string', c_void_p, [c_void_p])
@@ -503,32 +503,32 @@ _bind('nyx_number_prop_get_long', c_int64, [c_void_p])
 _bind('nyx_number_prop_get_ulong', c_uint64, [c_void_p])
 _bind('nyx_number_prop_get_double', c_double, [c_void_p])
 
-_bind('nyx_number_vector_new', c_void_p, [c_char_p, c_char_p, c_int, c_int, c_void_p, ctypes.POINTER(nyx_opts_t)])
+_bind('nyx_number_vector_new', c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(nyx_dict_p), ctypes.POINTER(nyx_opts_t)])
 
 ## NYX TEXT ##
 
-_bind("nyx_text_prop_new", c_void_p, [c_char_p, c_char_p, c_char_p])
-_bind("nyx_text_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+_bind("nyx_text_prop_new", c_void_p, [c_char_p, c_char_p, c_char_p, c_bool])
+_bind("nyx_text_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(nyx_dict_p), ctypes.POINTER(nyx_opts_t)])
 
 ## NYX LIGHT ##
 
 _bind("nyx_light_prop_new", c_void_p, [c_char_p, c_char_p, c_int])
-_bind("nyx_light_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+_bind("nyx_light_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(nyx_dict_p), ctypes.POINTER(nyx_opts_t)])
 
 ## NYX TEXT ##
 
 _bind("nyx_switch_prop_new", c_void_p, [c_char_p, c_char_p, c_int])
-_bind("nyx_switch_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+_bind("nyx_switch_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, c_int, ctypes.POINTER(nyx_dict_p), ctypes.POINTER(nyx_opts_t)])
 
 ## NYX BLOB ##
 
 _bind("nyx_blob_prop_new", c_void_p, [c_char_p, c_char_p, c_char_p, c_size_t, c_void_p, c_bool])
-_bind("nyx_blob_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+_bind("nyx_blob_vector_new", c_void_p, [c_char_p, c_char_p, c_int, c_int, ctypes.POINTER(nyx_dict_p), ctypes.POINTER(nyx_opts_t)])
 
 ## NYX STREAM ##
 
 _bind("nyx_stream_prop_new", c_void_p, [c_char_p, c_char_p])
-_bind("nyx_stream_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(c_void_p), ctypes.POINTER(nyx_opts_t)])
+_bind("nyx_stream_vector_new", c_void_p, [c_char_p, c_char_p, c_int, ctypes.POINTER(nyx_dict_p), ctypes.POINTER(nyx_opts_t)])
 
 _bind('nyx_stream_pub', c_bool, [c_void_p, c_size_t, ctypes.POINTER(c_size_t), ctypes.POINTER(c_void_p)])
 

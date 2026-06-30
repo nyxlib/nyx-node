@@ -77,7 +77,7 @@ class NyxTextVector(json.json_dict.NyxDict):
             bind.as_bytes(name, allow_none = False),
             enums.nyx_state(state),
             enums.nyx_perm(perm),
-            ctypes.c_void_p(),
+            bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))
 

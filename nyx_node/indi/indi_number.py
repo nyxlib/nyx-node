@@ -44,7 +44,7 @@ class NyxNumberIntProp(NyxNumberProp):
 
         super().__init__(bind.lib.nyx_number_prop_new_int(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
+            bind.as_bytes(label, allow_none = False),
             bind.as_bytes(fmt, allow_none = False),
             min,
             max,
@@ -244,7 +244,7 @@ class NyxNumberVector(json.json_dict.NyxDict):
             bind.as_bytes(name, allow_none = False),
             enums.nyx_state(state),
             enums.nyx_perm(perm),
-            ctypes.c_void_p(),
+            bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))
 

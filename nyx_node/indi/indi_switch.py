@@ -86,7 +86,7 @@ class NyxSwitchVector(json.json_dict.NyxDict):
             enums.nyx_state(state),
             enums.nyx_perm(perm),
             enums.nyx_rule(rule),
-            ctypes.c_void_p(),
+            bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))
 
