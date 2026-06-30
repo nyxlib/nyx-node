@@ -10,6 +10,7 @@ import atexit
 ########################################################################################################################
 
 from .obj import *
+from .xml import *
 from .indi import *
 from .json import *
 from .node import *

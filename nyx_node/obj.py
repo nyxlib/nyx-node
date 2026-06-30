@@ -17,6 +17,10 @@ import traceback
 
 from . import bind
 
+if typing.TYPE_CHECKING:
+
+    from .xml import NyxXMLDoc
+
 ########################################################################################################################
 # CALLBACKS                                                                                                            #
 ########################################################################################################################
@@ -295,6 +299,8 @@ class NyxObject:
 
     def to_xmldoc(self) -> NyxXMLDoc:
 
+        from .xml import NyxXMLDoc
+
         return NyxXMLDoc(bind.lib.nyx_object_to_xmldoc(self.ptr))
 
     ####################################################################################################################
@@ -306,77 +312,6 @@ class NyxObject:
             return NotImplemented
 
         return bool(bind.lib.nyx_object_equal(self.ptr, other.ptr))
-
-    ####################################################################################################################
-
-    def __str__(self):
-
-        return self.to_string()
-
-    def __repr__(self):
-
-        return self.to_string()
-
-########################################################################################################################
-# XMLDOC                                                                                                               #
-########################################################################################################################
-
-class NyxXMLDoc:
-
-    ####################################################################################################################
-
-    def __init__(self, ptr):
-
-        self._ptr = bind.check_ptr(ptr, 'nyx_xmldoc_t')
-
-        self._finalizer = weakref.finalize(self, NyxXMLDoc._finalize, self._ptr)
-
-    ####################################################################################################################
-
-    @staticmethod
-    def _finalize(ptr) -> None:
-
-        bind.lib.nyx_xmldoc_free(ptr)
-
-    ####################################################################################################################
-
-    @property
-    def ptr(self):
-
-        if not self._ptr:
-
-            raise ValueError('Nyx XMLDoc has been closed')
-
-        return self._ptr
-
-    ####################################################################################################################
-
-    @staticmethod
-    def from_string(string: str) -> NyxXMLDoc:
-
-        return NyxXMLDoc(bind.lib.nyx_xmldoc_parse(bind.as_bytes(string, allow_none = False)))
-
-    ####################################################################################################################
-
-    def to_string(self) -> str:
-
-        return bind.take_string(bind.lib.nyx_xmldoc_to_string(self.ptr))
-
-    ####################################################################################################################
-
-    def to_json(self) -> NyxObject:
-
-        return NyxObject(bind.lib.nyx_xmldoc_to_object(self.ptr))
-
-    ####################################################################################################################
-
-    def __eq__(self, other):
-
-        if not isinstance(other, NyxXMLDoc):
-
-            return NotImplemented
-
-        return self.to_string() == other.to_string()
 
     ####################################################################################################################
 
