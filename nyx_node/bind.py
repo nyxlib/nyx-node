@@ -407,6 +407,8 @@ def _bind(name: str, restype, argtypes: typing.Sequence[object]) -> None:
 _bind('nyx_memory_initialize', None, [])
 _bind('nyx_memory_finalize', c_bool, [])
 
+_bind('nyx_memory_free', c_size_t, [c_void_p])
+
 _bind('nyx_string_ndup', c_void_p, [c_void_p, c_size_t])
 _bind('nyx_buffer_ndup', c_void_p, [c_void_p, c_size_t])
 
