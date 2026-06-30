@@ -79,7 +79,7 @@ class NyxNumberUIntProp(NyxNumberProp):
 
         super().__init__(bind.lib.nyx_number_prop_new_uint(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
+            bind.as_bytes(label, allow_none = True),
             bind.as_bytes(fmt, allow_none = False),
             min,
             max,
@@ -114,7 +114,7 @@ class NyxNumberLongProp(NyxNumberProp):
 
         super().__init__(bind.lib.nyx_number_prop_new_long(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
+            bind.as_bytes(label, allow_none = True),
             bind.as_bytes(fmt, allow_none = False),
             min,
             max,
@@ -149,7 +149,7 @@ class NyxNumberULongProp(NyxNumberProp):
 
         super().__init__(bind.lib.nyx_number_prop_new_ulong(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
+            bind.as_bytes(label, allow_none = True),
             bind.as_bytes(fmt, allow_none = False),
             min,
             max,
@@ -184,7 +184,7 @@ class NyxNumberDoubleProp(NyxNumberProp):
 
         super().__init__(bind.lib.nyx_number_prop_new_double(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
+            bind.as_bytes(label, allow_none = True),
             bind.as_bytes(fmt, allow_none = False),
             min,
             max,

@@ -54,11 +54,11 @@ class NyxNode:
         self._ptr = bind.lib.nyx_node_initialize(
             bind.as_bytes(node_id, allow_none = False),
             self._vectors_ptr,
-            bind.as_bytes(indi_url),
-            bind.as_bytes(mqtt_url),
-            bind.as_bytes(nss_url),
-            bind.as_bytes(mqtt_username),
-            bind.as_bytes(mqtt_password),
+            bind.as_bytes(indi_url, allow_none = True),
+            bind.as_bytes(mqtt_url, allow_none = True),
+            bind.as_bytes(nss_url, allow_none = True),
+            bind.as_bytes(mqtt_username, allow_none = True),
+            bind.as_bytes(mqtt_password, allow_none = True),
             bind.nyx_mqtt_handler_t(0),
             retry_ms,
             enable_xml,
@@ -87,25 +87,68 @@ class NyxNode:
 
     def enable(self, device: str, name: str | None = None, message: str | None = None) -> None:
 
-        bind.lib.nyx_node_enable(self.ptr, bind.as_bytes(device, allow_none = False), bind.as_bytes(name), bind.as_bytes(message))
+        bind.lib.nyx_node_enable(
+            self.ptr,
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(name, allow_none = True),
+            bind.as_bytes(message, allow_none = True)
+        )
 
     ####################################################################################################################
 
     def disable(self, device: str, name: str | None = None, message: str | None = None) -> None:
 
-        bind.lib.nyx_node_disable(self.ptr, bind.as_bytes(device, allow_none = False), bind.as_bytes(name), bind.as_bytes(message))
+        bind.lib.nyx_node_disable(
+            self.ptr,
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(name, allow_none = True),
+            bind.as_bytes(message, allow_none = True)
+        )
 
     ####################################################################################################################
 
     def send_message(self, device: str, message: str | None = None) -> None:
 
-        bind.lib.nyx_node_send_message(self.ptr, bind.as_bytes(device, allow_none = False), bind.as_bytes(message))
+        bind.lib.nyx_node_send_message(
+            self.ptr,
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(message, allow_none = True)
+        )
 
     ####################################################################################################################
 
     def send_del_property(self, device: str, name: str | None = None, message: str | None = None) -> None:
 
-        bind.lib.nyx_node_send_del_property(self.ptr, bind.as_bytes(device, allow_none = False), bind.as_bytes(name), bind.as_bytes(message))
+        bind.lib.nyx_node_send_del_property(
+            self.ptr,
+            bind.as_bytes(device, allow_none = False),
+            bind.as_bytes(name, allow_none = True),
+            bind.as_bytes(message, allow_none = True)
+        )
+
+    ####################################################################################################################
+
+    def mqtt_sub(self, topic: str, qos: int = 0) -> None:
+
+        bind.lib.nyx_mqtt_sub(
+            self.ptr,
+            bind.as_bytes(topic, allow_none = False),
+            qos
+        )
+
+    ####################################################################################################################
+
+    def mqtt_pub(self, topic: str, message: bytes, qos: int = 0) -> None:
+
+        message = bind.as_bytes(message, allow_none = False)
+
+        bind.lib.nyx_mqtt_pub(
+            self.ptr,
+            bind.as_bytes(topic, allow_none = False),
+            len(message),
+            message,
+            qos
+        )
 
 ########################################################################################################################
 

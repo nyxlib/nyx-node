@@ -51,8 +51,8 @@ class NyxBLOBProp(json.json_dict.NyxDict):
 
         super().__init__(bind.lib.nyx_blob_prop_new(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
-            bind.as_bytes(fmt),
+            bind.as_bytes(label, allow_none = True),
+            bind.as_bytes(fmt, allow_none = True),
             len(data),
             buff,
             True,

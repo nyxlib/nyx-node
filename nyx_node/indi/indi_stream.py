@@ -34,7 +34,7 @@ class NyxStreamProp(json.json_dict.NyxDict):
 
         super().__init__(bind.lib.nyx_stream_prop_new(
             bind.as_bytes(name, allow_none = False),
-            bind.as_bytes(label),
+            bind.as_bytes(label, allow_none = True),
         ))
 
 ########################################################################################################################

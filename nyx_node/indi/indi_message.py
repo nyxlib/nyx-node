@@ -28,7 +28,7 @@ class NyxMessage(json.json_dict.NyxDict):
 
         super().__init__(bind.lib.nyx_message_new(
             bind.as_bytes(device, allow_none = False),
-            bind.as_bytes(message)
+            bind.as_bytes(message, allow_none = True)
         ))
 
 ########################################################################################################################

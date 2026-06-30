@@ -32,8 +32,8 @@ class NyxDelProperty(json.json_dict.NyxDict):
 
         super().__init__(bind.lib.nyx_del_property_new(
             bind.as_bytes(device, allow_none = False),
-            bind.as_bytes(name),
-            bind.as_bytes(message),
+            bind.as_bytes(name, allow_none = True),
+            bind.as_bytes(message, allow_none = True),
         ))
 
 ########################################################################################################################

@@ -212,7 +212,7 @@ def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[True] = Tr
 
 ########################################################################################################################
 
-def as_bytes(value: str | bytes | None, *, allow_none: bool = True) -> bytes | None:
+def as_bytes(value: str | bytes | None, *, allow_none: bool) -> bytes | None:
 
     ####################################################################################################################
 
@@ -247,10 +247,10 @@ def as_opts(opts: dict[str, typing.Any] | None) -> nyx_opts_t | None:
         return None
 
     return nyx_opts_t(
-        as_bytes(opts.get('group')),
-        as_bytes(opts.get('label')),
-        as_bytes(opts.get('hints')),
-        as_bytes(opts.get('message')),
+        as_bytes(opts.get('group'), allow_none = True),
+        as_bytes(opts.get('label'), allow_none = True),
+        as_bytes(opts.get('hints'), allow_none = True),
+        as_bytes(opts.get('message'), allow_none = True),
         float(opts.get('timeout', 0.0)),
     )
 
@@ -534,5 +534,10 @@ _bind('nyx_node_disable', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
 
 _bind('nyx_node_send_message', None, [nyx_node_p, c_char_p, c_char_p])
 _bind('nyx_node_send_del_property', None, [nyx_node_p, c_char_p, c_char_p, c_char_p])
+
+_bind('nyx_mqtt_sub', None, [c_void_p, c_char_p, c_int])
+_bind('nyx_mqtt_pub', None, [c_void_p, c_char_p, c_size_t, c_void_p, c_int])
+
+_bind('nyx_nss_pub', None, [c_void_p, c_char_p, c_char_p, c_size_t, ctypes.POINTER(c_uint32), ctypes.POINTER(c_size_t), ctypes.POINTER(c_void_p)])
 
 ########################################################################################################################
