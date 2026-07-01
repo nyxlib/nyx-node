@@ -5,11 +5,11 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-import ctypes
 import typing
 
 ########################################################################################################################
 
+from .. import obj
 from .. import bind
 from .. import json
 
@@ -42,6 +42,16 @@ class NyxLightProp(json.json_dict.NyxDict):
             bind.as_bytes(name, allow_none = False),
             bind.as_bytes(label, allow_none = True),
             enums.nyx_state(value),
+        ))
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_int_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(
+            enums.nyx_state(new_value),
+            enums.nyx_state(old_value),
         ))
 
 ########################################################################################################################
@@ -88,6 +98,13 @@ class NyxLightVector(json.json_dict.NyxDict):
                 raise TypeError(f'Expected NyxLightProp')
 
             children.push(prop)
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_vector_t)
+    def _nyx_callback_method(self, _vector, modified):
+
+        self._dispatch_callbacks(bool(modified))
 
 ########################################################################################################################
 

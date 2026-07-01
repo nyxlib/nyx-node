@@ -85,6 +85,7 @@ class NyxObject:
 
     ####################################################################################################################
 
+    # noinspection PyTypeChecker, PyUnresolvedReferences
     def on(self, callback: typing.Callable) -> typing.Callable:
 
         if not callable(callback):

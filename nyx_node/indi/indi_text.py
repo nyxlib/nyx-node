@@ -5,11 +5,11 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-import ctypes
 import typing
 
 ########################################################################################################################
 
+from .. import obj
 from .. import bind
 from .. import json
 
@@ -40,6 +40,16 @@ class NyxTextProp(json.json_dict.NyxDict):
             bind.as_bytes(name, allow_none = False),
             bind.as_bytes(label, allow_none = True),
             bind.as_bytes(value, allow_none = True),
+        ))
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_str_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(
+            new_value.decode('utf-8') if new_value is not None else None,
+            old_value.decode('utf-8') if old_value is not None else None,
         ))
 
 ########################################################################################################################
@@ -93,6 +103,14 @@ class NyxTextVector(json.json_dict.NyxDict):
                 raise TypeError(f'Expected NyxTextProp')
 
             children.push(prop)
+
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_vector_t)
+    def _nyx_callback_method(self, _vector, modified):
+
+        self._dispatch_callbacks(bool(modified))
 
 ########################################################################################################################
 
