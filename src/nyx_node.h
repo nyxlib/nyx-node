@@ -228,7 +228,7 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
 */
 
 #define NYX_LOG_WARN(fmt, ...) \
-            do { nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
+            do { nyx_log(NYX_LOG_LEVEL_WARN, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1122,7 +1122,7 @@ typedef struct
  */
 
 #define NYX_DICT_ITER(dict) \
-                ((nyx_dict_iter_t) {.idx = 0, .head = ((nyx_dict_t *) (dict))->head})
+                ((nyx_dict_iter_t) {0, ((nyx_dict_t *) (dict))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -1452,7 +1452,7 @@ typedef struct
  */
 
 #define NYX_LIST_ITER(list) \
-                ((nyx_list_iter_t) {.idx = 0, .head = ((nyx_list_t *) (list))->head})
+                ((nyx_list_iter_t) {0, ((nyx_list_t *) (list))->head})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -2874,7 +2874,7 @@ __NYX_NULLABLE__ nyx_node_t *nyx_node_initialize(
 void nyx_node_finalize(
     nyx_node_t *node,
     bool free_vectors
-    );
+);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
