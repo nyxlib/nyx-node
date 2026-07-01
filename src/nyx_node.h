@@ -22,7 +22,7 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef ARDUINO
+#if defined(__clang__) && !defined(ARDUINO)
 #  pragma clang diagnostic push
 #  pragma ide diagnostic ignored "OCUnusedMacroInspection"
 #  pragma ide diagnostic ignored "UnreachableCallsOfFunction"
@@ -87,6 +87,7 @@ void nyx_memory_initialize(void);
 
 /**
  * @brief Finalize the memory subsystem.
+ * @return true if there is no memory leak.
  */
 
 bool nyx_memory_finalize(void);
@@ -221,6 +222,17 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @brief Logs an warning message.
+ * @param fmt Printf-style formatting string.
+ * @param ... Format arguments.
+*/
+
+#define NYX_LOG_WARN(fmt, ...) \
+            do { nyx_log(NYX_LOG_LEVEL_ERROR, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
  * @brief Logs an info message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
@@ -243,13 +255,13 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Logs a verbose message.
+ * @brief Logs a trace message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
  */
 
-#define NYX_LOG_VERBOSE(fmt, ...) \
-            do { nyx_log(NYX_LOG_LEVEL_VERBOSE, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
+#define NYX_LOG_TRACE(fmt, ...) \
+            do { nyx_log(NYX_LOG_LEVEL_TRACE, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__); } while(0)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* UTILITIES                                                                                                          */
@@ -628,7 +640,7 @@ bool nyx_object_equal(
  * @brief Returns a string, with the special character escaping, representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_object_to_string(
@@ -642,7 +654,7 @@ str_t nyx_object_to_string(
  * @brief Returns a C string, without special character escaping, representing the provided JSON object.
  * @param object JSON object.
  * @return A newly allocated string that represents the provided JSON object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_object_to_cstring(
@@ -688,7 +700,7 @@ nyx_null_t *nyx_null_new(void);
  * @brief Returns a string representing the provided JSON null object.
  * @param object JSON null object.
  * @return A newly allocated string that represents the provided JSON null object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_null_to_string(
@@ -765,7 +777,7 @@ bool nyx_number_set(
  * @brief Returns a string representing the provided JSON number object.
  * @param object JSON number object.
  * @return A newly allocated string that represents the provided JSON number object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_number_to_string(
@@ -858,7 +870,7 @@ bool nyx_boolean_set(
  * @brief Returns a string representing the provided JSON boolean object.
  * @param object JSON boolean object.
  * @return A newly allocated string that represents the provided JSON boolean object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_boolean_to_string(
@@ -1003,7 +1015,7 @@ size_t nyx_string_length(
  * @brief Returns a C string, with the special character escaping, representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_string_to_string(
@@ -1017,7 +1029,7 @@ str_t nyx_string_to_string(
  * @brief Returns a C string, without special character escaping, representing the provided JSON string object.
  * @param object JSON string object.
  * @return A newly allocated string that represents the provided JSON string object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_string_to_cstring(
@@ -1028,7 +1040,7 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided string (managed reference).
+ * @brief Returns a JSON string object holding the value of the provided string.
  * @param value Value for the new JSON string object.
  * @param managed If `true`, the provided buffer is freed with this object.
  * @return The new JSON string object.
@@ -1047,7 +1059,7 @@ __NYX_INLINE__ nyx_string_t *nyx_string_from(STR_t value, bool managed)
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided buffer (unmanaged reference).
+ * @brief Returns a JSON string object holding the value of the provided buffer.
  * @param size Buffer size for the new JSON string object.
  * @param buff Buffer pointer for the new JSON string object.
  * @param managed If `true`, the provided buffer is freed with this object.
@@ -1227,7 +1239,7 @@ size_t nyx_dict_size(
  * @brief Returns a string representing the provided JSON dict object.
  * @param object JSON dict object.
  * @return A newly allocated string that represents the provided JSON dict object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_dict_to_string(
@@ -1314,7 +1326,7 @@ __NYX_INLINE__ void nyx_dict_get_buff(const nyx_dict_t *dict, STR_t key, size_t 
 
 /**
  * @memberof nyx_dict_t
- * @brief Sets a number value of an existing key holding a boolean.
+ * @brief Sets a boolean value of an existing key holding a boolean.
  * @param dict JSON dict object.
  * @param key Key.
  * @param value Number value to set.
@@ -1372,6 +1384,17 @@ __NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_dict_t
+ * @brief Sets a C string buffer of an existing key holding a string.
+ * @param dict JSON dict object.
+ * @param key Key.
+ * @param size ???.
+ * @param buff ???.
+ * @param managed If `true`, the provided buffer is freed with this object.
+ * @return true if the value was modified, false otherwise.
+ */
 
 __NYX_INLINE__ bool nyx_dict_set_string_buff(const nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
 {
@@ -1556,7 +1579,7 @@ size_t nyx_list_size(
  * @brief Returns a string representing the provided JSON list object.
  * @param object JSON list object.
  * @return A newly allocated string that represents the provided JSON list object.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_list_to_string(
@@ -1624,7 +1647,7 @@ __NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *list, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * @brief Sets a number value of an existing index holding a boolean.
+ * @brief Sets a boolean value of an existing index holding a boolean.
  * @param list JSON list object.
  * @param idx Index.
  * @param value Number value to set.
@@ -1682,6 +1705,17 @@ __NYX_INLINE__ bool nyx_list_set_string(const nyx_list_t *list, size_t idx, STR_
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_list_t
+ * @brief Sets a C string buffer of an existing index holding a string.
+ * @param list JSON list object.
+ * @param idx Index.
+ * @param size ???.
+ * @param buff ???.
+ * @param managed If `true`, the provided buffer is freed with this object.
+ * @return true if the value was modified, false otherwise.
+ */
 
 __NYX_INLINE__ bool nyx_list_set_string_buff(const nyx_list_t *list, size_t idx, size_t size, BUFF_t buff, bool managed)
 {
@@ -1789,7 +1823,7 @@ void nyx_xmldoc_free(
  * @brief Returns a string representing the provided XML document.
  * @param xmldoc XML document.
  * @return A newly allocated string that represents the provided XML document.
- * @note Must be freed.
+ * @note Must be freed with @ref nyx_memory_free.
  */
 
 str_t nyx_xmldoc_to_string(
@@ -2846,7 +2880,7 @@ void nyx_node_finalize(
 
 /**
  * @memberof nyx_node_t
- * @brief Add a new timer.
+ * @brief Adds a new timer.
  * @param node Nyx node.
  * @param interval_ms Interval [milliseconds].
  * @param callback Callback to be invoked.
@@ -3014,7 +3048,7 @@ void nyx_nss_pub(
 /** @} */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef ARDUINO
+#if defined(__clang__) && !defined(ARDUINO)
 #  pragma clang diagnostic pop
 #endif
 
