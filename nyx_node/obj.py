@@ -11,7 +11,6 @@ from __future__ import annotations
 import ctypes
 import typing
 import weakref
-import traceback
 
 ########################################################################################################################
 
@@ -25,150 +24,19 @@ if typing.TYPE_CHECKING:
 # CALLBACKS                                                                                                            #
 ########################################################################################################################
 
-# noinspection PyBroadException
-@bind.nyx_callback_int_t
-def c_callback_int(vector, prop, new_value, old_value):
+def nyx_callback(nyx_callback_type):
 
-    try:
+    ####################################################################################################################
 
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
+    def decorate(callback):
 
-        return bool(self._callback(vector, prop, new_value, old_value))
+        callback._nyx_callback_type = nyx_callback_type
 
-    except BaseException:
+        return callback
 
-        traceback.print_exc()
+    ####################################################################################################################
 
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_uint_t
-def c_callback_uint(vector, prop, new_value, old_value):
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        return bool(self._callback(vector, prop, new_value, old_value))
-
-    except BaseException:
-
-        traceback.print_exc()
-
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_long_t
-def c_callback_long(vector, prop, new_value, old_value):
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        return bool(self._callback(vector, prop, new_value, old_value))
-
-    except BaseException:
-
-        traceback.print_exc()
-
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_ulong_t
-def c_callback_ulong(vector, prop, new_value, old_value):
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        return bool(self._callback(vector, prop, new_value, old_value))
-
-    except BaseException:
-
-        traceback.print_exc()
-
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_double_t
-def c_callback_double(vector, prop, new_value, old_value):
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        return bool(self._callback(vector, prop, new_value, old_value))
-
-    except BaseException:
-
-        traceback.print_exc()
-
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_str_t
-def c_callback_str(vector, prop, new_value, old_value):
-
-    new_value = new_value.decode('utf-8') if new_value is not None else None
-    old_value = old_value.decode('utf-8') if old_value is not None else None
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        return bool(self._callback(vector, prop, new_value, old_value))
-
-    except BaseException:
-
-        traceback.print_exc()
-
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_buffer_t
-def c_callback_buffer(vector, prop, size, buff):
-
-    new_value = ctypes.string_at(buff, size) if buff is not None and size > 0 else b''
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(prop.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        return bool(self._callback(vector, prop, new_value))
-
-    except BaseException:
-
-        traceback.print_exc()
-
-        return False
-
-########################################################################################################################
-
-# noinspection PyBroadException
-@bind.nyx_callback_vector_t
-def c_callback_vector(vector, modified):
-
-    try:
-
-        self = ctypes.cast(ctypes.c_void_p(vector.contents.base.ctx), ctypes.POINTER(ctypes.py_object)).contents.value
-
-        self._callback(vector, bool(modified))
-
-    except BaseException:
-
-        traceback.print_exc()
+    return decorate
 
 ########################################################################################################################
 # OBJECT                                                                                                               #
@@ -178,23 +46,10 @@ class NyxObject:
 
     ####################################################################################################################
 
-    _PROPERTY_CALLBACKS: dict[str, typing.Any] = {
-        'int': c_callback_int,
-        'uint': c_callback_uint,
-        'long': c_callback_long,
-        'ulong': c_callback_ulong,
-        'double': c_callback_double,
-        'str': c_callback_str,
-        'buffer': c_callback_buffer,
-        'vector': c_callback_vector,
-    }
-
-    ####################################################################################################################
-
     def __init__(self, ptr):
 
-        self._callback = None
-        self._ctx = None
+        self._callbacks = []
+        self._c_callback = None
 
         self._ptr = bind.check_ptr(ptr, 'nyx_object_t')
 
@@ -208,7 +63,6 @@ class NyxObject:
         ptr = ctypes.cast(ptr, bind.nyx_object_p)
 
         ptr.contents.callback = None
-        ptr.contents.   ctx   = None
 
         bind.lib.nyx_object_unref(ptr)
 
@@ -225,50 +79,48 @@ class NyxObject:
 
     ####################################################################################################################
 
-    def clear_callback(self) -> None:
+    def _dispatch_callbacks(self, *args):
 
-        object_ptr = ctypes.cast(self.ptr, ctypes.POINTER(bind.nyx_object_t))
-
-        object_ptr.contents.callback = None
-        object_ptr.contents.   ctx   = None
-
-        self._callback = None
-        self._ctx = None
+        return tuple(callback(*args) for callback in tuple(self._callbacks))
 
     ####################################################################################################################
 
-    def set_callback(self, kind: str, callback) -> None:
+    def on(self, callback: typing.Callable) -> typing.Callable:
+
+        if not callable(callback):
+
+            raise TypeError('Expected a callable')
 
         ################################################################################################################
 
-        try:
+        callback_method = getattr(  type(self)  , '_nyx_callback_method', None)
 
-            c_callback = self._PROPERTY_CALLBACKS[kind]
+        callback_type = getattr(callback_method, '_nyx_callback_type', None)
 
-        except KeyError:
+        if callback_type is None:
 
-            raise ValueError(f'Invalid Nyx callback type: {kind!r}') from None
-
-        ################################################################################################################
-
-        self.clear_callback()
+            raise TypeError(f'{type(self).__name__} does not support callbacks')
 
         ################################################################################################################
 
-        if callback is not None:
+        if self._c_callback is None:
 
-            ############################################################################################################
+            self._c_callback = callback_type(self._nyx_callback_method)
 
-            self._callback = callback
-            self._ctx = ctypes.py_object(self)
+            object_ptr = ctypes.cast(self.ptr, bind.nyx_object_p)
 
-            ############################################################################################################
+            object_ptr.contents.callback = ctypes.cast(
+                self._c_callback,
+                ctypes.c_void_p,
+            )
 
-            object_ptr = ctypes.cast(self.ptr, ctypes.POINTER(bind.nyx_object_t))
+        ################################################################################################################
 
-            object_ptr.contents.callback = ctypes.cast(c_callback, ctypes.c_void_p)
+        self._callbacks.append(callback)
 
-            object_ptr.contents.ctx = ctypes.addressof(self._ctx)
+        ################################################################################################################
+
+        return callback
 
     ####################################################################################################################
 
