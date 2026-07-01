@@ -5,11 +5,11 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-import ctypes
 import typing
 
 ########################################################################################################################
 
+from .. import obj
 from .. import bind
 from .. import json
 
@@ -54,6 +54,13 @@ class NyxNumberIntProp(NyxNumberProp):
 
     ####################################################################################################################
 
+    @obj.nyx_callback(bind.nyx_callback_int_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(new_value, old_value))
+
+    ####################################################################################################################
+
     @property
     def value(self) -> int:
 
@@ -86,6 +93,13 @@ class NyxNumberUIntProp(NyxNumberProp):
             step,
             value,
         ))
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_uint_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(new_value, old_value))
 
     ####################################################################################################################
 
@@ -124,6 +138,13 @@ class NyxNumberLongProp(NyxNumberProp):
 
     ####################################################################################################################
 
+    @obj.nyx_callback(bind.nyx_callback_long_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(new_value, old_value))
+
+    ####################################################################################################################
+
     @property
     def value(self) -> int:
 
@@ -159,6 +180,13 @@ class NyxNumberULongProp(NyxNumberProp):
 
     ####################################################################################################################
 
+    @obj.nyx_callback(bind.nyx_callback_ulong_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(new_value, old_value))
+
+    ####################################################################################################################
+
     @property
     def value(self) -> int:
 
@@ -191,6 +219,13 @@ class NyxNumberDoubleProp(NyxNumberProp):
             step,
             value,
         ))
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_double_t)
+    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+
+        return all(self._dispatch_callbacks(new_value, old_value))
 
     ####################################################################################################################
 
@@ -260,6 +295,13 @@ class NyxNumberVector(json.json_dict.NyxDict):
                 raise TypeError('Expected NyxNumberProp')
 
             children.push(prop)
+
+    ####################################################################################################################
+
+    @obj.nyx_callback(bind.nyx_callback_vector_t)
+    def _nyx_callback_method(self, _vector, modified):
+
+        self._dispatch_callbacks(bool(modified))
 
 ########################################################################################################################
 
