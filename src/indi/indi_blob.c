@@ -70,7 +70,7 @@ bool nyx_blob_prop_set(const nyx_dict_t *prop, size_t size, BUFF_t buff, bool ma
         managed = false;
     }
 
-    return nyx_dict_set_string_buff(prop, "$", size, buff, managed);
+    return nyx_dict_set_buff(prop, "$", size, buff, managed);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

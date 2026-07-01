@@ -78,7 +78,7 @@ double nan(const char *tag);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Initialize the memory subsystem.
+ * @brief Initializes the memory subsystem.
  */
 
 void nyx_memory_initialize(void);
@@ -86,8 +86,8 @@ void nyx_memory_initialize(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Finalize the memory subsystem.
- * @return true if there is no memory leak.
+ * @brief Finalizes the memory subsystem.
+ * @return `true` if there is no memory leak, `false` otherwise.
  */
 
 bool nyx_memory_finalize(void);
@@ -222,7 +222,7 @@ void __attribute__((format(printf, 5, 6))) nyx_log(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Logs an warning message.
+ * @brief Logs a warning message.
  * @param fmt Printf-style formatting string.
  * @param ... Format arguments.
 */
@@ -599,7 +599,7 @@ __NYX_NULLABLE__ nyx_object_t *nyx_object_unref(
  * @memberof nyx_object_t
  * @brief Gets the type of the provided JSON object.
  * @param object JSON object.
- * @return The type of the provided JSON object.
+ * @return The type.
  */
 
 nyx_type_t nyx_object_get_type(
@@ -745,9 +745,9 @@ nyx_number_t *nyx_number_new(void);
 
 /**
  * @memberof nyx_number_t
- * @brief Get the value of the provided JSON number object.
+ * @brief Gets the value of the provided JSON number object.
  * @param object JSON number object.
- * @return Value of the provided JSON number object.
+ * @return The value.
  */
 
 double nyx_number_get(
@@ -758,7 +758,7 @@ double nyx_number_get(
 
 /**
  * @memberof nyx_number_t
- * @brief Set the value of the provided JSON number object.
+ * @brief Sets the value of the provided JSON number object.
  * @param object JSON number object.
  * @param value Value for the provided JSON number object.
  * @return `true` if the value was modified, `false` otherwise.
@@ -839,9 +839,9 @@ nyx_boolean_t *nyx_boolean_new(void);
 
 /**
  * @memberof nyx_boolean_t
- * @brief Get the value of the provided JSON boolean object.
+ * @brief Gets the value of the provided JSON boolean object.
  * @param object JSON boolean object.
- * @return The value of the provided JSON boolean object.
+ * @return The value.
  */
 
 bool nyx_boolean_get(
@@ -852,7 +852,7 @@ bool nyx_boolean_get(
 
 /**
  * @memberof nyx_boolean_t
- * @brief Set the value of the provided JSON boolean object.
+ * @brief Sets the value of the provided JSON boolean object.
  * @param object JSON boolean object.
  * @param value Value for the provided JSON boolean object.
  * @return `true` if the value was modified, `false` otherwise.
@@ -934,9 +934,10 @@ nyx_string_t *nyx_string_new(void);
 
 /**
  * @memberof nyx_string_t
- * @brief Get the value of the provided JSON string object.
+ * @brief Gets the text value of the provided JSON string object.
  * @param object JSON string object.
- * @return The value of the provided JSON string object.
+ * @return The text value of the provided JSON string object.
+ * @note The returned text value remains valid until the object is modified or released.
  */
 
 STR_t nyx_string_get(
@@ -947,10 +948,11 @@ STR_t nyx_string_get(
 
 /**
  * @memberof nyx_string_t
- * @brief Get the value of the provided JSON string object.
+ * @brief Gets the content of the provided JSON string object as a byte buffer.
  * @param object JSON string object.
- * @param result_size ???.
- * @param result_buff ???.
+ * @param result_size Optional pointer receiving the number of content bytes.
+ * @param result_buff Optional pointer receiving the content buffer.
+ * @note The returned buffer remains valid until the object is modified or released.
  */
 
 void nyx_string_get_buff(
@@ -963,10 +965,10 @@ void nyx_string_get_buff(
 
 /**
  * @memberof nyx_string_t
- * @brief Set the value of the provided JSON string object.
+ * @brief Sets the text value of the provided JSON string object.
  * @param object JSON string object.
- * @param value Value for the provided JSON string object.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @param value Text value.
+ * @param managed If `true`, ownership of the provided value is transferred to the object.
  * @return `true` if the value was modified, `false` otherwise.
  */
 
@@ -980,11 +982,11 @@ bool nyx_string_set(
 
 /**
  * @memberof nyx_string_t
- * @brief Set the value of the provided JSON string object.
+ * @brief Sets the content of the provided JSON string object from a byte buffer.
  * @param object JSON string object.
- * @param size Value size for the provided JSON string object.
- * @param buff Value buffer for the provided JSON string object.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @param size Number of content bytes.
+ * @param buff Content buffer.
+ * @param managed If `true`, ownership of the provided buffer is transferred to the object.
  * @return `true` if the value was modified, `false` otherwise.
  */
 
@@ -999,9 +1001,9 @@ bool nyx_string_set_buff(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns the length of the provided JSON string object.
+ * @brief Returns the number of content bytes of the provided JSON string object.
  * @param object JSON string object.
- * @return The length of the provided JSON string object.
+ * @return The number of content bytes.
  */
 
 size_t nyx_string_length(
@@ -1040,9 +1042,9 @@ str_t nyx_string_to_cstring(
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided string.
- * @param value Value for the new JSON string object.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @brief Returns a JSON string object holding the provided text value.
+ * @param value Text value.
+ * @param managed If `true`, ownership of the provided value is transferred to the object.
  * @return The new JSON string object.
  */
 
@@ -1059,10 +1061,10 @@ __NYX_INLINE__ nyx_string_t *nyx_string_from(STR_t value, bool managed)
 
 /**
  * @memberof nyx_string_t
- * @brief Returns a JSON string object holding the value of the provided buffer.
- * @param size Buffer size for the new JSON string object.
- * @param buff Buffer pointer for the new JSON string object.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @brief Returns a JSON string object holding the provided content bytes.
+ * @param size Number of content bytes.
+ * @param buff Content buffer.
+ * @param managed If `true`, ownership of the provided buffer is transferred to the object.
  * @return The new JSON string object.
  */
 
@@ -1165,7 +1167,7 @@ void nyx_dict_del(
 /**
  * @memberof nyx_dict_t
  * @brief Iterates over a JSON dict object.
- * @param iter List iterator.
+ * @param iter Dict iterator.
  * @param key Pointer to the current element key.
  * @param object Pointer to the current JSON object.
  * @return `true` while elements remain, `false` otherwise.
@@ -1194,7 +1196,7 @@ bool nyx_dict_iterate(
  * @brief Gets the JSON object of the provided key.
  * @param object JSON dict object.
  * @param key Key.
- * @return The JSON object of the provided key or `NULL`.
+ * @return The JSON object or `NULL`.
  */
 
 nyx_object_t *nyx_dict_get(
@@ -1288,10 +1290,11 @@ __NYX_INLINE__ double nyx_dict_get_number(const nyx_dict_t *dict, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * @brief Gets a C string value of the provided key.
+ * @brief Gets a text value of the provided key.
  * @param dict JSON dict object.
  * @param key Key.
- * @return The related C string value or `NULL` if absent or wrong type.
+ * @return The related text value or `NULL` if absent or wrong type.
+ * @note The returned text value remains valid until the related string object is modified or released.
  */
 
 __NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *dict, STR_t key)
@@ -1307,19 +1310,19 @@ __NYX_INLINE__ STR_t nyx_dict_get_string(const nyx_dict_t *dict, STR_t key)
 
 /**
  * @memberof nyx_dict_t
- * @brief Gets a C string value of the provided key.
+ * @brief Gets the content of the provided key as a byte buffer.
  * @param dict JSON dict object.
  * @param key Key.
- * @param size ???.
- * @param buff ???.
- * @return The related C string value or `NULL` if absent or wrong type.
- */
+ * @param result_size Pointer receiving the number of content bytes.
+ * @param result_buff Pointer receiving the content buffer.
+ * @note The returned buffer remains valid until the related string object is modified or released.
+*/
 
-__NYX_INLINE__ void nyx_dict_get_buff(const nyx_dict_t *dict, STR_t key, size_t *size, buff_t *buff)
+__NYX_INLINE__ void nyx_dict_get_buff(const nyx_dict_t *dict, STR_t key, __NYX_NULLABLE__ size_t *result_size, __NYX_NULLABLE__ buff_t *result_buff)
 {
     nyx_object_t *object = nyx_dict_get(dict, key);
 
-    if(object != NULL && object->type == NYX_TYPE_STRING) nyx_string_get_buff((nyx_string_t *) object, size, buff);
+    if(object != NULL && object->type == NYX_TYPE_STRING) nyx_string_get_buff((nyx_string_t *) object, result_size, result_buff);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -1329,8 +1332,8 @@ __NYX_INLINE__ void nyx_dict_get_buff(const nyx_dict_t *dict, STR_t key, size_t 
  * @brief Sets a boolean value of an existing key holding a boolean.
  * @param dict JSON dict object.
  * @param key Key.
- * @param value Number value to set.
- * @return true if the value was modified, false otherwise.
+ * @param value Boolean value to set.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __NYX_INLINE__ bool nyx_dict_set_boolean(const nyx_dict_t *dict, STR_t key, bool value)
@@ -1350,7 +1353,7 @@ __NYX_INLINE__ bool nyx_dict_set_boolean(const nyx_dict_t *dict, STR_t key, bool
  * @param dict JSON dict object.
  * @param key Key.
  * @param value Number value to set.
- * @return true if the value was modified, false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __NYX_INLINE__ bool nyx_dict_set_number(const nyx_dict_t *dict, STR_t key, double value)
@@ -1366,12 +1369,12 @@ __NYX_INLINE__ bool nyx_dict_set_number(const nyx_dict_t *dict, STR_t key, doubl
 
 /**
  * @memberof nyx_dict_t
- * @brief Sets a C string value of an existing key holding a string.
+ * @brief Sets a text value of an existing key holding a string.
  * @param dict JSON dict object.
  * @param key Key.
- * @param value C string value to set.
- * @param managed If `true`, the provided buffer is freed with this object.
- * @return true if the value was modified, false otherwise.
+ * @param value Text value to set.
+ * @param managed If `true`, ownership of the provided value is transferred to the object.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t value, bool managed)
@@ -1387,16 +1390,16 @@ __NYX_INLINE__ bool nyx_dict_set_string(const nyx_dict_t *dict, STR_t key, STR_t
 
 /**
  * @memberof nyx_dict_t
- * @brief Sets a C string buffer of an existing key holding a string.
+ * @brief Sets the content of an existing key holding a string from a byte buffer.
  * @param dict JSON dict object.
  * @param key Key.
- * @param size ???.
- * @param buff ???.
- * @param managed If `true`, the provided buffer is freed with this object.
- * @return true if the value was modified, false otherwise.
+ * @param size Number of content bytes.
+ * @param buff Content buffer.
+ * @param managed If `true`, ownership of the provided buffer is transferred to the object.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_dict_set_string_buff(const nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
+__NYX_INLINE__ bool nyx_dict_set_buff(const nyx_dict_t *dict, STR_t key, size_t size, BUFF_t buff, bool managed)
 {
     nyx_object_t *object = nyx_dict_get(dict, key);
 
@@ -1628,10 +1631,11 @@ __NYX_INLINE__ double nyx_list_get_number(const nyx_list_t *list, size_t idx)
 
 /**
  * @memberof nyx_list_t
- * @brief Gets a C string value at the provided index.
+ * @brief Gets a text value at the provided index.
  * @param list JSON list object.
  * @param idx Index.
- * @return The related C string value or `NULL` if absent or wrong type.
+ * @return The related text value or `NULL` if absent or wrong type.
+ * @note The returned text value remains valid until the related string object is modified or released.
  */
 
 __NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *list, size_t idx)
@@ -1647,11 +1651,30 @@ __NYX_INLINE__ STR_t nyx_list_get_string(const nyx_list_t *list, size_t idx)
 
 /**
  * @memberof nyx_list_t
+ * @brief Gets the content of the provided index as a byte buffer.
+ * @param list JSON list object.
+ * @param idx Index.
+ * @param result_size Pointer receiving the number of content bytes.
+ * @param result_buff Pointer receiving the content buffer.
+ * @note The returned buffer remains valid until the related string object is modified or released.
+ */
+
+__NYX_INLINE__ void nyx_list_get_buff(const nyx_list_t *list, size_t idx, __NYX_NULLABLE__ size_t *result_size, __NYX_NULLABLE__ buff_t *result_buff)
+{
+    nyx_object_t *object = nyx_list_get(list, idx);
+
+    if(object != NULL && object->type == NYX_TYPE_STRING) nyx_string_get_buff((nyx_string_t *) object, result_size, result_buff);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @memberof nyx_list_t
  * @brief Sets a boolean value of an existing index holding a boolean.
  * @param list JSON list object.
  * @param idx Index.
- * @param value Number value to set.
- * @return true if the value was modified, false otherwise.
+ * @param value Boolean value to set.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __NYX_INLINE__ bool nyx_list_set_boolean(const nyx_list_t *list, size_t idx, bool value)
@@ -1671,7 +1694,7 @@ __NYX_INLINE__ bool nyx_list_set_boolean(const nyx_list_t *list, size_t idx, boo
  * @param list JSON list object.
  * @param idx Index.
  * @param value Number value to set.
- * @return true if the value was modified, false otherwise.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __NYX_INLINE__ bool nyx_list_set_number(const nyx_list_t *list, size_t idx, double value)
@@ -1687,12 +1710,12 @@ __NYX_INLINE__ bool nyx_list_set_number(const nyx_list_t *list, size_t idx, doub
 
 /**
  * @memberof nyx_list_t
- * @brief Sets a C string value of an existing index holding a string.
+ * @brief Sets a text value of an existing index holding a string.
  * @param list JSON list object.
  * @param idx Index.
- * @param value C string value to set.
- * @param managed If `true`, the provided buffer is freed with this object.
- * @return true if the value was modified, false otherwise.
+ * @param value Text value to set.
+ * @param managed If `true`, ownership of the provided value is transferred to the object.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
 __NYX_INLINE__ bool nyx_list_set_string(const nyx_list_t *list, size_t idx, STR_t value, bool managed)
@@ -1708,16 +1731,16 @@ __NYX_INLINE__ bool nyx_list_set_string(const nyx_list_t *list, size_t idx, STR_
 
 /**
  * @memberof nyx_list_t
- * @brief Sets a C string buffer of an existing index holding a string.
+ * @brief Sets the content of an existing index holding a string from a byte buffer.
  * @param list JSON list object.
  * @param idx Index.
- * @param size ???.
- * @param buff ???.
- * @param managed If `true`, the provided buffer is freed with this object.
- * @return true if the value was modified, false otherwise.
+ * @param size Number of content bytes.
+ * @param buff Content buffer.
+ * @param managed If `true`, ownership of the provided buffer is transferred to the object.
+ * @return `true` if the value was modified, `false` otherwise.
  */
 
-__NYX_INLINE__ bool nyx_list_set_string_buff(const nyx_list_t *list, size_t idx, size_t size, BUFF_t buff, bool managed)
+__NYX_INLINE__ bool nyx_list_set_buff(const nyx_list_t *list, size_t idx, size_t size, BUFF_t buff, bool managed)
 {
     nyx_object_t *object = nyx_list_get(list, idx);
 
@@ -2335,8 +2358,8 @@ nyx_dict_t *nyx_number_set_vector_new(
  * @brief Allocates a new INDI / Nyx text property.
  * @param name Property name.
  * @param label Property label.
- * @param value Initial value.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @param value Initial text value.
+ * @param managed If `true`, ownership of the provided value is transferred to the property object.
  * @return The new property object.
  */
 
@@ -2350,10 +2373,10 @@ nyx_dict_t *nyx_text_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Sets the new value of the provided property object.
+ * @brief Sets the text value of the provided property object.
  * @param prop Property object.
- * @param value New value.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @param value Text value.
+ * @param managed If `true`, ownership of the provided value is transferred to the property object.
  * @return `true` if the value was modified, `false` otherwise.
  */
 
@@ -2366,9 +2389,10 @@ bool nyx_text_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the text value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The text value.
+ * @note The returned text value remains valid until the property object is modified or released.
  */
 
 STR_t nyx_text_prop_get(
@@ -2583,9 +2607,9 @@ nyx_dict_t *nyx_switch_set_vector_new(
  * @param name Property name.
  * @param label Property label.
  * @param format Payload format.
- * @param size Size of the initial payload content.
- * @param buff Pointer to the initial payload content.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @param size Number of initial payload bytes.
+ * @param buff Initial payload buffer.
+ * @param managed If `true`, ownership of the provided buffer is transferred to the property object.
  * @return The new property object.
  * @note If a format ends with `.z`, the payload is automatically ZLib+Base64-compressed, otherwise, the payload is automatically Base64-encoded.
  */
@@ -2602,11 +2626,11 @@ nyx_dict_t *nyx_blob_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Sets the new value of the provided property object.
+ * @brief Sets the payload of the provided property object.
  * @param prop Property object.
- * @param size Size of the new payload content.
- * @param buff Pointer to the new payload content.
- * @param managed If `true`, the provided buffer is freed with this object.
+ * @param size Number of payload bytes.
+ * @param buff Payload buffer.
+ * @param managed If `true`, ownership of the provided buffer is transferred to the object.
  * @return `true` if the value was modified, `false` otherwise.
  */
 
@@ -2620,10 +2644,11 @@ bool nyx_blob_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the payload of the provided property object.
  * @param prop Property object.
- * @param size Size of the current payload content.
- * @param buff Pointer to current new payload content.
+ * @param size Optional pointer receiving the number of payload bytes.
+ * @param buff Optional pointer receiving the payload buffer.
+ * @note The returned buffer remains valid until the property object is modified or released.
  */
 
 void nyx_blob_prop_get(
@@ -2674,11 +2699,11 @@ nyx_dict_t *nyx_blob_set_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Allocates a new Nyx Stream.
+ * @brief Allocates a new Nyx Stream property.
  * @param name Property name.
  * @param label Property label.
  * @return The new property object.
- * @note If the property name ends with `.b`, the payload is automatically base64-encoded.
+ * @note If the property name ends with `.b`, the payload is automatically Base64-encoded.
  * @note If the property name ends with `.z`, the payload is automatically ZLib-compressed.
  */
 
@@ -2690,7 +2715,7 @@ nyx_dict_t *nyx_stream_prop_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Allocates a new Nyx stream vector.
+ * @brief Allocates a new Nyx Stream vector.
  * @param device Device name.
  * @param name Vector name.
  * @param state Vector state.
@@ -2710,12 +2735,13 @@ nyx_dict_t *nyx_stream_vector_new(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief If Nyx-Stream is enabled, publishes an entry to a stream.
+ * @brief If Nyx Stream is enabled, publishes an entry to a stream.
  * @param vector Nyx stream vector.
- * @param n_fields Number of field doublets (size, buffer), must be number of properties in the vector.
- * @param field_sizes Array of field sizes, on entry per property in the vector.
- * @param field_buffs Array of field buffers, on entry per property in the vector.
- * @return `true` if the provided fields match with the vector content.
+ * @param n_fields Number of fields. Must match the number of properties in the vector.
+ * @param field_sizes Array of payload byte counts, one per field.
+ * @param field_buffs Array of payload buffers, one per field.
+ * @return `true` if the provided fields match the vector content, `false` otherwise.
+ * @note Field payloads may contain arbitrary binary data.
  */
 
 bool nyx_stream_pub(
@@ -2812,10 +2838,11 @@ typedef enum
  * @brief MQTT event handler.
  * @param node Nyx node.
  * @param event_type Event type.
- * @param topic_size MQTT topic length.
+ * @param topic_size Number of MQTT topic bytes.
  * @param topic_buff MQTT topic buffer.
- * @param message_size MQTT message length.
- * @param message_buff MQTT message buffer.
+ * @param message_size Number of message payload bytes.
+ * @param message_buff Message payload buffer.
+ * @note The message payload may contain arbitrary binary data.
  */
 
 typedef void (* nyx_mqtt_handler_t)(
@@ -2833,10 +2860,10 @@ typedef void (* nyx_mqtt_handler_t)(
  * @memberof nyx_node_t
  * @brief Allocates and initializes a new Nyx node.
  * @param node_id Unique node identifier.
- * @param vectors Array of vectors with `ǸULL` sentinel.
+ * @param vectors Array of vectors with `NULL` sentinel.
  * @param indi_url Optional INDI URL (e.g., tcp://0.0.0.0:7625).
  * @param mqtt_url Optional MQTT URL (e.g., mqtt://localhost:1883).
- * @param nss_url Optional Nyx-Stream URL (e.g., tcp://localhost:6379).
+ * @param nss_url Optional Nyx Stream URL (e.g., tcp://localhost:6379).
  * @param mqtt_username Optional MQTT username.
  * @param mqtt_password Optional MQTT password.
  * @param mqtt_handler Optional MQTT handler.
@@ -3005,9 +3032,10 @@ void nyx_mqtt_sub(
  * @brief If MQTT is enabled, publishes an MQTT message.
  * @param node Nyx node.
  * @param topic MQTT topic.
- * @param message_size MQTT message length.
- * @param message_buff MQTT message buffer.
+ * @param message_size Number of message payload bytes.
+ * @param message_buff Message payload buffer.
  * @param qos MQTT Quality Of Service.
+ * @note The message payload may contain arbitrary binary data.
  */
 
 void nyx_mqtt_pub(
@@ -3022,16 +3050,17 @@ void nyx_mqtt_pub(
 
 /**
  * @memberof nyx_node_t
- * @brief If Nyx-Stream is enabled, publishes an entry to a stream.
+ * @brief If Nyx Stream is enabled, publishes an entry to a stream.
  * @param node Nyx node.
  * @param device Device name.
  * @param stream Stream name.
- * @param n_fields Number of field triplets (hash, size, buffer).
- * @param field_hashes Array of field hashes.
- * @param field_sizes Array of field sizes.
- * @param field_buffs Array of field buffers.
+ * @param n_fields Number of fields.
+ * @param field_hashes Array of field name hashes, one per field.
+ * @param field_sizes Array of payload byte counts, one per field.
+ * @param field_buffs Array of payload buffers, one per field.
  * @warning Field hashes must be computed with @ref nyx_hash.
  * @warning Unless performance is critical, prefer using @ref nyx_stream_pub.
+ * @note Field payloads may contain arbitrary binary data.
  */
 
 void nyx_nss_pub(

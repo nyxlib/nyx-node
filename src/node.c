@@ -593,7 +593,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                                                             if((success = object2->callback._buffer == NULL || object2->callback._buffer(vector, (nyx_dict_t *) object2, dst_size, dst_buff)))
                                                             {
-                                                                modified = nyx_dict_set_string_buff((nyx_dict_t *) object2, "$", dst_size, dst_buff, true);
+                                                                modified = nyx_dict_set_buff((nyx_dict_t *) object2, "$", dst_size, dst_buff, true);
                                                             }
                                                             else
                                                             {
