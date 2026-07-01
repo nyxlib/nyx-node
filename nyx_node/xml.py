@@ -47,7 +47,7 @@ class NyxXMLDoc:
 
         if not self._ptr:
 
-            raise ValueError('Nyx XMLDoc has been closed')
+            raise ValueError('Nyx XMLDoc has been finalized')
 
         return self._ptr
 
