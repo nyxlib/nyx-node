@@ -179,6 +179,13 @@ nyx_node_p = ctypes.POINTER(nyx_node_t)
 
 ########################################################################################################################
 
+nyx_timer_callback_t = ctypes.CFUNCTYPE(
+    None,
+    c_void_p
+)
+
+########################################################################################################################
+
 class NyxMQTTEvent(enum.IntEnum):
 
     OPEN = 1100
@@ -540,6 +547,8 @@ _bind('nyx_stream_pub', c_bool, [c_void_p, c_size_t, ctypes.POINTER(c_size_t), c
 
 _bind('nyx_node_initialize', nyx_node_p, [c_char_p, ctypes.POINTER(nyx_dict_p), c_char_p, c_char_p, c_char_p, c_char_p, c_char_p, nyx_mqtt_handler_t, c_uint32, c_bool])
 _bind('nyx_node_finalize', None, [nyx_node_p, c_bool])
+
+_bind('nyx_node_add_timer', None, [nyx_node_p, c_uint32, nyx_timer_callback_t, c_void_p])
 
 _bind('nyx_node_poll', None, [nyx_node_p, c_uint32])
 

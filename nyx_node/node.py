@@ -6,7 +6,6 @@
 ########################################################################################################################
 
 import ctypes
-import queue
 import typing
 
 ########################################################################################################################
@@ -43,9 +42,11 @@ class NyxNode:
 
         ################################################################################################################
 
-        self._mqtt_handlers = {}
+        self._mqtt_open_handlers = []
+        self._mqtt_msg_handlers = []
+        self._timer_contexts = []
 
-        self._mqtt_events = queue.SimpleQueue()
+        ################################################################################################################
 
         self._mqtt_callback = bind.nyx_mqtt_handler_t(self._on_mqtt)
 
@@ -104,52 +105,44 @@ class NyxNode:
 
         event_type = NyxMQTTEvent(event_type)
 
-        if event_type not in self._mqtt_handlers:
-
-            return
-
+        ################################################################################################################
+        # OPEN EVENT                                                                                                   #
         ################################################################################################################
 
-        topic = ctypes.string_at(topic_buff, topic_size) if topic_size else b''
-        message = ctypes.string_at(message_buff, message_size) if message_size else b''
+        if event_type == NyxMQTTEvent.OPEN:
+
+            callbacks = tuple(self._mqtt_open_handlers)
+
+            for callback in callbacks:
+
+                callback()
 
         ################################################################################################################
+        # MSG EVENT                                                                                                    #
+        ################################################################################################################
 
-        topic = topic.decode('utf-8')
+        elif event_type == NyxMQTTEvent.MSG:
 
-        self._mqtt_events.put((
-            event_type,
-            topic,
-            message,
-        ))
+            callbacks = tuple(self._mqtt_msg_handlers)
+
+            if callbacks:
+
+                topic = ctypes.string_at(topic_buff, topic_size) if topic_size else b''
+                message = ctypes.string_at(message_buff, message_size) if message_size else b''
+
+                topic = topic.decode('utf-8')
+
+                for callback in callbacks:
+
+                    callback(topic, message)
 
     ####################################################################################################################
 
-    def _dispatch_mqtt(self) -> None:
+    @staticmethod
+    @bind.nyx_timer_callback_t
+    def _on_timer(arg: bind.c_void_p) -> None:
 
-        ################################################################################################################
-
-        while True:
-
-            try:
-
-                event_type, topic, message = self._mqtt_events.get_nowait()
-
-            except queue.Empty:
-
-                return
-
-            ############################################################################################################
-
-            for callback in tuple(self._mqtt_handlers.get(event_type, ())):
-
-                if event_type == NyxMQTTEvent.OPEN:
-                    # noinspection PyCallingNonCallable
-                    callback(              )
-
-                if event_type == NyxMQTTEvent.MSG:
-                    # noinspection PyCallingNonCallable
-                    callback(topic, message)
+        ctypes.cast(arg, ctypes.POINTER(ctypes.py_object)).contents.value()
 
     ####################################################################################################################
 
@@ -169,7 +162,68 @@ class NyxNode:
 
                 raise TypeError('Expected a callable MQTT handler')
 
-            self._mqtt_handlers.setdefault(event_type, []).append(callback)
+            ############################################################################################################
+
+            if   event_type == NyxMQTTEvent.OPEN:
+
+                self._mqtt_open_handlers.append(callback)
+
+            elif event_type == NyxMQTTEvent.MSG:
+
+                self._mqtt_msg_handlers.append(callback)
+
+            else:
+
+                raise ValueError(f'Unsupported MQTT event: {event_type!r}')
+
+            ############################################################################################################
+
+            return callback
+
+        ################################################################################################################
+
+        return decorate
+
+    ####################################################################################################################
+
+    ####################################################################################################################
+
+    def on_timer(self, interval_ms: int):
+
+        ################################################################################################################
+
+        if not isinstance(interval_ms, int):
+
+            raise TypeError('Expected timer interval in milliseconds')
+
+        if interval_ms < 1:
+
+            raise ValueError('Timer interval must be positive')
+
+        ################################################################################################################
+
+        def decorate(callback: typing.Callable) -> typing.Callable:
+
+            if not callable(callback):
+
+                raise TypeError('Expected a callable timer handler')
+
+            ############################################################################################################
+
+            timer_context = ctypes.py_object(callback)
+
+            self._timer_contexts.append(timer_context)
+
+            ############################################################################################################
+
+            bind.lib.nyx_node_add_timer(
+                self.ptr,
+                interval_ms,
+                type(self)._on_timer,
+                bind.c_void_p(ctypes.addressof(timer_context)),
+            )
+
+            ############################################################################################################
 
             return callback
 
@@ -188,8 +242,6 @@ class NyxNode:
     def poll(self, timeout_ms: int) -> None:
 
         bind.lib.nyx_node_poll(self.ptr, timeout_ms)
-
-        self._dispatch_mqtt()
 
     ####################################################################################################################
 
