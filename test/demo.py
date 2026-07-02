@@ -330,21 +330,21 @@ def main():
     ####################################################################################################################
 
     with nyx_node.NyxNode(
-            'NYX_DEMO_PY',
-            [
-                mode_vector,
-                run_vector,
-                signal_vector,
-                fft_vector,
-                stream_vector,
-            ],
-            'tcp://0.0.0.0:7625',
-            os.getenv('MQTT_URL'),
-            os.getenv('STREAM_URL'),
-            os.getenv('MQTT_USERNAME'),
-            os.getenv('MQTT_PASSWORD'),
-            3000,
-            True,
+        'NYX_DEMO_PY',
+        [
+            mode_vector,
+            run_vector,
+            signal_vector,
+            fft_vector,
+            stream_vector,
+        ],
+        'tcp://0.0.0.0:7625',
+        os.getenv('MQTT_URL'),
+        os.getenv('STREAM_URL'),
+        os.getenv('MQTT_USERNAME'),
+        os.getenv('MQTT_PASSWORD'),
+        3000,
+        True,
     ) as node:
 
         ################################################################################################################
@@ -352,17 +352,15 @@ def main():
         @node.on_timer(50)
         def on_timer():
 
-            if run != nyx_node.NyxOnOff.ON:
+            if run == nyx_node.NyxOnOff.ON:
 
-                return
+                spectrum = get_spectrum()
 
-            spectrum = get_spectrum()
-
-            stream_vector.stream_pub([
-                struct.pack('=f', samp_rate),
-                struct.pack('=f', frequency),
-                struct.pack(f'={len(spectrum)}f', *spectrum),
-            ])
+                stream_vector.stream_pub([
+                    struct.pack('=f', samp_rate),
+                    struct.pack('=f', frequency),
+                    struct.pack(f'={len(spectrum)}f', *spectrum),
+                ])
 
         ################################################################################################################
 
@@ -391,6 +389,8 @@ def main():
             nonlocal stop
 
             stop = True
+
+        ################################################################################################################
 
         signal.signal(signal.SIGINT, signal_handler)
 
