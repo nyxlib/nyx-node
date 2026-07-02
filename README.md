@@ -20,7 +20,7 @@ The Nyx project introduces a protocol, backward-compatible with [INDI 1.7](docs/
 
 It enhances INDI by supporting multiple independent nodes, each embedding its own protocol stack. Nodes communicate using JSON over [MQTT](https://mqtt.org/) for slow control, and through a dedicated streaming system for real-time visualization. An alternative INDI compatibility mode, based on XML over TCP, is also supported. This architecture provides flexibility and scalability for distributed systems.
 
-The core library is written in C11 and targets POSIX, Windows, and Arduino environments, with no external dependencies; [Zlib](https://zlib.net/) is only required when compression is enabled.<br />Its low footprint makes Nyx suitable for deployment on microcontrollers (ESP32, Cortex-M, …).
+The core library is written in C11 and targets POSIX, Windows, and Arduino environments, with no external dependencies; [Zlib](https://zlib.net/) is only required when compression is enabled.<br />Its low footprint makes Nyx suitable for deployment on microcontrollers (ESP32, Cortex-M, …). A Python binding is also provided.
 
 # Typical architectures
 
