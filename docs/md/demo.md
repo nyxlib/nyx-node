@@ -12,6 +12,10 @@ Resulting interface as displayed in Nyx-Dashboard:
     <img src="https://raw.githubusercontent.com/nyxlib/nyx-node/main/docs/img/demo.png" style="width: 1250px;" />
 </div> 
 
-## Source code
+## Source code of the C/C++ demo
 
 \include ./test/demo.c
+
+## Source code of the Python demo
+
+\include ./test/demo.py
