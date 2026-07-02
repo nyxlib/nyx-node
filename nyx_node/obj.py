@@ -43,10 +43,12 @@ def nyx_callback(nyx_callback_type):
 ########################################################################################################################
 
 class NyxObject:
+    """Base class for JSON Nyx objects."""
 
     ####################################################################################################################
 
     def __init__(self, ptr):
+        """Wraps a C JSON object pointer."""
 
         self._callbacks = []
         self._c_callback = None
@@ -70,6 +72,7 @@ class NyxObject:
 
     @property
     def ptr(self):
+        """C pointer to the JSON object."""
 
         if not self._ptr:
 
@@ -87,6 +90,7 @@ class NyxObject:
 
     # noinspection PyTypeChecker, PyUnresolvedReferences
     def on(self, callback: typing.Callable) -> typing.Callable:
+        """Registers a callback triggered when clients modify this object."""
 
         if not callable(callback):
 
@@ -126,6 +130,7 @@ class NyxObject:
     ####################################################################################################################
 
     def notify(self) -> bool:
+        """Notifies this Nyx / INDI object to the clients."""
 
         return bool(bind.lib.nyx_object_notify(self.ptr))
 
@@ -133,24 +138,28 @@ class NyxObject:
 
     @staticmethod
     def from_string(string: str) -> NyxObject:
+        """Parses a JSON object from a string."""
 
         return NyxObject(bind.lib.nyx_object_parse(bind.as_bytes(string, allow_none = False)))
 
     ####################################################################################################################
 
     def to_string(self) -> str:
+        """Returns a JSON string with special character escaping."""
 
         return bind.take_string(bind.lib.nyx_object_to_string(self.ptr))
 
     ####################################################################################################################
 
     def to_cstring(self) -> str:
+        """Returns a JSON string without special character escaping."""
 
         return bind.take_string(bind.lib.nyx_object_to_cstring(self.ptr))
 
     ####################################################################################################################
 
     def to_xmldoc(self) -> NyxXMLDoc:
+        """Converts this JSON Nyx / INDI command to an XML one."""
 
         from .xml import NyxXMLDoc
 

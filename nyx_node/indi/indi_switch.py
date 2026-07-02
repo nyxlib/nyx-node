@@ -33,10 +33,12 @@ from . import utils
     setter = enums.nyx_onoff_str,
 )
 class NyxSwitchProp(json.json_dict.NyxDict):
+    """INDI / Nyx switch property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: enums.NyxOnOff | int | str | bool = enums.NyxOnOff.OFF):
+        """Allocates a new INDI / Nyx switch property."""
 
         super().__init__(bind.lib.nyx_switch_prop_new(
             bind.as_bytes(name, allow_none = False),
@@ -83,10 +85,12 @@ class NyxSwitchProp(json.json_dict.NyxDict):
     setter = enums.nyx_rule_str,
 )
 class NyxSwitchVector(json.json_dict.NyxDict):
+    """INDI / Nyx switch vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, rule: enums.NyxRule | int | str, props: typing.Iterable[NyxSwitchProp], **opts: typing.Any):
+        """Allocates a new INDI / Nyx switch vector."""
 
         ################################################################################################################
 

@@ -26,10 +26,12 @@ if typing.TYPE_CHECKING:
 ########################################################################################################################
 
 class NyxList(obj.NyxObject):
+    """JSON list object."""
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
+        """Allocates a new JSON list object or wraps one."""
 
         if ptr is None:
 
@@ -44,18 +46,21 @@ class NyxList(obj.NyxObject):
     ####################################################################################################################
 
     def clear(self) -> None:
+        """Clears the content of this JSON list object."""
 
         bind.lib.nyx_list_clear(self.ptr)
 
     ####################################################################################################################
 
     def __delitem__(self, idx: int) -> None:
+        """Deletes the entry at the provided index."""
 
         bind.lib.nyx_list_del(self.ptr, idx)
 
     ####################################################################################################################
 
     def __getitem__(self, idx: int) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
+        """Gets the JSON object at the provided index."""
 
         ################################################################################################################
 
@@ -118,6 +123,7 @@ class NyxList(obj.NyxObject):
     ####################################################################################################################
 
     def __setitem__(self, idx: int, value: obj.NyxObject) -> bool:
+        """Sets a JSON object at the provided index."""
 
         if not isinstance(value, obj.NyxObject):
 
@@ -128,12 +134,14 @@ class NyxList(obj.NyxObject):
     ####################################################################################################################
 
     def push(self, value: obj.NyxObject) -> bool:
+        """Pushes a JSON object in this JSON list object."""
 
         return self.__setitem__(-1, value)
 
     ####################################################################################################################
 
     def __len__(self) -> int:
+        """Returns the number of items."""
 
         return int(bind.lib.nyx_list_size(self.ptr))
 

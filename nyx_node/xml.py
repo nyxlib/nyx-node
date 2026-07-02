@@ -24,10 +24,12 @@ if typing.TYPE_CHECKING:
 ########################################################################################################################
 
 class NyxXMLDoc:
+    """XML document."""
 
     ####################################################################################################################
 
     def __init__(self, ptr):
+        """Wraps a C XML document pointer."""
 
         self._ptr = bind.check_ptr(ptr, 'nyx_xmldoc_t')
 
@@ -44,6 +46,7 @@ class NyxXMLDoc:
 
     @property
     def ptr(self):
+        """C pointer to the XML document."""
 
         if not self._ptr:
 
@@ -55,6 +58,7 @@ class NyxXMLDoc:
 
     @staticmethod
     def from_string(string: str) -> NyxXMLDoc:
+        """Parses an XML document from a string."""
 
         from .obj import NyxObject
 
@@ -63,12 +67,14 @@ class NyxXMLDoc:
     ####################################################################################################################
 
     def to_string(self) -> str:
+        """Returns a string representing this XML document."""
 
         return bind.take_string(bind.lib.nyx_xmldoc_to_string(self.ptr))
 
     ####################################################################################################################
 
     def to_json(self) -> NyxObject:
+        """Converts this XML Nyx / INDI command to a JSON one."""
 
         return NyxObject(bind.lib.nyx_xmldoc_to_object(self.ptr))
 

@@ -37,10 +37,12 @@ from . import utils
     #setter = utils.nyx_blob,
 )
 class NyxBLOBProp(json.json_dict.NyxDict):
+    """INDI / Nyx BLOB property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, fmt: str | None = None, value: bytes | None = None):
+        """Allocates a new INDI / Nyx BLOB property."""
 
         ################################################################################################################
 
@@ -89,10 +91,12 @@ class NyxBLOBProp(json.json_dict.NyxDict):
     setter = enums.nyx_perm_str,
 )
 class NyxBLOBVector(json.json_dict.NyxDict):
+    """INDI / Nyx BLOB vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxBLOBProp], **opts: typing.Any):
+        """Allocates a new INDI / Nyx BLOB vector."""
 
         ################################################################################################################
 

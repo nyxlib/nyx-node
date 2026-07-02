@@ -14,10 +14,12 @@ from .. import obj
 ########################################################################################################################
 
 class NyxNull(obj.NyxObject):
+    """JSON null object."""
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
+        """Allocates a new JSON null object or wraps one."""
 
         if ptr is None:
 
@@ -33,6 +35,7 @@ class NyxNull(obj.NyxObject):
 
     @property
     def value(self) -> None:
+        """Null value."""
 
         return None
 

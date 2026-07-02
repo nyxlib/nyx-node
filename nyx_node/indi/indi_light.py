@@ -33,10 +33,12 @@ from . import utils
     setter = enums.nyx_state_str,
 )
 class NyxLightProp(json.json_dict.NyxDict):
+    """INDI / Nyx light property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: enums.NyxState | int | str = enums.NyxState.IDLE):
+        """Allocates a new INDI / Nyx light property."""
 
         super().__init__(bind.lib.nyx_light_prop_new(
             bind.as_bytes(name, allow_none = False),
@@ -71,10 +73,12 @@ class NyxLightProp(json.json_dict.NyxDict):
     setter = enums.nyx_state_str,
 )
 class NyxLightVector(json.json_dict.NyxDict):
+    """INDI / Nyx light vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxLightProp], **opts: typing.Any):
+        """Allocates a new INDI / Nyx light vector."""
 
         ################################################################################################################
 

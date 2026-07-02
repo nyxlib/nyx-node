@@ -10,6 +10,7 @@ from .. import bind
 ########################################################################################################################
 
 def nyx_hash(string: str, seed: int) -> int:
+    """Hashes a string using the MurmurHash2 algorithm."""
 
     if not string:
 

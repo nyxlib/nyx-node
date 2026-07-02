@@ -27,10 +27,12 @@ from . import utils
     '@label',
 )
 class NyxStreamProp(json.json_dict.NyxDict):
+    """Nyx Stream property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None):
+        """Allocates a new Nyx Stream property."""
 
         super().__init__(bind.lib.nyx_stream_prop_new(
             bind.as_bytes(name, allow_none = False),
@@ -54,10 +56,12 @@ class NyxStreamProp(json.json_dict.NyxDict):
     setter = enums.nyx_state_str,
 )
 class NyxStreamVector(json.json_dict.NyxDict):
+    """Nyx Stream vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxStreamProp], **opts: typing.Any):
+        """Allocates a new Nyx Stream vector."""
 
         ################################################################################################################
 
@@ -85,6 +89,7 @@ class NyxStreamVector(json.json_dict.NyxDict):
     ####################################################################################################################
 
     def stream_pub(self, field_values: typing.Sequence[bytes]) -> bool:
+        """Publishes an entry to a stream if Nyx Stream is enabled."""
 
         ################################################################################################################
 

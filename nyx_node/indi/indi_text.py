@@ -31,10 +31,12 @@ from . import utils
     '$',
 )
 class NyxTextProp(json.json_dict.NyxDict):
+    """INDI / Nyx text property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: str | None = None):
+        """Allocates a new INDI / Nyx text property."""
 
         super().__init__(bind.lib.nyx_text_prop_new(
             bind.as_bytes(name, allow_none = False),
@@ -75,10 +77,12 @@ class NyxTextProp(json.json_dict.NyxDict):
     setter = enums.nyx_perm_str,
 )
 class NyxTextVector(json.json_dict.NyxDict):
+    """INDI / Nyx text vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxTextProp], **opts: typing.Any):
+        """Allocates a new INDI / Nyx text vector."""
 
         ################################################################################################################
 

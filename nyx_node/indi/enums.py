@@ -13,6 +13,7 @@ import typing
 ########################################################################################################################
 
 class NyxState(enum.IntEnum):
+    """Vector state hint."""
 
     IDLE = 400
     OK = 401
@@ -22,6 +23,7 @@ class NyxState(enum.IntEnum):
 ########################################################################################################################
 
 class NyxPerm(enum.IntEnum):
+    """Vector permission hint."""
 
     RO = 500
     WO = 501
@@ -30,6 +32,7 @@ class NyxPerm(enum.IntEnum):
 ########################################################################################################################
 
 class NyxRule(enum.IntEnum):
+    """Switch vector rule hint."""
 
     ONE_OF_MANY = 600
     AT_MOST_ONE = 601
@@ -38,6 +41,7 @@ class NyxRule(enum.IntEnum):
 ########################################################################################################################
 
 class NyxOnOff(enum.IntEnum):
+    """Switch state."""
 
     ON = 700
     OFF = 701

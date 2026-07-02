@@ -15,6 +15,7 @@ from .. import bind
 ########################################################################################################################
 
 def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str]:
+    """Encodes a buffer using the Base64 algorithm."""
 
     if not data:
 
@@ -35,6 +36,7 @@ def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str
 ########################################################################################################################
 
 def nyx_base64_decode(data: typing.Optional[str | bytes]) -> typing.Optional[bytes]:
+    """Decodes a string using the Base64 algorithm."""
 
     if not str:
 

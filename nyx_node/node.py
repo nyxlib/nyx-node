@@ -20,6 +20,7 @@ NyxMQTTEvent = bind.NyxMQTTEvent
 ########################################################################################################################
 
 class NyxNode:
+    """Nyx node exposing INDI, MQTT and Nyx Stream endpoints."""
 
     ####################################################################################################################
 
@@ -35,6 +36,7 @@ class NyxNode:
             retry_ms: int,
             enable_xml: bool,
     ):
+        """Allocates and initializes a Nyx node."""
 
         ################################################################################################################
 
@@ -86,6 +88,7 @@ class NyxNode:
 
     @property
     def ptr(self):
+        """C pointer to the Nyx node."""
 
         return self._ptr
 
@@ -147,6 +150,7 @@ class NyxNode:
     ####################################################################################################################
 
     def on_mqtt(self, event_type: NyxMQTTEvent):
+        """Registers an MQTT event handler."""
 
         ################################################################################################################
 
@@ -189,6 +193,7 @@ class NyxNode:
     ####################################################################################################################
 
     def on_timer(self, interval_ms: int):
+        """Registers a timer handler."""
 
         ################################################################################################################
 
@@ -234,18 +239,21 @@ class NyxNode:
     ####################################################################################################################
 
     def close(self) -> None:
+        """Finalizes the Nyx node."""
 
         bind.lib.nyx_node_finalize(self.ptr, False)
 
     ####################################################################################################################
 
     def poll(self, timeout_ms: int) -> None:
+        """Performs a single poll iteration."""
 
         bind.lib.nyx_node_poll(self.ptr, timeout_ms)
 
     ####################################################################################################################
 
     def enable(self, device: str, name: str | None = None, message: str | None = None) -> None:
+        """Enables a device or a vector and notifies clients."""
 
         bind.lib.nyx_node_enable(
             self.ptr,
@@ -257,6 +265,7 @@ class NyxNode:
     ####################################################################################################################
 
     def disable(self, device: str, name: str | None = None, message: str | None = None) -> None:
+        """Disables a device or a vector and notifies clients."""
 
         bind.lib.nyx_node_disable(
             self.ptr,
@@ -268,6 +277,7 @@ class NyxNode:
     ####################################################################################################################
 
     def send_message(self, device: str, message: str | None = None) -> None:
+        """Sends a human-oriented message to the clients."""
 
         bind.lib.nyx_node_send_message(
             self.ptr,
@@ -278,6 +288,7 @@ class NyxNode:
     ####################################################################################################################
 
     def send_del_property(self, device: str, name: str | None = None, message: str | None = None) -> None:
+        """Sends a delete-property message to the clients."""
 
         bind.lib.nyx_node_send_del_property(
             self.ptr,
@@ -289,6 +300,7 @@ class NyxNode:
     ####################################################################################################################
 
     def mqtt_sub(self, topic: str, qos: int = 0) -> None:
+        """Subscribes to an MQTT topic if MQTT is enabled."""
 
         bind.lib.nyx_mqtt_sub(
             self.ptr,
@@ -299,6 +311,7 @@ class NyxNode:
     ####################################################################################################################
 
     def mqtt_pub(self, topic: str, message: bytes, qos: int = 0) -> None:
+        """Publishes an MQTT message if MQTT is enabled."""
 
         message = bind.as_bytes(message, allow_none = False)
 

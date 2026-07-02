@@ -26,10 +26,12 @@ if typing.TYPE_CHECKING:
 ########################################################################################################################
 
 class NyxDict(obj.NyxObject):
+    """JSON dict object."""
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
+        """Allocates a new JSON dict object or wraps one."""
 
         if ptr is None:
 
@@ -44,18 +46,21 @@ class NyxDict(obj.NyxObject):
     ####################################################################################################################
 
     def clear(self) -> None:
+        """Clears the content of this JSON dict object."""
 
         bind.lib.nyx_dict_clear(self.ptr)
 
     ####################################################################################################################
 
     def __delitem__(self, key: str) -> None:
+        """Deletes the entry of the provided key."""
 
         bind.lib.nyx_dict_del(self.ptr, bind.as_bytes(key, allow_none = False))
 
     ####################################################################################################################
 
     def __getitem__(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
+        """Gets the JSON object of the provided key."""
 
         ################################################################################################################
 
@@ -118,6 +123,7 @@ class NyxDict(obj.NyxObject):
     ####################################################################################################################
 
     def __setitem__(self, key: str, value: obj.NyxObject) -> bool:
+        """Sets a JSON object at the provided key."""
 
         if not isinstance(value, obj.NyxObject):
 
@@ -128,6 +134,7 @@ class NyxDict(obj.NyxObject):
     ####################################################################################################################
 
     def __len__(self) -> int:
+        """Returns the number of items."""
 
         return int(bind.lib.nyx_dict_size(self.ptr))
 

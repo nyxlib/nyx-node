@@ -10,10 +10,12 @@ from .. import obj
 ########################################################################################################################
 
 class NyxBoolean(obj.NyxObject):
+    """JSON boolean object."""
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
+        """Allocates a new JSON boolean object or wraps one."""
 
         if ptr is None:
 
@@ -29,6 +31,7 @@ class NyxBoolean(obj.NyxObject):
 
     @property
     def value(self) -> bool:
+        """Boolean value."""
 
         return bool(bind.lib.nyx_boolean_get(self.ptr))
 

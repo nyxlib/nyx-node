@@ -50,6 +50,7 @@ c_double = ctypes.c_double
 ########################################################################################################################
 
 class NyxObjectType(enum.IntEnum):
+    """JSON object types."""
 
     NULL = 0x65656500
     BOOLEAN = 0x65656501
@@ -62,6 +63,7 @@ class NyxObjectType(enum.IntEnum):
 
 # noinspection PyPep8Naming
 class nyx_object_t(ctypes.Structure):
+    """C structure describing a JSON object header."""
 
     _fields_ = [
         ('type', c_int32),
@@ -81,6 +83,7 @@ nyx_object_p = ctypes.POINTER(nyx_object_t)
 
 # noinspection PyPep8Naming
 class nyx_dict_t(ctypes.Structure):
+    """C structure describing a JSON dict object."""
 
     _fields_ = [
         ('base', nyx_object_t),
@@ -158,6 +161,7 @@ nyx_callback_vector_t = ctypes.CFUNCTYPE(
 
 # noinspection PyPep8Naming
 class nyx_opts_t(ctypes.Structure):
+    """C structure describing the options for INDI / Nyx vectors."""
 
     _fields_ = [
         ('group', c_char_p),
@@ -170,6 +174,7 @@ class nyx_opts_t(ctypes.Structure):
 ########################################################################################################################
 
 class nyx_node_t(ctypes.Structure):
+    """Opaque C structure describing a Nyx node."""
 
     pass
 
@@ -187,6 +192,7 @@ nyx_timer_callback_t = ctypes.CFUNCTYPE(
 ########################################################################################################################
 
 class NyxMQTTEvent(enum.IntEnum):
+    """TCP or MQTT event type."""
 
     OPEN = 1100
     MSG = 1101
@@ -230,6 +236,7 @@ def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[True] = Tr
 ########################################################################################################################
 
 def as_bytes(value: str | bytes | None, *, allow_none: bool) -> bytes | None:
+    """Converts text or bytes to a C-compatible byte buffer."""
 
     ####################################################################################################################
 
@@ -258,6 +265,7 @@ def as_bytes(value: str | bytes | None, *, allow_none: bool) -> bytes | None:
 ########################################################################################################################
 
 def as_opts(opts: dict[str, typing.Any] | None) -> nyx_opts_t | None:
+    """Converts vector options to their C representation."""
 
     if opts is None:
 
@@ -274,6 +282,7 @@ def as_opts(opts: dict[str, typing.Any] | None) -> nyx_opts_t | None:
 ########################################################################################################################
 
 def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
+    """Checks that a C pointer is not NULL."""
 
     ####################################################################################################################
 
@@ -295,6 +304,7 @@ def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
 ########################################################################################################################
 
 def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
+    """Copies a C buffer and frees it with nyx_memory_free."""
 
     ptr = check_ptr(ptr, 'C buffer')
 
@@ -306,6 +316,7 @@ def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
 ########################################################################################################################
 
 def take_string(ptr: int | c_void_p | None, size: int | None = None) -> str:
+    """Copies a C string and frees it with nyx_memory_free."""
 
     ptr = check_ptr(ptr, 'C string')
 

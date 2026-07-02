@@ -14,10 +14,12 @@ from .. import obj
 ########################################################################################################################
 
 class NyxString(obj.NyxObject):
+    """JSON string object."""
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
+        """Allocates a new JSON string object or wraps one."""
 
         if ptr is None:
 
@@ -48,6 +50,7 @@ class NyxString(obj.NyxObject):
 
     @property
     def value(self) -> str:
+        """Text value."""
 
         return self._get_buff().decode('utf-8')
 
@@ -55,6 +58,7 @@ class NyxString(obj.NyxObject):
 
     @property
     def buff(self) -> bytes:
+        """Content bytes."""
 
         return self._get_buff()#decode('utf-8')
 
