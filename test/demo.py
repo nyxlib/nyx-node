@@ -9,6 +9,7 @@
 import os
 import sys
 import random
+import signal
 import struct
 
 # noinspection PyTypeChecker
@@ -328,6 +329,18 @@ def main():
 
     ####################################################################################################################
 
+    stop = False
+
+    def signal_handler(_signo, _frame):
+
+        nonlocal stop
+
+        stop = True
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+    ####################################################################################################################
+
     with nyx_node.NyxNode(
             'NYX_DEMO_PY',
             [
@@ -383,15 +396,9 @@ def main():
 
         ################################################################################################################
 
-        try:
+        while not stop:
 
-            while not stop:
-
-                node.poll(25)
-
-        except KeyboardInterrupt:
-
-            pass
+            node.poll(25)
 
     ####################################################################################################################
 
