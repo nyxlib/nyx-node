@@ -329,18 +329,6 @@ def main():
 
     ####################################################################################################################
 
-    stop = False
-
-    def signal_handler(_signo, _frame):
-
-        nonlocal stop
-
-        stop = True
-
-    signal.signal(signal.SIGINT, signal_handler)
-
-    ####################################################################################################################
-
     with nyx_node.NyxNode(
             'NYX_DEMO_PY',
             [
@@ -393,6 +381,18 @@ def main():
             if topic == 'demo/exit':
 
                 stop = True
+
+        ####################################################################################################################
+
+        stop = False
+
+        def signal_handler(_signo, _frame):
+
+            nonlocal stop
+
+            stop = True
+
+        signal.signal(signal.SIGINT, signal_handler)
 
         ################################################################################################################
 
