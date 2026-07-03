@@ -1,6 +1,8 @@
 .pio
 .idea
+.agent
 .cache
+.codex
 .fleet
 .DS_Store
 
