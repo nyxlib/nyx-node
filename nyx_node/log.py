@@ -5,31 +5,22 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
-import atexit
+from . import bind
 
 ########################################################################################################################
 
-from .log import *
-from .obj import *
-from .xml import *
-from .indi import *
-from .json import *
-from .node import *
-from .utils import *
+NyxLogLevel = bind.NyxLogLevel
 
 ########################################################################################################################
 
-from .bind import lib
+def nyx_set_log_level(level: bind.NyxLogLevel) -> None:
+    """Sets the log level threshold."""
 
-def _shutdown() -> None:
+    if not isinstance(level, NyxLogLevel):
 
-    lib.nyx_memory_finalize()
+        raise TypeError('Expected NyxLogLevel enum')
 
-lib.nyx_memory_initialize()
-
-########################################################################################################################
-
-atexit.register(_shutdown)
+    bind.lib.nyx_set_log_level(level)
 
 ########################################################################################################################
 

@@ -49,6 +49,19 @@ c_double = ctypes.c_double
 # TYPES                                                                                                                #
 ########################################################################################################################
 
+class NyxLogLevel(enum.IntEnum):
+    """Log levels."""
+
+    NONE  = 100,
+    FATAL = 101,
+    ERROR = 102,
+    WARN  = 103,
+    INFO  = 104,
+    DEBUG = 105,
+    TRACE = 106,
+
+########################################################################################################################
+
 class NyxObjectType(enum.IntEnum):
     """JSON object types."""
 
@@ -417,6 +430,12 @@ def _bind(name: str, restype, argtypes: typing.Sequence[object]) -> None:
     except AttributeError as e:
 
         raise NyxLibraryError(f'Missing C symbol: {name}') from e
+
+########################################################################################################################
+
+## LOG ##
+
+_bind('nyx_set_log_level', None, [c_int])
 
 ########################################################################################################################
 
