@@ -52,7 +52,7 @@ The core library is written in C11 and targets POSIX, Windows, Arduino and Pytho
 
 > Any existing INDI driver can be connected to the Nyx network via “INDI → Nyx Bridge”.
 
-# Build instructions
+# Build and install instructions (C library)
 
 ```bash
 mkdir build
@@ -61,6 +61,12 @@ cd build
 cmake ..
 make
 sudo make install
+```
+
+# Install instructions (Python module)
+
+```bash
+python -m pip install .
 ```
 
 # Home page and documentation
