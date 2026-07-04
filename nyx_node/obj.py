@@ -29,7 +29,7 @@ def nyx_callback(nyx_callback_type):
 
     ####################################################################################################################
 
-    def decorate(callback):
+    def decorate(callback: typing.Callable) -> typing.Callable:
 
         callback._nyx_callback_type = nyx_callback_type
 

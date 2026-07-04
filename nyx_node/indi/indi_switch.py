@@ -120,7 +120,7 @@ class NyxSwitchVector(json.json_dict.NyxDict):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_vector_t)
-    def _nyx_callback_method(self, _vector, modified):
+    def _nyx_callback_method(self, _vector: json.json_dict.NyxDict, modified: bool) -> None:
 
         self._dispatch_callbacks(bool(modified))
 
