@@ -29,8 +29,8 @@ from . import utils
 @utils.nyx_property(
     'value',
     '$',
-    getter = enums.nyx_onoff_int,
-    setter = enums.nyx_onoff_str,
+    getter = enums.NyxOnOff.nyx_onoff_int,
+    setter = enums.NyxOnOff.nyx_onoff_str,
 )
 class NyxSwitchProp(json.json_dict.NyxDict):
     """! @brief INDI / Nyx switch property."""
@@ -48,7 +48,7 @@ class NyxSwitchProp(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_switch_prop_new(
             bind.as_bytes(name, allow_none = False),
             bind.as_bytes(label, allow_none = True),
-            enums.nyx_onoff_int(value),
+            enums.NyxOnOff.nyx_onoff_int(value),
         ))
 
     ####################################################################################################################
@@ -57,8 +57,8 @@ class NyxSwitchProp(json.json_dict.NyxDict):
     def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
 
         return all(self._dispatch_callbacks(
-            enums.nyx_onoff_int(new_value),
-            enums.nyx_onoff_int(old_value),
+            enums.NyxOnOff.nyx_onoff_int(new_value),
+            enums.NyxOnOff.nyx_onoff_int(old_value),
         ))
 
 ########################################################################################################################
@@ -74,20 +74,20 @@ class NyxSwitchProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state_int,
-    setter = enums.nyx_state_str,
+    getter = enums.NyxState.nyx_state_int,
+    setter = enums.NyxState.nyx_state_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
-    getter = enums.nyx_perm_int,
-    setter = enums.nyx_perm_str,
+    getter = enums.NyxPerm.nyx_perm_int,
+    setter = enums.NyxPerm.nyx_perm_str,
 )
 @utils.nyx_property(
     'rule',
     '@rule',
-    getter = enums.nyx_rule_int,
-    setter = enums.nyx_rule_str,
+    getter = enums.NyxRule.nyx_rule_int,
+    setter = enums.NyxRule.nyx_rule_str,
 )
 class NyxSwitchVector(json.json_dict.NyxDict):
     """! @brief INDI / Nyx switch vector."""
@@ -111,9 +111,9 @@ class NyxSwitchVector(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_switch_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state_int(state),
-            enums.nyx_perm_int(perm),
-            enums.nyx_rule_int(rule),
+            enums.NyxState.nyx_state_int(state),
+            enums.NyxPerm.nyx_perm_int(perm),
+            enums.NyxRule.nyx_rule_int(rule),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

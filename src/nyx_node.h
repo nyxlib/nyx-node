@@ -2057,9 +2057,9 @@ typedef struct
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_NUMBER Nyx Number messages
+  * @defgroup NYX_NUMBER Nyx Number Messages
   * @ingroup NYX
-  * Nyx Number messages
+  * Nyx Number Messages
   * @{
   */
 
@@ -2347,9 +2347,9 @@ nyx_dict_t *nyx_number_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_TEXT Nyx Text messages
+  * @defgroup NYX_TEXT Nyx Text Messages
   * @ingroup NYX
-  * Nyx Text messages
+  * Nyx Text Messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2433,9 +2433,9 @@ nyx_dict_t *nyx_text_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_LIGHT Nyx Light messages
+  * @defgroup NYX_LIGHT Nyx Light Messages
   * @ingroup NYX
-  * Nyx Light messages
+  * Nyx Light Messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2512,9 +2512,9 @@ nyx_dict_t *nyx_light_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_SWITCH Nyx Switch messages
+  * @defgroup NYX_SWITCH Nyx Switch Messages
   * @ingroup NYX
-  * Nyx Switch messages
+  * Nyx Switch Messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2595,9 +2595,9 @@ nyx_dict_t *nyx_switch_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_BLOB Nyx BLOB messages
+  * @defgroup NYX_BLOB Nyx BLOB Messages
   * @ingroup NYX
-  * Nyx BLOB messages
+  * Nyx BLOB Messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2691,9 +2691,9 @@ nyx_dict_t *nyx_blob_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_STREAM Nyx Stream messages
+  * @defgroup NYX_STREAM Nyx Stream Messages
   * @ingroup NYX
-  * Nyx Stream messages
+  * Nyx Stream Messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -2763,9 +2763,9 @@ nyx_dict_t *nyx_stream_set_vector_new(
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /** @}
-  * @defgroup NYX_MESSAGE Other Nyx messages
+  * @defgroup NYX_MESSAGE Other Nyx Messages
   * @ingroup NYX
-  * Other Nyx messages
+  * Other Nyx Messages
   * @{
   */
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -72,14 +72,14 @@ class NyxTextProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state_int,
-    setter = enums.nyx_state_str,
+    getter = enums.NyxState.nyx_state_int,
+    setter = enums.NyxState.nyx_state_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
-    getter = enums.nyx_perm_int,
-    setter = enums.nyx_perm_str,
+    getter = enums.NyxPerm.nyx_perm_int,
+    setter = enums.NyxPerm.nyx_perm_str,
 )
 class NyxTextVector(json.json_dict.NyxDict):
     """! @brief INDI / Nyx text vector."""
@@ -102,8 +102,8 @@ class NyxTextVector(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_text_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state_int(state),
-            enums.nyx_perm_int(perm),
+            enums.NyxState.nyx_state_int(state),
+            enums.NyxPerm.nyx_perm_int(perm),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

@@ -29,8 +29,8 @@ from . import utils
 @utils.nyx_property(
     'value',
     '$',
-    getter = enums.nyx_state_int,
-    setter = enums.nyx_state_str,
+    getter = enums.NyxState.nyx_state_int,
+    setter = enums.NyxState.nyx_state_str,
 )
 class NyxLightProp(json.json_dict.NyxDict):
     """! @brief INDI / Nyx light property."""
@@ -74,8 +74,8 @@ class NyxLightProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state_int,
-    setter = enums.nyx_state_str,
+    getter = enums.NyxState.nyx_state_int,
+    setter = enums.NyxState.nyx_state_str,
 )
 class NyxLightVector(json.json_dict.NyxDict):
     """! @brief INDI / Nyx light vector."""
@@ -97,7 +97,7 @@ class NyxLightVector(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_light_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state_int(state),
+            enums.NyxState.nyx_state_int(state),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))
