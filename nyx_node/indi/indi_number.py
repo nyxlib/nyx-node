@@ -31,19 +31,28 @@ from . import utils
     '@format',
 )
 class NyxNumberProp(json.json_dict.NyxDict):
-    """Base class for INDI / Nyx number properties."""
+    """! @brief Base class for INDI / Nyx number properties."""
 
     pass
 
 ########################################################################################################################
 
 class NyxNumberIntProp(NyxNumberProp):
-    """INDI / Nyx int32_t number property."""
+    """! @brief INDI / Nyx `int32_t` number property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """Allocates a new INDI / Nyx int32_t number property."""
+        """! @brief Allocates a new INDI / Nyx `int32_t` number property.
+
+        @param name Property name.
+        @param label Property label.
+        @param fmt Printf-style formatting string (%[flags][width]d).
+        @param min Range min, ignored if min == max.
+        @param max Range max, ignored if min == max.
+        @param step Step size, ignored if step == 0.
+        @param value Initial `int32_t` value.
+        """
 
         super().__init__(bind.lib.nyx_number_prop_new_int(
             bind.as_bytes(name, allow_none = False),
@@ -66,7 +75,10 @@ class NyxNumberIntProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """Current value."""
+        """! @brief Gets the current value of this property object.
+
+        @return The current value.
+        """
 
         return bind.lib.nyx_number_prop_get_int(self.ptr)
 
@@ -83,12 +95,21 @@ class NyxNumberIntProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberUIntProp(NyxNumberProp):
-    """INDI / Nyx uint32_t number property."""
+    """! @brief INDI / Nyx `uint32_t` number property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """Allocates a new INDI / Nyx uint32_t number property."""
+        """! @brief Allocates a new INDI / Nyx `uint32_t` number property.
+
+        @param name Property name.
+        @param label Property label.
+        @param fmt Printf-style formatting string (%[flags][width]{uoxX}).
+        @param min Range min, ignored if min == max.
+        @param max Range max, ignored if min == max.
+        @param step Step size, ignored if step == 0.
+        @param value Initial `uint32_t` value.
+        """
 
         super().__init__(bind.lib.nyx_number_prop_new_uint(
             bind.as_bytes(name, allow_none = False),
@@ -111,7 +132,10 @@ class NyxNumberUIntProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """Current value."""
+        """! @brief Gets the current value of this property object.
+
+        @return The current value.
+        """
 
         return bind.lib.nyx_number_prop_get_uint(self.ptr)
 
@@ -128,12 +152,21 @@ class NyxNumberUIntProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberLongProp(NyxNumberProp):
-    """INDI / Nyx int64_t number property."""
+    """! @brief INDI / Nyx `int64_t` number property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """Allocates a new INDI / Nyx int64_t number property."""
+        """! @brief Allocates a new INDI / Nyx `int64_t` number property.
+
+        @param name Property name.
+        @param label Property label.
+        @param fmt Printf-style formatting string (%[flags][width]ld).
+        @param min Range min, ignored if min == max.
+        @param max Range max, ignored if min == max.
+        @param step Step size, ignored if step == 0.
+        @param value Initial `int64_t` value.
+        """
 
         super().__init__(bind.lib.nyx_number_prop_new_long(
             bind.as_bytes(name, allow_none = False),
@@ -156,7 +189,10 @@ class NyxNumberLongProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """Current value."""
+        """! @brief Gets the current value of this property object.
+
+        @return The current value.
+        """
 
         return bind.lib.nyx_number_prop_get_long(self.ptr)
 
@@ -173,12 +209,21 @@ class NyxNumberLongProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberULongProp(NyxNumberProp):
-    """INDI / Nyx uint64_t number property."""
+    """! @brief INDI / Nyx `uint64_t` number property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """Allocates a new INDI / Nyx uint64_t number property."""
+        """! @brief Allocates a new INDI / Nyx `uint64_t` number property.
+
+        @param name Property name.
+        @param label Property label.
+        @param fmt Printf-style formatting string (%[flags][width]l{uoxX}).
+        @param min Range min, ignored if min == max.
+        @param max Range max, ignored if min == max.
+        @param step Step size, ignored if step == 0.
+        @param value Initial `uint64_t` value.
+        """
 
         super().__init__(bind.lib.nyx_number_prop_new_ulong(
             bind.as_bytes(name, allow_none = False),
@@ -201,7 +246,10 @@ class NyxNumberULongProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """Current value."""
+        """! @brief Gets the current value of this property object.
+
+        @return The current value.
+        """
 
         return bind.lib.nyx_number_prop_get_ulong(self.ptr)
 
@@ -218,12 +266,21 @@ class NyxNumberULongProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberDoubleProp(NyxNumberProp):
-    """INDI / Nyx double number property."""
+    """! @brief INDI / Nyx `double` number property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: float, max: float, step: float, value: float):
-        """Allocates a new INDI / Nyx double number property."""
+        """! @brief Allocates a new INDI / Nyx `double` number property.
+
+        @param name Property name.
+        @param label Property label.
+        @param fmt Printf-style formatting string (%[flags][width]l?{fFeEgGaAm}).
+        @param min Range min, ignored if min == max.
+        @param max Range max, ignored if min == max.
+        @param step Step size, ignored if step == 0.
+        @param value Initial `double` value.
+        """
 
         super().__init__(bind.lib.nyx_number_prop_new_double(
             bind.as_bytes(name, allow_none = False),
@@ -246,7 +303,10 @@ class NyxNumberDoubleProp(NyxNumberProp):
 
     @property
     def value(self) -> float:
-        """Current value."""
+        """! @brief Gets the current value of this property object.
+
+        @return The current value.
+        """
 
         return bind.lib.nyx_number_prop_get_double(self.ptr)
 
@@ -273,30 +333,38 @@ class NyxNumberDoubleProp(NyxNumberProp):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state,
+    getter = enums.nyx_state_int,
     setter = enums.nyx_state_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
-    getter = enums.nyx_perm,
+    getter = enums.nyx_perm_int,
     setter = enums.nyx_perm_str,
 )
 class NyxNumberVector(json.json_dict.NyxDict):
-    """INDI / Nyx number vector."""
+    """! @brief INDI / Nyx number vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxNumberProp], **opts: typing.Any):
-        """Allocates a new INDI / Nyx number vector."""
+        """! @brief Allocates a new INDI / Nyx number vector.
+
+        @param device Device name.
+        @param name Vector name.
+        @param state Vector state.
+        @param perm Vector permissions.
+        @param props Properties.
+        @param opts Options (group, label, hints, timeout, message).
+        """
 
         ################################################################################################################
 
         super().__init__(bind.lib.nyx_number_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state(state),
-            enums.nyx_perm(perm),
+            enums.nyx_state_int(state),
+            enums.nyx_perm_int(perm),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

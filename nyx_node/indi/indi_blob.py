@@ -36,12 +36,19 @@ from . import utils
     '$',
 )
 class NyxBLOBProp(json.json_dict.NyxDict):
-    """INDI / Nyx BLOB property."""
+    """! @brief INDI / Nyx BLOB property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, fmt: str | None = None, value: bytes | None = None):
-        """Allocates a new INDI / Nyx BLOB property."""
+        """! @brief Allocates a new INDI / Nyx BLOB property.
+
+        @param name Property name.
+        @param label Property label.
+        @param fmt Payload format.
+        @param value Initial payload buffer.
+        @note If a format ends with `.z`, the payload is automatically ZLib+Base64-compressed, otherwise, the payload is automatically Base64-encoded.
+        """
 
         ################################################################################################################
 
@@ -80,30 +87,38 @@ class NyxBLOBProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state,
+    getter = enums.nyx_state_int,
     setter = enums.nyx_state_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
-    getter = enums.nyx_perm,
+    getter = enums.nyx_perm_int,
     setter = enums.nyx_perm_str,
 )
 class NyxBLOBVector(json.json_dict.NyxDict):
-    """INDI / Nyx BLOB vector."""
+    """! @brief INDI / Nyx BLOB vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxBLOBProp], **opts: typing.Any):
-        """Allocates a new INDI / Nyx BLOB vector."""
+        """! @brief Allocates a new INDI / Nyx BLOB vector.
+
+        @param device Device name.
+        @param name Vector name.
+        @param state Vector state.
+        @param perm Vector permissions.
+        @param props Properties.
+        @param opts Options (group, label, hints, timeout, message).
+        """
 
         ################################################################################################################
 
         super().__init__(bind.lib.nyx_blob_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state(state),
-            enums.nyx_perm(perm),
+            enums.nyx_state_int(state),
+            enums.nyx_perm_int(perm),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

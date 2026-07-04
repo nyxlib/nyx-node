@@ -27,12 +27,15 @@ if typing.TYPE_CHECKING:
 ########################################################################################################################
 
 class NyxDict(obj.NyxObject):
-    """JSON dict object."""
+    """! @brief JSON dict object."""
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
-        """Allocates a new JSON dict object or wraps one."""
+        """! @brief Allocates a new JSON dict object or wraps one.
+
+        @param ptr Optional JSON dict object pointer.
+        """
 
         if ptr is None:
 
@@ -47,21 +50,28 @@ class NyxDict(obj.NyxObject):
     ####################################################################################################################
 
     def clear(self) -> None:
-        """Clears the content of this JSON dict object."""
+        """! @brief Clears the content of this JSON dict object."""
 
         bind.lib.nyx_dict_clear(self.ptr)
 
     ####################################################################################################################
 
     def __delitem__(self, key: str) -> None:
-        """Deletes the entry of the provided key."""
+        """! @brief Deletes the entry of the provided key.
+
+        @param key Key.
+        """
 
         bind.lib.nyx_dict_del(self.ptr, bind.as_bytes(key, allow_none = False))
 
     ####################################################################################################################
 
     def __getitem__(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
-        """Gets the JSON object of the provided key."""
+        """! @brief Gets the JSON object of the provided key.
+
+        @param key Key.
+        @return The JSON object.
+        """
 
         ################################################################################################################
 
@@ -124,7 +134,12 @@ class NyxDict(obj.NyxObject):
     ####################################################################################################################
 
     def __setitem__(self, key: str, value: obj.NyxObject) -> bool:
-        """Sets a JSON object at the provided key."""
+        """! @brief Sets a JSON object in this JSON dict object.
+
+        @param key Key.
+        @param value JSON object to be added.
+        @return `true` if the value was modified, `false` otherwise.
+        """
 
         if not isinstance(value, obj.NyxObject):
 
@@ -135,7 +150,10 @@ class NyxDict(obj.NyxObject):
     ####################################################################################################################
 
     def __len__(self) -> int:
-        """Returns the number of items."""
+        """! @brief Gets the number of items in this JSON dict object.
+
+        @return The number of items in this JSON dict object.
+        """
 
         return int(bind.lib.nyx_dict_size(self.ptr))
 

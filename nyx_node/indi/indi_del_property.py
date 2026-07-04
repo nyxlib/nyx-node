@@ -25,12 +25,18 @@ from . import utils
     '@message',
 )
 class NyxDelProperty(json.json_dict.NyxDict):
-    """INDI / Nyx delete-property message object."""
+    """! @brief INDI / Nyx `delete-property` message object."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str | None = None, message: str | None = None):
-        """Allocates a new INDI / Nyx delete-property message object."""
+        """! @brief Allocates a new INDI / Nyx `delete-property` message object.
+
+        @param device Device name.
+        @param name Optional vector name (`None` means whole device).
+        @param message Optional human-oriented message.
+        @note Prefer using `NyxNode.send_del_property()`.
+        """
 
         super().__init__(bind.lib.nyx_del_property_new(
             bind.as_bytes(device, allow_none = False),

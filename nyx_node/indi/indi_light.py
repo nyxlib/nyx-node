@@ -29,21 +29,26 @@ from . import utils
 @utils.nyx_property(
     'value',
     '$',
-    getter = enums.nyx_state,
+    getter = enums.nyx_state_int,
     setter = enums.nyx_state_str,
 )
 class NyxLightProp(json.json_dict.NyxDict):
-    """INDI / Nyx light property."""
+    """! @brief INDI / Nyx light property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: enums.NyxState | int | str = enums.NyxState.IDLE):
-        """Allocates a new INDI / Nyx light property."""
+        """! @brief Allocates a new INDI / Nyx light property.
+
+        @param name Property name.
+        @param label Property label.
+        @param value Initial value.
+        """
 
         super().__init__(bind.lib.nyx_light_prop_new(
             bind.as_bytes(name, allow_none = False),
             bind.as_bytes(label, allow_none = True),
-            enums.nyx_state(value),
+            enums.nyx_state_int(value),
         ))
 
     ####################################################################################################################
@@ -52,8 +57,8 @@ class NyxLightProp(json.json_dict.NyxDict):
     def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
 
         return all(self._dispatch_callbacks(
-            enums.nyx_state(new_value),
-            enums.nyx_state(old_value),
+            enums.nyx_state_int(new_value),
+            enums.nyx_state_int(old_value),
         ))
 
 ########################################################################################################################
@@ -69,23 +74,30 @@ class NyxLightProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state,
+    getter = enums.nyx_state_int,
     setter = enums.nyx_state_str,
 )
 class NyxLightVector(json.json_dict.NyxDict):
-    """INDI / Nyx light vector."""
+    """! @brief INDI / Nyx light vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxLightProp], **opts: typing.Any):
-        """Allocates a new INDI / Nyx light vector."""
+        """! @brief Allocates a new INDI / Nyx light vector.
+
+        @param device Device name.
+        @param name Vector name.
+        @param state Vector state.
+        @param props Properties.
+        @param opts Options (group, label, hints, timeout, message).
+        """
 
         ################################################################################################################
 
         super().__init__(bind.lib.nyx_light_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state(state),
+            enums.nyx_state_int(state),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

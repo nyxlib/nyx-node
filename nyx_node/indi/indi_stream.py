@@ -27,12 +27,18 @@ from . import utils
     '@label',
 )
 class NyxStreamProp(json.json_dict.NyxDict):
-    """Nyx Stream property."""
+    """! @brief Nyx Stream property."""
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None):
-        """Allocates a new Nyx Stream property."""
+        """! @brief Allocates a new Nyx Stream property.
+
+        @param name Property name.
+        @param label Property label.
+        @note If the property name ends with `.b`, the payload is automatically Base64-encoded.
+        @note If the property name ends with `.z`, the payload is automatically ZLib-compressed.
+        """
 
         super().__init__(bind.lib.nyx_stream_prop_new(
             bind.as_bytes(name, allow_none = False),
@@ -52,23 +58,30 @@ class NyxStreamProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.nyx_state,
+    getter = enums.nyx_state_int,
     setter = enums.nyx_state_str,
 )
 class NyxStreamVector(json.json_dict.NyxDict):
-    """Nyx Stream vector."""
+    """! @brief Nyx Stream vector."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxStreamProp], **opts: typing.Any):
-        """Allocates a new Nyx Stream vector."""
+        """! @brief Allocates a new Nyx Stream vector.
+
+        @param device Device name.
+        @param name Vector name.
+        @param state Vector state.
+        @param props Properties.
+        @param opts Options (group, label, hints, timeout, message).
+        """
 
         ################################################################################################################
 
         super().__init__(bind.lib.nyx_stream_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.nyx_state(state),
+            enums.nyx_state_int(state),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))
@@ -89,7 +102,12 @@ class NyxStreamVector(json.json_dict.NyxDict):
     ####################################################################################################################
 
     def stream_pub(self, field_values: typing.Sequence[bytes]) -> bool:
-        """Publishes an entry to a stream if Nyx Stream is enabled."""
+        """! @brief If Nyx Stream is enabled, publishes an entry to a stream.
+
+        @param field_values Field payloads, one per field.
+        @return `true` if the provided fields match the vector content, `false` otherwise.
+        @note Field payloads may contain arbitrary binary data.
+        """
 
         ################################################################################################################
 

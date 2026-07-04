@@ -13,7 +13,7 @@ import typing
 ########################################################################################################################
 
 class NyxState(enum.IntEnum):
-    """Vector state hint."""
+    """! @brief Vector state hint."""
 
     IDLE = 400
     OK = 401
@@ -23,7 +23,7 @@ class NyxState(enum.IntEnum):
 ########################################################################################################################
 
 class NyxPerm(enum.IntEnum):
-    """Vector permission hint."""
+    """! @brief Vector permission hint."""
 
     RO = 500
     WO = 501
@@ -32,7 +32,7 @@ class NyxPerm(enum.IntEnum):
 ########################################################################################################################
 
 class NyxRule(enum.IntEnum):
-    """Switch vector rule hint."""
+    """! @brief Switch vector rule hint."""
 
     ONE_OF_MANY = 600
     AT_MOST_ONE = 601
@@ -41,7 +41,7 @@ class NyxRule(enum.IntEnum):
 ########################################################################################################################
 
 class NyxOnOff(enum.IntEnum):
-    """Switch state."""
+    """! @brief Switch state."""
 
     ON = 700
     OFF = 701
@@ -134,7 +134,7 @@ _ONOFF_FROM_STR = {value: key for key, value in _ONOFF_TO_STR.items()}
 # PUBLIC                                                                                                               #
 ########################################################################################################################
 
-def nyx_state(value: NyxState | int | str) -> int:
+def nyx_state_int(value: NyxState | int | str) -> int:
 
     return _nyx_enum(value, NyxState, _STATE_FROM_STR, 'state')
 
@@ -146,7 +146,7 @@ def nyx_state_str(value: NyxState | int | str) -> str:
 
 ########################################################################################################################
 
-def nyx_perm(value: NyxPerm | int | str) -> int:
+def nyx_perm_int(value: NyxPerm | int | str) -> int:
 
     return _nyx_enum(value, NyxPerm, _PERM_FROM_STR, 'permission')
 
@@ -158,7 +158,7 @@ def nyx_perm_str(value: NyxPerm | int | str) -> str:
 
 ########################################################################################################################
 
-def nyx_rule(value: NyxRule | int | str) -> int:
+def nyx_rule_int(value: NyxRule | int | str) -> int:
 
     return _nyx_enum(value, NyxRule, _RULE_FROM_STR, 'rule')
 
@@ -170,7 +170,7 @@ def nyx_rule_str(value: NyxRule | int | str) -> str:
 
 ########################################################################################################################
 
-def nyx_onoff(value: NyxOnOff | int | str | bool) -> int:
+def nyx_onoff_int(value: NyxOnOff | int | str | bool) -> int:
 
     if isinstance(value, bool):
 
@@ -182,7 +182,7 @@ def nyx_onoff(value: NyxOnOff | int | str | bool) -> int:
 
 def nyx_onoff_str(value: NyxOnOff | int | str | bool) -> str:
 
-    return _ONOFF_TO_STR[NyxOnOff(nyx_onoff(value))]
+    return _ONOFF_TO_STR[NyxOnOff(nyx_onoff_int(value))]
 
 ########################################################################################################################
 

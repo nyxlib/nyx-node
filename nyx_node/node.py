@@ -20,7 +20,7 @@ NyxMQTTEvent = bind.NyxMQTTEvent
 ########################################################################################################################
 
 class NyxNode:
-    """Nyx node exposing INDI, MQTT and Nyx Stream endpoints."""
+    """! @brief Nyx node exposing INDI, MQTT and Nyx Stream endpoints."""
 
     ####################################################################################################################
 
@@ -36,7 +36,18 @@ class NyxNode:
             retry_ms: int,
             enable_xml: bool,
     ):
-        """Allocates and initializes a Nyx node."""
+        """! @brief Allocates and initializes a Nyx node.
+
+        @param node_id Unique node identifier.
+        @param vectors Array of vectors.
+        @param indi_url Optional INDI URL.
+        @param mqtt_url Optional MQTT URL.
+        @param nss_url Optional Nyx Stream URL.
+        @param mqtt_username Optional MQTT username.
+        @param mqtt_password Optional MQTT password.
+        @param retry_ms Connect retry time [milliseconds].
+        @param enable_xml Enables the XML messages.
+        """
 
         ################################################################################################################
 
@@ -88,7 +99,10 @@ class NyxNode:
 
     @property
     def ptr(self):
-        """C pointer to the Nyx node."""
+        """! @brief C pointer to the Nyx node.
+
+        @return The Nyx node pointer.
+        """
 
         return self._ptr
 
@@ -150,7 +164,12 @@ class NyxNode:
     ####################################################################################################################
 
     def on_mqtt(self, event_type: NyxMQTTEvent):
-        """Registers an MQTT event handler."""
+        """! @brief Registers an MQTT event handler.
+
+        @param event_type MQTT event type.
+        @return A decorator registering the MQTT event handler.
+        @note The MQTT handler has to be defined when the Nyx node is initialized.
+        """
 
         ################################################################################################################
 
@@ -193,7 +212,12 @@ class NyxNode:
     ####################################################################################################################
 
     def on_timer(self, interval_ms: int):
-        """Registers a timer handler."""
+        """! @brief Registers a timer handler.
+
+        @param interval_ms Interval [milliseconds].
+        @return A decorator registering the timer handler.
+        @note All added timers are polled when `poll()` is called, and called if expired.
+        """
 
         ################################################################################################################
 
@@ -239,21 +263,29 @@ class NyxNode:
     ####################################################################################################################
 
     def close(self) -> None:
-        """Finalizes the Nyx node."""
+        """! @brief Finalizes the Nyx node."""
 
         bind.lib.nyx_node_finalize(self.ptr, False)
 
     ####################################################################################################################
 
     def poll(self, timeout_ms: int) -> None:
-        """Performs a single poll iteration."""
+        """! @brief Performs a single poll iteration.
+
+        @param timeout_ms Timeout [milliseconds].
+        """
 
         bind.lib.nyx_node_poll(self.ptr, timeout_ms)
 
     ####################################################################################################################
 
     def enable(self, device: str, name: str | None = None, message: str | None = None) -> None:
-        """Enables a device or a vector and notifies clients."""
+        """! @brief Enables a device or a vector and notifies clients.
+
+        @param device Device name.
+        @param name Optional vector name (`None` means whole device).
+        @param message Optional human-oriented message.
+        """
 
         bind.lib.nyx_node_enable(
             self.ptr,
@@ -265,7 +297,12 @@ class NyxNode:
     ####################################################################################################################
 
     def disable(self, device: str, name: str | None = None, message: str | None = None) -> None:
-        """Disables a device or a vector and notifies clients."""
+        """! @brief Disables a device or a vector and notifies clients.
+
+        @param device Device name.
+        @param name Optional vector name (`None` means whole device).
+        @param message Optional human-oriented message.
+        """
 
         bind.lib.nyx_node_disable(
             self.ptr,
@@ -277,7 +314,11 @@ class NyxNode:
     ####################################################################################################################
 
     def send_message(self, device: str, message: str | None = None) -> None:
-        """Sends a human-oriented message to the clients."""
+        """! @brief Sends a human-oriented message to the clients.
+
+        @param device Device name.
+        @param message Human-oriented message.
+        """
 
         bind.lib.nyx_node_send_message(
             self.ptr,
@@ -288,7 +329,12 @@ class NyxNode:
     ####################################################################################################################
 
     def send_del_property(self, device: str, name: str | None = None, message: str | None = None) -> None:
-        """Sends a delete-property message to the clients."""
+        """! @brief Sends a `del-property` message to the clients.
+
+        @param device Device name.
+        @param name Optional vector name (`None` means whole device).
+        @param message Optional human-oriented message.
+        """
 
         bind.lib.nyx_node_send_del_property(
             self.ptr,
@@ -300,7 +346,12 @@ class NyxNode:
     ####################################################################################################################
 
     def mqtt_sub(self, topic: str, qos: int = 0) -> None:
-        """Subscribes to an MQTT topic if MQTT is enabled."""
+        """! @brief If MQTT is enabled, subscribes to an MQTT topic.
+
+        @param topic MQTT topic.
+        @param qos MQTT Quality Of Service.
+        @note The MQTT handler has to be defined when the Nyx node is initialized.
+        """
 
         bind.lib.nyx_mqtt_sub(
             self.ptr,
@@ -311,7 +362,13 @@ class NyxNode:
     ####################################################################################################################
 
     def mqtt_pub(self, topic: str, message: bytes, qos: int = 0) -> None:
-        """Publishes an MQTT message if MQTT is enabled."""
+        """! @brief If MQTT is enabled, publishes an MQTT message.
+
+        @param topic MQTT topic.
+        @param message Message payload.
+        @param qos MQTT Quality Of Service.
+        @note The message payload may contain arbitrary binary data.
+        """
 
         message = bind.as_bytes(message, allow_none = False)
 

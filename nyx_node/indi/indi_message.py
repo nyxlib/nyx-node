@@ -21,12 +21,17 @@ from . import utils
     '@message',
 )
 class NyxMessage(json.json_dict.NyxDict):
-    """INDI / Nyx human-oriented message object."""
+    """! @brief INDI / Nyx human-oriented message object."""
 
     ####################################################################################################################
 
     def __init__(self, device: str, message: str | None = None):
-        """Allocates a new INDI / Nyx human-oriented message object."""
+        """! @brief Allocates a new INDI / Nyx human-oriented message object.
+
+        @param device Device name.
+        @param message Human-oriented message.
+        @note Prefer using `NyxNode.send_message()`.
+        """
 
         super().__init__(bind.lib.nyx_message_new(
             bind.as_bytes(device, allow_none = False),

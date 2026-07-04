@@ -17,10 +17,10 @@ import pathlib
 ########################################################################################################################
 
 class NyxError(RuntimeError):
-    """Base error raised by the Python Nyx binding."""
+    """! @brief Base error raised by the Python Nyx binding."""
 
 class NyxLibraryError(NyxError):
-    """Raised when the C shared library cannot be loaded or used."""
+    """! @brief Raised when the C shared library cannot be loaded or used."""
 
 ########################################################################################################################
 # ALIASES                                                                                                              #
@@ -50,7 +50,7 @@ c_double = ctypes.c_double
 ########################################################################################################################
 
 class NyxLogLevel(enum.IntEnum):
-    """Log levels."""
+    """! @brief Nyx log levels."""
 
     NONE  = 100,
     FATAL = 101,
@@ -63,7 +63,7 @@ class NyxLogLevel(enum.IntEnum):
 ########################################################################################################################
 
 class NyxObjectType(enum.IntEnum):
-    """JSON object types."""
+    """! @brief JSON object types."""
 
     NULL = 0x65656500
     BOOLEAN = 0x65656501
@@ -76,7 +76,7 @@ class NyxObjectType(enum.IntEnum):
 
 # noinspection PyPep8Naming
 class nyx_object_t(ctypes.Structure):
-    """C structure describing a JSON object header."""
+    """! @brief Struct describing a JSON object."""
 
     _fields_ = [
         ('type', c_int32),
@@ -96,7 +96,7 @@ nyx_object_p = ctypes.POINTER(nyx_object_t)
 
 # noinspection PyPep8Naming
 class nyx_dict_t(ctypes.Structure):
-    """C structure describing a JSON dict object."""
+    """! @brief Struct describing a JSON dict object."""
 
     _fields_ = [
         ('base', nyx_object_t),
@@ -174,7 +174,7 @@ nyx_callback_vector_t = ctypes.CFUNCTYPE(
 
 # noinspection PyPep8Naming
 class nyx_opts_t(ctypes.Structure):
-    """C structure describing the options for INDI / Nyx vectors."""
+    """! @brief Struct describing the options for INDI / Nyx vectors."""
 
     _fields_ = [
         ('group', c_char_p),
@@ -187,7 +187,7 @@ class nyx_opts_t(ctypes.Structure):
 ########################################################################################################################
 
 class nyx_node_t(ctypes.Structure):
-    """Opaque C structure describing a Nyx node."""
+    """! @brief Opaque struct describing a Nyx node."""
 
     pass
 
@@ -205,7 +205,7 @@ nyx_timer_callback_t = ctypes.CFUNCTYPE(
 ########################################################################################################################
 
 class NyxMQTTEvent(enum.IntEnum):
-    """TCP or MQTT event type."""
+    """! @brief TCP or MQTT event type."""
 
     OPEN = 1100
     MSG = 1101
@@ -249,7 +249,12 @@ def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[True] = Tr
 ########################################################################################################################
 
 def as_bytes(value: str | bytes | None, *, allow_none: bool) -> bytes | None:
-    """Converts text or bytes to a C-compatible byte buffer."""
+    """! @brief Converts text or bytes to a C-compatible byte buffer.
+
+    @param value Text or bytes value to convert.
+    @param allow_none Allows `None` to be returned unchanged.
+    @return The converted byte buffer, or `None` when allowed.
+    """
 
     ####################################################################################################################
 
@@ -278,7 +283,11 @@ def as_bytes(value: str | bytes | None, *, allow_none: bool) -> bytes | None:
 ########################################################################################################################
 
 def as_opts(opts: dict[str, typing.Any] | None) -> nyx_opts_t | None:
-    """Converts vector options to their C representation."""
+    """! @brief Converts vector options to their C representation.
+
+    @param opts Options (group, label, hints, timeout, message).
+    @return The C options structure, or `None` when no options are provided.
+    """
 
     if opts is None:
 
@@ -295,7 +304,12 @@ def as_opts(opts: dict[str, typing.Any] | None) -> nyx_opts_t | None:
 ########################################################################################################################
 
 def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
-    """Checks that a C pointer is not NULL."""
+    """! @brief Checks that a C pointer is not `NULL`.
+
+    @param ptr C pointer to check.
+    @param what Object name used in the error message.
+    @return The checked C pointer.
+    """
 
     ####################################################################################################################
 
@@ -317,7 +331,12 @@ def check_ptr(ptr: int | c_void_p | None, what: str = 'C object') -> c_void_p:
 ########################################################################################################################
 
 def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
-    """Copies a C buffer and frees it with nyx_memory_free."""
+    """! @brief Copies a C buffer and frees it with `nyx_memory_free`.
+
+    @param ptr C buffer pointer.
+    @param size Number of bytes to copy.
+    @return The copied bytes.
+    """
 
     ptr = check_ptr(ptr, 'C buffer')
 
@@ -329,7 +348,12 @@ def take_bytes(ptr: int | c_void_p | None, size: int) -> bytes:
 ########################################################################################################################
 
 def take_string(ptr: int | c_void_p | None, size: int | None = None) -> str:
-    """Copies a C string and frees it with nyx_memory_free."""
+    """! @brief Copies a C string and frees it with `nyx_memory_free`.
+
+    @param ptr C string pointer.
+    @param size Optional string size.
+    @return The copied string.
+    """
 
     ptr = check_ptr(ptr, 'C string')
 

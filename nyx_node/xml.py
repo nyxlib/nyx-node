@@ -25,12 +25,15 @@ if typing.TYPE_CHECKING:
 ########################################################################################################################
 
 class NyxXMLDoc:
-    """XML document."""
+    """! @brief XML document."""
 
     ####################################################################################################################
 
     def __init__(self, ptr):
-        """Wraps a C XML document pointer."""
+        """! @brief Wraps a C XML document pointer.
+
+        @param ptr XML document pointer.
+        """
 
         self._ptr = bind.check_ptr(ptr, 'nyx_xmldoc_t')
 
@@ -47,7 +50,10 @@ class NyxXMLDoc:
 
     @property
     def ptr(self):
-        """C pointer to the XML document."""
+        """! @brief C pointer to the XML document.
+
+        @return The XML document pointer.
+        """
 
         if not self._ptr:
 
@@ -59,7 +65,11 @@ class NyxXMLDoc:
 
     @staticmethod
     def from_string(string: str) -> NyxXMLDoc:
-        """Parses an XML document from a string."""
+        """! @brief Parses an XML document from a string.
+
+        @param string XML string.
+        @return The new XML document.
+        """
 
         from .obj import NyxObject
 
@@ -68,14 +78,20 @@ class NyxXMLDoc:
     ####################################################################################################################
 
     def to_string(self) -> str:
-        """Returns a string representing this XML document."""
+        """! @brief Returns a string representing this XML document.
+
+        @return A string that represents this XML document.
+        """
 
         return bind.take_string(bind.lib.nyx_xmldoc_to_string(self.ptr))
 
     ####################################################################################################################
 
     def to_json(self) -> NyxObject:
-        """Converts this XML Nyx / INDI command to a JSON one."""
+        """! @brief Converts this XML Nyx / INDI command to a JSON one.
+
+        @return The corresponding JSON Nyx / INDI command.
+        """
 
         return NyxObject(bind.lib.nyx_xmldoc_to_object(self.ptr))
 

@@ -14,7 +14,10 @@ NyxLogLevel = bind.NyxLogLevel
 ########################################################################################################################
 
 def nyx_set_log_level(level: bind.NyxLogLevel) -> None:
-    """Sets the log level threshold."""
+    """! @brief Sets the log level threshold.
+
+    @param level Log level threshold.
+    """
 
     if not isinstance(level, NyxLogLevel):
 
