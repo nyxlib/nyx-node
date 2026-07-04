@@ -34,7 +34,6 @@ from . import utils
 @utils.nyx_property(
     'value',
     '$',
-    #setter = utils.nyx_blob,
 )
 class NyxBLOBProp(json.json_dict.NyxDict):
     """INDI / Nyx BLOB property."""
