@@ -5,6 +5,13 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
+"""!
+@defgroup nyx_enums Nyx enumerations
+@brief Enumerations used by NyxNode.
+"""
+
+########################################################################################################################
+
 from __future__ import annotations
 
 ########################################################################################################################
@@ -15,7 +22,10 @@ import typing
 ########################################################################################################################
 
 class NyxState(enum.IntEnum):
-    """! @brief Vector state hint."""
+    """!
+    @ingroup nyx_enums
+    @brief Vector state hint.
+    """
 
     IDLE = 400
     OK = 401
@@ -24,10 +34,10 @@ class NyxState(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_state_int(cls, value: NyxState | int | str) -> int:
-        """! @brief Converts a NyxState value as an integer.
-
+    @staticmethod
+    def nyx_state_int(value: NyxState | int | str) -> int:
+        """!
+        @brief Converts a NyxState value as an integer.
         @param value The value to convert.
         @return The NyxState value as an integer.
         """
@@ -36,10 +46,10 @@ class NyxState(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_state_str(cls, value: NyxState | int | str) -> str:
-        """! @brief Converts a NyxState value as a string.
-
+    @staticmethod
+    def nyx_state_str(value: NyxState | int | str) -> str:
+        """!
+        @brief Converts a NyxState value as a string.
         @param value The value to convert.
         @return The NyxState value as a string.
         """
@@ -60,7 +70,10 @@ _STATE_FROM_STR = {value: key for key, value in _STATE_TO_STR.items()}
 ########################################################################################################################
 
 class NyxPerm(enum.IntEnum):
-    """! @brief Vector permission hint."""
+    """!
+    @ingroup nyx_enums
+    @brief Vector permission hint.
+    """
 
     RO = 500
     WO = 501
@@ -68,10 +81,10 @@ class NyxPerm(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_perm_int(cls, value: NyxPerm | int | str) -> int:
-        """! @brief Converts a NyxPerm value as an integer.
-
+    @staticmethod
+    def nyx_perm_int(value: NyxPerm | int | str) -> int:
+        """!
+        @brief Converts a NyxPerm value as an integer.
         @param value The value to convert.
         @return The NyxPerm value as an integer.
         """
@@ -80,10 +93,10 @@ class NyxPerm(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_perm_str(cls, value: NyxPerm | int | str) -> str:
-        """! @brief Converts a NyxPerm value as a string.
-
+    @staticmethod
+    def nyx_perm_str(value: NyxPerm | int | str) -> str:
+        """!
+        @brief Converts a NyxPerm value as a string.
         @param value The value to convert.
         @return The NyxPerm value as a string.
         """
@@ -103,7 +116,10 @@ _PERM_FROM_STR = {value: key for key, value in _PERM_TO_STR.items()}
 ########################################################################################################################
 
 class NyxRule(enum.IntEnum):
-    """! @brief Switch vector rule hint."""
+    """!
+    @ingroup nyx_enums
+    @brief Switch vector rule hint.
+    """
 
     ONE_OF_MANY = 600
     AT_MOST_ONE = 601
@@ -111,10 +127,10 @@ class NyxRule(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_rule_int(cls, value: NyxRule | int | str) -> int:
-        """! @brief Converts a NyxRule value as an integer.
-
+    @staticmethod
+    def nyx_rule_int(value: NyxRule | int | str) -> int:
+        """!
+        @brief Converts a NyxRule value as an integer.
         @param value The value to convert.
         @return The NyxRule value as an integer.
         """
@@ -123,10 +139,10 @@ class NyxRule(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_rule_str(cls, value: NyxRule | int | str) -> str:
-        """! @brief Converts a NyxRule value as a string.
-
+    @staticmethod
+    def nyx_rule_str(value: NyxRule | int | str) -> str:
+        """!
+        @brief Converts a NyxRule value as a string.
         @param value The value to convert.
         @return The NyxRule value as a string.
         """
@@ -146,17 +162,20 @@ _RULE_FROM_STR = {value: key for key, value in _RULE_TO_STR.items()}
 ########################################################################################################################
 
 class NyxOnOff(enum.IntEnum):
-    """! @brief Switch state."""
+    """!
+    @ingroup nyx_enums
+    @brief Switch state.
+    """
 
     ON = 700
     OFF = 701
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_onoff_int(cls, value: NyxOnOff | int | str | bool) -> int:
-        """! @brief Converts a NyxOnOff value as an integer.
-
+    @staticmethod
+    def nyx_onoff_int(value: NyxOnOff | int | str | bool) -> int:
+        """!
+        @brief Converts a NyxOnOff value as an integer.
         @param value The value to convert.
         @return The NyxOnOff value as an integer.
         """
@@ -169,10 +188,10 @@ class NyxOnOff(enum.IntEnum):
 
     ####################################################################################################################
 
-    @classmethod
-    def nyx_onoff_str(cls, value: NyxOnOff | int | str | bool) -> str:
-        """! @brief Converts a NyxOnOff value as a string.
-
+    @staticmethod
+    def nyx_onoff_str(value: NyxOnOff | int | str | bool) -> str:
+        """!
+        @brief Converts a NyxOnOff value as a string.
         @param value The value to convert.
         @return The NyxOnOff value as a string.
         """
