@@ -57,7 +57,6 @@ def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
 # BAS64 ENCODE / DECODE                                                                                                                 #
 ########################################################################################################################
 
-
 def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str]:
     """Encodes a buffer using the Base64 algorithm."""
 
