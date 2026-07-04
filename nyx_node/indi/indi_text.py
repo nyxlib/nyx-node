@@ -104,7 +104,7 @@ class NyxTextVector(json.json_dict.NyxDict):
 
             if not isinstance(prop, NyxTextProp):
 
-                raise TypeError(f'Expected NyxTextProp')
+                raise TypeError('Expected NyxTextProp')
 
             children.push(prop)
 

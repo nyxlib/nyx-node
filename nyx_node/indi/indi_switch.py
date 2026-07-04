@@ -113,7 +113,7 @@ class NyxSwitchVector(json.json_dict.NyxDict):
 
             if not isinstance(prop, NyxSwitchProp):
 
-                raise TypeError(f'Expected NyxSwitchProp')
+                raise TypeError('Expected NyxSwitchProp')
 
             children.push(prop)
 

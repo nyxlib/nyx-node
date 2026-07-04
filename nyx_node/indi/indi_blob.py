@@ -118,7 +118,7 @@ class NyxBLOBVector(json.json_dict.NyxDict):
 
             if not isinstance(prop, NyxBLOBProp):
 
-                raise TypeError(f'Expected NyxBlobProp')
+                raise TypeError('Expected NyxBlobProp')
 
             children.push(prop)
 

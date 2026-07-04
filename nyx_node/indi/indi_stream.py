@@ -82,7 +82,7 @@ class NyxStreamVector(json.json_dict.NyxDict):
 
             if not isinstance(prop, NyxStreamProp):
 
-                raise TypeError(f'Expected NyxStreamProp')
+                raise TypeError('Expected NyxStreamProp')
 
             children.push(prop)
 
