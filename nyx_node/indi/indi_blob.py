@@ -27,18 +27,22 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
+    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
+    doc = '@brief Gets / sets the label of this property object.'
 )
 @utils.nyx_property(
     'format',
     '@format',
+    doc = '@brief Gets / sets the format of this property object.'
 )
 @utils.nyx_property(
     'value',
     '$',
+    doc = '@brief Gets / sets the value of this property object.'
 )
 class NyxBLOBProp(json.json_dict.NyxDict):
     """!
@@ -89,22 +93,26 @@ class NyxBLOBProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'device',
     '@device',
+    doc = '@brief Gets / sets the device of this property object.'
 )
 @utils.nyx_property(
     'name',
     '@name',
+    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'state',
     '@state',
     getter = enums.NyxState.nyx_state_int,
     setter = enums.NyxState.nyx_state_str,
+    doc = '@brief Gets / sets the state of this property object.'
 )
 @utils.nyx_property(
     'perm',
     '@perm',
     getter = enums.NyxPerm.nyx_perm_int,
     setter = enums.NyxPerm.nyx_perm_str,
+    doc = '@brief Gets / sets the permission of this property object.'
 )
 class NyxBLOBVector(json.json_dict.NyxDict):
     """!

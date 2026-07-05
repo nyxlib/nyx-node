@@ -26,14 +26,17 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
+    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
+    doc = '@brief Gets / sets the label of this property object.'
 )
 @utils.nyx_property(
     'value',
     '$',
+    doc = '@brief Gets / sets the value of this property object.'
 )
 class NyxTextProp(json.json_dict.NyxDict):
     """!
@@ -73,6 +76,7 @@ class NyxTextProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'device',
     '@device',
+    doc = '@brief Gets / sets the device of this property object.'
 )
 @utils.nyx_property(
     'name',
@@ -83,12 +87,14 @@ class NyxTextProp(json.json_dict.NyxDict):
     '@state',
     getter = enums.NyxState.nyx_state_int,
     setter = enums.NyxState.nyx_state_str,
+    doc = '@brief Gets / sets the state of this property object.'
 )
 @utils.nyx_property(
     'perm',
     '@perm',
     getter = enums.NyxPerm.nyx_perm_int,
     setter = enums.NyxPerm.nyx_perm_str,
+    doc = '@brief Gets / sets the permission of this property object.'
 )
 class NyxTextVector(json.json_dict.NyxDict):
     """!

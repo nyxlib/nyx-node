@@ -26,16 +26,19 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
+    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
+    doc = '@brief Gets / sets the label of this property object.'
 )
 @utils.nyx_property(
     'value',
     '$',
     getter = enums.NyxState.nyx_state_int,
     setter = enums.NyxState.nyx_state_str,
+    doc = '@brief Gets / sets the value of this property object.'
 )
 class NyxLightProp(json.json_dict.NyxDict):
     """!
@@ -75,16 +78,19 @@ class NyxLightProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'device',
     '@device',
+    doc = '@brief Gets / sets the device of this property object.'
 )
 @utils.nyx_property(
     'name',
     '@name',
+    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'state',
     '@state',
     getter = enums.NyxState.nyx_state_int,
     setter = enums.NyxState.nyx_state_str,
+    doc = '@brief Gets / sets the state of this property object.'
 )
 class NyxLightVector(json.json_dict.NyxDict):
     """!
