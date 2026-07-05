@@ -1,6 +1,6 @@
 # C/C++ API
 
-Here is the description of the NyxNode C/C++ API:
+Here is the description of the Nyx Node C/C++ API:
 
 <div class="directory">
 <div class="levels">[detail level <span onclick="javascript:toggleLevel(1);">1</span><span onclick="javascript:toggleLevel(2);">2</span><span onclick="javascript:toggleLevel(3);">3</span>]</div>
