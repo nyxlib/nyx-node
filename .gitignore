@@ -6,6 +6,7 @@
 .fleet
 .DS_Store
 
+/dist/
 /build/
 /docs/html/
 /cmake-build-*/

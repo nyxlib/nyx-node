@@ -15,7 +15,7 @@ import struct
 # noinspection PyTypeChecker
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import nyx_node
+import nyx
 
 ########################################################################################################################
 
@@ -29,7 +29,7 @@ def main():
 
     ####################################################################################################################
 
-    run = nyx_node.NyxOnOff.OFF
+    run = nyx.NyxOnOff.OFF
     mode = MODE_NOISE
 
     samp_rate = 2000000.0
@@ -88,14 +88,14 @@ def main():
 
     ####################################################################################################################
 
-    nyx_node.nyx_set_log_level(nyx_node.NyxLogLevel.DEBUG)
+    nyx.nyx_set_log_level(nyx.NyxLogLevel.DEBUG)
 
     ####################################################################################################################
 
-    run_prop = nyx_node.NyxSwitchProp(
+    run_prop = nyx.NyxSwitchProp(
         'run',
         'Run',
-        nyx_node.NyxOnOff.OFF,
+        nyx.NyxOnOff.OFF,
     )
 
     @run_prop.on
@@ -109,22 +109,22 @@ def main():
 
     ####################################################################################################################
 
-    run_vector = nyx_node.NyxSwitchVector(
+    run_vector = nyx.NyxSwitchVector(
         'Demo',
         'run',
-        nyx_node.NyxState.OK,
-        nyx_node.NyxPerm.RW,
-        nyx_node.NyxRule.AT_MOST_ONE,
+        nyx.NyxState.OK,
+        nyx.NyxPerm.RW,
+        nyx.NyxRule.AT_MOST_ONE,
         [run_prop],
         group = 'Demo',
     )
 
     ####################################################################################################################
 
-    mode_noise_prop = nyx_node.NyxSwitchProp(
+    mode_noise_prop = nyx.NyxSwitchProp(
         'mode_noise',
         'Noise only',
-        nyx_node.NyxOnOff.ON,
+        nyx.NyxOnOff.ON,
     )
 
     @mode_noise_prop.on
@@ -132,7 +132,7 @@ def main():
 
         nonlocal mode
 
-        if new_value == nyx_node.NyxOnOff.ON:
+        if new_value == nyx.NyxOnOff.ON:
 
             mode = MODE_NOISE
 
@@ -140,10 +140,10 @@ def main():
 
     ####################################################################################################################
 
-    mode_delta_prop = nyx_node.NyxSwitchProp(
+    mode_delta_prop = nyx.NyxSwitchProp(
         'mode_delta',
         'Dirac delta',
-        nyx_node.NyxOnOff.OFF,
+        nyx.NyxOnOff.OFF,
     )
 
     @mode_delta_prop.on
@@ -151,7 +151,7 @@ def main():
 
         nonlocal mode
 
-        if new_value == nyx_node.NyxOnOff.ON:
+        if new_value == nyx.NyxOnOff.ON:
 
             mode = MODE_DELTA
 
@@ -159,10 +159,10 @@ def main():
 
     ####################################################################################################################
 
-    mode_comb_prop = nyx_node.NyxSwitchProp(
+    mode_comb_prop = nyx.NyxSwitchProp(
         'mode_comb',
         'Dirac comb',
-        nyx_node.NyxOnOff.OFF,
+        nyx.NyxOnOff.OFF,
     )
 
     @mode_comb_prop.on
@@ -170,7 +170,7 @@ def main():
 
         nonlocal mode
 
-        if new_value == nyx_node.NyxOnOff.ON:
+        if new_value == nyx.NyxOnOff.ON:
 
             mode = MODE_COMB
 
@@ -178,12 +178,12 @@ def main():
 
     ####################################################################################################################
 
-    mode_vector = nyx_node.NyxSwitchVector(
+    mode_vector = nyx.NyxSwitchVector(
         'Demo',
         'signal_mode',
-        nyx_node.NyxState.OK,
-        nyx_node.NyxPerm.RW,
-        nyx_node.NyxRule.ONE_OF_MANY,
+        nyx.NyxState.OK,
+        nyx.NyxPerm.RW,
+        nyx.NyxRule.ONE_OF_MANY,
         [
             mode_noise_prop,
             mode_delta_prop,
@@ -194,7 +194,7 @@ def main():
 
     ####################################################################################################################
 
-    samp_rate_prop = nyx_node.NyxNumberDoubleProp(
+    samp_rate_prop = nyx.NyxNumberDoubleProp(
         'samp_rate',
         'Sample rate [Hz]',
         '%.0f',
@@ -215,7 +215,7 @@ def main():
 
     ####################################################################################################################
 
-    frequency_prop = nyx_node.NyxNumberDoubleProp(
+    frequency_prop = nyx.NyxNumberDoubleProp(
         'frequency',
         'Frequency [Hz]',
         '%.0f',
@@ -236,7 +236,7 @@ def main():
 
     ####################################################################################################################
 
-    power_prop = nyx_node.NyxNumberDoubleProp(
+    power_prop = nyx.NyxNumberDoubleProp(
         'power',
         'Power (dB)',
         '%.1f',
@@ -257,11 +257,11 @@ def main():
 
     ####################################################################################################################
 
-    signal_vector = nyx_node.NyxNumberVector(
+    signal_vector = nyx.NyxNumberVector(
         'Demo',
         'signal_params',
-        nyx_node.NyxState.OK,
-        nyx_node.NyxPerm.RW,
+        nyx.NyxState.OK,
+        nyx.NyxPerm.RW,
         [
             samp_rate_prop,
             frequency_prop,
@@ -272,7 +272,7 @@ def main():
 
     ####################################################################################################################
 
-    fft_size_prop = nyx_node.NyxNumberUIntProp(
+    fft_size_prop = nyx.NyxNumberUIntProp(
         'fft_size',
         'FFT size',
         '%u',
@@ -293,36 +293,36 @@ def main():
 
     ####################################################################################################################
 
-    fft_vector = nyx_node.NyxNumberVector(
+    fft_vector = nyx.NyxNumberVector(
         'Demo',
         'fft_params',
-        nyx_node.NyxState.OK,
-        nyx_node.NyxPerm.RW,
+        nyx.NyxState.OK,
+        nyx.NyxPerm.RW,
         [fft_size_prop],
         group = 'Demo',
     )
 
     ####################################################################################################################
 
-    stream_samp_rate_prop = nyx_node.NyxStreamProp(
+    stream_samp_rate_prop = nyx.NyxStreamProp(
         'samp_rate',
         'Sample rate [Hz]',
     )
 
-    stream_frequency_prop = nyx_node.NyxStreamProp(
+    stream_frequency_prop = nyx.NyxStreamProp(
         'frequency',
         'Frequency [Hz]',
     )
 
-    stream_samples_prop = nyx_node.NyxStreamProp(
+    stream_samples_prop = nyx.NyxStreamProp(
         'samples',
         'Samples',
     )
 
-    stream_vector = nyx_node.NyxStreamVector(
+    stream_vector = nyx.NyxStreamVector(
         'Demo',
         'spectrum',
-        nyx_node.NyxState.OK,
+        nyx.NyxState.OK,
         [
             stream_samp_rate_prop,
             stream_frequency_prop,
@@ -333,7 +333,7 @@ def main():
 
     ####################################################################################################################
 
-    with nyx_node.NyxNode(
+    with nyx.NyxNode(
         'NYX_DEMO_PY',
         [
             mode_vector,
@@ -356,7 +356,7 @@ def main():
         @node.on_timer(50)
         def on_timer():
 
-            if run == nyx_node.NyxOnOff.ON:
+            if run == nyx.NyxOnOff.ON:
 
                 spectrum = get_spectrum()
 
@@ -368,14 +368,14 @@ def main():
 
         ################################################################################################################
 
-        @node.on_mqtt(nyx_node.NyxMQTTEvent.OPEN)
+        @node.on_mqtt(nyx.NyxMQTTEvent.OPEN)
         def on_mqtt_open():
 
             node.mqtt_sub('demo/exit')
 
         ################################################################################################################
 
-        @node.on_mqtt(nyx_node.NyxMQTTEvent.MSG)
+        @node.on_mqtt(nyx.NyxMQTTEvent.MSG)
         def on_mqtt_msg(topic, _message):
 
             nonlocal stop
