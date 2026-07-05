@@ -22,8 +22,6 @@ if typing.TYPE_CHECKING:
     from .xml import NyxXMLDoc
 
 ########################################################################################################################
-# CALLBACKS                                                                                                            #
-########################################################################################################################
 
 def nyx_callback(nyx_callback_type):
 
@@ -40,16 +38,17 @@ def nyx_callback(nyx_callback_type):
     return decorate
 
 ########################################################################################################################
-# OBJECT                                                                                                               #
-########################################################################################################################
 
 class NyxObject:
-    """! @brief Base class for JSON Nyx objects."""
+    """!
+    @brief Base class for JSON Nyx objects.
+    """
 
     ####################################################################################################################
 
     def __init__(self, ptr):
-        """! @brief Wraps a C JSON object pointer.
+        """!
+        @brief Wraps a C JSON object pointer.
 
         @param ptr JSON object pointer.
         """
@@ -76,7 +75,8 @@ class NyxObject:
 
     @property
     def ptr(self):
-        """! @brief C pointer to the JSON object.
+        """!
+        @brief C pointer to the JSON object.
 
         @return The JSON object pointer.
         """
@@ -97,7 +97,8 @@ class NyxObject:
 
     # noinspection PyTypeChecker, PyUnresolvedReferences
     def on(self, callback: typing.Callable) -> typing.Callable:
-        """! @brief Registers a callback triggered when clients modify this object.
+        """!
+        @brief Registers a callback triggered when clients modify this object.
 
         @param callback Callback triggered when clients modify this object.
         @return The registered callback.
@@ -141,7 +142,8 @@ class NyxObject:
     ####################################################################################################################
 
     def notify(self) -> bool:
-        """! @brief Notifies this Nyx / INDI object to the clients.
+        """!
+        @brief Notifies this Nyx / INDI object to the clients.
 
         @return `true` if the object was notified, `false` otherwise.
         """
@@ -152,7 +154,8 @@ class NyxObject:
 
     @staticmethod
     def from_string(string: str) -> NyxObject:
-        """! @brief Parses a JSON object from a string.
+        """!
+        @brief Parses a JSON object from a string.
 
         @param string JSON string.
         @return The new JSON object.
@@ -163,7 +166,8 @@ class NyxObject:
     ####################################################################################################################
 
     def to_string(self) -> str:
-        """! @brief Returns a JSON string with special character escaping.
+        """!
+        @brief Returns a JSON string with special character escaping.
 
         @return A string that represents this JSON object.
         """
@@ -173,7 +177,8 @@ class NyxObject:
     ####################################################################################################################
 
     def to_cstring(self) -> str:
-        """! @brief Returns a JSON string without special character escaping.
+        """!
+        @brief Returns a JSON string without special character escaping.
 
         @return A string that represents this JSON object.
         """
@@ -183,7 +188,8 @@ class NyxObject:
     ####################################################################################################################
 
     def to_xmldoc(self) -> NyxXMLDoc:
-        """! @brief Converts this JSON Nyx / INDI command to an XML one.
+        """!
+        @brief Converts this JSON Nyx / INDI command to an XML one.
 
         @return The corresponding XML Nyx / INDI command.
         """

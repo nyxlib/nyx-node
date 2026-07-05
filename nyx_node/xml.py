@@ -21,16 +21,17 @@ if typing.TYPE_CHECKING:
     from .obj import NyxObject
 
 ########################################################################################################################
-# XMLDOC                                                                                                               #
-########################################################################################################################
 
 class NyxXMLDoc:
-    """! @brief XML document."""
+    """!
+    @brief XML document.
+    """
 
     ####################################################################################################################
 
     def __init__(self, ptr):
-        """! @brief Wraps a C XML document pointer.
+        """!
+        @brief Wraps a C XML document pointer.
 
         @param ptr XML document pointer.
         """
@@ -50,7 +51,8 @@ class NyxXMLDoc:
 
     @property
     def ptr(self):
-        """! @brief C pointer to the XML document.
+        """!
+        @brief C pointer to the XML document.
 
         @return The XML document pointer.
         """
@@ -65,7 +67,8 @@ class NyxXMLDoc:
 
     @staticmethod
     def from_string(string: str) -> NyxXMLDoc:
-        """! @brief Parses an XML document from a string.
+        """!
+        @brief Parses an XML document from a string.
 
         @param string XML string.
         @return The new XML document.
@@ -78,7 +81,8 @@ class NyxXMLDoc:
     ####################################################################################################################
 
     def to_string(self) -> str:
-        """! @brief Returns a string representing this XML document.
+        """!
+        @brief Returns a string representing this XML document.
 
         @return A string that represents this XML document.
         """
@@ -88,7 +92,8 @@ class NyxXMLDoc:
     ####################################################################################################################
 
     def to_json(self) -> NyxObject:
-        """! @brief Converts this XML Nyx / INDI command to a JSON one.
+        """!
+        @brief Converts this XML Nyx / INDI command to a JSON one.
 
         @return The corresponding JSON Nyx / INDI command.
         """

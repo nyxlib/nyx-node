@@ -11,12 +11,15 @@ from .. import obj
 ########################################################################################################################
 
 class NyxNumber(obj.NyxObject):
-    """! @brief JSON number object."""
+    """!
+    @brief JSON number object.
+    """
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
-        """! @brief Allocates a new JSON number object or wraps one.
+        """!
+        @brief Allocates a new JSON number object or wraps one.
 
         @param ptr Optional JSON number object pointer.
         """
@@ -35,7 +38,8 @@ class NyxNumber(obj.NyxObject):
 
     @property
     def value(self) -> float:
-        """! @brief Gets the value of this JSON number object.
+        """!
+        @brief Gets the value of this JSON number object.
 
         @return The value.
         """

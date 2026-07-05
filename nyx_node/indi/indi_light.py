@@ -18,6 +18,11 @@ from . import utils
 
 ########################################################################################################################
 
+## @defgroup nyx_light_message Nyx Light Message
+#  @brief Nyx / INDI Light Message.
+
+########################################################################################################################
+
 @utils.nyx_property(
     'name',
     '@name',
@@ -33,12 +38,16 @@ from . import utils
     setter = enums.NyxState.nyx_state_str,
 )
 class NyxLightProp(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx light property."""
+    """!
+    @ingroup nyx_light_message
+    @brief INDI / Nyx light property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: enums.NyxState | int | str = enums.NyxState.IDLE):
-        """! @brief Allocates a new INDI / Nyx light property.
+        """!
+        @brief Allocates a new INDI / Nyx light property.
 
         @param name Property name.
         @param label Property label.
@@ -78,12 +87,16 @@ class NyxLightProp(json.json_dict.NyxDict):
     setter = enums.NyxState.nyx_state_str,
 )
 class NyxLightVector(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx light vector."""
+    """!
+    @ingroup nyx_light_message
+    @brief INDI / Nyx light vector.
+    """
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxLightProp], **opts: typing.Any):
-        """! @brief Allocates a new INDI / Nyx light vector.
+        """!
+        @brief Allocates a new INDI / Nyx light vector.
 
         @param device Device name.
         @param name Vector name.

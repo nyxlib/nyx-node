@@ -15,7 +15,8 @@ from . import bind
 ########################################################################################################################
 
 def nyx_hash(string: str, seed: int) -> int:
-    """! @brief Hashes a string using the MurmurHash2 algorithm.
+    """!
+    @brief Hashes a string using the MurmurHash2 algorithm.
 
     @param string String to hash.
     @param seed Initial seed value.
@@ -35,7 +36,8 @@ def nyx_hash(string: str, seed: int) -> int:
 ########################################################################################################################
 
 def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
-    """! @brief Generates a MAC address based on a node identifier.
+    """!
+    @brief Generates a MAC address based on a node identifier.
 
     @param mac0 First fixed byte of the MAC address.
     @param mac1 Second fixed byte of the MAC address.
@@ -63,7 +65,8 @@ def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
 ########################################################################################################################
 
 def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str]:
-    """! @brief Encodes a buffer using the Base64 algorithm.
+    """!
+    @brief Encodes a buffer using the Base64 algorithm.
 
     @param data Data to encode.
     @return The encoded string, or None when no data is provided.
@@ -88,7 +91,8 @@ def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str
 ########################################################################################################################
 
 def nyx_base64_decode(data: typing.Optional[str | bytes]) -> typing.Optional[bytes]:
-    """! @brief Decodes a string using the Base64 algorithm.
+    """!
+    @brief Decodes a string using the Base64 algorithm.
 
     @param data Base64 data to decode.
     @return The decoded buffer, or None when no data is provided.

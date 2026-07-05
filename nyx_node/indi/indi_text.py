@@ -18,6 +18,11 @@ from . import utils
 
 ########################################################################################################################
 
+## @defgroup nyx_text_message Nyx Text Message
+#  @brief Nyx / INDI Text Message.
+
+########################################################################################################################
+
 @utils.nyx_property(
     'name',
     '@name',
@@ -31,12 +36,16 @@ from . import utils
     '$',
 )
 class NyxTextProp(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx text property."""
+    """!
+    @ingroup nyx_text_message
+    @brief INDI / Nyx text property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: str | None = None):
-        """! @brief Allocates a new INDI / Nyx text property.
+        """!
+        @brief Allocates a new INDI / Nyx text property.
 
         @param name Property name.
         @param label Property label.
@@ -82,12 +91,16 @@ class NyxTextProp(json.json_dict.NyxDict):
     setter = enums.NyxPerm.nyx_perm_str,
 )
 class NyxTextVector(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx text vector."""
+    """!
+    @ingroup nyx_text_message
+    @brief INDI / Nyx text vector.
+    """
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxTextProp], **opts: typing.Any):
-        """! @brief Allocates a new INDI / Nyx text vector.
+        """!
+        @brief Allocates a new INDI / Nyx text vector.
 
         @param device Device name.
         @param name Vector name.
@@ -120,7 +133,6 @@ class NyxTextVector(json.json_dict.NyxDict):
                 raise TypeError('Expected NyxTextProp')
 
             children.push(prop)
-
 
     ####################################################################################################################
 

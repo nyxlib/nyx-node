@@ -8,10 +8,11 @@
 
         <tab type="user" url="md_docs_2md_2demo.html" title="Demo" />
 
-        <tab type="topics" visible="yes" title="C/C++ API" />
+        <tab type="user" url="md_docs_2md_2ccpp.html" title="C/C++ API" />
 
         <tab type="user" url="md_docs_2md_2python.html" title="Python API" />
 
         <tab type="filelist" visible="yes" title="Files" />
     </navindex>
+
 </doxygenlayout>

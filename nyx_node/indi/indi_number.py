@@ -18,6 +18,11 @@ from . import utils
 
 ########################################################################################################################
 
+## @defgroup nyx_number_message Nyx Number Message
+#  @brief Nyx / INDI Number Message.
+
+########################################################################################################################
+
 @utils.nyx_property(
     'name',
     '@name',
@@ -31,19 +36,26 @@ from . import utils
     '@format',
 )
 class NyxNumberProp(json.json_dict.NyxDict):
-    """! @brief Base class for INDI / Nyx number properties."""
+    """!
+    @ingroup nyx_number_message
+    @brief Base class for INDI / Nyx number properties.
+    """
 
     pass
 
 ########################################################################################################################
 
 class NyxNumberIntProp(NyxNumberProp):
-    """! @brief INDI / Nyx `int32_t` number property."""
+    """!
+    @ingroup nyx_number_message
+    @brief INDI / Nyx `int32_t` number property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """! @brief Allocates a new INDI / Nyx `int32_t` number property.
+        """!
+        @brief Allocates a new INDI / Nyx `int32_t` number property.
 
         @param name Property name.
         @param label Property label.
@@ -75,7 +87,8 @@ class NyxNumberIntProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """! @brief Gets the current value of this property object.
+        """!
+        @brief Gets the current value of this property object.
 
         @return The current value.
         """
@@ -95,12 +108,16 @@ class NyxNumberIntProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberUIntProp(NyxNumberProp):
-    """! @brief INDI / Nyx `uint32_t` number property."""
+    """!
+    @ingroup nyx_number_message
+    @brief INDI / Nyx `uint32_t` number property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """! @brief Allocates a new INDI / Nyx `uint32_t` number property.
+        """!
+        @brief Allocates a new INDI / Nyx `uint32_t` number property.
 
         @param name Property name.
         @param label Property label.
@@ -132,7 +149,8 @@ class NyxNumberUIntProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """! @brief Gets the current value of this property object.
+        """!
+        @brief Gets the current value of this property object.
 
         @return The current value.
         """
@@ -152,12 +170,16 @@ class NyxNumberUIntProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberLongProp(NyxNumberProp):
-    """! @brief INDI / Nyx `int64_t` number property."""
+    """!
+    @ingroup nyx_number_message
+    @brief INDI / Nyx `int64_t` number property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """! @brief Allocates a new INDI / Nyx `int64_t` number property.
+        """!
+        @brief Allocates a new INDI / Nyx `int64_t` number property.
 
         @param name Property name.
         @param label Property label.
@@ -189,7 +211,8 @@ class NyxNumberLongProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """! @brief Gets the current value of this property object.
+        """!
+        @brief Gets the current value of this property object.
 
         @return The current value.
         """
@@ -209,12 +232,16 @@ class NyxNumberLongProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberULongProp(NyxNumberProp):
-    """! @brief INDI / Nyx `uint64_t` number property."""
+    """!
+    @ingroup nyx_number_message
+    @brief INDI / Nyx `uint64_t` number property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: int, max: int, step: int, value: int):
-        """! @brief Allocates a new INDI / Nyx `uint64_t` number property.
+        """!
+        @brief Allocates a new INDI / Nyx `uint64_t` number property.
 
         @param name Property name.
         @param label Property label.
@@ -246,7 +273,8 @@ class NyxNumberULongProp(NyxNumberProp):
 
     @property
     def value(self) -> int:
-        """! @brief Gets the current value of this property object.
+        """!
+        @brief Gets the current value of this property object.
 
         @return The current value.
         """
@@ -266,12 +294,16 @@ class NyxNumberULongProp(NyxNumberProp):
 ########################################################################################################################
 
 class NyxNumberDoubleProp(NyxNumberProp):
-    """! @brief INDI / Nyx `double` number property."""
+    """!
+    @ingroup nyx_number_message
+    @brief INDI / Nyx `double` number property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None, fmt: str, min: float, max: float, step: float, value: float):
-        """! @brief Allocates a new INDI / Nyx `double` number property.
+        """!
+        @brief Allocates a new INDI / Nyx `double` number property.
 
         @param name Property name.
         @param label Property label.
@@ -303,7 +335,8 @@ class NyxNumberDoubleProp(NyxNumberProp):
 
     @property
     def value(self) -> float:
-        """! @brief Gets the current value of this property object.
+        """!
+        @brief Gets the current value of this property object.
 
         @return The current value.
         """
@@ -343,12 +376,16 @@ class NyxNumberDoubleProp(NyxNumberProp):
     setter = enums.NyxPerm.nyx_perm_str,
 )
 class NyxNumberVector(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx number vector."""
+    """!
+    @ingroup nyx_number_message
+    @brief INDI / Nyx number vector.
+    """
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxNumberProp], **opts: typing.Any):
-        """! @brief Allocates a new INDI / Nyx number vector.
+        """!
+        @brief Allocates a new INDI / Nyx number vector.
 
         @param device Device name.
         @param name Vector name.

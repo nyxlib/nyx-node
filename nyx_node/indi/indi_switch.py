@@ -18,6 +18,11 @@ from . import utils
 
 ########################################################################################################################
 
+## @defgroup nyx_switch_message Nyx Switch Message
+#  @brief Nyx / INDI Switch Message.
+
+########################################################################################################################
+
 @utils.nyx_property(
     'name',
     '@name',
@@ -33,12 +38,16 @@ from . import utils
     setter = enums.NyxOnOff.nyx_onoff_str,
 )
 class NyxSwitchProp(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx switch property."""
+    """!
+    @ingroup nyx_switch_message
+    @brief INDI / Nyx switch property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, value: enums.NyxOnOff | int | str | bool = enums.NyxOnOff.OFF):
-        """! @brief Allocates a new INDI / Nyx switch property.
+        """!
+        @brief Allocates a new INDI / Nyx switch property.
 
         @param name Property name.
         @param label Property label.
@@ -90,12 +99,16 @@ class NyxSwitchProp(json.json_dict.NyxDict):
     setter = enums.NyxRule.nyx_rule_str,
 )
 class NyxSwitchVector(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx switch vector."""
+    """!
+    @ingroup nyx_switch_message
+    @brief INDI / Nyx switch vector.
+    """
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, rule: enums.NyxRule | int | str, props: typing.Iterable[NyxSwitchProp], **opts: typing.Any):
-        """! @brief Allocates a new INDI / Nyx switch vector.
+        """!
+        @brief Allocates a new INDI / Nyx switch vector.
 
         @param device Device name.
         @param name Vector name.

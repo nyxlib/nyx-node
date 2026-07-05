@@ -11,12 +11,15 @@ from .. import obj
 ########################################################################################################################
 
 class NyxBoolean(obj.NyxObject):
-    """! @brief JSON boolean object."""
+    """!
+    @brief JSON boolean object.
+    """
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
-        """! @brief Allocates a new JSON boolean object or wraps one.
+        """!
+        @brief Allocates a new JSON boolean object or wraps one.
 
         @param ptr Optional JSON boolean object pointer.
         """
@@ -35,7 +38,8 @@ class NyxBoolean(obj.NyxObject):
 
     @property
     def value(self) -> bool:
-        """! @brief Gets the value of this JSON boolean object.
+        """!
+        @brief Gets the value of this JSON boolean object.
 
         @return The value.
         """

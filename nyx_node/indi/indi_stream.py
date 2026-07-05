@@ -18,6 +18,11 @@ from . import utils
 
 ########################################################################################################################
 
+## @defgroup nyx_stream_message Nyx Stream Message
+#  @brief Nyx Stream Message.
+
+########################################################################################################################
+
 @utils.nyx_property(
     'name',
     '@name',
@@ -27,15 +32,20 @@ from . import utils
     '@label',
 )
 class NyxStreamProp(json.json_dict.NyxDict):
-    """! @brief Nyx Stream property."""
+    """!
+    @ingroup nyx_stream_message
+    @brief Nyx Stream property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None):
-        """! @brief Allocates a new Nyx Stream property.
+        """!
+        @brief Allocates a new Nyx Stream property.
 
         @param name Property name.
         @param label Property label.
+
         @note If the property name ends with `.b`, the payload is automatically Base64-encoded.
         @note If the property name ends with `.z`, the payload is automatically ZLib-compressed.
         """
@@ -62,12 +72,16 @@ class NyxStreamProp(json.json_dict.NyxDict):
     setter = enums.NyxState.nyx_state_str,
 )
 class NyxStreamVector(json.json_dict.NyxDict):
-    """! @brief Nyx Stream vector."""
+    """!
+    @ingroup nyx_stream_message
+    @brief Nyx Stream vector.
+    """
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, props: typing.Iterable[NyxStreamProp], **opts: typing.Any):
-        """! @brief Allocates a new Nyx Stream vector.
+        """!
+        @brief Allocates a new Nyx Stream vector.
 
         @param device Device name.
         @param name Vector name.
@@ -102,10 +116,12 @@ class NyxStreamVector(json.json_dict.NyxDict):
     ####################################################################################################################
 
     def stream_pub(self, field_values: typing.Sequence[bytes]) -> bool:
-        """! @brief If Nyx Stream is enabled, publishes an entry to a stream.
+        """!
+        @brief If Nyx Stream is enabled, publishes an entry to a stream.
 
         @param field_values Field payloads, one per field.
         @return `true` if the provided fields match the vector content, `false` otherwise.
+
         @note Field payloads may contain arbitrary binary data.
         """
 

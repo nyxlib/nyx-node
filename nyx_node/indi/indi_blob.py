@@ -19,6 +19,11 @@ from . import utils
 
 ########################################################################################################################
 
+## @defgroup nyx_blob_message Nyx BLOB Message
+#  @brief Nyx / INDI BLOB Message.
+
+########################################################################################################################
+
 @utils.nyx_property(
     'name',
     '@name',
@@ -36,17 +41,22 @@ from . import utils
     '$',
 )
 class NyxBLOBProp(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx BLOB property."""
+    """!
+    @ingroup nyx_blob_message
+    @brief INDI / Nyx BLOB property.
+    """
 
     ####################################################################################################################
 
     def __init__(self, name: str, label: str | None = None, fmt: str | None = None, value: bytes | None = None):
-        """! @brief Allocates a new INDI / Nyx BLOB property.
+        """!
+        @brief Allocates a new INDI / Nyx BLOB property.
 
         @param name Property name.
         @param label Property label.
         @param fmt Payload format.
         @param value Initial payload buffer.
+
         @note If a format ends with `.z`, the payload is automatically ZLib+Base64-compressed, otherwise, the payload is automatically Base64-encoded.
         """
 
@@ -97,12 +107,16 @@ class NyxBLOBProp(json.json_dict.NyxDict):
     setter = enums.NyxPerm.nyx_perm_str,
 )
 class NyxBLOBVector(json.json_dict.NyxDict):
-    """! @brief INDI / Nyx BLOB vector."""
+    """!
+    @ingroup nyx_blob_message
+    @brief INDI / Nyx BLOB vector.
+    """
 
     ####################################################################################################################
 
     def __init__(self, device: str, name: str, state: enums.NyxState | int | str, perm: enums.NyxPerm | int | str, props: typing.Iterable[NyxBLOBProp], **opts: typing.Any):
-        """! @brief Allocates a new INDI / Nyx BLOB vector.
+        """!
+        @brief Allocates a new INDI / Nyx BLOB vector.
 
         @param device Device name.
         @param name Vector name.

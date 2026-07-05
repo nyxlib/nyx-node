@@ -15,12 +15,15 @@ from .. import obj
 ########################################################################################################################
 
 class NyxNull(obj.NyxObject):
-    """! @brief JSON null object."""
+    """!
+    @brief JSON null object.
+    """
 
     ####################################################################################################################
 
     def __init__(self, ptr = None):
-        """! @brief Allocates a new JSON null object or wraps one.
+        """!
+        @brief Allocates a new JSON null object or wraps one.
 
         @param ptr Optional JSON null object pointer.
         """
@@ -39,7 +42,8 @@ class NyxNull(obj.NyxObject):
 
     @property
     def value(self) -> None:
-        """! @brief Gets the value of this JSON null object.
+        """!
+        @brief Gets the value of this JSON null object.
 
         @return `None`.
         """
