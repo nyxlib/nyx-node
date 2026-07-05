@@ -39,7 +39,8 @@ class NyxNumber(obj.NyxObject):
     @property
     def value(self) -> float:
         """!
-        @brief Gets the value of this JSON number object.
+        @property NyxNumber::value
+        @brief Gets / sets the value of this JSON number object.
 
         @return The value.
         """

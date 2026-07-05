@@ -88,7 +88,8 @@ class NyxNumberIntProp(NyxNumberProp):
     @property
     def value(self) -> int:
         """!
-        @brief Gets the current value of this property object.
+        @property NyxNumberIntProp::value
+        @brief Gets / sets the value of this property object.
 
         @return The current value.
         """
@@ -150,6 +151,7 @@ class NyxNumberUIntProp(NyxNumberProp):
     @property
     def value(self) -> int:
         """!
+        @property NyxNumberUIntProp::value
         @brief Gets the current value of this property object.
 
         @return The current value.
@@ -212,6 +214,7 @@ class NyxNumberLongProp(NyxNumberProp):
     @property
     def value(self) -> int:
         """!
+        @property NyxNumberLongProp::value
         @brief Gets the current value of this property object.
 
         @return The current value.
@@ -274,6 +277,7 @@ class NyxNumberULongProp(NyxNumberProp):
     @property
     def value(self) -> int:
         """!
+        @property NyxNumberULongProp::value
         @brief Gets the current value of this property object.
 
         @return The current value.
@@ -336,6 +340,7 @@ class NyxNumberDoubleProp(NyxNumberProp):
     @property
     def value(self) -> float:
         """!
+        @property NyxNumberDoubleProp::value
         @brief Gets the current value of this property object.
 
         @return The current value.

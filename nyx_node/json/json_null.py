@@ -43,7 +43,8 @@ class NyxNull(obj.NyxObject):
     @property
     def value(self) -> None:
         """!
-        @brief Gets the value of this JSON null object.
+        @property NyxNumber::value
+        @brief Gets / sets the value of this JSON null object.
 
         @return `None`.
         """

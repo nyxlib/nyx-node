@@ -9,7 +9,7 @@ import typing
 
 ########################################################################################################################
 
-def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typing.Any] | None = None, setter: typing.Callable | None = None) -> typing.Callable:
+def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typing.Any] | None = None, setter: typing.Callable | None = None, doc: str = None) -> typing.Callable:
 
     def decorate(cls: type) -> type:
 
@@ -44,6 +44,10 @@ def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typi
         ################################################################################################################
 
         setattr(cls, name, property(get_value, set_value))
+
+        ################################################################################################################
+
+        cls.__doc__ = doc
 
         ################################################################################################################
 

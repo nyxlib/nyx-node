@@ -58,7 +58,8 @@ class NyxString(obj.NyxObject):
     @property
     def value(self) -> str:
         """!
-        @brief Gets the text value of this JSON string object.
+        @property NyxNumber::value
+        @brief Gets / sets the text value of this JSON string object.
 
         @return The text value.
 
@@ -72,7 +73,8 @@ class NyxString(obj.NyxObject):
     @property
     def buff(self) -> bytes:
         """!
-        @brief Gets the content of this JSON string object as a byte buffer.
+        @property NyxNumber::value
+        @brief Gets / sets the content of this JSON string object as a byte buffer.
 
         @return The content bytes.
 

@@ -39,7 +39,8 @@ class NyxBoolean(obj.NyxObject):
     @property
     def value(self) -> bool:
         """!
-        @brief Gets the value of this JSON boolean object.
+        @property NyxNumber::value
+        @brief Gets / sets the value of this JSON boolean object.
 
         @return The value.
         """
