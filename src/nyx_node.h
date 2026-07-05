@@ -2200,9 +2200,9 @@ bool nyx_number_prop_set_int(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 int32_t nyx_number_prop_get_int(
@@ -2226,9 +2226,9 @@ bool nyx_number_prop_set_uint(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 uint32_t nyx_number_prop_get_uint(
@@ -2252,9 +2252,9 @@ bool nyx_number_prop_set_long(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 int64_t nyx_number_prop_get_long(
@@ -2278,9 +2278,9 @@ bool nyx_number_prop_set_ulong(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 uint64_t nyx_number_prop_get_ulong(
@@ -2304,9 +2304,9 @@ bool nyx_number_prop_set_double(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 double nyx_number_prop_get_double(
@@ -2471,9 +2471,9 @@ bool nyx_light_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 nyx_state_t nyx_light_prop_get(
@@ -2550,9 +2550,9 @@ bool nyx_switch_prop_set(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Gets the current value of the provided property object.
+ * @brief Gets the value of the provided property object.
  * @param prop Property object.
- * @return The current value.
+ * @return The value.
  */
 
 nyx_onoff_t nyx_switch_prop_get(
