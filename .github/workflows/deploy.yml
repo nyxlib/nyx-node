@@ -21,6 +21,8 @@ jobs:
                     apt-get update
                     apt-get install -y gcc git bash make cmake gcovr rsync unzip doxygen graphviz mosquitto openssh-client mosquitto-clients
 
+                    doxygen --version
+
             -   name: Start MQTT broker
                 run: |
                     mosquitto -d
