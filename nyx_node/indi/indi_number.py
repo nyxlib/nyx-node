@@ -26,14 +26,17 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
+    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
+    doc = '@brief Gets / sets the label of this property object.'
 )
 @utils.nyx_property(
     'format',
     '@format',
+    doc = '@brief Gets / sets the format of this property object.'
 )
 class NyxNumberProp(json.json_dict.NyxDict):
     """!
@@ -91,7 +94,7 @@ class NyxNumberIntProp(NyxNumberProp):
         @property NyxNumberIntProp::value
         @brief Gets / sets the value of this property object.
 
-        @return The current value.
+        @return The value.
         """
 
         return bind.lib.nyx_number_prop_get_int(self.ptr)
@@ -152,9 +155,9 @@ class NyxNumberUIntProp(NyxNumberProp):
     def value(self) -> int:
         """!
         @property NyxNumberUIntProp::value
-        @brief Gets the current value of this property object.
+        @brief Gets the value of this property object.
 
-        @return The current value.
+        @return The value.
         """
 
         return bind.lib.nyx_number_prop_get_uint(self.ptr)
@@ -215,9 +218,9 @@ class NyxNumberLongProp(NyxNumberProp):
     def value(self) -> int:
         """!
         @property NyxNumberLongProp::value
-        @brief Gets the current value of this property object.
+        @brief Gets the value of this property object.
 
-        @return The current value.
+        @return The value.
         """
 
         return bind.lib.nyx_number_prop_get_long(self.ptr)
@@ -278,9 +281,9 @@ class NyxNumberULongProp(NyxNumberProp):
     def value(self) -> int:
         """!
         @property NyxNumberULongProp::value
-        @brief Gets the current value of this property object.
+        @brief Gets the value of this property object.
 
-        @return The current value.
+        @return The value.
         """
 
         return bind.lib.nyx_number_prop_get_ulong(self.ptr)
@@ -341,9 +344,9 @@ class NyxNumberDoubleProp(NyxNumberProp):
     def value(self) -> float:
         """!
         @property NyxNumberDoubleProp::value
-        @brief Gets the current value of this property object.
+        @brief Gets the value of this property object.
 
-        @return The current value.
+        @return The value.
         """
 
         return bind.lib.nyx_number_prop_get_double(self.ptr)
