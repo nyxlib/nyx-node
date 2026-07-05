@@ -39,8 +39,7 @@ class NyxNumber(obj.NyxObject):
     @property
     def value(self) -> float:
         """!
-        @property NyxNumber::value
-        @brief Gets / sets the value of this JSON number object.
+        @brief Gets the value of this JSON number object.
 
         @return The value.
         """
@@ -51,6 +50,11 @@ class NyxNumber(obj.NyxObject):
 
     @value.setter
     def value(self, value: float) -> bool:
+        """!
+        @brief Sets the value of this JSON number object.
+
+        @return `True` if the value was modified, `False` otherwise.
+        """
 
         return bool(bind.lib.nyx_number_set(self.ptr, float(value)))
 

@@ -5,16 +5,38 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
+import enum
+
+########################################################################################################################
+
 from . import bind
 
 ########################################################################################################################
 
-NyxLogLevel = bind.NyxLogLevel
+## @defgroup nyx_logger Nyx logger
+#  @brief Nyx logger.
+
+########################################################################################################################
+
+class NyxLogLevel(enum.IntEnum):
+    """!
+    @ingroup nyx_logger
+    @brief Nyx log levels.
+    """
+
+    NONE  = 100,
+    FATAL = 101,
+    ERROR = 102,
+    WARN  = 103,
+    INFO  = 104,
+    DEBUG = 105,
+    TRACE = 106,
 
 ########################################################################################################################
 
 def nyx_set_log_level(level: bind.NyxLogLevel) -> None:
     """!
+    @ingroup nyx_logger
     @brief Sets the log level threshold.
 
     @param level Log level threshold.

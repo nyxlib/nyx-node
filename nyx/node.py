@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 ########################################################################################################################
 
+import enum
 import ctypes
 import typing
 
@@ -15,12 +16,26 @@ from . import json
 
 ########################################################################################################################
 
-NyxMQTTEvent = bind.NyxMQTTEvent
+## @defgroup nyx_node Nyx node
+#  @brief Nyx node.
+
+########################################################################################################################
+
+class NyxMQTTEvent(enum.IntEnum):
+    """!
+    @ingroup nyx_node
+    @brief MQTT event type.
+    """
+
+    OPEN = 1100
+    MSG = 1101
+
 
 ########################################################################################################################
 
 class NyxNode:
     """!
+    @ingroup nyx_node
     @brief Nyx node exposing INDI, MQTT and Nyx Stream endpoints.
     """
 

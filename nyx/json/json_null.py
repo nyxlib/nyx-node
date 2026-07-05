@@ -43,8 +43,7 @@ class NyxNull(obj.NyxObject):
     @property
     def value(self) -> None:
         """!
-        @property NyxNumber::value
-        @brief Gets / sets the value of this JSON null object.
+        @brief Gets the value of this JSON null object.
 
         @return `None`.
         """
@@ -56,6 +55,11 @@ class NyxNull(obj.NyxObject):
     # noinspection PyUnusedLocal
     @value.setter
     def value(self, value: typing.Any) -> bool:
+        """!
+        @brief Sets the value of this JSON null object.
+
+        @return `True` if the value was modified, `False` otherwise.
+        """
 
         return False
 

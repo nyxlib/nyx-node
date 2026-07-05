@@ -39,8 +39,7 @@ class NyxBoolean(obj.NyxObject):
     @property
     def value(self) -> bool:
         """!
-        @property NyxNumber::value
-        @brief Gets / sets the value of this JSON boolean object.
+        @brief Gets the value of this JSON boolean object.
 
         @return The value.
         """
@@ -51,6 +50,11 @@ class NyxBoolean(obj.NyxObject):
 
     @value.setter
     def value(self, value: bool) -> bool:
+        """!
+        @brief Sets the value of this JSON boolean object.
+
+        @return `True` if the value was modified, `False` otherwise.
+        """
 
         return bool(bind.lib.nyx_boolean_set(self.ptr, bool(value)))
 
