@@ -68,6 +68,7 @@ class NyxStreamProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
+    kind = enums.NyxState,
     getter = enums.NyxState.to_int,
     setter = enums.NyxState.to_str,
 )
@@ -120,7 +121,7 @@ class NyxStreamVector(json.json_dict.NyxDict):
         @brief If Nyx Stream is enabled, publishes an entry to a stream.
 
         @param field_values Field payloads, one per field.
-        @return `true` if the provided fields match the vector content, `false` otherwise.
+        @return @c True if the provided fields match the vector content, @c False otherwise.
 
         @note Field payloads may contain arbitrary binary data.
         """

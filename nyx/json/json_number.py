@@ -53,7 +53,7 @@ class NyxNumber(obj.NyxObject):
         """!
         @brief Sets the value of this JSON number object.
 
-        @return `True` if the value was modified, `False` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         return bool(bind.lib.nyx_number_set(self.ptr, float(value)))

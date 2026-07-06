@@ -58,7 +58,7 @@ class NyxNull(obj.NyxObject):
         """!
         @brief Sets the value of this JSON null object.
 
-        @return `True` if the value was modified, `False` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         return False

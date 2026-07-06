@@ -145,7 +145,7 @@ class NyxObject:
         """!
         @brief Notifies this Nyx / INDI object to the clients.
 
-        @return `true` if the object was notified, `false` otherwise.
+        @return @c True if the object was notified, @c False otherwise.
         """
 
         return bool(bind.lib.nyx_object_notify(self.ptr))

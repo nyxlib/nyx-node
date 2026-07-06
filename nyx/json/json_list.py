@@ -149,7 +149,7 @@ class NyxList(obj.NyxObject):
 
         @param idx Index.
         @param value JSON object to be added.
-        @return `true` if the value was modified, `false` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         if not isinstance(value, obj.NyxObject):
@@ -165,7 +165,7 @@ class NyxList(obj.NyxObject):
         @brief Pushes a JSON object in this JSON list object.
 
         @param value JSON object to be added.
-        @return `true` if the value was modified, `false` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         return self.__setitem__(-1, value)

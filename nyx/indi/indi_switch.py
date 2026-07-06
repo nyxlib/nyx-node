@@ -34,6 +34,7 @@ from . import utils
 @utils.nyx_property(
     'value',
     '$',
+    kind = enums.NyxOnOff,
     getter = enums.NyxOnOff.to_int,
     setter = enums.NyxOnOff.to_str,
 )
@@ -83,18 +84,21 @@ class NyxSwitchProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
+    kind = enums.NyxState,
     getter = enums.NyxState.to_int,
     setter = enums.NyxState.to_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
+    kind = enums.NyxPerm,
     getter = enums.NyxPerm.to_int,
     setter = enums.NyxPerm.to_str,
 )
 @utils.nyx_property(
     'rule',
     '@rule',
+    kind = enums.NyxRule,
     getter = enums.NyxRule.nyx_rule_int,
     setter = enums.NyxRule.nyx_rule_str,
 )

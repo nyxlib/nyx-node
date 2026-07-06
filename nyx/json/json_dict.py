@@ -148,7 +148,7 @@ class NyxDict(obj.NyxObject):
 
         @param key Key.
         @param value JSON object to be added.
-        @return `true` if the value was modified, `false` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         if not isinstance(value, obj.NyxObject):

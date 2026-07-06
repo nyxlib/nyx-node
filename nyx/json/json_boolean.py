@@ -53,7 +53,7 @@ class NyxBoolean(obj.NyxObject):
         """!
         @brief Sets the value of this JSON boolean object.
 
-        @return `True` if the value was modified, `False` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         return bool(bind.lib.nyx_boolean_set(self.ptr, bool(value)))

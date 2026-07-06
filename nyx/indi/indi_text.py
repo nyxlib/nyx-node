@@ -81,12 +81,14 @@ class NyxTextProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
+    kind = enums.NyxState,
     getter = enums.NyxState.to_int,
     setter = enums.NyxState.to_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
+    kind = enums.NyxPerm,
     getter = enums.NyxPerm.to_int,
     setter = enums.NyxPerm.to_str,
 )

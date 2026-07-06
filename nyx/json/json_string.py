@@ -88,7 +88,7 @@ class NyxString(obj.NyxObject):
         """!
         @brief Sets the text value of this JSON string object.
 
-        @return `True` if the value was modified, `False` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         ################################################################################################################
@@ -112,7 +112,7 @@ class NyxString(obj.NyxObject):
         """!
         @brief Sets the content of this JSON string object as a byte buffer.
 
-        @return `True` if the value was modified, `False` otherwise.
+        @return @c True if the value was modified, @c False otherwise.
         """
 
         ################################################################################################################

@@ -34,6 +34,7 @@ from . import utils
 @utils.nyx_property(
     'value',
     '$',
+    kind = enums.NyxState,
     getter = enums.NyxState.to_int,
     setter = enums.NyxState.to_str,
 )
@@ -83,6 +84,7 @@ class NyxLightProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'state',
     '@state',
+    kind = enums.NyxState,
     getter = enums.NyxState.to_int,
     setter = enums.NyxState.to_str,
 )

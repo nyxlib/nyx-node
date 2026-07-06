@@ -8,39 +8,165 @@ import pathlib
 
 ########################################################################################################################
 
+def _keyword_value(node: ast.Call, name: str) -> ast.expr | None:
+
+    for keyword in node.keywords:
+
+        if keyword.arg == name:
+
+            return keyword.value
+
+    return None
+
+########################################################################################################################
+
 def _is_nyx_property(node: ast.expr) -> bool:
 
     return (
-        isinstance(node, ast.Call)
-        and
-        isinstance(node.func, ast.Attribute)
-        and
-        node.func.attr == 'nyx_property'
-        and
-        node.args
-        and
-        isinstance(node.args[0], ast.Constant)
-        and
-        isinstance(node.args[0].value, str)
+            isinstance(node, ast.Call)
+            and
+            isinstance(node.func, ast.Attribute)
+            and
+            node.func.attr == 'nyx_property'
+            and
+            node.args
+            and
+            isinstance(node.args[0], ast.Constant)
+            and
+            isinstance(node.args[0].value, str)
     )
 
 ########################################################################################################################
 
 def _doc(node: ast.Call) -> str | None:
 
-    for keyword in node.keywords:
+    value = _keyword_value(node, 'doc')
 
-        if (
-            keyword.arg == 'doc'
+    if (
+            isinstance(value, ast.Constant)
             and
-            isinstance(keyword.value, ast.Constant)
-            and
-            isinstance(keyword.value.value, str)
-        ):
+            isinstance(value.value, str)
+    ):
 
-            return keyword.value.value
+        return value.value
 
     return None
+
+########################################################################################################################
+
+def _module_name(path: pathlib.Path) -> str:
+
+    parts: list[str] = []
+
+    if path.name != '__init__.py':
+
+        parts.append(path.stem)
+
+    parent = path.parent
+
+    while (parent / '__init__.py').is_file():
+
+        parts.append(parent.name)
+
+        parent = parent.parent
+
+    return '.'.join(reversed(parts))
+
+########################################################################################################################
+
+def _imported_names(tree: ast.Module, module_name: str) -> dict[str, str]:
+
+    imports: dict[str, str] = {}
+
+    package_name = module_name.rpartition('.')[0]
+    package_parts = package_name.split('.') if package_name else []
+
+    for node in tree.body:
+
+        if isinstance(node, ast.Import):
+
+            for alias in node.names:
+
+                name = alias.asname or alias.name.split('.', 1)[0]
+
+                if alias.asname is not None:
+
+                    imports[name] = alias.name
+
+                else:
+
+                    imports[name] = name
+
+        elif isinstance(node, ast.ImportFrom):
+
+            if node.level:
+
+                parts = package_parts[:len(package_parts) - node.level + 1]
+
+                if node.module is not None:
+
+                    parts.extend(node.module.split('.'))
+
+                imported_module = '.'.join(parts)
+
+            else:
+
+                imported_module = node.module or ''
+
+            for alias in node.names:
+
+                if alias.name == '*':
+
+                    continue
+
+                name = alias.asname or alias.name
+
+                if imported_module:
+
+                    imports[name] = f'{imported_module}.{alias.name}'
+
+                else:
+
+                    imports[name] = alias.name
+
+    return imports
+
+########################################################################################################################
+
+def _kind(node: ast.Call, imports: dict[str, str], module_name: str) -> tuple[str, str]:
+
+    if len(node.args) >= 3:
+
+        value = node.args[2]
+
+    else:
+
+        value = _keyword_value(node, 'kind')
+
+    if value is None:
+
+        return 'str', 'str'
+
+    value_text = ast.unparse(value)
+    value_parts = value_text.split('.')
+    kind = value_parts[-1]
+
+    if value_parts[0] in imports:
+
+        kind_ref = '.'.join([
+            imports[value_parts[0]],
+            *value_parts[1:],
+        ])
+
+    elif len(value_parts) == 1 and kind.startswith('Nyx'):
+
+        kind_ref = f'{module_name}.{kind}'
+
+    else:
+
+        kind_ref = value_text
+
+    return kind, kind_ref
 
 ########################################################################################################################
 
@@ -53,11 +179,11 @@ def _indent(line: str) -> str:
 def _is_docstring(node: ast.stmt) -> bool:
 
     return (
-        isinstance(node, ast.Expr)
-        and
-        isinstance(node.value, ast.Constant)
-        and
-        isinstance(node.value.value, str)
+            isinstance(node, ast.Expr)
+            and
+            isinstance(node.value, ast.Constant)
+            and
+            isinstance(node.value.value, str)
     )
 
 ########################################################################################################################
@@ -67,9 +193,9 @@ def _constructor(node: ast.ClassDef) -> ast.FunctionDef:
     for child in node.body:
 
         if (
-            isinstance(child, ast.FunctionDef)
-            and
-            child.name == '__init__'
+                isinstance(child, ast.FunctionDef)
+                and
+                child.name == '__init__'
         ):
 
             return child
@@ -102,11 +228,23 @@ def _comment_decorator(lines: list[str], node: ast.Call) -> None:
 
 ########################################################################################################################
 
-def _property_lines(name: str, class_name: str, doc: str | None, indent: str) -> list[str]:
+def _property_lines(name: str, doc: str | None, kind: str, kind_ref: str, indent: str) -> list[str]:
 
-    if doc is None:
+    ####################################################################################################################
 
-        doc = f'The @c {name} : @c str attribute of this {class_name} object.'
+    if kind.startswith('Nyx'):
+
+        kind_doc = f'@ref {kind_ref} "{kind}"'
+
+    else:
+
+        kind_doc = kind
+
+    if not doc:
+
+        doc = f'Gets or sets the @c {name} property of this object (type: {kind_doc}).'
+
+    ####################################################################################################################
 
     doc_lines = [line.strip() for line in doc.strip().splitlines()]
 
@@ -114,7 +252,11 @@ def _property_lines(name: str, class_name: str, doc: str | None, indent: str) ->
 
         doc_lines[0] = doc_lines[0][len('@brief '):]
 
+    ####################################################################################################################
+
     result = [f'{indent}## @brief {doc_lines[0]}\n']
+
+    ####################################################################################################################
 
     for line in doc_lines[1:]:
 
@@ -126,26 +268,31 @@ def _property_lines(name: str, class_name: str, doc: str | None, indent: str) ->
 
             result.append(f'{indent}##\n')
 
+    ####################################################################################################################
+
     result.extend([
-        f'{indent}self.{name} = \'\'\n',
+        f'{indent}self.{name} = property()\n',
         '\n',
     ])
+
+    ####################################################################################################################
 
     return result
 
 ########################################################################################################################
 
-def main() -> int:
+def main(path: pathlib.Path) -> int:
 
     ####################################################################################################################
-
-    path = pathlib.Path(sys.argv[1])
 
     lines = path.read_text(encoding = 'utf-8').splitlines(keepends = True)
 
     ####################################################################################################################
 
     tree = ast.parse(''.join(lines), filename = str(path))
+
+    module_name = _module_name(path)
+    imports = _imported_names(tree, module_name)
 
     ####################################################################################################################
 
@@ -157,7 +304,7 @@ def main() -> int:
 
             continue
 
-        properties: list[tuple[str, str | None]] = []
+        properties: list[tuple[str, str | None, str, str]] = []
 
         for decorator in class_node.decorator_list:
 
@@ -167,8 +314,9 @@ def main() -> int:
 
             name = decorator.args[0].value
             doc = _doc(decorator)
+            kind, kind_ref = _kind(decorator, imports, module_name)
 
-            properties.append((name, doc))
+            properties.append((name, doc, kind, kind_ref))
 
             _comment_decorator(lines, decorator)
 
@@ -182,12 +330,13 @@ def main() -> int:
 
         generated_lines: list[str] = []
 
-        for name, doc in properties:
+        for name, doc, kind, kind_ref in properties:
 
             generated_lines.extend(_property_lines(
                 name,
-                class_node.name,
                 doc,
+                kind,
+                kind_ref,
                 indent,
             ))
 
@@ -211,6 +360,6 @@ def main() -> int:
 
 if __name__ == '__main__':
 
-    raise SystemExit(main())
+    raise SystemExit(main(pathlib.Path(sys.argv[1])))
 
 ########################################################################################################################
