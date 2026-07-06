@@ -22,15 +22,25 @@ class NyxLogLevel(enum.IntEnum):
     """!
     @ingroup LOGGER_PY
     @brief Nyx log levels.
+
+    | Value               | Description       |
+    | :------------------ | :---------------- |
+    | `NyxLogLevel.NONE`  | Logging disabled. |
+    | `NyxLogLevel.FATAL` | Fatal level.      |
+    | `NyxLogLevel.ERROR` | Error level.      |
+    | `NyxLogLevel.WARN`  | Warning level.    |
+    | `NyxLogLevel.INFO`  | Log level.        |
+    | `NyxLogLevel.DEBUG` | Debug level.      |
+    | `NyxLogLevel.TRACE` | Trace level.      |
     """
 
-    NONE  = 100,
-    FATAL = 101,
-    ERROR = 102,
-    WARN  = 103,
-    INFO  = 104,
-    DEBUG = 105,
-    TRACE = 106,
+    NONE  = 100
+    FATAL = 101
+    ERROR = 102
+    WARN  = 103
+    INFO  = 104
+    DEBUG = 105
+    TRACE = 106
 
 ########################################################################################################################
 

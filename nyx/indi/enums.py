@@ -24,6 +24,13 @@ import typing
 class NyxState(enum.IntEnum):
     """!
     @brief Vector state hint.
+
+    | Value            | Description     |
+    | :--------------- | :-------------- |
+    | `NyxState.IDLE`  | State is idle.  |
+    | `NyxState.OK`    | State is ok.    |
+    | `NyxState.BUSY`  | State is busy.  |
+    | `NyxState.ALERT` | State is alert. |
     """
 
     IDLE = 400
@@ -74,6 +81,12 @@ _STATE_FROM_STR = {value: key for key, value in _STATE_TO_STR.items()}
 class NyxPerm(enum.IntEnum):
     """!
     @brief Vector permission hint.
+
+    | Value        | Description   |
+    | :----------- | :------------ |
+    | `NyxPerm.RO` | Read only.    |
+    | `NyxPerm.WO` | Write only.   |
+    | `NyxPerm.RW` | Read & write. |
     """
 
     RO = 500
@@ -122,6 +135,12 @@ _PERM_FROM_STR = {value: key for key, value in _PERM_TO_STR.items()}
 class NyxRule(enum.IntEnum):
     """!
     @brief Switch vector rule hint.
+
+    | Value                 | Description                                                |
+    | :-------------------- | :--------------------------------------------------------- |
+    | `NyxRule.ONE_OF_MANY` | Only one switch of many can be ON (e.g., radio buttons).   |
+    | `NyxRule.AT_MOST_ONE` | At most one switch can be ON, but all switches can be off. |
+    | `NyxRule.ANY_OF_MANY` | Any number of switches can be ON (e.g., check boxes).      |
     """
 
     ONE_OF_MANY = 600
@@ -170,6 +189,11 @@ _RULE_FROM_STR = {value: key for key, value in _RULE_TO_STR.items()}
 class NyxOnOff(enum.IntEnum):
     """!
     @brief Switch state.
+
+    | Value          | Description    |
+    | :------------- | :------------- |
+    | `NyxOnOff.ON`  | Switch is ON.  |
+    | `NyxOnOff.OFF` | Switch is OFF. |
     """
 
     ON = 700
