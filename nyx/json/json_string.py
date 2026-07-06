@@ -60,7 +60,7 @@ class NyxString(obj.NyxObject):
         """!
         @brief Gets the text value of this JSON string object.
 
-        @return The text value.
+        @return The current text value.
 
         @note The returned text value remains valid until the object is modified or released.
         """
@@ -74,7 +74,7 @@ class NyxString(obj.NyxObject):
         """!
         @brief Gets the content of this JSON string object as a byte buffer.
 
-        @return The content bytes.
+        @return The current content bytes.
 
         @note The returned buffer remains valid until the object is modified or released.
         """

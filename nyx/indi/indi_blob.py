@@ -19,7 +19,7 @@ from . import utils
 
 ########################################################################################################################
 
-## @defgroup nyx_blob_message Nyx BLOB Message
+## @defgroup BLOB_MESSAGE_PY Nyx BLOB Message
 #  @brief Nyx / INDI BLOB Message.
 
 ########################################################################################################################
@@ -27,26 +27,23 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
-    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
-    doc = '@brief Gets / sets the label of this property object.'
 )
 @utils.nyx_property(
     'format',
     '@format',
-    doc = '@brief Gets / sets the format of this property object.'
 )
 @utils.nyx_property(
     'value',
     '$',
-    doc = '@brief Gets / sets the value of this property object.'
+    kind = bytes,
 )
 class NyxBLOBProp(json.json_dict.NyxDict):
     """!
-    @ingroup nyx_blob_message
+    @ingroup BLOB_MESSAGE_PY
     @brief INDI / Nyx BLOB property.
     """
 
@@ -93,30 +90,26 @@ class NyxBLOBProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'device',
     '@device',
-    doc = '@brief Gets / sets the device of this property object.'
 )
 @utils.nyx_property(
     'name',
     '@name',
-    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.NyxState.nyx_state_int,
-    setter = enums.NyxState.nyx_state_str,
-    doc = '@brief Gets / sets the state of this property object.'
+    getter = enums.NyxState.to_int,
+    setter = enums.NyxState.to_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
-    getter = enums.NyxPerm.nyx_perm_int,
-    setter = enums.NyxPerm.nyx_perm_str,
-    doc = '@brief Gets / sets the permission of this property object.'
+    getter = enums.NyxPerm.to_int,
+    setter = enums.NyxPerm.to_str,
 )
 class NyxBLOBVector(json.json_dict.NyxDict):
     """!
-    @ingroup nyx_blob_message
+    @ingroup BLOB_MESSAGE_PY
     @brief INDI / Nyx BLOB vector.
     """
 
@@ -139,8 +132,8 @@ class NyxBLOBVector(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_blob_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.NyxState.nyx_state_int(state),
-            enums.NyxPerm.nyx_perm_int(perm),
+            enums.NyxState.to_int(state),
+            enums.NyxPerm.to_int(perm),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

@@ -14,14 +14,14 @@ from . import bind
 
 ########################################################################################################################
 
-## @defgroup nyx_utils Nyx utilities
+## @defgroup UTILS_PY Nyx utilities
 #  @brief Nyx utilities.
 
 ########################################################################################################################
 
 def nyx_hash(string: str, seed: int) -> int:
     """!
-    @ingroup nyx_utils
+    @ingroup UTILS_PY
     @brief Hashes a string using the MurmurHash2 algorithm.
 
     @param string String to hash.
@@ -43,7 +43,7 @@ def nyx_hash(string: str, seed: int) -> int:
 
 def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
     """!
-    @ingroup nyx_utils
+    @ingroup UTILS_PY
     @brief Generates a MAC address based on a node identifier.
 
     @param mac0 First fixed byte of the MAC address.
@@ -73,7 +73,7 @@ def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
 
 def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str]:
     """!
-    @ingroup nyx_utils
+    @ingroup UTILS_PY
     @brief Encodes a buffer using the Base64 algorithm.
 
     @param data Data to encode.
@@ -100,7 +100,7 @@ def nyx_base64_encode(data: typing.Optional[str | bytes]) -> typing.Optional[str
 
 def nyx_base64_decode(data: typing.Optional[str | bytes]) -> typing.Optional[bytes]:
     """!
-    @ingroup nyx_utils
+    @ingroup UTILS_PY
     @brief Decodes a string using the Base64 algorithm.
 
     @param data Base64 data to decode.

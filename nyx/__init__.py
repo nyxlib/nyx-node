@@ -16,13 +16,13 @@ import atexit
 
 ########################################################################################################################
 
-from .log import *
 from .obj import *
 from .xml import *
 from .indi import *
 from .json import *
 from .node import *
 from .utils import *
+from .logger import *
 
 ########################################################################################################################
 

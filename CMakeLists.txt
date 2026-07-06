@@ -69,7 +69,7 @@ set(SOURCE_FILES
     src/utils/hash.c
     src/utils/zlib.c
     #
-    src/log.c
+    src/logger.c
     src/string_builder.c
     src/object.c
     src/dom.c

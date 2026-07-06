@@ -9,7 +9,7 @@ import typing
 
 ########################################################################################################################
 
-def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typing.Any] | None = None, setter: typing.Callable | None = None, doc: str = None) -> typing.Callable:
+def nyx_property(name: str, key: str, kind: typing.Type = str, getter: typing.Callable[[typing.Any], typing.Any] | None = None, setter: typing.Callable | None = None) -> typing.Callable:
 
     def decorate(cls: type) -> type:
 
@@ -21,7 +21,12 @@ def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typi
 
         ################################################################################################################
 
-        def get_value(self):
+        def get_value(self) -> kind:
+            f"""
+            @brief Gets the `{name}` attribute of this Nyx object.
+
+            @return The current value.
+            """
 
             value = self[key].value
 
@@ -33,7 +38,12 @@ def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typi
 
         ################################################################################################################
 
-        def set_value(self, value) -> None:
+        def set_value(self, value: kind) -> None:
+            f"""
+            @brief Sets the `{name}` attribute of this Nyx object.
+
+            `True` if the value was modified, `False` otherwise.
+            """
 
             if setter is not None:
 
@@ -44,10 +54,6 @@ def nyx_property(name: str, key: str, getter: typing.Callable[[typing.Any], typi
         ################################################################################################################
 
         setattr(cls, name, property(get_value, set_value))
-
-        ################################################################################################################
-
-        cls.__doc__ = doc
 
         ################################################################################################################
 

@@ -15,12 +15,12 @@ import typing
 
 ########################################################################################################################
 
-## @defgroup nyx_enums Nyx enumerations
+## @defgroup ENUMS_PY Enumerations used by NyxNode
 #  @brief Enumerations used by NyxNode.
 
 ########################################################################################################################
 
-## @ingroup nyx_enums
+## @ingroup ENUMS_PY
 class NyxState(enum.IntEnum):
     """!
     @brief Vector state hint.
@@ -34,7 +34,7 @@ class NyxState(enum.IntEnum):
     ####################################################################################################################
 
     @staticmethod
-    def nyx_state_int(value: NyxState | int | str) -> int:
+    def to_int(value: NyxState | int | str) -> int:
         """!
         @brief Converts a NyxState value as an integer.
 
@@ -47,7 +47,7 @@ class NyxState(enum.IntEnum):
     ####################################################################################################################
 
     @staticmethod
-    def nyx_state_str(value: NyxState | int | str) -> str:
+    def to_str(value: NyxState | int | str) -> str:
         """!
         @brief Converts a NyxState value as a string.
 
@@ -70,7 +70,7 @@ _STATE_FROM_STR = {value: key for key, value in _STATE_TO_STR.items()}
 
 ########################################################################################################################
 
-## @ingroup nyx_enums
+## @ingroup ENUMS_PY
 class NyxPerm(enum.IntEnum):
     """!
     @brief Vector permission hint.
@@ -83,7 +83,7 @@ class NyxPerm(enum.IntEnum):
     ####################################################################################################################
 
     @staticmethod
-    def nyx_perm_int(value: NyxPerm | int | str) -> int:
+    def to_int(value: NyxPerm | int | str) -> int:
         """!
         @brief Converts a NyxPerm value as an integer.
 
@@ -96,7 +96,7 @@ class NyxPerm(enum.IntEnum):
     ####################################################################################################################
 
     @staticmethod
-    def nyx_perm_str(value: NyxPerm | int | str) -> str:
+    def to_str(value: NyxPerm | int | str) -> str:
         """!
         @brief Converts a NyxPerm value as a string.
 
@@ -118,7 +118,7 @@ _PERM_FROM_STR = {value: key for key, value in _PERM_TO_STR.items()}
 
 ########################################################################################################################
 
-## @ingroup nyx_enums
+## @ingroup ENUMS_PY
 class NyxRule(enum.IntEnum):
     """!
     @brief Switch vector rule hint.
@@ -166,7 +166,7 @@ _RULE_FROM_STR = {value: key for key, value in _RULE_TO_STR.items()}
 
 ########################################################################################################################
 
-## @ingroup nyx_enums
+## @ingroup ENUMS_PY
 class NyxOnOff(enum.IntEnum):
     """!
     @brief Switch state.
@@ -178,7 +178,7 @@ class NyxOnOff(enum.IntEnum):
     ####################################################################################################################
 
     @staticmethod
-    def nyx_onoff_int(value: NyxOnOff | int | str | bool) -> int:
+    def to_int(value: NyxOnOff | int | str | bool) -> int:
         """!
         @brief Converts a NyxOnOff value as an integer.
 
@@ -195,7 +195,7 @@ class NyxOnOff(enum.IntEnum):
     ####################################################################################################################
 
     @staticmethod
-    def nyx_onoff_str(value: NyxOnOff | int | str | bool) -> str:
+    def to_str(value: NyxOnOff | int | str | bool) -> str:
         """!
         @brief Converts a NyxOnOff value as a string.
 

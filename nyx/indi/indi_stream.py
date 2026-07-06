@@ -18,7 +18,7 @@ from . import utils
 
 ########################################################################################################################
 
-## @defgroup nyx_stream_message Nyx Stream Message
+## @defgroup STREAM_MESSAGE_PY Nyx Stream Message
 #  @brief Nyx Stream Message.
 
 ########################################################################################################################
@@ -26,16 +26,14 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
-    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
-    doc = '@brief Gets / sets the label of this property object.'
 )
 class NyxStreamProp(json.json_dict.NyxDict):
     """!
-    @ingroup nyx_stream_message
+    @ingroup STREAM_MESSAGE_PY
     @brief Nyx Stream property.
     """
 
@@ -62,23 +60,20 @@ class NyxStreamProp(json.json_dict.NyxDict):
 @utils.nyx_property(
     'device',
     '@device',
-    doc = '@brief Gets / sets the device of this property object.'
 )
 @utils.nyx_property(
     'name',
     '@name',
-    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.NyxState.nyx_state_int,
-    setter = enums.NyxState.nyx_state_str,
-    doc = '@brief Gets / sets the state of this property object.'
+    getter = enums.NyxState.to_int,
+    setter = enums.NyxState.to_str,
 )
 class NyxStreamVector(json.json_dict.NyxDict):
     """!
-    @ingroup nyx_stream_message
+    @ingroup STREAM_MESSAGE_PY
     @brief Nyx Stream vector.
     """
 
@@ -100,7 +95,7 @@ class NyxStreamVector(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_stream_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.NyxState.nyx_state_int(state),
+            enums.NyxState.to_int(state),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

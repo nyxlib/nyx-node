@@ -16,14 +16,14 @@ from . import json
 
 ########################################################################################################################
 
-## @defgroup nyx_node Nyx node
+## @defgroup NODE_PY Nyx node
 #  @brief Nyx node.
 
 ########################################################################################################################
 
 class NyxMQTTEvent(enum.IntEnum):
     """!
-    @ingroup nyx_node
+    @ingroup NODE_PY
     @brief MQTT event type.
     """
 
@@ -35,7 +35,7 @@ class NyxMQTTEvent(enum.IntEnum):
 
 class NyxNode:
     """!
-    @ingroup nyx_node
+    @ingroup NODE_PY
     @brief Nyx node exposing INDI, MQTT and Nyx Stream endpoints.
     """
 

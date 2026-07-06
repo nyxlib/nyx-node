@@ -41,7 +41,7 @@ class NyxNumber(obj.NyxObject):
         """!
         @brief Gets the value of this JSON number object.
 
-        @return The value.
+        @return The current value.
         """
 
         return float(bind.lib.nyx_number_get(self.ptr))

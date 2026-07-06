@@ -13,14 +13,14 @@ from . import bind
 
 ########################################################################################################################
 
-## @defgroup nyx_logger Nyx logger
+## @defgroup LOGGER_PY Nyx logger
 #  @brief Nyx logger.
 
 ########################################################################################################################
 
 class NyxLogLevel(enum.IntEnum):
     """!
-    @ingroup nyx_logger
+    @ingroup LOGGER_PY
     @brief Nyx log levels.
     """
 
@@ -36,7 +36,7 @@ class NyxLogLevel(enum.IntEnum):
 
 def nyx_set_log_level(level: bind.NyxLogLevel) -> None:
     """!
-    @ingroup nyx_logger
+    @ingroup LOGGER_PY
     @brief Sets the log level threshold.
 
     @param level Log level threshold.

@@ -41,7 +41,7 @@ class NyxBoolean(obj.NyxObject):
         """!
         @brief Gets the value of this JSON boolean object.
 
-        @return The value.
+        @return The current value.
         """
 
         return bool(bind.lib.nyx_boolean_get(self.ptr))

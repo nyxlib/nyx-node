@@ -18,7 +18,7 @@ from . import utils
 
 ########################################################################################################################
 
-## @defgroup nyx_number_message Nyx Number Message
+## @defgroup NUMBER_MESSAGE_PY Nyx Number Message
 #  @brief Nyx / INDI Number Message.
 
 ########################################################################################################################
@@ -26,31 +26,32 @@ from . import utils
 @utils.nyx_property(
     'name',
     '@name',
-    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'label',
     '@label',
-    doc = '@brief Gets / sets the label of this property object.'
 )
 @utils.nyx_property(
     'format',
     '@format',
-    doc = '@brief Gets / sets the format of this property object.'
 )
 class NyxNumberProp(json.json_dict.NyxDict):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief Base class for INDI / Nyx number properties.
     """
 
-    pass
+    ####################################################################################################################
+
+    def __init__(self, ptr = None):
+
+        super().__init__(ptr)
 
 ########################################################################################################################
 
 class NyxNumberIntProp(NyxNumberProp):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief INDI / Nyx `int32_t` number property.
     """
 
@@ -113,7 +114,7 @@ class NyxNumberIntProp(NyxNumberProp):
 
 class NyxNumberUIntProp(NyxNumberProp):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief INDI / Nyx `uint32_t` number property.
     """
 
@@ -176,7 +177,7 @@ class NyxNumberUIntProp(NyxNumberProp):
 
 class NyxNumberLongProp(NyxNumberProp):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief INDI / Nyx `int64_t` number property.
     """
 
@@ -239,7 +240,7 @@ class NyxNumberLongProp(NyxNumberProp):
 
 class NyxNumberULongProp(NyxNumberProp):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief INDI / Nyx `uint64_t` number property.
     """
 
@@ -302,7 +303,7 @@ class NyxNumberULongProp(NyxNumberProp):
 
 class NyxNumberDoubleProp(NyxNumberProp):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief INDI / Nyx `double` number property.
     """
 
@@ -366,30 +367,26 @@ class NyxNumberDoubleProp(NyxNumberProp):
 @utils.nyx_property(
     'device',
     '@device',
-    doc = '@brief Gets / sets the device of this property object.'
 )
 @utils.nyx_property(
     'name',
     '@name',
-    doc = '@brief Gets / sets the name of this property object.'
 )
 @utils.nyx_property(
     'state',
     '@state',
-    getter = enums.NyxState.nyx_state_int,
-    setter = enums.NyxState.nyx_state_str,
-    doc = '@brief Gets / sets the state of this property object.'
+    getter = enums.NyxState.to_int,
+    setter = enums.NyxState.to_str,
 )
 @utils.nyx_property(
     'perm',
     '@perm',
-    getter = enums.NyxPerm.nyx_perm_int,
-    setter = enums.NyxPerm.nyx_perm_str,
-    doc = '@brief Gets / sets the permission of this property object.'
+    getter = enums.NyxPerm.to_int,
+    setter = enums.NyxPerm.to_str,
 )
 class NyxNumberVector(json.json_dict.NyxDict):
     """!
-    @ingroup nyx_number_message
+    @ingroup NUMBER_MESSAGE_PY
     @brief INDI / Nyx number vector.
     """
 
@@ -412,8 +409,8 @@ class NyxNumberVector(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_number_vector_new(
             bind.as_bytes(device, allow_none = False),
             bind.as_bytes(name, allow_none = False),
-            enums.NyxState.nyx_state_int(state),
-            enums.NyxPerm.nyx_perm_int(perm),
+            enums.NyxState.to_int(state),
+            enums.NyxPerm.to_int(perm),
             bind.nyx_dict_p(),
             bind.as_opts(opts),
         ))

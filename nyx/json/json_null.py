@@ -45,7 +45,7 @@ class NyxNull(obj.NyxObject):
         """!
         @brief Gets the value of this JSON null object.
 
-        @return `None`.
+        @return The current value (`None`).
         """
 
         return None
