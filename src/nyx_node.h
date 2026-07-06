@@ -160,13 +160,13 @@ __NYX_NULLABLE__ str_t nyx_string_ndup(
 
 typedef enum nyx_log_level_e
 {
-    NYX_LOG_LEVEL_NONE  = 100,
-    NYX_LOG_LEVEL_FATAL = 101,
-    NYX_LOG_LEVEL_ERROR = 102,
-    NYX_LOG_LEVEL_WARN  = 103,
-    NYX_LOG_LEVEL_INFO  = 104,
-    NYX_LOG_LEVEL_DEBUG = 105,
-    NYX_LOG_LEVEL_TRACE = 106,
+    NYX_LOG_LEVEL_NONE  = 100,                                                                  //!< Logging disabled.
+    NYX_LOG_LEVEL_FATAL = 101,                                                                  //!< Fatal level.
+    NYX_LOG_LEVEL_ERROR = 102,                                                                  //!< Error level.
+    NYX_LOG_LEVEL_WARN  = 103,                                                                  //!< Warning level.
+    NYX_LOG_LEVEL_INFO  = 104,                                                                  //!< Log level.
+    NYX_LOG_LEVEL_DEBUG = 105,                                                                  //!< Debug level.
+    NYX_LOG_LEVEL_TRACE = 106,                                                                  //!< Trace level.
 
 } nyx_log_level_t;
 
@@ -431,12 +431,12 @@ __NYX_NULLABLE__ buff_t nyx_zlib_base64_inflate(
 
 typedef enum
 {
-    NYX_TYPE_NULL    = NYX_OBJECT_MAGIC | 0,                                                       //!< Null object.
-    NYX_TYPE_BOOLEAN = NYX_OBJECT_MAGIC | 1,                                                       //!< Boolean object.
-    NYX_TYPE_NUMBER  = NYX_OBJECT_MAGIC | 2,                                                       //!< Number object.
-    NYX_TYPE_STRING  = NYX_OBJECT_MAGIC | 3,                                                       //!< String object.
-    NYX_TYPE_DICT    = NYX_OBJECT_MAGIC | 4,                                                       //!< Dict object.
-    NYX_TYPE_LIST    = NYX_OBJECT_MAGIC | 5,                                                       //!< List object.
+    NYX_TYPE_NULL    = NYX_OBJECT_MAGIC | 0,                                                    //!< Null object.
+    NYX_TYPE_BOOLEAN = NYX_OBJECT_MAGIC | 1,                                                    //!< Boolean object.
+    NYX_TYPE_NUMBER  = NYX_OBJECT_MAGIC | 2,                                                    //!< Number object.
+    NYX_TYPE_STRING  = NYX_OBJECT_MAGIC | 3,                                                    //!< String object.
+    NYX_TYPE_DICT    = NYX_OBJECT_MAGIC | 4,                                                    //!< Dict object.
+    NYX_TYPE_LIST    = NYX_OBJECT_MAGIC | 5,                                                    //!< List object.
 
 } nyx_type_t;
 

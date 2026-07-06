@@ -8,7 +8,7 @@ Here is the description of the Nyx Node C/C++ API:
 
 <tr id="row_1_" class="even"><td class="entry"><span style="width:0px;display:inline-block;"></span><a class="el" href="group__MEMORY.html" target="_self">Memory</a></td><td class="desc"></td></tr>
 
-<tr id="row_2_" class="even"><td class="entry"><span style="width:0px;display:inline-block;"></span><a class="el" href="group__LOG.hyml" target="_self">Logger</a></td><td class="desc"></td></tr>
+<tr id="row_2_" class="even"><td class="entry"><span style="width:0px;display:inline-block;"></span><a class="el" href="group__LOGGER.html" target="_self">Logger</a></td><td class="desc"></td></tr>
 
 <tr id="row_3_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;"></span><a class="el" href="group__UTILITIES.html" target="_self">Utilities</a></td><td class="desc"></td></tr>
 
