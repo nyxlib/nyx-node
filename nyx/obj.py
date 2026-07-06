@@ -189,7 +189,7 @@ class NyxObject:
 
     def to_xmldoc(self) -> NyxXMLDoc:
         """!
-        @brief Converts this JSON Nyx / INDI command to an XML one.
+        @brief Converts this JSON Nyx / INDI command to the XML one.
 
         @return The corresponding XML Nyx / INDI command.
         """

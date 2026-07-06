@@ -21,7 +21,7 @@ def nyx_property(name: str, key: str, kind: typing.Type = str, getter: typing.Ca
 
         ################################################################################################################
 
-        def get_value(self) -> typing.Any:
+        def get_value(self) -> kind:
             f"""
             @brief Gets the @c {name} attribute of this object (type: @c {kind.__name__}).'
                     
@@ -38,11 +38,11 @@ def nyx_property(name: str, key: str, kind: typing.Type = str, getter: typing.Ca
 
         ################################################################################################################
 
-        def set_value(self, value: typing.Any) -> None:
+        def set_value(self, value: kind) -> None:
             f"""
             @brief Sets the @c {name} attribute of this object (type: @c {kind.__name__}).'
 
-            @return @c True if the value was modified, @c False otherwise.
+            @return None
             """
 
             if setter is not None:

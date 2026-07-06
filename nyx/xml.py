@@ -93,7 +93,7 @@ class NyxXMLDoc:
 
     def to_json(self) -> NyxObject:
         """!
-        @brief Converts this XML Nyx / INDI command to a JSON one.
+        @brief Converts this XML Nyx / INDI command to the JSON one.
 
         @return The corresponding JSON Nyx / INDI command.
         """
