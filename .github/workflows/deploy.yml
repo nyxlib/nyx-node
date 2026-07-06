@@ -21,7 +21,7 @@ jobs:
                     apt-get update
                     apt-get install -y gcc git bash curl make cmake gcovr rsync unzip doxygen graphviz mosquitto openssh-client mosquitto-clients
 
-                    curl http://nyxlib.org/download/third-party/doxygen > /usr/bin/doxygen
+                    curl -L http://nyxlib.org/download/third-party/doxygen > /usr/bin/doxygen
 
                     chmod +x /usr/bin/doxygen
 
