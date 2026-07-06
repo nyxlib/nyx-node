@@ -76,6 +76,7 @@ class NyxObject:
     @property
     def ptr(self):
         """!
+        @private
         @brief C pointer to the JSON object.
 
         @return The JSON object pointer.

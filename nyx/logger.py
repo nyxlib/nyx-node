@@ -34,7 +34,7 @@ class NyxLogLevel(enum.IntEnum):
 
 ########################################################################################################################
 
-def nyx_set_log_level(level: bind.NyxLogLevel) -> None:
+def nyx_set_log_level(level: NyxLogLevel) -> None:
     """!
     @ingroup LOGGER_PY
     @brief Sets the log level threshold.

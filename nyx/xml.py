@@ -52,6 +52,7 @@ class NyxXMLDoc:
     @property
     def ptr(self):
         """!
+        @private
         @brief C pointer to the XML document.
 
         @return The XML document pointer.

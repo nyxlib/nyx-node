@@ -118,6 +118,7 @@ class NyxNode:
     @property
     def ptr(self):
         """!
+        @private
         @brief C pointer to the Nyx node.
 
         @return The Nyx node pointer.
