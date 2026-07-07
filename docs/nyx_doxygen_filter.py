@@ -23,17 +23,17 @@ def _keyword_value(node: ast.Call, name: str) -> ast.expr | None:
 def _is_nyx_property(node: ast.expr) -> bool:
 
     return (
-            isinstance(node, ast.Call)
-            and
-            isinstance(node.func, ast.Attribute)
-            and
-            node.func.attr == 'nyx_property'
-            and
-            node.args
-            and
-            isinstance(node.args[0], ast.Constant)
-            and
-            isinstance(node.args[0].value, str)
+        isinstance(node, ast.Call)
+        and
+        isinstance(node.func, ast.Attribute)
+        and
+        node.func.attr == 'nyx_property'
+        and
+        node.args
+        and
+        isinstance(node.args[0], ast.Constant)
+        and
+        isinstance(node.args[0].value, str)
     )
 
 ########################################################################################################################
@@ -43,9 +43,9 @@ def _doc(node: ast.Call) -> str | None:
     value = _keyword_value(node, 'doc')
 
     if (
-            isinstance(value, ast.Constant)
-            and
-            isinstance(value.value, str)
+        isinstance(value, ast.Constant)
+        and
+        isinstance(value.value, str)
     ):
 
         return value.value
@@ -179,11 +179,11 @@ def _indent(line: str) -> str:
 def _is_docstring(node: ast.stmt) -> bool:
 
     return (
-            isinstance(node, ast.Expr)
-            and
-            isinstance(node.value, ast.Constant)
-            and
-            isinstance(node.value.value, str)
+        isinstance(node, ast.Expr)
+        and
+        isinstance(node.value, ast.Constant)
+        and
+        isinstance(node.value.value, str)
     )
 
 ########################################################################################################################
@@ -193,9 +193,9 @@ def _constructor(node: ast.ClassDef) -> ast.FunctionDef:
     for child in node.body:
 
         if (
-                isinstance(child, ast.FunctionDef)
-                and
-                child.name == '__init__'
+            isinstance(child, ast.FunctionDef)
+            and
+            child.name == '__init__'
         ):
 
             return child

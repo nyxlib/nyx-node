@@ -2788,7 +2788,7 @@ nyx_dict_t *nyx_message_new(
 /**
  * @brief Allocates a new INDI / Nyx `delete-property` message object.
  * @param device Device name.
- * @param name Optional vector name (`NULL` ≡ whole device).
+ * @param name Optional vector name (`NULL` means the whole device).
  * @param message Optional human-oriented message.
  * @return The new `delete-property` message object.
  * @note Prefer using @ref nyx_node_send_del_property.
@@ -2868,7 +2868,7 @@ typedef void (* nyx_mqtt_handler_t)(
  * @param mqtt_password Optional MQTT password.
  * @param mqtt_handler Optional MQTT handler.
  * @param retry_ms Connect retry time [milliseconds].
- * @param enable_xml Enables the XML messages.
+ * @param enable_xml Enables the XML messages for INDI compatibility.
  * @return The new Nyx node.
  */
 
@@ -2912,7 +2912,7 @@ void nyx_node_finalize(
  * @param interval_ms Interval [milliseconds].
  * @param callback Callback to be invoked.
  * @param arg Callback argument.
- * @note All added timers are polled when @ref nyx_node_poll is called, and called if expired.
+ * @note Timers are triggered by the @ref nyx_node_poll method.
  */
 
 void nyx_node_add_timer(
@@ -2929,6 +2929,7 @@ void nyx_node_add_timer(
  * @brief Performs a single poll iteration.
  * @param node Nyx node.
  * @param timeout_ms Timeout [milliseconds].
+ * @note \c timeout_ms determines the minimum timer resolution.
  */
 
 void nyx_node_poll(
@@ -2943,7 +2944,7 @@ void nyx_node_poll(
  * @brief Enables a device or a vector and notifies clients.
  * @param node Nyx node.
  * @param device Device name.
- * @param name Optional vector name (`NULL` ≡ whole device).
+ * @param name Optional vector name (`NULL` means the whole device).
  * @param message Optional human-oriented message.
  */
 
@@ -2961,7 +2962,7 @@ void nyx_node_enable(
  * @brief Disables a device or a vector and notifies clients.
  * @param node Nyx node.
  * @param device Device name.
- * @param name Optional vector name (`NULL` ≡ whole device).
+ * @param name Optional vector name (`NULL` means the whole device).
  * @param message Optional human-oriented message.
  */
 
@@ -2996,7 +2997,7 @@ void nyx_node_send_message(
  * @brief Sends a `del-property` message to the clients.
  * @param node Nyx node.
  * @param device Device name.
- * @param name Optional vector name (`NULL` ≡ whole device).
+ * @param name Optional vector name (`NULL` means the whole device).
  * @param message Optional human-oriented message.
  * @anchor nyx_node_send_del_property
  */

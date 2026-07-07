@@ -69,7 +69,7 @@ class NyxNode:
         @param mqtt_username Optional MQTT username.
         @param mqtt_password Optional MQTT password.
         @param retry_ms Connect retry time [milliseconds].
-        @param enable_xml Enables the XML messages.
+        @param enable_xml Enables the XML messages for INDI compatibility.
         """
 
         ################################################################################################################
@@ -195,7 +195,17 @@ class NyxNode:
         @param event_type MQTT event type.
         @return A decorator registering the MQTT event handler.
 
-        @note The MQTT handler has to be defined when the Nyx node is initialized.
+        @code{.py}
+        @node.on_mqtt(nyx.NyxMQTTEvent.OPEN)
+        def on_mqtt_open():
+
+            ...
+
+        @node.on_mqtt(nyx.NyxMQTTEvent.MSG)
+        def on_mqtt_msg(topic, message):
+
+            ...
+        @endcode
         """
 
         ################################################################################################################
@@ -243,7 +253,15 @@ class NyxNode:
         @param interval_ms Interval [milliseconds].
         @return A decorator registering the timer handler.
 
-        @note All added timers are polled when `poll()` is called, and called if expired.
+        @note Timers are triggered by the @ref nyx.node.NyxNode.poll method.
+
+        @code{.py}
+        @node.on_timer(50)
+        def on_timer():
+
+            ...
+
+        @endcode
         """
 
         ################################################################################################################
@@ -305,6 +323,8 @@ class NyxNode:
 
         @param timeout_ms Timeout [milliseconds].
         @return None
+
+        @note \c timeout_ms determines the minimum timer resolution.
         """
 
         bind.lib.nyx_node_poll(self.ptr, timeout_ms)
@@ -335,7 +355,7 @@ class NyxNode:
         @brief Disables a device or a vector and notifies clients.
 
         @param device Device name.
-        @param name Optional vector name (`None` means whole device).
+        @param name Optional vector name (`None` means the whole device).
         @param message Optional human-oriented message.
         @return None
         """
@@ -371,7 +391,7 @@ class NyxNode:
         @brief Sends a `del-property` message to the clients.
 
         @param device Device name.
-        @param name Optional vector name (`None` means whole device).
+        @param name Optional vector name (`None` means the whole device).
         @param message Optional human-oriented message.
         @return None
         """
@@ -393,7 +413,7 @@ class NyxNode:
         @param qos MQTT Quality Of Service.
         @return None
 
-        @note The MQTT handler has to be defined when the Nyx node is initialized.
+        @note MQTT handlers have to be added with the @ref nyx.node.NyxNode.on_mqtt decorator.
         """
 
         bind.lib.nyx_mqtt_sub(
