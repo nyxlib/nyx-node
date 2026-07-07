@@ -19,7 +19,7 @@ from . import bind
 
 ########################################################################################################################
 
-def nyx_hash(string: str | None, seed: int) -> int:
+def nyx_hash(string: str | bytes | None, seed: int) -> int:
     """!
     @ingroup UTILS_PY
     @brief Hashes a string using the MurmurHash2 algorithm.
@@ -71,7 +71,7 @@ def nyx_generate_mac_addr(mac0: int, mac1: int, node_id: str) -> bytes:
 
 ########################################################################################################################
 
-def nyx_base64_encode(data: str | bytes | None) -> str | None:
+def nyx_base64_encode(data: bytes | None) -> str | None:
     """!
     @ingroup UTILS_PY
     @brief Encodes a buffer using the Base64 algorithm.
@@ -98,7 +98,7 @@ def nyx_base64_encode(data: str | bytes | None) -> str | None:
 
 ########################################################################################################################
 
-def nyx_base64_decode(data: str | bytes | None) -> bytes | None:
+def nyx_base64_decode(data: str | None) -> bytes | None:
     """!
     @ingroup UTILS_PY
     @brief Decodes a string using the Base64 algorithm.

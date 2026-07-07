@@ -64,7 +64,7 @@ class NyxSwitchProp(json.json_dict.NyxDict):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_int_t)
-    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
 
         return all(self._dispatch_callbacks(
             enums.NyxOnOff.to_int(new_value),
@@ -151,7 +151,7 @@ class NyxSwitchVector(json.json_dict.NyxDict):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_vector_t)
-    def _nyx_callback_method(self, _vector: json.json_dict.NyxDict, modified: bool) -> None:
+    def _nyx_callback_func(self, _vector: json.json_dict.NyxDict, modified: bool) -> None:
 
         self._dispatch_callbacks(bool(modified))
 

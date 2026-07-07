@@ -196,15 +196,15 @@ class NyxNode:
         @return A decorator registering the MQTT event handler.
 
         @code{.py}
-        @node.on_mqtt(nyx.NyxMQTTEvent.OPEN)
-        def on_mqtt_open():
+        with nyx.NyxNode(...) as node:
 
-            ...
+            @node.on_mqtt(nyx.NyxMQTTEvent.OPEN)
+            def on_mqtt_open():
+                ...
 
-        @node.on_mqtt(nyx.NyxMQTTEvent.MSG)
-        def on_mqtt_msg(topic, message):
-
-            ...
+            @node.on_mqtt(nyx.NyxMQTTEvent.MSG)
+            def on_mqtt_msg(topic, message):
+                ...
         @endcode
         """
 
@@ -256,11 +256,11 @@ class NyxNode:
         @note Timers are triggered by the @ref nyx.node.NyxNode.poll method.
 
         @code{.py}
-        @node.on_timer(50)
-        def on_timer():
+        with nyx.NyxNode(...) as node:
 
-            ...
-
+            @node.on_timer(50)
+            def on_timer():
+                ...
         @endcode
         """
 

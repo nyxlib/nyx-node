@@ -61,7 +61,7 @@ class NyxTextProp(json.json_dict.NyxDict):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_str_t)
-    def _nyx_callback_method(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
 
         return all(self._dispatch_callbacks(
             new_value.decode('utf-8') if new_value is not None else None,
@@ -139,7 +139,7 @@ class NyxTextVector(json.json_dict.NyxDict):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_vector_t)
-    def _nyx_callback_method(self, _vector: json.json_dict.NyxDict, modified: bool) -> None:
+    def _nyx_callback_func(self, _vector: json.json_dict.NyxDict, modified: bool) -> None:
 
         self._dispatch_callbacks(bool(modified))
 

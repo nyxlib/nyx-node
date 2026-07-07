@@ -103,6 +103,16 @@ class NyxObject:
 
         @param callback Callback triggered when clients modify this object.
         @return The registered callback.
+
+        @code{.py}
+        @prop.on
+        def on_changed(new_value, old_value):
+            ...
+
+        @vector.on
+        def on_changed(modified):
+            ...
+        @endcode
         """
 
         if not callable(callback):
@@ -111,9 +121,8 @@ class NyxObject:
 
         ################################################################################################################
 
-        callback_method = getattr(  type(self)  , '_nyx_callback_method', None)
-
-        callback_type = getattr(callback_method, '_nyx_callback_type', None)
+        callback_func = getattr(type(self)   , '_nyx_callback_func', None)
+        callback_type = getattr(callback_func, '_nyx_callback_type', None)
 
         if callback_type is None:
 
@@ -123,7 +132,7 @@ class NyxObject:
 
         if self._c_callback is None:
 
-            self._c_callback = callback_type(self._nyx_callback_method)
+            self._c_callback = callback_type(self._nyx_callback_func)
 
             object_ptr = ctypes.cast(self.ptr, bind.nyx_object_p)
 
