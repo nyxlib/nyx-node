@@ -25,12 +25,12 @@ class NyxState(enum.IntEnum):
     """!
     @brief Vector state hint.
 
-    | Value            | Description     |
-    | :--------------- | :-------------- |
-    | `NyxState.IDLE`  | State is idle.  |
-    | `NyxState.OK`    | State is ok.    |
-    | `NyxState.BUSY`  | State is busy.  |
-    | `NyxState.ALERT` | State is alert. |
+    | Symbol           | Value | Description     |
+    | :--------------- | :---- | :-------------- |
+    | `NyxState.IDLE`  | 400   | State is idle.  |
+    | `NyxState.OK`    | 401   | State is ok.    |
+    | `NyxState.BUSY`  | 402   | State is busy.  |
+    | `NyxState.ALERT` | 403   | State is alert. |
     """
 
     IDLE = 400
@@ -82,11 +82,11 @@ class NyxPerm(enum.IntEnum):
     """!
     @brief Vector permission hint.
 
-    | Value        | Description   |
-    | :----------- | :------------ |
-    | `NyxPerm.RO` | Read only.    |
-    | `NyxPerm.WO` | Write only.   |
-    | `NyxPerm.RW` | Read & write. |
+    | Symbol       | Value | Description   |
+    | :----------- | :---- |:------------- |
+    | `NyxPerm.RO` | 500   | Read only.    |
+    | `NyxPerm.WO` | 501   | Write only.   |
+    | `NyxPerm.RW` | 502   | Read & write. |
     """
 
     RO = 500
@@ -136,11 +136,11 @@ class NyxRule(enum.IntEnum):
     """!
     @brief Switch vector rule hint.
 
-    | Value                 | Description                                                |
-    | :-------------------- | :--------------------------------------------------------- |
-    | `NyxRule.ONE_OF_MANY` | Only one switch of many can be ON (e.g., radio buttons).   |
-    | `NyxRule.AT_MOST_ONE` | At most one switch can be ON, but all switches can be off. |
-    | `NyxRule.ANY_OF_MANY` | Any number of switches can be ON (e.g., check boxes).      |
+    | Symbol                | Value | Description                                                |
+    | :-------------------- | :---- | :--------------------------------------------------------- |
+    | `NyxRule.ONE_OF_MANY` | 600   | Only one switch of many can be ON (e.g., radio buttons).   |
+    | `NyxRule.AT_MOST_ONE` | 601   | At most one switch can be ON, but all switches can be off. |
+    | `NyxRule.ANY_OF_MANY` | 602   | Any number of switches can be ON (e.g., check boxes).      |
     """
 
     ONE_OF_MANY = 600
@@ -190,10 +190,10 @@ class NyxOnOff(enum.IntEnum):
     """!
     @brief Switch state.
 
-    | Value          | Description    |
-    | :------------- | :------------- |
-    | `NyxOnOff.ON`  | Switch is ON.  |
-    | `NyxOnOff.OFF` | Switch is OFF. |
+    | Symbol         | Value | Description    |
+    | :------------- | :---- | :------------- |
+    | `NyxOnOff.ON`  | 700   | Switch is ON.  |
+    | `NyxOnOff.OFF` | 701   | Switch is OFF. |
     """
 
     ON = 700
