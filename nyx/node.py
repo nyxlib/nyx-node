@@ -26,15 +26,14 @@ class NyxMQTTEvent(enum.IntEnum):
     @ingroup NODE_PY
     @brief MQTT event type.
 
-    | Value               | Description             |
-    | :------------------ | :---------------------- |
-    | `NyxMQTTEvent.OPEN` | A connection is opened. |
-    | `NyxMQTTEvent.MSG`  | A message is received.  |
+    | Symbol              | Value | Description             |
+    | :------------------ | :---- | :---------------------- |
+    | `NyxMQTTEvent.OPEN` | 1100  | A connection is opened. |
+    | `NyxMQTTEvent.MSG`  | 1101  | A message is received.  |
     """
 
     OPEN = 1100
     MSG = 1101
-
 
 ########################################################################################################################
 
