@@ -234,25 +234,19 @@ class NyxObject:
 
     ####################################################################################################################
 
-    def to_string(self) -> str:
+    def to_string(self, json_string: bool = True) -> str:
         """!
-        @brief Returns a JSON string with special character escaping.
+        @brief Returns a string representing this JSON object.
 
-        @return A string that represents this JSON object.
+        @param json_string If @c True, the resulting string is escaped.
+
+        @return A string that represents this JSON document.
         """
 
-        return bind.take_string(bind.lib.nyx_object_to_string(self.ptr))
-
-    ####################################################################################################################
-
-    def to_cstring(self) -> str:
-        """!
-        @brief Returns a JSON string without special character escaping.
-
-        @return A string that represents this JSON object.
-        """
-
-        return bind.take_string(bind.lib.nyx_object_to_cstring(self.ptr))
+        if json_string:
+            return bind.take_string(bind.lib.nyx_object_to_string(self.ptr))
+        else:
+            return bind.take_string(bind.lib.nyx_object_to_cstring(self.ptr))
 
     ####################################################################################################################
 
