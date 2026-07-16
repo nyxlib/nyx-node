@@ -21,12 +21,15 @@ class NyxNull(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __init__(self, ptr = None):
+    def __init__(self, value: typing.Any, ptr: int | None = None):
         """!
         @brief Allocates a new JSON null object or wraps one.
 
+        @param value Optional default value.
         @param ptr Optional JSON null object pointer.
         """
+
+        ################################################################################################################
 
         if ptr is None:
 
@@ -36,7 +39,15 @@ class NyxNull(obj.NyxObject):
 
             raise TypeError('Not a pointer to a Nyx null object')
 
+        ################################################################################################################
+
         super().__init__(ptr)
+
+        ################################################################################################################
+
+        if isinstance(value, type(None)):
+
+            raise TypeError('Cannot set a value on a JSON null object')
 
     ####################################################################################################################
 

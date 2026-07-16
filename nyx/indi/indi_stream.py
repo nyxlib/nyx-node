@@ -112,7 +112,7 @@ class NyxStreamVector(json.json_dict.NyxDict):
 
                 raise TypeError('Expected NyxStreamProp')
 
-            children.push(prop)
+            children.append(prop)
 
     ####################################################################################################################
 

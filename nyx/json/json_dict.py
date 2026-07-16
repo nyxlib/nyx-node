@@ -26,7 +26,7 @@ class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __init__(self, ptr = None):
+    def __init__(self, ptr: int | None = None):
         """!
         @brief Allocates a new JSON dict object or wraps one.
 
@@ -124,7 +124,7 @@ class NyxDict(obj.NyxObject):
         dict_ptr = ctypes.cast(self.ptr, bind.nyx_dict_p)
 
         iterator = bind.nyx_dict_iter_t(
-            0,
+            0x00000000000000000000,
             dict_ptr.contents.head,
         )
 

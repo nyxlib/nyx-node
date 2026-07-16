@@ -21,12 +21,15 @@ class NyxString(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __init__(self, ptr = None):
+    def __init__(self, value: str | bytes | None = None, ptr: int | None = None):
         """!
         @brief Allocates a new JSON string object or wraps one.
 
+        @param value Optional default value.
         @param ptr Optional JSON string object pointer.
         """
+
+        ################################################################################################################
 
         if ptr is None:
 
@@ -36,7 +39,19 @@ class NyxString(obj.NyxObject):
 
             raise TypeError('Not a pointer to a Nyx string object')
 
+        ################################################################################################################
+
         super().__init__(ptr)
+
+        ################################################################################################################
+
+        if isinstance(value, str):
+
+            self.value = value
+
+        if isinstance(value, bytes):
+
+            self.buff = value
 
     ####################################################################################################################
 

@@ -83,7 +83,7 @@ class NyxNumberIntProp(NyxNumberProp):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_int_t)
-    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(new_value, old_value))
 
@@ -146,7 +146,7 @@ class NyxNumberUIntProp(NyxNumberProp):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_uint_t)
-    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(new_value, old_value))
 
@@ -209,7 +209,7 @@ class NyxNumberLongProp(NyxNumberProp):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_long_t)
-    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(new_value, old_value))
 
@@ -272,7 +272,7 @@ class NyxNumberULongProp(NyxNumberProp):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_ulong_t)
-    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(new_value, old_value))
 
@@ -335,7 +335,7 @@ class NyxNumberDoubleProp(NyxNumberProp):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_double_t)
-    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(new_value, old_value))
 
@@ -426,7 +426,7 @@ class NyxNumberVector(json.json_dict.NyxDict):
 
                 raise TypeError('Expected NyxNumberProp')
 
-            children.push(prop)
+            children.append(prop)
 
     ####################################################################################################################
 

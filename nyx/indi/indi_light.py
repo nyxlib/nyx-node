@@ -64,7 +64,7 @@ class NyxLightProp(json.json_dict.NyxDict):
     ####################################################################################################################
 
     @obj.nyx_callback(bind.nyx_callback_int_t)
-    def _nyx_callback_func(self, _vector, _prop, new_value, old_value):
+    def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(
             enums.nyx_state_int(new_value),
@@ -128,7 +128,7 @@ class NyxLightVector(json.json_dict.NyxDict):
 
                 raise TypeError('Expected NyxLightProp')
 
-            children.push(prop)
+            children.append(prop)
 
     ####################################################################################################################
 

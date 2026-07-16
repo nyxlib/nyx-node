@@ -46,7 +46,7 @@ class NyxObject:
 
     ####################################################################################################################
 
-    def __init__(self, ptr):
+    def __init__(self, ptr: int):
         """!
         @brief Wraps a C JSON object pointer.
 
@@ -63,7 +63,7 @@ class NyxObject:
     ####################################################################################################################
 
     @staticmethod
-    def _finalize(ptr) -> None:
+    def _finalize(ptr: int) -> None:
 
         ptr = ctypes.cast(ptr, bind.nyx_object_p)
 
@@ -74,7 +74,7 @@ class NyxObject:
     ####################################################################################################################
 
     @property
-    def ptr(self):
+    def ptr(self) -> int:
         """!
         @private
         @brief C pointer to the JSON object.
@@ -113,27 +113,27 @@ class NyxObject:
 
             if object_type == bind.NyxObjectType.NULL:
                 from .json.json_null import NyxNull
-                return NyxNull(ptr)
+                return NyxNull(ptr = ptr)
 
             if object_type == bind.NyxObjectType.BOOLEAN:
                 from .json.json_boolean import NyxBoolean
-                return NyxBoolean(ptr)
+                return NyxBoolean(ptr = ptr)
 
             if object_type == bind.NyxObjectType.NUMBER:
                 from .json.json_number import NyxNumber
-                return NyxNumber(ptr)
+                return NyxNumber(ptr = ptr)
 
             if object_type == bind.NyxObjectType.STRING:
                 from .json.json_string import NyxString
-                return NyxString(ptr)
+                return NyxString(ptr = ptr)
 
             if object_type == bind.NyxObjectType.DICT:
                 from .json.json_dict import NyxDict
-                return NyxDict(ptr)
+                return NyxDict(ptr = ptr)
 
             if object_type == bind.NyxObjectType.LIST:
                 from .json.json_list import NyxList
-                return NyxList(ptr)
+                return NyxList(ptr = ptr)
 
             ############################################################################################################
 
@@ -263,7 +263,7 @@ class NyxObject:
 
     ####################################################################################################################
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
 
         if not isinstance(other, NyxObject):
 
@@ -273,11 +273,11 @@ class NyxObject:
 
     ####################################################################################################################
 
-    def __str__(self):
+    def __str__(self) -> str:
 
         return self.to_string()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         return self.to_string()
 

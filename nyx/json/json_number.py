@@ -17,22 +17,33 @@ class NyxNumber(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __init__(self, ptr = None):
+    def __init__(self, value: int | float | None = None, ptr: int | None = None):
         """!
         @brief Allocates a new JSON number object or wraps one.
 
+        @param value Optional default value.
         @param ptr Optional JSON number object pointer.
         """
+
+        ################################################################################################################
 
         if ptr is None:
 
             ptr = bind.lib.nyx_number_new()
 
-        elif bind.lib.nyx_object_get_type(ptr) != bind.NyxObjectType.BOOLEAN:
+        elif bind.lib.nyx_object_get_type(ptr) != bind.NyxObjectType.NUMBER:
 
             raise TypeError('Not a pointer to a Nyx number object')
 
+        ################################################################################################################
+
         super().__init__(ptr)
+
+        ################################################################################################################
+
+        if isinstance(value, (int, float)):
+
+            self.value = float(value)
 
     ####################################################################################################################
 

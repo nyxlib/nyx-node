@@ -17,12 +17,15 @@ class NyxBoolean(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __init__(self, ptr = None):
+    def __init__(self, value: int | float | bool | None = None, ptr: int | None = None):
         """!
         @brief Allocates a new JSON boolean object or wraps one.
 
+        @param value Optional default value.
         @param ptr Optional JSON boolean object pointer.
         """
+
+        ################################################################################################################
 
         if ptr is None:
 
@@ -32,7 +35,15 @@ class NyxBoolean(obj.NyxObject):
 
             raise TypeError('Not a pointer to a Nyx boolean object')
 
+        ################################################################################################################
+
         super().__init__(ptr)
+
+        ################################################################################################################
+
+        if isinstance(value, (int, float, bool)):
+
+            self.value = bool(value)
 
     ####################################################################################################################
 

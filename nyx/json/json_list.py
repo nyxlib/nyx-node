@@ -26,7 +26,7 @@ class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __init__(self, ptr = None):
+    def __init__(self, ptr: int | None = None):
         """!
         @brief Allocates a new JSON list object or wraps one.
 
@@ -137,7 +137,7 @@ class NyxList(obj.NyxObject):
         list_ptr = ctypes.cast(self.ptr, bind.nyx_list_p)
 
         iterator = bind.nyx_list_iter_t(
-            0,
+            0x00000000000000000000,
             list_ptr.contents.head,
         )
 

@@ -29,7 +29,7 @@ class NyxXMLDoc:
 
     ####################################################################################################################
 
-    def __init__(self, ptr):
+    def __init__(self, ptr: int):
         """!
         @brief Wraps a C XML document pointer.
 
@@ -43,14 +43,14 @@ class NyxXMLDoc:
     ####################################################################################################################
 
     @staticmethod
-    def _finalize(ptr) -> None:
+    def _finalize(ptr: int) -> None:
 
         bind.lib.nyx_xmldoc_free(ptr)
 
     ####################################################################################################################
 
     @property
-    def ptr(self):
+    def ptr(self) -> int:
         """!
         @private
         @brief C pointer to the XML document.
@@ -103,7 +103,7 @@ class NyxXMLDoc:
 
     ####################################################################################################################
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
 
         if not isinstance(other, NyxXMLDoc):
 
@@ -113,11 +113,11 @@ class NyxXMLDoc:
 
     ####################################################################################################################
 
-    def __str__(self):
+    def __str__(self) -> str:
 
         return self.to_string()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         return self.to_string()
 
