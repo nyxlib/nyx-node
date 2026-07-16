@@ -58,7 +58,7 @@ class NyxLightProp(json.json_dict.NyxDict):
         super().__init__(bind.lib.nyx_light_prop_new(
             bind.as_bytes(name, allow_none = False),
             bind.as_bytes(label, allow_none = True),
-            enums.nyx_state_int(value),
+            enums.NyxState.to_int(value),
         ))
 
     ####################################################################################################################
@@ -67,8 +67,8 @@ class NyxLightProp(json.json_dict.NyxDict):
     def _nyx_callback_func(self, _vector, _prop, new_value, old_value) -> bool:
 
         return all(self._dispatch_callbacks(
-            enums.nyx_state_int(new_value),
-            enums.nyx_state_int(old_value),
+            enums.NyxState.to_int(new_value),
+            enums.NyxState.to_int(old_value),
         ))
 
 ########################################################################################################################
