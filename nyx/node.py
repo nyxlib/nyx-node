@@ -323,7 +323,7 @@ class NyxNode:
         @param timeout_ms Timeout [milliseconds].
         @return None
 
-        @note \c timeout_ms determines the minimum timer resolution.
+        @note @c timeout_ms determines the minimum timer resolution.
         """
 
         bind.lib.nyx_node_poll(self.ptr, timeout_ms)

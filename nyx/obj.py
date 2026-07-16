@@ -90,6 +90,65 @@ class NyxObject:
 
     ####################################################################################################################
 
+    @staticmethod
+    def _wrap_borrowed_ptr(ptr: int) -> NyxObject:
+
+        ################################################################################################################
+
+        ptr = bind.check_ptr(ptr, 'nyx_object_t')
+
+        ################################################################################################################
+
+        bind.lib.nyx_object_ref(ptr)
+
+        ################################################################################################################
+
+        try:
+
+            ############################################################################################################
+
+            object_type = bind.lib.nyx_object_get_type(ptr)
+
+            ############################################################################################################
+
+            if object_type == bind.NyxObjectType.NULL:
+                from .json.json_null import NyxNull
+                return NyxNull(ptr)
+
+            if object_type == bind.NyxObjectType.BOOLEAN:
+                from .json.json_boolean import NyxBoolean
+                return NyxBoolean(ptr)
+
+            if object_type == bind.NyxObjectType.NUMBER:
+                from .json.json_number import NyxNumber
+                return NyxNumber(ptr)
+
+            if object_type == bind.NyxObjectType.STRING:
+                from .json.json_string import NyxString
+                return NyxString(ptr)
+
+            if object_type == bind.NyxObjectType.DICT:
+                from .json.json_dict import NyxDict
+                return NyxDict(ptr)
+
+            if object_type == bind.NyxObjectType.LIST:
+                from .json.json_list import NyxList
+                return NyxList(ptr)
+
+            ############################################################################################################
+
+            raise TypeError(f'internal error, unknown Nyx object type `{object_type}`')
+
+            ############################################################################################################
+
+        except BaseException:
+
+            bind.lib.nyx_object_unref(ptr)
+
+            raise
+
+    ####################################################################################################################
+
     def _dispatch_callbacks(self, *args):
 
         return tuple(callback(*args) for callback in tuple(self._callbacks))

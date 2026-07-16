@@ -9,20 +9,13 @@ from __future__ import annotations
 
 ########################################################################################################################
 
+import ctypes
 import typing
 
 ########################################################################################################################
 
 from .. import bind
 from .. import obj
-
-if typing.TYPE_CHECKING:
-
-    from .json_null import NyxNull
-    from .json_boolean import NyxBoolean
-    from .json_number import NyxNumber
-    from .json_string import NyxString
-    from .json_list import NyxList
 
 ########################################################################################################################
 
@@ -74,7 +67,7 @@ class NyxDict(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __getitem__(self, key: str) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
+    def __getitem__(self, key: str) -> obj.NyxObject:
         """!
         @brief Gets the JSON object of the provided key.
 
@@ -92,53 +85,7 @@ class NyxDict(obj.NyxObject):
 
         ################################################################################################################
 
-        bind.lib.nyx_object_ref(ptr)
-
-        ################################################################################################################
-
-        try:
-
-            ############################################################################################################
-
-            object_type = bind.lib.nyx_object_get_type(ptr)
-
-            ############################################################################################################
-
-            if object_type == bind.NyxObjectType.NULL:
-                from .json_null import NyxNull
-                return NyxNull(ptr)
-
-            if object_type == bind.NyxObjectType.BOOLEAN:
-                from .json_boolean import NyxBoolean
-                return NyxBoolean(ptr)
-
-            if object_type == bind.NyxObjectType.NUMBER:
-                from .json_number import NyxNumber
-                return NyxNumber(ptr)
-
-            if object_type == bind.NyxObjectType.STRING:
-                from .json_string import NyxString
-                return NyxString(ptr)
-
-            if object_type == bind.NyxObjectType.DICT:
-                #### .json_dict import NyxDict
-                return NyxDict(ptr)
-
-            if object_type == bind.NyxObjectType.LIST:
-                from .json_list import NyxList
-                return NyxList(ptr)
-
-            ############################################################################################################
-
-            raise TypeError(f'internal error, unknown Nyx object type `{object_type}`')
-
-            ############################################################################################################
-
-        except BaseException:
-
-            bind.lib.nyx_object_unref(ptr)
-
-            raise
+        return obj.NyxObject._wrap_borrowed_ptr(ptr)
 
     ####################################################################################################################
 
@@ -167,6 +114,87 @@ class NyxDict(obj.NyxObject):
         """
 
         return int(bind.lib.nyx_dict_size(self.ptr))
+
+    ####################################################################################################################
+
+    def _iterate(self) -> typing.Iterator[typing.Tuple[str, int]]:
+
+        ################################################################################################################
+
+        dict_ptr = ctypes.cast(self.ptr, bind.nyx_dict_p)
+
+        iterator = bind.nyx_dict_iter_t(
+            0,
+            dict_ptr.contents.head,
+        )
+
+        ################################################################################################################
+
+        key = bind.c_char_p()
+        val = bind.c_void_p()
+
+        ################################################################################################################
+
+        while bind.lib.nyx_dict_iterate(
+            ctypes.byref(iterator),
+            ctypes.byref(key),
+            ctypes.byref(val),
+        ):
+
+            if key.value is None\
+               or               \
+               val.value is None:
+
+                raise RuntimeError('Invalid Nyx dict iterator result')
+
+            yield key.value.decode('utf-8'), val.value
+
+    ####################################################################################################################
+
+    def __iter__(self) -> typing.Iterator[str]:
+
+        for key, _ in self._iterate():
+
+            yield key
+
+    ####################################################################################################################
+
+    def keys(self) -> typing.Iterator[str]:
+        """!
+        @brief Iterates over the keys of this JSON dict object.
+
+        @return An iterator over the keys.
+        """
+
+        for key, _ in self._iterate():
+
+            yield key
+
+    ####################################################################################################################
+
+    def values(self) -> typing.Iterator[obj.NyxObject]:
+        """!
+        @brief Iterates over the values of this JSON dict object.
+
+        @return An iterator over the values.
+        """
+
+        for _, ptr in self._iterate():
+
+            yield obj.NyxObject._wrap_borrowed_ptr(ptr)
+
+    ####################################################################################################################
+
+    def items(self) -> typing.Iterator[typing.Tuple[str, obj.NyxObject]]:
+        """!
+        @brief Iterates over the key/value pairs of this JSON dict object.
+
+        @return An iterator over the key/value pairs.
+        """
+
+        for key, ptr in self._iterate():
+
+            yield key, obj.NyxObject._wrap_borrowed_ptr(ptr)
 
 ########################################################################################################################
 

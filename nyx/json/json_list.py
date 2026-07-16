@@ -9,20 +9,13 @@ from __future__ import annotations
 
 ########################################################################################################################
 
+import ctypes
 import typing
 
 ########################################################################################################################
 
 from .. import bind
 from .. import obj
-
-if typing.TYPE_CHECKING:
-
-    from .json_null import NyxNull
-    from .json_boolean import NyxBoolean
-    from .json_number import NyxNumber
-    from .json_string import NyxString
-    from .json_dict import NyxDict
 
 ########################################################################################################################
 
@@ -75,7 +68,7 @@ class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
-    def __getitem__(self, idx: int) -> NyxNull | NyxBoolean | NyxNumber | NyxString | NyxDict | NyxList:
+    def __getitem__(self, idx: int) -> obj.NyxObject:
         """!
         @brief Gets the JSON object at the provided index.
 
@@ -93,53 +86,7 @@ class NyxList(obj.NyxObject):
 
         ################################################################################################################
 
-        bind.lib.nyx_object_ref(ptr)
-
-        ################################################################################################################
-
-        try:
-
-            ############################################################################################################
-
-            object_type = bind.lib.nyx_object_get_type(ptr)
-
-            ############################################################################################################
-
-            if object_type == bind.NyxObjectType.NULL:
-                from .json_null import NyxNull
-                return NyxNull(ptr)
-
-            if object_type == bind.NyxObjectType.BOOLEAN:
-                from .json_boolean import NyxBoolean
-                return NyxBoolean(ptr)
-
-            if object_type == bind.NyxObjectType.NUMBER:
-                from .json_number import NyxNumber
-                return NyxNumber(ptr)
-
-            if object_type == bind.NyxObjectType.STRING:
-                from .json_string import NyxString
-                return NyxString(ptr)
-
-            if object_type == bind.NyxObjectType.DICT:
-                from .json_dict import NyxDict
-                return NyxDict(ptr)
-
-            if object_type == bind.NyxObjectType.LIST:
-                #### .json_list import NyxList
-                return NyxList(ptr)
-
-            ############################################################################################################
-
-            raise TypeError(f'internal error, unknown Nyx object type `{object_type}`')
-
-            ############################################################################################################
-
-        except BaseException:
-
-            bind.lib.nyx_object_unref(ptr)
-
-            raise
+        return obj.NyxObject._wrap_borrowed_ptr(ptr)
 
     ####################################################################################################################
 
@@ -180,6 +127,92 @@ class NyxList(obj.NyxObject):
         """
 
         return int(bind.lib.nyx_list_size(self.ptr))
+
+    ####################################################################################################################
+
+    def _iterate(self) -> typing.Iterator[typing.Tuple[int, int]]:
+
+        ################################################################################################################
+
+        list_ptr = ctypes.cast(self.ptr, bind.nyx_list_p)
+
+        iterator = bind.nyx_list_iter_t(
+            0,
+            list_ptr.contents.head,
+        )
+
+        ################################################################################################################
+
+        idx = bind.c_size_t()
+        val = bind.c_void_p()
+
+        ################################################################################################################
+
+        while bind.lib.nyx_list_iterate(
+            ctypes.byref(iterator),
+            ctypes.byref(idx),
+            ctypes.byref(val),
+        ):
+
+            if idx.value is None\
+               or               \
+               val.value is None:
+
+                raise RuntimeError('Invalid Nyx list iterator result')
+
+            yield idx.value, val.value
+
+    ####################################################################################################################
+
+    def __iter__(self) -> typing.Iterator[obj.NyxObject]:
+        """!
+        @brief Iterates over the values of this JSON list object.
+
+        @return An iterator over the values.
+        """
+
+        for _, ptr in self._iterate():
+
+            yield obj.NyxObject._wrap_borrowed_ptr(ptr)
+
+    ####################################################################################################################
+
+    def indices(self) -> typing.Iterator[int]:
+        """!
+        @brief Iterates over the indices of this JSON list object.
+
+        @return An iterator over the indices.
+        """
+
+        for idx, _ in self._iterate():
+
+            yield idx
+
+    ####################################################################################################################
+
+    def values(self) -> typing.Iterator[obj.NyxObject]:
+        """!
+        @brief Iterates over the values of this JSON list object.
+
+        @return An iterator over the values.
+        """
+
+        for _, ptr in self._iterate():
+
+            yield obj.NyxObject._wrap_borrowed_ptr(ptr)
+
+    ####################################################################################################################
+
+    def items(self) -> typing.Iterator[typing.Tuple[int, obj.NyxObject]]:
+        """!
+        @brief Iterates over the index/value pairs of this JSON list object.
+
+        @return An iterator over the index/value pairs.
+        """
+
+        for idx, ptr in self._iterate():
+
+            yield idx, obj.NyxObject._wrap_borrowed_ptr(ptr)
 
 ########################################################################################################################
 

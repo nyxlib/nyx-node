@@ -97,11 +97,65 @@ class nyx_dict_t(ctypes.Structure):
 
     _fields_ = [
         ('base', nyx_object_t),
+        ('head', c_void_p),
+        ('tail', c_void_p),
     ]
 
 ########################################################################################################################
 
 nyx_dict_p = ctypes.POINTER(nyx_dict_t)
+
+########################################################################################################################
+
+# noinspection PyPep8Naming
+class nyx_dict_iter_t(ctypes.Structure):
+    """!
+    @private
+    """
+
+    _fields_ = [
+        ('idx', c_size_t),
+        ('head', c_void_p),
+    ]
+
+########################################################################################################################
+
+nyx_dict_iter_p = ctypes.POINTER(nyx_dict_iter_t)
+
+########################################################################################################################
+
+# noinspection PyPep8Naming
+class nyx_list_t(ctypes.Structure):
+    """!
+    @private
+    """
+
+    _fields_ = [
+        ('base', nyx_object_t),
+        ('head', c_void_p),
+        ('tail', c_void_p),
+    ]
+
+########################################################################################################################
+
+nyx_list_p = ctypes.POINTER(nyx_list_t)
+
+########################################################################################################################
+
+# noinspection PyPep8Naming
+class nyx_list_iter_t(ctypes.Structure):
+    """!
+    @private
+    """
+
+    _fields_ = [
+        ('idx', c_size_t),
+        ('head', c_void_p),
+    ]
+
+########################################################################################################################
+
+nyx_list_iter_p = ctypes.POINTER(nyx_list_iter_t)
 
 ########################################################################################################################
 
@@ -219,22 +273,27 @@ nyx_mqtt_handler_t = ctypes.CFUNCTYPE(
 # HELPERS                                                                                                              #
 ########################################################################################################################
 
+# noinspection PyOverloads
 @typing.overload
 def as_bytes(value: str | bytes, *, allow_none: bool = True) -> bytes:
     ...
 
+# noinspection PyOverloads
 @typing.overload
 def as_bytes(value: None, *, allow_none: typing.Literal[True] = True) -> None:
     ...
 
+# noinspection PyOverloads
 @typing.overload
 def as_bytes(value: None, *, allow_none: typing.Literal[False]) -> typing.NoReturn:
     ...
 
+# noinspection PyOverloads
 @typing.overload
 def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[False]) -> bytes:
     ...
 
+# noinspection PyOverloads
 @typing.overload
 def as_bytes(value: str | bytes | None, *, allow_none: typing.Literal[True] = True) -> bytes | None:
     ...
@@ -489,6 +548,7 @@ _bind('nyx_number_set', c_bool, [c_void_p, c_double])
 _bind('nyx_dict_new', c_void_p, [])
 _bind('nyx_dict_clear', None, [c_void_p])
 _bind('nyx_dict_del', None, [c_void_p, c_char_p])
+_bind('nyx_dict_iterate', c_bool, [nyx_dict_iter_p, ctypes.POINTER(c_char_p), ctypes.POINTER(c_void_p)])
 _bind('nyx_dict_get', c_void_p, [c_void_p, c_char_p])
 _bind('nyx_dict_set', c_bool, [c_void_p, c_char_p, c_void_p])
 _bind('nyx_dict_size', c_size_t, [c_void_p])
@@ -496,6 +556,7 @@ _bind('nyx_dict_size', c_size_t, [c_void_p])
 _bind('nyx_list_new', c_void_p, [])
 _bind('nyx_list_clear', None, [c_void_p])
 _bind('nyx_list_del', None, [c_void_p, c_size_t])
+_bind('nyx_list_iterate', c_bool, [nyx_list_iter_p, ctypes.POINTER(c_size_t), ctypes.POINTER(c_void_p)])
 _bind('nyx_list_get', c_void_p, [c_void_p, c_size_t])
 _bind('nyx_list_set', c_bool, [c_void_p, c_size_t, c_void_p])
 _bind('nyx_list_size', c_size_t, [c_void_p])
