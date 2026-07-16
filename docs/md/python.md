@@ -10,7 +10,7 @@ Here is the description of the Nyx Node Python API:
 
 <tr id="row_1_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;"></span><a class="el" href="group__UTILS__PY.html" target="_self">Utilities</a></td><td class="desc"></td></tr>
 
-<tr id="row_2_" class="even"><td class="entry"><span style="width:0px;display:inline-block;"></span><span id="arr_2_" class="arrow" onclick="toggleFolder('2_')">▼</span><a class="el" href="classnyx_1_1json_1_1json__dict_1_1NyxDict.html" target="_self">JSON serialization / deserialization</a></td><td class="desc"></td></tr>
+<tr id="row_2_" class="even"><td class="entry"><span style="width:0px;display:inline-block;"></span><span id="arr_2_" class="arrow" onclick="toggleFolder('2_')">▼</span><a class="el" href="classnyx_1_1obj_1_1NyxObject.html" target="_self">JSON serialization / deserialization</a></td><td class="desc"></td></tr>
 <tr id="row_2_0_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="classnyx_1_1json_1_1json__null_1_1NyxNull.html" target="_self">JSON Null Object</a></td><td class="desc"></td></tr>
 <tr id="row_2_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="classnyx_1_1json_1_1json__number_1_1NyxNumber.html" target="_self">JSON Number Object</a></td><td class="desc"></td></tr>
 <tr id="row_2_2_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="classnyx_1_1json_1_1json__boolean_1_1NyxBoolean.html" target="_self">JSON Boolean Object</a></td><td class="desc"></td></tr>
