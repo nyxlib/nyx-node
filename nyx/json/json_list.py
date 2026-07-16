@@ -107,9 +107,9 @@ class NyxList(obj.NyxObject):
 
     ####################################################################################################################
 
-    def push(self, value: obj.NyxObject) -> bool:
+    def append(self, value: obj.NyxObject) -> bool:
         """!
-        @brief Pushes a JSON object in this JSON list object.
+        @brief Appends a JSON object in this JSON list object.
 
         @param value JSON object to be added.
         @return @c True if the value was modified, @c False otherwise.
