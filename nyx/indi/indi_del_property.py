@@ -36,7 +36,7 @@ class NyxDelProperty(json.json_dict.NyxDict):
         @brief Allocates a new INDI / Nyx `delete-property` message object.
 
         @param device Device name.
-        @param name Optional vector name (`None` means whole device).
+        @param name Optional vector name (`None` means the whole device).
         @param message Optional human-oriented message.
 
         @note Prefer using `NyxNode.send_del_property()`.

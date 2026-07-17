@@ -103,9 +103,9 @@ class NyxNode:
 
                 for prop in vector['children']:
 
-                    prop.node = self
+                    prop._node = self
 
-            vector.node = self
+            vector._node = self
 
             ############################################################################################################
 
@@ -361,7 +361,7 @@ class NyxNode:
         @brief Enables a device or a vector and notifies clients.
 
         @param device Device name.
-        @param name Optional vector name (`None` means whole device).
+        @param name Optional vector name (`None` means the whole device).
         @param message Optional human-oriented message.
         @return None
         """
