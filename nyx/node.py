@@ -97,18 +97,6 @@ class NyxNode:
 
         for i, vector in enumerate(self._vectors):
 
-            ############################################################################################################
-
-            if 'children' in vector:
-
-                for prop in vector['children']:
-
-                    prop._node = self
-
-            vector._node = self
-
-            ############################################################################################################
-
             if not isinstance(vector, json.NyxDict):
 
                 raise TypeError('Expected Nyx Dict object')
