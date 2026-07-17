@@ -8,6 +8,7 @@
 import enum
 import ctypes
 import typing
+import argparse
 
 ########################################################################################################################
 
@@ -56,6 +57,7 @@ class NyxNode:
             mqtt_password: str | None,
             retry_ms: int,
             enable_xml: bool,
+            args: argparse.Namespace | None = None
     ):
         """!
         @brief Allocates and initializes a Nyx node.
@@ -69,6 +71,7 @@ class NyxNode:
         @param mqtt_password Optional MQTT password.
         @param retry_ms Connect retry time [milliseconds].
         @param enable_xml Enables the XML messages for INDI compatibility.
+        @param args Optional command-line arguments.
         """
 
         ################################################################################################################
@@ -94,6 +97,18 @@ class NyxNode:
 
         for i, vector in enumerate(self._vectors):
 
+            ############################################################################################################
+
+            if 'children' in vector:
+
+                for prop in vector['children']:
+
+                    prop.node = self
+
+            vector.node = self
+
+            ############################################################################################################
+
             if not isinstance(vector, json.NyxDict):
 
                 raise TypeError('Expected Nyx Dict object')
@@ -117,6 +132,10 @@ class NyxNode:
             enable_xml,
         )
 
+        ################################################################################################################
+
+        self._args = args
+
     ####################################################################################################################
 
     @property
@@ -129,6 +148,13 @@ class NyxNode:
         """
 
         return self._ptr
+
+    ####################################################################################################################
+
+    @property
+    def args(self) -> argparse.Namespace | None:
+
+        return self._args
 
     ####################################################################################################################
 

@@ -19,6 +19,8 @@ from . import bind
 
 if typing.TYPE_CHECKING:
 
+    from .node import NyxNode
+
     from .xml import NyxXMLDoc
 
 ########################################################################################################################
@@ -52,6 +54,8 @@ class NyxObject:
 
         @param ptr JSON object pointer.
         """
+
+        self._node = None
 
         self._callbacks = []
         self._c_callback = None
@@ -87,6 +91,25 @@ class NyxObject:
             raise ValueError('Nyx object has been closed')
 
         return self._ptr
+
+    ####################################################################################################################
+
+    @property
+    def node(self) -> NyxNode:
+        """!
+        @brief The node that owns this object.
+
+        @return The owning node.
+        """
+
+        return self._node
+
+    ####################################################################################################################
+
+    @node.setter
+    def node(self, node: NyxNode) -> None:
+
+        self._node = node
 
     ####################################################################################################################
 
