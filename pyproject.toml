@@ -7,11 +7,16 @@ name = "nyx-node"
 version = "1.0.0b6"
 description = "Python bindings for NyxNode"
 readme = "README.md"
-requires-python = ">=3.10"
 license = "GPL-3.0-or-later"
 authors = [
     {name = "Jérôme ODIER", email = "jerome.odier@lpsc.in2p3.fr"},
 ]
 
+requires-python = ">=3.8"
+dependencies = []
+
 [tool.hatch.build.targets.wheel]
 packages = ["nyx"]
+
+[tool.hatch.build]
+exclude = ["docs/*", "src/*", "test/*"]
