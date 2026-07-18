@@ -130,9 +130,7 @@ class NyxNode:
     def ptr(self):
         """!
         @private
-        @brief C pointer to the Nyx node.
-
-        @return The Nyx node pointer.
+        @brief C pointer to the Nyx Node object.
         """
 
         return self._ptr
@@ -141,6 +139,9 @@ class NyxNode:
 
     @property
     def args(self) -> argparse.Namespace | None:
+        """!
+        @brief Optional command-line arguments provided in the constructor.
+        """
 
         return self._args
 
