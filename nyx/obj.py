@@ -182,7 +182,7 @@ class NyxObject:
 
         ################################################################################################################
 
-        callback_func = getattr(type(self)   , '_nyx_callback_func', None)
+        callback_func = getattr(type(self), '_nyx_callback_func', None)
         callback_type = getattr(callback_func, '_nyx_callback_type', None)
 
         if callback_type is None:
