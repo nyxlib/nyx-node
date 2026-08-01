@@ -5,15 +5,23 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef NYX_HPP
-#define NYX_HPP
+#ifndef NYX_INDI_HPP
+#define NYX_INDI_HPP
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#include "cpp/__init__.hpp"
+#include "enums.hpp"
+#include "indi_blob.hpp"
+#include "indi_text.hpp"
+#include "indi_light.hpp"
+#include "indi_number.hpp"
+#include "indi_stream.hpp"
+#include "indi_switch.hpp"
+#include "indi_message.hpp"
+#include "indi_del_property.hpp"
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-#endif /* NYX_HPP */
+#endif /* NYX_INDI_HPP */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

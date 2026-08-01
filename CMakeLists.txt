@@ -1,12 +1,12 @@
 ########################################################################################################################
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 ########################################################################################################################
 
 project(nyx_node
     VERSION 1.0.0
-    LANGUAGES C
+    LANGUAGES C CXX
 )
 
 ########################################################################################################################
@@ -14,6 +14,12 @@ project(nyx_node
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_C_FLAGS_DEBUG "-Og -g3 -fno-omit-frame-pointer -fsanitize=address,undefined")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
@@ -58,9 +64,39 @@ find_package(Doxygen)
 
 ########################################################################################################################
 
+set(CPP_HEADER_FILES
+    src/nyx_node.hpp
+    src/cpp/__init__.hpp
+    src/cpp/common.hpp
+    src/cpp/logger.hpp
+    src/cpp/node.hpp
+    src/cpp/obj.hpp
+    src/cpp/runtime.hpp
+    src/cpp/utils.hpp
+    src/cpp/xml.hpp
+    src/cpp/indi/__init__.hpp
+    src/cpp/indi/enums.hpp
+    src/cpp/indi/indi_blob.hpp
+    src/cpp/indi/indi_del_property.hpp
+    src/cpp/indi/indi_light.hpp
+    src/cpp/indi/indi_message.hpp
+    src/cpp/indi/indi_number.hpp
+    src/cpp/indi/indi_stream.hpp
+    src/cpp/indi/indi_switch.hpp
+    src/cpp/indi/indi_text.hpp
+    src/cpp/indi/vector.hpp
+    src/cpp/json/__init__.hpp
+    src/cpp/json/json_boolean.hpp
+    src/cpp/json/json_dict.hpp
+    src/cpp/json/json_list.hpp
+    src/cpp/json/json_null.hpp
+    src/cpp/json/json_number.hpp
+    src/cpp/json/json_string.hpp
+)
+
 set(SOURCE_FILES
     src/nyx_node.h
-    src/nyx_node.hpp
+    ${CPP_HEADER_FILES}
     src/nyx_node_internal.h
     #
     src/utils/addr.c
@@ -174,6 +210,7 @@ install(TARGETS nyx-node-static EXPORT NyxNodeTargets ARCHIVE DESTINATION lib)
 install(TARGETS nyx-node-shared EXPORT NyxNodeTargets LIBRARY DESTINATION lib)
 
 install(FILES src/nyx_node.h src/nyx_node.hpp DESTINATION include)
+install(DIRECTORY src/cpp DESTINATION include FILES_MATCHING PATTERN "*.hpp")
 
 ########################################################################################################################
 
@@ -201,6 +238,9 @@ target_link_libraries(check_xml nyx-node-static)
 
 add_executable(demo test/demo.c)
 target_link_libraries(demo nyx-node-static)
+
+add_executable(demo_cpp test/demo.cpp)
+target_link_libraries(demo_cpp nyx-node-static)
 
 ########################################################################################################################
 # DOCS                                                                                                                 #

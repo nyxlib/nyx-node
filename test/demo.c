@@ -197,7 +197,7 @@ static void timer_stream(__NYX_UNUSED__ void *arg)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 static void mqtt_callback(
-    nyx_node_t *node,
+    const nyx_node_t *node,
     nyx_event_type_t event_type,
     size_t topic_size,
     BUFF_t topic_buff,
