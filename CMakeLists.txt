@@ -76,6 +76,7 @@ set(CPP_HEADER_FILES
     src/cpp/xml.hpp
     src/cpp/indi/__init__.hpp
     src/cpp/indi/enums.hpp
+    src/cpp/indi/utils.hpp
     src/cpp/indi/indi_blob.hpp
     src/cpp/indi/indi_del_property.hpp
     src/cpp/indi/indi_light.hpp
@@ -84,7 +85,6 @@ set(CPP_HEADER_FILES
     src/cpp/indi/indi_stream.hpp
     src/cpp/indi/indi_switch.hpp
     src/cpp/indi/indi_text.hpp
-    src/cpp/indi/vector.hpp
     src/cpp/json/__init__.hpp
     src/cpp/json/json_boolean.hpp
     src/cpp/json/json_dict.hpp

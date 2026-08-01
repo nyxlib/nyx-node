@@ -11,6 +11,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #include "enums.hpp"
+#include "utils.hpp"
 #include "indi_blob.hpp"
 #include "indi_text.hpp"
 #include "indi_light.hpp"

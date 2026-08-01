@@ -48,35 +48,6 @@ public:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-/**
- * @brief INDI / Nyx vector options.
- *
- * Options are group, label, hints, message and timeout.
- */
-struct Opts : nyx_opts_t
-{
-    /**
-     * @brief Builds INDI / Nyx vector options.
-     *
-     * @param opt_group Optional group name.
-     * @param opt_label Optional vector label.
-     * @param opt_hints Optional display hints.
-     * @param opt_message Optional human-oriented message.
-     * @param opt_timeout Optional timeout.
-     */
-    explicit Opts(
-        STR_t opt_group = nullptr,
-        STR_t opt_label = nullptr,
-        STR_t opt_hints = nullptr,
-        STR_t opt_message = nullptr,
-        double opt_timeout = 0.0
-    ) : nyx_opts_t{opt_group, opt_label, opt_hints, opt_message, opt_timeout}
-    {
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 inline std::string take_string(str_t value)
 {
     if(value == nullptr)
