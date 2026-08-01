@@ -19,8 +19,8 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup STREAM_MESSAGE_CPP Nyx Stream Message (C++)
- * @brief Nyx Stream Message C++ API.
+ * @defgroup STREAM_MESSAGE_CPP Nyx Stream Message
+ * @brief Nyx Stream Message API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

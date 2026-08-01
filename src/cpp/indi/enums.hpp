@@ -19,8 +19,8 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup ENUMS_CPP Enumerations used by NyxNode (C++)
- * @brief Enumerations used by the NyxNode C++ API.
+ * @defgroup ENUMS_CPP Enumerations used by NyxNode
+ * @brief Enumerations used by the NyxNode API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

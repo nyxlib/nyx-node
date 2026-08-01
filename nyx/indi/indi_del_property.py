@@ -26,6 +26,7 @@ from . import utils
 )
 class NyxDelProperty(json.json_dict.NyxDict):
     """!
+    @ingroup NYX_MESSAGE_PY
     @brief INDI / Nyx `delete-property` message object.
     """
 

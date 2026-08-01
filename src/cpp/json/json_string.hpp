@@ -19,9 +19,9 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup STRING_OBJECT_CPP JSON String Object (C++)
+ * @defgroup STRING_OBJECT_CPP JSON String Object
  * @ingroup OBJECT_CPP
- * @brief JSON string object C++ API.
+ * @brief JSON string object API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -107,7 +107,7 @@ public:
      * @param result_buff Optional pointer receiving the content buffer.
      * @note The returned buffer remains valid until the object is modified or released.
      */
-    void get_buff(size_t *result_size, buff_t *result_buff) const
+    void value(size_t *result_size, buff_t *result_buff) const
     {
         nyx_string_get_buff(string_ptr(), result_size, result_buff);
     }

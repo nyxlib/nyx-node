@@ -18,12 +18,9 @@ namespace nyx {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-/* OBJECTS                                                                                                            */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 /**
- * @defgroup OBJECT_CPP JSON serialization / deserialization (C++)
- * @brief JSON serialization / deserialization C++ API.
+ * @defgroup OBJECT_CPP JSON serialization / deserialization
+ * @brief JSON serialization / deserialization API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -42,7 +39,7 @@ public:
     /*----------------------------------------------------------------------------------------------------------------*/
 
     /**
-     * @brief Creates an empty C++ wrapper.
+     * @brief Creates an empty wrapper.
      */
     Object() = default;
 

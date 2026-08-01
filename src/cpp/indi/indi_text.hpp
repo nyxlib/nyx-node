@@ -19,8 +19,8 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup TEXT_MESSAGE_CPP Nyx Text Message (C++)
- * @brief Nyx / INDI Text Message C++ API.
+ * @defgroup TEXT_MESSAGE_CPP Nyx Text Message
+ * @brief Nyx / INDI Text Message API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

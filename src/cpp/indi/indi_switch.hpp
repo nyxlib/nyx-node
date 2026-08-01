@@ -19,8 +19,8 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup SWITCH_MESSAGE_CPP Nyx Switch Message (C++)
- * @brief Nyx / INDI Switch Message C++ API.
+ * @defgroup SWITCH_MESSAGE_CPP Nyx Switch Message
+ * @brief Nyx / INDI Switch Message API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -31,8 +31,10 @@ namespace nyx {
  */
 using ObjectType = nyx_type_t;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 /**
- * @brief Exception thrown by the C++ Nyx API.
+ * @brief Exception thrown by the Nyx API.
  */
 class Error : public std::runtime_error
 {

@@ -22,8 +22,8 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup NYX_MESSAGE_CPP Other Nyx Messages (C++)
- * @brief Other Nyx Message C++ API.
+ * @defgroup NYX_MESSAGE_CPP Other Nyx Messages
+ * @brief Other Nyx Message API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

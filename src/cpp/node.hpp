@@ -20,8 +20,8 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup NODE_CPP Nyx node (C++)
- * @brief Nyx node C++ API.
+ * @defgroup NODE_CPP Nyx node
+ * @brief Nyx node API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -32,11 +32,10 @@ namespace nyx {
  */
 using MQTTEvent = nyx_event_type_t;
 
-/* NODE                                                                                                               */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Non-owning Nyx node reference passed to C++ callbacks.
+ * @brief Non-owning Nyx node reference passed to callbacks.
  */
 class NodeRef
 {

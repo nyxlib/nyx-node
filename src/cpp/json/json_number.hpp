@@ -19,9 +19,9 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup NUMBER_OBJECT_CPP JSON Number Object (C++)
+ * @defgroup NUMBER_OBJECT_CPP JSON Number Object
  * @ingroup OBJECT_CPP
- * @brief JSON number object C++ API.
+ * @brief JSON number object API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

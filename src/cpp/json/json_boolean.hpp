@@ -19,9 +19,9 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup BOOLEAN_OBJECT_CPP JSON Boolean Object (C++)
+ * @defgroup BOOLEAN_OBJECT_CPP JSON Boolean Object
  * @ingroup OBJECT_CPP
- * @brief JSON boolean object C++ API.
+ * @brief JSON boolean object API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

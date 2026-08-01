@@ -26,6 +26,7 @@ Here is the description of the Nyx Node Python API:
 <tr id="row_3_4_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="group__SWITCH__MESSAGE__PY.html" target="_self">Nyx Switch Message</a></td><td class="desc"></td></tr>
 <tr id="row_3_5_" class="even"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="group__BLOB__MESSAGE__PY.html" target="_self">Nyx BLOB Message</a></td><td class="desc"></td></tr>
 <tr id="row_3_6_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="group__STREAM__MESSAGE__PY.html" target="_self">Nyx Stream Messages</a></td><td class="desc"></td></tr>
+<tr id="row_3_7_" class="even"><td class="entry"><span style="width:32px;display:inline-block;"></span><a class="el" href="group__NYX__MESSAGE__PY.html" target="_self">Other Nyx Messages</a></td><td class="desc"></td></tr>
 
 <tr id="row_4_" class="even"><td class="entry"><span style="width:16px;display:inline-block;"></span><a class="el" href="group__NODE__PY.html" target="_self">Nyx node</a></td><td class="desc"></td></tr>
 

@@ -21,12 +21,10 @@ namespace nyx {
 #if !defined(ARDUINO)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* XML                                                                                                                */
-/*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup XMLDOC_CPP XML serialization / deserialization (C++)
- * @brief XML serialization / deserialization C++ API.
+ * @defgroup XMLDOC_CPP XML serialization / deserialization
+ * @brief XML serialization / deserialization API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

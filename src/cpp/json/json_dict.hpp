@@ -21,9 +21,9 @@ namespace nyx {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @defgroup DICT_OBJECT_CPP JSON Dict Object (C++)
+ * @defgroup DICT_OBJECT_CPP JSON Dict Object
  * @ingroup OBJECT_CPP
- * @brief JSON dict object C++ API.
+ * @brief JSON dict object API.
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/

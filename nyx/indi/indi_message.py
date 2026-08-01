@@ -22,6 +22,7 @@ from . import utils
 )
 class NyxMessage(json.json_dict.NyxDict):
     """!
+    @ingroup NYX_MESSAGE_PY
     @brief INDI / Nyx human-oriented message object.
     """
 
