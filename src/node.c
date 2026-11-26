@@ -408,7 +408,7 @@ static void _set_properties(const nyx_node_t *node, const nyx_dict_t *dict)
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                if(strlen(tag1) > 3 && strlen(tag2) > 3     // skip "def" and "new" suffixes
+                if(strlen(tag1) > 3 && strlen(tag2) > 3     // skip "def" and "new" prefixes
                    &&
                    strcmp(tag1 + 3, tag2 + 3) == 0
                    &&
